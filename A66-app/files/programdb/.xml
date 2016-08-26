@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Progromdb>
+    <parameter>
+        <BoardThickness>0</BoardThickness>
+        <material>0</material>
+        <Upmold></Upmold>
+        <Lowermold></Lowermold>
+        <processed>0</processed>
+        <StepNum>-1</StepNum>
+    </parameter>
+</Progromdb>
