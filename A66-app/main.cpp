@@ -30,7 +30,7 @@ extern int MotorXDisplayFalg,MotorYDisplayFalg;
 extern int MotorXDisplayValue,MotorYDisplayValue;
 
 
-
+/*测试分支效果*/
 #ifndef AF_CAN
 #define AF_CAN 29
 #endif
