@@ -5,6 +5,7 @@
 #include <QDebug>
 #include "manualadjustdate.h"
 #include "global.h"
+#include "yreferencepoint.h"
 
 
 extern bool stopped;
@@ -399,10 +400,9 @@ void Manual::on_pushButton_B6_7_clicked()
 
 
 
-void Manual::on_pushButton_B6_3_clicked()// 基准点
+void Manual::on_toolButton_YReferencePoint_clicked()
 {
-
-
-
+    YReferencePoint *yrp =new YReferencePoint;
+    yrp->exec();
 
 }

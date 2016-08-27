@@ -18,6 +18,7 @@
 #include <QSqlRecord>
 #include <QDesktopWidget>
 #include "runstate.h"
+#include "mainwindow.h"
 
 
 int MaterialIndexFlag =0;
@@ -27,23 +28,22 @@ Programdb::Programdb(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    initProgram();
-
-    //******NEW********//
-    ui->tableWidget_Programdb->setColumnWidth(Program_Id,80);
-    ui->tableWidget_Programdb->setColumnWidth(Program_Name,200);
-    ui->tableWidget_Programdb->setColumnWidth(Program_BoardWide,80);
-    ui->tableWidget_Programdb->setColumnWidth(Program_BoardThick,80);
-    ui->tableWidget_Programdb->setColumnWidth(Program_Material,100);
-    ui->tableWidget_Programdb->setColumnWidth(Program_LowerMold,70);
-    ui->tableWidget_Programdb->setColumnWidth(Program_UpMold,70);
-
-   // ui->tableWidget_Programdb->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
-
-    ui->tableWidget_Programdb->horizontalHeader()->setStretchLastSection(true);
-    ui->tableWidget_Programdb->horizontalHeader()->setClickable(false);    //******NEW********//
 
 
+   initProgram();
+
+
+//    MainWindow *wd = new MainWindow;
+////    wd->openMainWindowWin();
+////    Programdb *pg=new Programdb;
+//    connect(this, SIGNAL(sig_returnMainwindow()), wd, SLOT(openMainWindowWin()));
+//    connect(this, SIGNAL(ReflashProgram()), wd, SLOT(ReFlashProgName()));
+//    connect(wd, SIGNAL(openProgramWidget()), this, SLOT(openProgramWin()));
+//    wd->setWindowFlags(Qt::FramelessWindowHint);
+//    wd->show();
+//    wd->move(0,MAIN_WIDGET_Y);
+
+   connect(ui->comboBox_P_material,SIGNAL(currentIndexChanged(const QString &)),this,SLOT(UpdtaeMaterialDat()));
 
 }
 
@@ -57,10 +57,16 @@ void Programdb::openProgramWin()
     this->setWindowFlags(Qt::FramelessWindowHint);
     this->show();
     this->move(0,WIDGET_Y);
+    disconnect(ui->comboBox_P_material,SIGNAL(currentIndexChanged(const QString &)),this,SLOT(UpdtaeMaterialDat()));
     ui->tableWidget_Programdb->selectRow(CurrentReg.Current_ProgramLibRow);
+    ReflashMaterialFalg = 1;
   //  ReflashMaterialdb();
     ReflashMaterialdb();
     Display_ProgramItem();
+    ui->comboBox_P_material->setCurrentIndex(CurrentReg.Materialtemp[0]);
+    connect(ui->comboBox_P_material,SIGNAL(currentIndexChanged(const QString &)),this,SLOT(UpdtaeMaterialDat()));
+    qDebug()<<"Materialtemp[0]"<<CurrentReg.Materialtemp[0];
+
 
 }
 
@@ -80,7 +86,22 @@ void Programdb::initProgram(void)
     ui->lineEdit_P_UpMolds->setText(ui->tableWidget_Programdb->item(ui->tableWidget_Programdb->currentRow(),Program_UpMold)->text());
     ui->lineEdit_P_LowerMolds->setText(ui->tableWidget_Programdb->item(ui->tableWidget_Programdb->currentRow(),Program_LowerMold)->text());
     ui->lineEdit_P_Total->setText(ui->tableWidget_Programdb->item(ui->tableWidget_Programdb->currentRow(),Program_ProcessNum)->text());
-//  ui->comboBox_P_material->setCurrentIndex(0);
+
+    //******NEW********//
+    ui->tableWidget_Programdb->setColumnWidth(Program_Id,80);
+    ui->tableWidget_Programdb->setColumnWidth(Program_Name,200);
+    ui->tableWidget_Programdb->setColumnWidth(Program_BoardWide,80);
+    ui->tableWidget_Programdb->setColumnWidth(Program_BoardThick,80);
+    ui->tableWidget_Programdb->setColumnWidth(Program_Material,100);
+    ui->tableWidget_Programdb->setColumnWidth(Program_LowerMold,70);
+    ui->tableWidget_Programdb->setColumnWidth(Program_UpMold,70);
+
+   // ui->tableWidget_Programdb->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
+
+    ui->tableWidget_Programdb->horizontalHeader()->setStretchLastSection(true);
+    ui->tableWidget_Programdb->horizontalHeader()->setClickable(false);    //******NEW********//
+
+//
 
 
 //    ui->comboBox_P_material->addItem(trUtf8("铝"));
@@ -88,13 +109,14 @@ void Programdb::initProgram(void)
 //    ui->comboBox_P_material->addItem(trUtf8("不绣钢"));
       ReflashMaterialdb();
       Display_ProgramItem();
+      ui->comboBox_P_material->setCurrentIndex(CurrentReg.Materialtemp[0]);
+      qDebug()<<"Materialtemp[0]"<<CurrentReg.Materialtemp[0];
 
 }
 
 void Programdb::ReflashMaterialdb()
 {
     ui->comboBox_P_material->clear();
-    bool ok;
     if(!db.open())
     {
         QMessageBox::critical(0,QObject::tr("Error"),
@@ -115,6 +137,7 @@ void Programdb::ReflashMaterialdb()
             qDebug()<<"record.value().toString()"<<record.value("Name").toString();
     }
 
+    ui->comboBox_P_material->setCurrentIndex(0);
     db.close();//释放数据库
 
 }
@@ -136,6 +159,11 @@ void Programdb::ReflashProgramWrokedNum(int Num)
 void Programdb::Display_ProgramItem()
 {
     bool ok;
+
+    for (int i=0;i<50;i++)
+    {
+        CurrentReg.Materialtemp[i] = 0;
+    }
 
     if(!db.open())
     {
@@ -167,9 +195,25 @@ void Programdb::Display_ProgramItem()
             ui->tableWidget_Programdb->setItem(i,Program_Name,new QTableWidgetItem(record.value("Name").toString()));
             ui->tableWidget_Programdb->setItem(i,Program_BoardWide,new QTableWidgetItem(QString::number(record.value("BoardWide").toDouble(&ok),10,2)));
             ui->tableWidget_Programdb->setItem(i,Program_BoardThick,new QTableWidgetItem(QString::number(record.value("BoardThick").toDouble(&ok),10,2)));//******NEW********//
-//            qDebug()<<"record.value("").toInt()"<<record.value("Material").toInt();
+            qDebug()<<"record.value("").toInt()"<<record.value("Material").toInt();
+            qDebug()<<"record.value("").toString()"<<record.value("Material").toString();
             ui->comboBox_P_material->setCurrentIndex(record.value("Material").toInt());
+
+
+            CurrentReg.Materialtemp[i] = record.value("Material").toInt();
+
+            qDebug()<<" -----------------------------Materialtemp[i]"<< CurrentReg.Materialtemp[i];
+
+//            if(ReflashMaterialFalg > 0)
+//            {
+//                fristMaterialIndex = record.value("Material").toInt();
+//                qDebug()<<"fristMaterialIndex"<<fristMaterialIndex;
+
+//            }
+//            ReflashMaterialFalg ++;
             ui->tableWidget_Programdb->setItem(i,Program_Material,new QTableWidgetItem(ui->comboBox_P_material->currentText()));
+            qDebug()<<"currentText"<<ui->comboBox_P_material->currentText();
+            qDebug()<<"currentIndex"<<ui->comboBox_P_material->currentIndex();
 
 
             ui->tableWidget_Programdb->setItem(i,Program_LowerMold,new QTableWidgetItem(record.value("LowerMold").toString() ));//+ "/" + record.value("UpMold").toString()
@@ -191,7 +235,7 @@ void Programdb::Display_ProgramItem()
                 modelStep_temp.setRecord(0,record);
                 modelStep_temp.submitAll();
             }
-            qDebug()<<"StepNum_str"<<StepNum_str;
+           // qDebug()<<"StepNum_str"<<StepNum_str;
     }
 
 
@@ -396,16 +440,15 @@ void Programdb::on_lineEdit_P_boardThickness_returnPressed()
     ui->tableWidget_Programdb->setItem(ui->tableWidget_Programdb->currentRow(), Program_BoardThick, new QTableWidgetItem(ui->lineEdit_P_boardThickness->text()));
     Update_ProgramLibItem(ui->tableWidget_Programdb->item(ui->tableWidget_Programdb->currentRow(),Program_Id)->text().toInt(),Program_BoardThick,ui->lineEdit_P_boardThickness->text());
 }
-void Programdb::on_comboBox_P_material_currentIndexChanged(const QString &arg1)
+
+
+
+void Programdb::UpdtaeMaterialDat()
 {
-    if(MaterialIndexFlag > 1)
-    {
+
     ui->tableWidget_Programdb->setItem(ui->tableWidget_Programdb->currentRow(), Program_Material, new QTableWidgetItem(ui->comboBox_P_material->currentText()));
     Update_ProgramLibItem(ui->tableWidget_Programdb->item(ui->tableWidget_Programdb->currentRow(),Program_Id)->text().toInt(),Program_Material,QString::number(ui->comboBox_P_material->currentIndex(),10));
-
-    }
-    MaterialIndexFlag ++;
-    qDebug("MaterialIndexFlag");
+    qDebug()<<"ui->comboBox_P_material->currentIndex()"<<ui->comboBox_P_material->currentIndex();
 }
 void Programdb::on_lineEdit_P_UpMolds_returnPressed()
 {

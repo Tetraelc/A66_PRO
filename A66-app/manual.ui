@@ -55,7 +55,7 @@
     <string>对数</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_B6_3">
+  <widget class="QToolButton" name="toolButton_YReferencePoint">
    <property name="geometry">
     <rect>
      <x>910</x>

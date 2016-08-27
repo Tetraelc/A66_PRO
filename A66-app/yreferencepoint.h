@@ -14,7 +14,11 @@ class YReferencePoint : public QDialog
 public:
     explicit YReferencePoint(QWidget *parent = 0);
     ~YReferencePoint();
+    void Display_YReferenceItem();
     
+private slots:
+    void on_buttonBox_accepted();
+
 private:
     Ui::YReferencePoint *ui;
 };

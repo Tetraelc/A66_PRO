@@ -24,6 +24,7 @@ public:
     void DeleteProgramLib();
     void Update_ProgramLibItem(int Id,int Col,QString Value);
     void ReflashMaterialdb();
+//    int Materialtemp[50];
 
 
 public slots:
@@ -42,6 +43,7 @@ signals:
     void sig_MulName();
     void Sig_NewStepData();
     void ReflashProgram();
+    void sig_returnMainwindow();
 
 
 
@@ -50,7 +52,7 @@ private slots:
     void on_lineEdit_P_UpMolds_returnPressed();
     void on_lineEdit_P_LowerMolds_returnPressed();
     void on_lineEdit_P_Total_returnPressed();
-    void on_comboBox_P_material_currentIndexChanged(const QString &arg1);
+    void UpdtaeMaterialDat();
     void on_tableWidget_Programdb_itemSelectionChanged();
 
 
@@ -70,6 +72,7 @@ private slots:
 
 private:
     Ui::Programdb *ui;
+    int fristMaterialIndex;
 };
 
 #endif // PROGRAMDB_H

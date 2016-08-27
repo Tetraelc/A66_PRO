@@ -61,8 +61,8 @@ void Step::timerEvent(QTimerEvent *t) //定时器事件
              scanAngleFlag = false;
              scanAngleCompensateFlag = false;
              ui->lineEdit_S_Yaxis->setText(QString::number(CurrentStepTemp.Yaxis,'.',0));
+             ui->tableWidget_Step->setItem(ui->tableWidget_Step->currentRow(),StepProgram_Yaxis,new QTableWidgetItem(QString::number(CurrentStepTemp.Yaxis,'.',0)));
              qDebug()<<"timerEvent"<<CurrentStepTemp.Angle<<CurrentStepTemp.AngleCompensate<<CurrentProgramTemp.BroadThick<<CurrentStepTemp.Yzero<<CurrentStepTemp.Yaxis;
-             qDebug("timerEvent");
         }
     }
 
@@ -250,6 +250,7 @@ void Step::on_lineEdit_S_Angle_returnPressed()
     RunState *runstate1 = new  RunState;
     runstate1->ReadForRun();
     CurrentStepTemp.Angle = ui->lineEdit_S_Angle->text().toDouble(&ok);
+
     scanAngleFlag = true;
 
   // MathCalculation::AngleToYDis(ui->lineEdit_S_Angle->text(),ui->lineEdit_S_AngleCompensate->text(),0,float boardThick,float moldThick,float YZero);
@@ -267,7 +268,7 @@ void Step::on_lineEdit_S_AngleCompensate_returnPressed()
 
 }
 void Step::on_lineEdit_S_Yaxis_returnPressed()
-{
+{   
     ui->tableWidget_Step->setItem(ui->tableWidget_Step->currentRow(), StepProgram_Yaxis, new QTableWidgetItem(ui->lineEdit_S_Yaxis->text()));
     Update_StepProgramItem(ui->tableWidget_Step->item(ui->tableWidget_Step->currentRow(),StepProgram_Id)->text().toInt(),StepProgram_Yaxis,ui->lineEdit_S_Yaxis->text());
 }

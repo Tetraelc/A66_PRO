@@ -22,8 +22,9 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
     void initWindow();
-public slots:
 
+public slots:
+    void openMainWindowWin();
     void ReturnProgramdb();
     void ReFlashProgName();
 

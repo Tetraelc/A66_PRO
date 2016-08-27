@@ -57,6 +57,7 @@ extern int LowerMoldIndex;
 
 extern int UpMoldNum;
 extern int LowerMoldNum;
+extern int ReflashMaterialFalg;
 
 extern QSqlDatabase db;
 
@@ -93,6 +94,8 @@ struct _CURRENTREG
   int Current_MotorAlarm;
 //  int CurrentRnuStateWorkedTotal;
   QString Current_WorkedTotal;
+
+  int Materialtemp[50];
 
 };
 

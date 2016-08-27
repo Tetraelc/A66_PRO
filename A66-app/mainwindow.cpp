@@ -58,6 +58,7 @@ void MainWindow::initWindow()
     connect(this, SIGNAL(openRunStateWidget()), rs, SLOT(openRunStateWin()));
     connect(rs, SIGNAL(openProgramwindow()), this, SLOT(ReturnProgramdb()));
     Programdb *pg=new Programdb;
+    connect(pg, SIGNAL(sig_returnMainwindow()), this, SLOT(openMainWindowWin()));
     connect(pg, SIGNAL(ReflashProgram()), this, SLOT(ReFlashProgName()));
     connect(this, SIGNAL(openProgramWidget()), pg, SLOT(openProgramWin()));
     SystemInfo *Info = new SystemInfo;
@@ -69,6 +70,15 @@ void MainWindow::initWindow()
 //    pg->move(0,WIDGET_Y);
 //    pg->show();
     ui->toolButton_B0->setEnabled(false);
+}
+
+void MainWindow::openMainWindowWin()
+{
+    this->setWindowFlags(Qt::FramelessWindowHint);
+    this->show();
+    this->move(0,MAIN_WIDGET_Y);
+    qDebug("openMainWindowWin");
+
 }
 
 void MainWindow::ReFlashProgName()
@@ -225,10 +235,7 @@ void MainWindow::on_toolButton_B5_clicked()
 
 bool MainWindow::on_toolButton_Start_clicked()
 {
-
-
 //    SystemWarnInformation(UpperPointAlarm);
-
     emit openRunStateWidget();
     ui->toolButton_T1->setText(trUtf8(" 运行"));
     ui->toolButton_T1->setIcon(QIcon("./ICO/P1-RUN.png"));

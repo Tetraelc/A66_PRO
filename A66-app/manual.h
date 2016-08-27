@@ -50,9 +50,7 @@ private slots:
     
     void on_pushButton_B6_7_clicked();
 
-
-
-    void on_pushButton_B6_3_clicked();
+    void on_toolButton_YReferencePoint_clicked();
 
 private:
     Ui::Manual *ui;

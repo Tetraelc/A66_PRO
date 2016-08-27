@@ -9,6 +9,7 @@ int StepIndex=0;
 int CurrentStep=1;
 int UpMoldIndex;
 int LowerMoldIndex;
+int ReflashMaterialFalg =0;
 
 int UpMoldNum=1;
 int LowerMoldNum=1;
