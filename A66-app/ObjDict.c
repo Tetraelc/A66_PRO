@@ -22,7 +22,8 @@ INTEGER32 MOTOR_POSTION[] =		/* Mapped at index 0x2001, subindex 0x01 - 0x04 */
   };
 UNS8 A20_IN_Status;
 UNS8 A20_Run_Status;
-UNS8 A20_OUT_Status;
+
+UNS8 A20_OUT_Status;//输出状态获取
 /**************************************************************************/
 /* Declaration of value range types                                       */
 /**************************************************************************/
@@ -331,6 +332,7 @@ $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
                     {
                       0x20000110,	/* 536871176 */
                       0x20010120	/* 536936736 */
+
                     };
                     subindex ObjDict_Index1600[] =
                      {
@@ -372,7 +374,8 @@ $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
                     UNS32 ObjDict_obj1603[] =
                     {
                       0x20000408,	/* 536871952 */
-                      0x20010408	/* 536937504 */
+                      0x20010408,	/* 536937504 */
+                      0x20020408
                     };
                     subindex ObjDict_Index1603[] =
                      {
@@ -545,7 +548,7 @@ $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
                        { RW, uint16, sizeof (UNS16), (void*)&MOTOR_STATUS[0] },
                        { RW, uint16, sizeof (UNS16), (void*)&MOTOR_STATUS[1] },
                        { RW, uint16, sizeof (UNS16), (void*)&MOTOR_STATUS[2] },
-                       { RW, uint8, sizeof (UNS8), (void*)&A20_IN_Status}
+
                      };
 
 /* index 0x2001 :   Mapped variable MOTOR_POSTION */
@@ -556,7 +559,16 @@ $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
                        { RW, int32, sizeof (INTEGER32), (void*)&MOTOR_POSTION[0] },
                        { RW, int32, sizeof (INTEGER32), (void*)&MOTOR_POSTION[1] },
                        { RW, int32, sizeof (INTEGER32), (void*)&MOTOR_POSTION[2] },
-                       { RW, uint8, sizeof (UNS8),      (void*)&A20_Run_Status }
+
+                     };
+/* index 0x2002 :   Mapped variable A20 */
+                    UNS8 ObjDict_highestSubIndex_obj2002 = 4; /* number of subindex - 1*/
+                    subindex ObjDict_Index2002[] =
+                     {
+                       { RO, uint8, sizeof (UNS8), (void*)&ObjDict_highestSubIndex_obj2002 },
+                       { RW, uint8, sizeof (UNS8), (void*)&A20_IN_Status},
+                       { RW, uint8, sizeof (UNS8),      (void*)&A20_Run_Status },
+                       { RW, uint8, sizeof (UNS8),      (void*)&A20_OUT_Status }
                      };
 ////dcf
                     UNS8  motor_1 [20] = {0x02,0x00,0x00,0x00,
@@ -614,7 +626,7 @@ const indextable ObjDict_objdict[] =
   { (subindex*)ObjDict_Index1A03,sizeof(ObjDict_Index1A03)/sizeof(ObjDict_Index1A03[0]), 0x1A03},
   { (subindex*)ObjDict_Index2000,sizeof(ObjDict_Index2000)/sizeof(ObjDict_Index2000[0]), 0x2000},
   { (subindex*)ObjDict_Index2001,sizeof(ObjDict_Index2001)/sizeof(ObjDict_Index2001[0]), 0x2001},
-
+ { (subindex*)ObjDict_Index2002,sizeof(ObjDict_Index2002)/sizeof(ObjDict_Index2002[0]), 0x2002},
     { (subindex*)ObjDict_Index2100,sizeof(ObjDict_Index2100)/sizeof(ObjDict_Index2100[0]), 0x2100},
 };
 
@@ -658,8 +670,8 @@ const indextable * ObjDict_scanIndexOD (UNS16 wIndex, UNS32 * errorCode, ODCallb
         case 0x1A03: i = 32;break;
         case 0x2000: i = 33;break;
         case 0x2001: i = 34;break;
-
-        case 0x2100: i = 35;break;
+  case 0x2002: i = 35;break;
+        case 0x2100: i = 36;break;
 
         default:
             *errorCode = OD_NO_SUCH_OBJECT;
