@@ -22,6 +22,7 @@ INTEGER32 MOTOR_POSTION[] =		/* Mapped at index 0x2001, subindex 0x01 - 0x04 */
   };
 UNS8 A20_IN_Status;
 UNS8 A20_Run_Status;
+UNS8 A20_OUT_Status;
 /**************************************************************************/
 /* Declaration of value range types                                       */
 /**************************************************************************/
