@@ -519,7 +519,7 @@
      <string>输出状态：</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_4">
+   <widget class="QLabel" name="label_OUT1">
     <property name="geometry">
      <rect>
       <x>170</x>
@@ -538,7 +538,7 @@
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QLabel" name="label_6">
+   <widget class="QLabel" name="label_OUT2">
     <property name="geometry">
      <rect>
       <x>200</x>
@@ -557,7 +557,7 @@
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QLabel" name="label_7">
+   <widget class="QLabel" name="label_OUT3">
     <property name="geometry">
      <rect>
       <x>230</x>
@@ -576,7 +576,7 @@
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QLabel" name="label_8">
+   <widget class="QLabel" name="label_OUT4">
     <property name="geometry">
      <rect>
       <x>260</x>
@@ -595,7 +595,7 @@
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QLabel" name="label_9">
+   <widget class="QLabel" name="label_OUT8">
     <property name="geometry">
      <rect>
       <x>380</x>
@@ -614,7 +614,7 @@
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QLabel" name="label_10">
+   <widget class="QLabel" name="label_OUT5">
     <property name="geometry">
      <rect>
       <x>290</x>
@@ -633,7 +633,7 @@
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QLabel" name="label_11">
+   <widget class="QLabel" name="label_OUT6">
     <property name="geometry">
      <rect>
       <x>320</x>
@@ -652,7 +652,7 @@
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QLabel" name="label_12">
+   <widget class="QLabel" name="label_OUT7">
     <property name="geometry">
      <rect>
       <x>350</x>

@@ -99,6 +99,7 @@ void Manual::timerEvent(QTimerEvent *t) //定时器事件
 
         CheckINState();
         CheckRunState();
+        CheckOutState();
 
     }
 
@@ -159,7 +160,42 @@ int Manual::CheckINState()
     ui->label_IN7->setEnabled(false);
    // qDebug()<<"A20_IN_Status"<<A20_IN_Status;
 }
+int Manual::CheckOutState()
+{
+    if(A20_OUT_Status & 0x01)
+        ui->label_OUT1->setEnabled(true);
+    else
+        ui->label_OUT1->setEnabled(false);
+    if(A20_OUT_Status & 0x02)
+        ui->label_OUT2->setEnabled(true);
+    else
+        ui->label_OUT2->setEnabled(false);
+    if(A20_OUT_Status & 0x04)
+        ui->label_OUT3->setEnabled(true);
+    else
+        ui->label_OUT3->setEnabled(false);
+    if(A20_OUT_Status & 0x08)
+        ui->label_OUT4->setEnabled(true);
+    else
+        ui->label_OUT4->setEnabled(false);
+    if(A20_OUT_Status & 0x10)
+        ui->label_OUT5->setEnabled(true);
+    else
+        ui->label_OUT5->setEnabled(false);
+    if(A20_OUT_Status & 0x20)
+        ui->label_OUT6->setEnabled(true);
+    else
+        ui->label_OUT6->setEnabled(false);
+    if(A20_OUT_Status & 0x40)
+        ui->label_OUT7->setEnabled(true);
+    else
+        ui->label_OUT7->setEnabled(false);
+    if(A20_OUT_Status & 0x80)
+        ui->label_OUT8->setEnabled(true);
+    else
+        ui->label_OUT8->setEnabled(false);
 
+}
 int Manual::Checkstatus(int motor_id)
 {
 

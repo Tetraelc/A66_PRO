@@ -21,6 +21,7 @@ public:
     int Checkstatus(int motor_id);
     int CheckINState();
     int CheckRunState();
+    int CheckOutState();
 public slots:
     void openManualWin();
     void XMotorThread();

@@ -16,5 +16,6 @@ extern UNS16 MOTOR_STATUS[4];		/* Mapped at index 0x2000, subindex 0x01 - 0x04 *
 extern INTEGER32 MOTOR_POSTION[4];		/* Mapped at index 0x2001, subindex 0x01 - 0x04 */
 extern UNS8 A20_IN_Status;
 extern UNS8 A20_Run_Status;
+extern UNS8 A20_OUT_Status;
 
 #endif // OBJDICT_H
