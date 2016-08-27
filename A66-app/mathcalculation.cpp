@@ -3,7 +3,11 @@
 #include "math.h"
 
 #define PI 3.1415926
-
+struct AngleMulti angleMulti[24] = {{60,1},{65,1.1},{70,1.3},{75,1.5},{80,1.6},{85,1.7},
+                                    {90,1.8},{95,1.6},{100,1.4},{105,1.2},{110,1.1},
+                                    {115,1},{120,0.85},{125,0.72},{130,0.66},{135,0.58},
+                                    {140,0.5},{145,0.4},{150,0.38},{155,0.32},{160,0.2},
+                                    {165,0.15},{170,0.1},{175,0.1}};
 MathCalculation::MathCalculation(QObject *parent) :
     QObject(parent)
 {
@@ -163,4 +167,57 @@ double MathCalculation::AngleToLength(double m_ba)
         return result;
     }
 }
+/************************************************
+函数名：pressureCal
+功  能：折弯压力计算
+参  数：板厚、板宽、强度、模开口V 单位都是mm
+返回值：返回压力 单位是N
 
+************************************************/
+double MathCalculation::pressureCal(double boardWidth,double boardTick,double strength,double moldV)
+{
+    double P;
+    P = (boardWidth*(boardTick)*strength)/(moldV*(1+4*boardTick/moldV));
+    return P;
+}
+int MathCalculation::circleCal(double Radius)
+{
+    float k=0.52;
+    int step;
+    step = k*Radius;
+    return step;
+}
+/************************************************
+函数名：
+功  能：展开长度计算
+参  数：单位都是mm
+返回值：返回压力 单位是N
+
+************************************************/
+double MathCalculation::delelopLength(double A,double B,double boardTick,double angle)
+{
+    int i ;
+    double Length;
+    double angle_Multi = 0;
+    if(angle == 30)
+    {
+        Length = A+B-boardTick+0.5;
+    }
+    else if(angle == 40)
+    {
+        Length = A+B-boardTick*0.6+0.3;
+    }
+    else
+    {
+    for(i=0;i<24;i++)
+    {
+        if(angleMulti[i].angle == angle)
+        {
+            angle_Multi = angleMulti[i].multi;
+        }
+    }
+    Length = A+B-(boardTick*angle_Multi);
+    }
+    return Length;
+
+}
