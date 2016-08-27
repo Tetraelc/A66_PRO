@@ -932,7 +932,7 @@
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
-   <widget class="QToolButton" name="pushButton_Left_3">
+   <widget class="QToolButton" name="toolButton_Mode">
     <property name="geometry">
      <rect>
       <x>30</x>

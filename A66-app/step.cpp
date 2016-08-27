@@ -24,6 +24,7 @@ Step::Step(QWidget *parent) :
     ui->setupUi(this);
 
     yValue_Scan =startTimer(10);
+
 }
 
 Step::~Step()
@@ -47,6 +48,7 @@ void Step::openStepWin()
 
     Display_StepProgramItem();
     ui->tableWidget_Step->selectRow(0);
+
 }
 
 void Step::timerEvent(QTimerEvent *t) //定时器事件
@@ -54,16 +56,22 @@ void Step::timerEvent(QTimerEvent *t) //定时器事件
 
     if(t->timerId()==yValue_Scan){
 
+//         MathCalculation *mathcal = new MathCalculation;
         if(scanAngleFlag == true || scanAngleCompensateFlag  == true)
         {
-             MathCalculation *mathcal = new MathCalculation;
              CurrentStepTemp.Yaxis = mathcal->AngleToYDis(QString::number(CurrentStepTemp.Angle,'.',0).toInt(),QString::number(CurrentStepTemp.AngleCompensate,'.',0).toInt(),0,CurrentProgramTemp.BroadThick,0, CurrentStepTemp.Yzero);
              scanAngleFlag = false;
              scanAngleCompensateFlag = false;
              ui->lineEdit_S_Yaxis->setText(QString::number(CurrentStepTemp.Yaxis,'.',0));
              ui->tableWidget_Step->setItem(ui->tableWidget_Step->currentRow(),StepProgram_Yaxis,new QTableWidgetItem(QString::number(CurrentStepTemp.Yaxis,'.',0)));
              qDebug()<<"timerEvent"<<CurrentStepTemp.Angle<<CurrentStepTemp.AngleCompensate<<CurrentProgramTemp.BroadThick<<CurrentStepTemp.Yzero<<CurrentStepTemp.Yaxis;
+
+//             double MathCalculation::pressureCal(double boardWidth,double boardTick,double strength,double moldV)
         }
+
+        CurrentStepTemp.Pressure = mathcal->pressureCal(CurrentProgramTemp.BroadWideth,CurrentProgramTemp.BroadThick,CurrentMaterialTemp.StrengthFactor,CurrentLowerMoldTemp.D_V);
+        ui->lineEdit_S_pressure->setText(QString::number(CurrentStepTemp.Pressure,'.',0));
+        ui->tableWidget_Step->setItem(ui->tableWidget_Step->currentRow(),StepProgram_Pressure,new QTableWidgetItem(QString::number(CurrentStepTemp.Pressure,'.',0)));
     }
 
 }
@@ -244,68 +252,165 @@ void Step::Update_StepProgramItem(int Id,int Col,QString Value)
 //工步编程tableWidget_Step和lineEdit_S建立链接
 void Step::on_lineEdit_S_Angle_returnPressed()
 {
-    bool ok;
-    ui->tableWidget_Step->setItem(ui->tableWidget_Step->currentRow(), StepProgram_Angle, new QTableWidgetItem(ui->lineEdit_S_Angle->text()));
-    Update_StepProgramItem(ui->tableWidget_Step->item(ui->tableWidget_Step->currentRow(),StepProgram_Id)->text().toInt(),StepProgram_Angle,ui->lineEdit_S_Angle->text());
     RunState *runstate1 = new  RunState;
-    runstate1->ReadForRun();
-    CurrentStepTemp.Angle = ui->lineEdit_S_Angle->text().toDouble(&ok);
+    runstate1->ReadForRun(CurrentReg.Current_StepProgramRow);
+    bool ok;
+    if( (ui->lineEdit_S_Angle->text().toInt() >= CurrentLowerMoldTemp.Angle) && (ui->lineEdit_S_Angle->text().toInt() <= 180) )
+    {
+        CurrentStepTemp.Angle = ui->lineEdit_S_Angle->text().toDouble(&ok);
+        ui->tableWidget_Step->setItem(ui->tableWidget_Step->currentRow(), StepProgram_Angle, new QTableWidgetItem(ui->lineEdit_S_Angle->text()));
+        Update_StepProgramItem(ui->tableWidget_Step->item(ui->tableWidget_Step->currentRow(),StepProgram_Id)->text().toInt(),StepProgram_Angle,ui->lineEdit_S_Angle->text());
+        scanAngleFlag = true;
+    }else
+    {
+        ui->tableWidget_Step->setItem(ui->tableWidget_Step->currentRow(), StepProgram_Angle, new QTableWidgetItem(QString::number(CurrentStepTemp.Angle,'.',0)));
+        ui->lineEdit_S_Angle->setText(QString::number(CurrentStepTemp.Angle,'.',0));
+    }
 
-    scanAngleFlag = true;
 
   // MathCalculation::AngleToYDis(ui->lineEdit_S_Angle->text(),ui->lineEdit_S_AngleCompensate->text(),0,float boardThick,float moldThick,float YZero);
-
 }
 void Step::on_lineEdit_S_AngleCompensate_returnPressed()
 {
+
     bool ok;
-    ui->tableWidget_Step->setItem(ui->tableWidget_Step->currentRow(), StepProgram_AngleCompensate, new QTableWidgetItem(ui->lineEdit_S_AngleCompensate->text()));
-    Update_StepProgramItem(ui->tableWidget_Step->item(ui->tableWidget_Step->currentRow(),StepProgram_Id)->text().toInt(),StepProgram_AngleCompensate,ui->lineEdit_S_AngleCompensate->text());
     RunState *runstate1 = new  RunState;
-    runstate1->ReadForRun();
-    CurrentStepTemp.AngleCompensate = ui->lineEdit_S_AngleCompensate->text().toDouble(&ok);
-    scanAngleCompensateFlag = true;
+    runstate1->ReadForRun(CurrentReg.Current_StepProgramRow);
+    if( (ui->lineEdit_S_AngleCompensate->text().toInt() >= -90) && (ui->lineEdit_S_AngleCompensate->text().toInt() <= 90) )
+    {
+        CurrentStepTemp.AngleCompensate = ui->lineEdit_S_AngleCompensate->text().toDouble(&ok);
+        ui->tableWidget_Step->setItem(ui->tableWidget_Step->currentRow(), StepProgram_AngleCompensate, new QTableWidgetItem(ui->lineEdit_S_AngleCompensate->text()));
+        Update_StepProgramItem(ui->tableWidget_Step->item(ui->tableWidget_Step->currentRow(),StepProgram_Id)->text().toInt(),StepProgram_AngleCompensate,ui->lineEdit_S_AngleCompensate->text());
+        scanAngleCompensateFlag = true;
+    }else
+    {
+        ui->tableWidget_Step->setItem(ui->tableWidget_Step->currentRow(), StepProgram_AngleCompensate, new QTableWidgetItem(QString::number(CurrentStepTemp.AngleCompensate,'.',0)));
+        ui->lineEdit_S_AngleCompensate->setText(QString::number(CurrentStepTemp.AngleCompensate,'.',0));
+
+    }
+
 
 }
 void Step::on_lineEdit_S_Yaxis_returnPressed()
 {   
-    ui->tableWidget_Step->setItem(ui->tableWidget_Step->currentRow(), StepProgram_Yaxis, new QTableWidgetItem(ui->lineEdit_S_Yaxis->text()));
-    Update_StepProgramItem(ui->tableWidget_Step->item(ui->tableWidget_Step->currentRow(),StepProgram_Id)->text().toInt(),StepProgram_Yaxis,ui->lineEdit_S_Yaxis->text());
+    bool ok;
+    if( (ui->lineEdit_S_Yaxis->text().toInt() >= 0) && (ui->lineEdit_S_Yaxis->text().toInt() <= 9999) )
+    {
+        CurrentStepTemp.Yaxis = ui->lineEdit_S_Yaxis->text().toDouble(&ok);
+        ui->tableWidget_Step->setItem(ui->tableWidget_Step->currentRow(), StepProgram_Yaxis, new QTableWidgetItem(ui->lineEdit_S_Yaxis->text()));
+        Update_StepProgramItem(ui->tableWidget_Step->item(ui->tableWidget_Step->currentRow(),StepProgram_Id)->text().toInt(),StepProgram_Yaxis,ui->lineEdit_S_Yaxis->text());
+    }else
+    {
+        ui->tableWidget_Step->setItem(ui->tableWidget_Step->currentRow(), StepProgram_Yaxis, new QTableWidgetItem(QString::number(CurrentStepTemp.Yaxis,'.',0)));
+        ui->lineEdit_S_Yaxis->setText(QString::number(CurrentStepTemp.Yaxis,'.',0));
+    }
+
 }
 void Step::on_lineEdit_S_Xaxis_returnPressed()
 {
-    ui->tableWidget_Step->setItem(ui->tableWidget_Step->currentRow(), StepProgram_Xaxis, new QTableWidgetItem(ui->lineEdit_S_Xaxis->text()));
-    Update_StepProgramItem(ui->tableWidget_Step->item(ui->tableWidget_Step->currentRow(),StepProgram_Id)->text().toInt(),StepProgram_Xaxis,ui->lineEdit_S_Xaxis->text());
+
+    bool ok;
+    if( (ui->lineEdit_S_Xaxis->text().toInt() >= 0) && (ui->lineEdit_S_Xaxis->text().toInt() <= 9999) )
+    {
+        CurrentStepTemp.Xaxis = ui->lineEdit_S_Yaxis->text().toDouble(&ok);
+        ui->tableWidget_Step->setItem(ui->tableWidget_Step->currentRow(), StepProgram_Xaxis, new QTableWidgetItem(ui->lineEdit_S_Xaxis->text()));
+        Update_StepProgramItem(ui->tableWidget_Step->item(ui->tableWidget_Step->currentRow(),StepProgram_Id)->text().toInt(),StepProgram_Xaxis,ui->lineEdit_S_Xaxis->text());
+    }else
+    {
+        ui->tableWidget_Step->setItem(ui->tableWidget_Step->currentRow(), StepProgram_Xaxis, new QTableWidgetItem(QString::number(CurrentStepTemp.Xaxis,'.',0)));
+        ui->lineEdit_S_Xaxis->setText(QString::number(CurrentStepTemp.Xaxis,'.',0));
+    }
+
 }
 void Step::on_lineEdit_S_XaxisCorrect_returnPressed()
 {
-    ui->tableWidget_Step->setItem(ui->tableWidget_Step->currentRow(), StepProgram_XaxisCorrect, new QTableWidgetItem(ui->lineEdit_S_XaxisCorrect->text()));
-    Update_StepProgramItem(ui->tableWidget_Step->item(ui->tableWidget_Step->currentRow(),StepProgram_Id)->text().toInt(),StepProgram_XaxisCorrect,ui->lineEdit_S_XaxisCorrect->text());
+    bool ok;
+    if( (ui->lineEdit_S_XaxisCorrect->text().toInt() >= 0) && (ui->lineEdit_S_XaxisCorrect->text().toInt() <= 9999) )
+    {
+        CurrentStepTemp.XaxisCorrect = ui->lineEdit_S_XaxisCorrect->text().toDouble(&ok);
+        ui->tableWidget_Step->setItem(ui->tableWidget_Step->currentRow(), StepProgram_XaxisCorrect, new QTableWidgetItem(ui->lineEdit_S_XaxisCorrect->text()));
+        Update_StepProgramItem(ui->tableWidget_Step->item(ui->tableWidget_Step->currentRow(),StepProgram_Id)->text().toInt(),StepProgram_XaxisCorrect,ui->lineEdit_S_XaxisCorrect->text());
+    }else
+    {
+        ui->tableWidget_Step->setItem(ui->tableWidget_Step->currentRow(), StepProgram_XaxisCorrect, new QTableWidgetItem(QString::number(CurrentStepTemp.XaxisCorrect,'.',0)));
+        ui->lineEdit_S_XaxisCorrect->setText(QString::number(CurrentStepTemp.XaxisCorrect,'.',0));
+    }
+
 }
 void Step::on_lineEdit_S_distance_returnPressed()
 {
-    ui->tableWidget_Step->setItem(ui->tableWidget_Step->currentRow(), StepProgram_Distance, new QTableWidgetItem(ui->lineEdit_S_distance->text()));
-    Update_StepProgramItem(ui->tableWidget_Step->item(ui->tableWidget_Step->currentRow(),StepProgram_Id)->text().toInt(),StepProgram_Distance,ui->lineEdit_S_distance->text());
+    bool ok;
+    if( (ui->lineEdit_S_distance->text().toInt() >= 0) && (ui->lineEdit_S_distance->text().toInt() <= 9999) )
+    {
+        CurrentStepTemp.concedeDistance = ui->lineEdit_S_distance->text().toDouble(&ok);
+        ui->tableWidget_Step->setItem(ui->tableWidget_Step->currentRow(), StepProgram_Distance, new QTableWidgetItem(ui->lineEdit_S_distance->text()));
+        Update_StepProgramItem(ui->tableWidget_Step->item(ui->tableWidget_Step->currentRow(),StepProgram_Id)->text().toInt(),StepProgram_Distance,ui->lineEdit_S_distance->text());
+    }else
+    {
+        ui->tableWidget_Step->setItem(ui->tableWidget_Step->currentRow(), StepProgram_Distance, new QTableWidgetItem(QString::number(CurrentStepTemp.concedeDistance,'.',0)));
+        ui->lineEdit_S_distance->setText(QString::number(CurrentStepTemp.concedeDistance,'.',0));
+    }
+
 }
 void Step::on_lineEdit_S_pressure_returnPressed()
 {
-    ui->tableWidget_Step->setItem(ui->tableWidget_Step->currentRow(), StepProgram_Pressure, new QTableWidgetItem(ui->lineEdit_S_pressure->text()));
-    Update_StepProgramItem(ui->tableWidget_Step->item(ui->tableWidget_Step->currentRow(),StepProgram_Id)->text().toInt(),StepProgram_Pressure,ui->lineEdit_S_pressure->text());
+    bool ok;
+    if( (ui->lineEdit_S_pressure->text().toInt() >= 0) && (ui->lineEdit_S_pressure->text().toInt() <= 99) )
+    {
+        CurrentStepTemp.Pressure = ui->lineEdit_S_pressure->text().toDouble(&ok);
+        ui->tableWidget_Step->setItem(ui->tableWidget_Step->currentRow(), StepProgram_Pressure, new QTableWidgetItem(ui->lineEdit_S_pressure->text()));
+        Update_StepProgramItem(ui->tableWidget_Step->item(ui->tableWidget_Step->currentRow(),StepProgram_Id)->text().toInt(),StepProgram_Pressure,ui->lineEdit_S_pressure->text());
+    }else
+    {
+        ui->tableWidget_Step->setItem(ui->tableWidget_Step->currentRow(), StepProgram_Pressure, new QTableWidgetItem(QString::number(CurrentStepTemp.Pressure,'.',0)));
+        ui->lineEdit_S_pressure->setText(QString::number(CurrentStepTemp.Pressure,'.',0));
+    }
+
 }
 void Step::on_lineEdit_S_return_returnPressed()
 {
-    ui->tableWidget_Step->setItem(ui->tableWidget_Step->currentRow(), StepProgram_ReturnTime, new QTableWidgetItem(ui->lineEdit_S_return->text()));
-    Update_StepProgramItem(ui->tableWidget_Step->item(ui->tableWidget_Step->currentRow(),StepProgram_Id)->text().toInt(),StepProgram_ReturnTime,ui->lineEdit_S_return->text());
+    bool ok;
+    if( (ui->lineEdit_S_return->text().toInt() >= 0) && (ui->lineEdit_S_return->text().toInt() <= 9999) )
+    {
+        CurrentStepTemp.ReturnTime = ui->lineEdit_S_return->text().toDouble(&ok);
+        ui->tableWidget_Step->setItem(ui->tableWidget_Step->currentRow(), StepProgram_ReturnTime, new QTableWidgetItem(ui->lineEdit_S_return->text()));
+        Update_StepProgramItem(ui->tableWidget_Step->item(ui->tableWidget_Step->currentRow(),StepProgram_Id)->text().toInt(),StepProgram_ReturnTime,ui->lineEdit_S_return->text());
+    }else
+    {
+        ui->tableWidget_Step->setItem(ui->tableWidget_Step->currentRow(), StepProgram_ReturnTime, new QTableWidgetItem(QString::number(CurrentStepTemp.ReturnTime,'.',0)));
+        ui->lineEdit_S_return->setText(QString::number(CurrentStepTemp.ReturnTime,'.',0));
+    }
+
 }
 void Step::on_lineEdit_S_Holding_returnPressed()
 {
-    ui->tableWidget_Step->setItem(ui->tableWidget_Step->currentRow(), StepProgram_HoldingTime, new QTableWidgetItem(ui->lineEdit_S_Holding->text()));
-    Update_StepProgramItem(ui->tableWidget_Step->item(ui->tableWidget_Step->currentRow(),StepProgram_Id)->text().toInt(),StepProgram_HoldingTime,ui->lineEdit_S_Holding->text());
+    bool ok;
+    if( (ui->lineEdit_S_Holding->text().toInt() >= 0) && (ui->lineEdit_S_Holding->text().toInt() <= 99) )
+    {
+        CurrentStepTemp.Holding = ui->lineEdit_S_Holding->text().toDouble(&ok);
+        ui->tableWidget_Step->setItem(ui->tableWidget_Step->currentRow(), StepProgram_HoldingTime, new QTableWidgetItem(ui->lineEdit_S_Holding->text()));
+        Update_StepProgramItem(ui->tableWidget_Step->item(ui->tableWidget_Step->currentRow(),StepProgram_Id)->text().toInt(),StepProgram_HoldingTime,ui->lineEdit_S_Holding->text());
+    }else
+    {
+        ui->tableWidget_Step->setItem(ui->tableWidget_Step->currentRow(), StepProgram_HoldingTime, new QTableWidgetItem(QString::number(CurrentStepTemp.Holding,'.',0)));
+        ui->lineEdit_S_Holding->setText(QString::number(CurrentStepTemp.Holding,'.',0));
+    }
+
 }
 void Step::on_lineEdit_S_Raxis_returnPressed()
 {
-    ui->tableWidget_Step->setItem(ui->tableWidget_Step->currentRow(), StepProgram_Raxis, new QTableWidgetItem(ui->lineEdit_S_Raxis->text()));
-    Update_StepProgramItem(ui->tableWidget_Step->item(ui->tableWidget_Step->currentRow(),StepProgram_Id)->text().toInt(),StepProgram_Raxis,ui->lineEdit_S_Raxis->text());
+    bool ok;
+    if( (ui->lineEdit_S_Raxis->text().toInt() >= 0) && (ui->lineEdit_S_Raxis->text().toInt() <= 9999) )
+    {
+        CurrentStepTemp.Raxis = ui->lineEdit_S_Raxis->text().toDouble(&ok);
+        ui->tableWidget_Step->setItem(ui->tableWidget_Step->currentRow(), StepProgram_Raxis, new QTableWidgetItem(ui->lineEdit_S_Raxis->text()));
+        Update_StepProgramItem(ui->tableWidget_Step->item(ui->tableWidget_Step->currentRow(),StepProgram_Id)->text().toInt(),StepProgram_Raxis,ui->lineEdit_S_Raxis->text());
+    }else
+    {
+        ui->tableWidget_Step->setItem(ui->tableWidget_Step->currentRow(), StepProgram_Raxis, new QTableWidgetItem(QString::number(CurrentStepTemp.Raxis,'.',0)));
+        ui->lineEdit_S_Raxis->setText(QString::number(CurrentStepTemp.Raxis,'.',0));
+    }
+
 
 }
 

@@ -27,6 +27,7 @@ void delay1ms(void)
   */
 void Master_heartbeatError(CO_Data* d, UNS8 heartbeatID)
 {
+    motor[heartbeatID-1].initStatus = 0; //离线之后
     motor[heartbeatID-1].HeartbeatError = 1;
   //  MSG_USER(0, "Master_heartbeatError %d\n", heartbeatID);
    printf("Master_heartbeatError %d\n",heartbeatID);

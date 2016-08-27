@@ -291,7 +291,7 @@ void Manual::XMotorThread()
 //     ui->lineEdit_ManualX->setText(QString::number(Get_MOTOR_Demand_Postion(0x01),10));
 //     //ui->lineEdit_XCurrentPos->setText(QString::number(MotorXDisplayValue,10));
 //    }
-//    if(MotorYDisplayFalg==1)
+//    if(MotorYDispcheckMotorState()layFalg==1)
 //    {
 //     ui->lineEdit_ManualY->setText(QString::number(Get_MOTOR_Demand_Postion(0x02),10));
 //     //ui->lineEdit_YCurrentPos->setText(QString::number(MotorYDisplayValue,10));
@@ -440,5 +440,11 @@ void Manual::on_toolButton_YReferencePoint_clicked()
 {
     YReferencePoint *yrp =new YReferencePoint;
     yrp->exec();
+
+}
+
+void Manual::on_toolButton_Length_clicked()
+{
+
 
 }

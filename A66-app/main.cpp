@@ -98,7 +98,7 @@ void  MotorThread::run()
 
 int main(int argc, char *argv[])
 {
-#if 0
+#if 1
     CanopenInit();
 ///////////////////////////////
     printf("to_socket\n");

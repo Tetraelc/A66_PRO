@@ -36,7 +36,7 @@ void openBeep()
 void Sql_Init()
 {
     db.setHostName("localhost"); //设置数据库主机名
-    db.setDatabaseName("A66-app.db"); //设置数据库名/opt/tetra/A66-app/
+    db.setDatabaseName("/opt/tetra/A66-app/A66-app.db"); //设置数据库名
     db.setUserName("root");//设置数据库登入用户名
     db.setPassword("123456");//设计数据库登入密码
 }

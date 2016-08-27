@@ -65,7 +65,7 @@ void Programdb::openProgramWin()
     Display_ProgramItem();
     ui->comboBox_P_material->setCurrentIndex(CurrentReg.Materialtemp[0]);
     connect(ui->comboBox_P_material,SIGNAL(currentIndexChanged(const QString &)),this,SLOT(UpdtaeMaterialDat()));
-    qDebug()<<"Materialtemp[0]"<<CurrentReg.Materialtemp[0];
+   // qDebug()<<"Materialtemp[0]"<<CurrentReg.Materialtemp[0];
 
 
 }
@@ -110,7 +110,7 @@ void Programdb::initProgram(void)
       ReflashMaterialdb();
       Display_ProgramItem();
       ui->comboBox_P_material->setCurrentIndex(CurrentReg.Materialtemp[0]);
-      qDebug()<<"Materialtemp[0]"<<CurrentReg.Materialtemp[0];
+     // qDebug()<<"Materialtemp[0]"<<CurrentReg.Materialtemp[0];
 
 }
 
@@ -134,7 +134,7 @@ void Programdb::ReflashMaterialdb()
 
             ui->comboBox_P_material->addItem(record.value("Name").toString());
           //  ui->tableWidget_Programdb->setItem(i,Program_Material,new QTableWidgetItem(record.value("Name").toString()));
-            qDebug()<<"record.value().toString()"<<record.value("Name").toString();
+           // qDebug()<<"record.value().toString()"<<record.value("Name").toString();
     }
 
     ui->comboBox_P_material->setCurrentIndex(0);
@@ -195,14 +195,14 @@ void Programdb::Display_ProgramItem()
             ui->tableWidget_Programdb->setItem(i,Program_Name,new QTableWidgetItem(record.value("Name").toString()));
             ui->tableWidget_Programdb->setItem(i,Program_BoardWide,new QTableWidgetItem(QString::number(record.value("BoardWide").toDouble(&ok),10,2)));
             ui->tableWidget_Programdb->setItem(i,Program_BoardThick,new QTableWidgetItem(QString::number(record.value("BoardThick").toDouble(&ok),10,2)));//******NEW********//
-            qDebug()<<"record.value("").toInt()"<<record.value("Material").toInt();
-            qDebug()<<"record.value("").toString()"<<record.value("Material").toString();
+           // qDebug()<<"record.value("").toInt()"<<record.value("Material").toInt();
+           // qDebug()<<"record.value("").toString()"<<record.value("Material").toString();
             ui->comboBox_P_material->setCurrentIndex(record.value("Material").toInt());
 
 
             CurrentReg.Materialtemp[i] = record.value("Material").toInt();
 
-            qDebug()<<" -----------------------------Materialtemp[i]"<< CurrentReg.Materialtemp[i];
+           // qDebug()<<" -----------------------------Materialtemp[i]"<< CurrentReg.Materialtemp[i];
 
 //            if(ReflashMaterialFalg > 0)
 //            {
@@ -212,8 +212,8 @@ void Programdb::Display_ProgramItem()
 //            }
 //            ReflashMaterialFalg ++;
             ui->tableWidget_Programdb->setItem(i,Program_Material,new QTableWidgetItem(ui->comboBox_P_material->currentText()));
-            qDebug()<<"currentText"<<ui->comboBox_P_material->currentText();
-            qDebug()<<"currentIndex"<<ui->comboBox_P_material->currentIndex();
+          //  qDebug()<<"currentText"<<ui->comboBox_P_material->currentText();
+          // qDebug()<<"currentIndex"<<ui->comboBox_P_material->currentIndex();
 
 
             ui->tableWidget_Programdb->setItem(i,Program_LowerMold,new QTableWidgetItem(record.value("LowerMold").toString() ));//+ "/" + record.value("UpMold").toString()

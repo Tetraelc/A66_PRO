@@ -15,6 +15,7 @@
 #include "mainwindow.h"
 #include "wrokedtotal.h"
 #include "systemwarn.h"
+#include "mathcalculation.h"
 
 
 int set_count =0;
@@ -55,11 +56,12 @@ void RunState::openRunStateWin()
     this->move(0,WIDGET_Y);
 
     ReadRunTable();
-    ReadForRun();
+    ReadForRun(CurrentRnuStateRow);
     CurrentRnuStateWorkedTotal=0;
 
 
     initWorkedTotalDialog();
+
 
 
 
@@ -88,22 +90,25 @@ void RunState::ReturnRun()
 
 void RunState::initWorkedTotalDialog()
 {
+
     if(!(A20_IN_Status & UpperPoint))
     {
-        CurrentReg.Current_MotorAlarm = UpperPointAlarm;
-//        SystemWarn *warn = new SystemWarn;
-//        warn->exec();
+        ReturnRun();
+        //CurrentReg.Current_MotorAlarm = UpperPointAlarm;
+        SystemWarn *warn = new SystemWarn;
+        warn->exec();
 
         if(!(A20_IN_Status & UpperPoint))
         {
              emit openProgramwindow();
+             qDebug("openProgramwindow");
         }
 
+
     }
-    else
-    {
-        WrokedTotal *wk =new WrokedTotal;
-        wk->exec();
+//    else
+//    {
+
         CurrentRnuStateRow = 0;
         CurrentReg.Current_WorkedTotal =200;
         ui->tableWidget_Run->selectRow(CurrentRnuStateRow);
@@ -111,50 +116,95 @@ void RunState::initWorkedTotalDialog()
         set_count = 0;
         PostionReachFlag = 1;
         ChangeRowFlag =0 ;
-
+        WrokedTotal *wk =new WrokedTotal;
+        wk->exec();
         Ms_Run = startTimer(20);
-    }
+        qDebug()<<" CurrentReg.Current_WorkedTotal.toInt()"<< CurrentReg.Current_WorkedTotal.toInt();
+        qDebug()<<" CurrentReg.Current_WorkedTotal"<< CurrentReg.Current_WorkedTotal;
+//    }
+
+}
+
+void RunState::checkMotorState()
+{
+    //qDebug()<<"Get_HeartbetError(0x01)"<<Get_HeartbetError(0x01);
+     if(Get_HeartbetError(0x01) == 0x01)
+     {
+         QMessageBox::critical(0,QObject::trUtf8("异常"),
+                               trUtf8("1号电机离线"));
+
+     }
+     if(Get_HeartbetError(0x02) == 0x01)
+     {
+         QMessageBox::critical(0,QObject::trUtf8("异常"),
+                               trUtf8("2号电机离线"));
+
+     }
+
+//     if(Get_HeartbetError(0x03) == 1)
+//     {
+//         QMessageBox::critical(0,QObject::trUtf8("异常"),
+//                               trUtf8("3号电机离线"));
+//          Clean_HeartbetError(0x02);
+//     }
+
+     if(Get_HeartbetError(0x04) == 0x01)
+     {
+         QMessageBox::critical(0,QObject::trUtf8("异常"),
+                               trUtf8("MT离线"));
+     }
+
+
+     if(motor[0].initStatus == 0)
+     {
+         QMessageBox::critical(0,QObject::trUtf8("异常"),
+                               trUtf8("1号电机未初始化！要重新打开电机"));
+     }
+     if(motor[1].initStatus == 0)
+     {
+         QMessageBox::critical(0,QObject::trUtf8("异常"),
+                               trUtf8("2号电机未初始化！要重新打开电机"));
+     }
+//     if(motor[2].initStatus == 0)
+//     {
+//         QMessageBox::critical(0,QObject::trUtf8("异常"),
+//                               trUtf8("3号电机未初始化！要重新打开电机"));
+//     }
+
 
 }
 
 
 
+
 void RunState::MotorRun()
 {
-
+//#define CUTSMODE			0x08//µ¥ŽÎÄ£Êœ  IN4
+//#define CUTCMODE			0x04//Á¬ÐøÄ£Êœ  IN3
+//#define CUTJMODE
     ui->tableWidget_Run->selectRow(CurrentRnuStateRow);
     ui->label_ProgramName->setText(CurrentProgramTemp.ProgramName);
-
     ui->label_CurrentStep->setText( QString::number(CurrentRnuStateRow + 1,'.',0) + "/" +  QString::number(CurrentProgramTemp.StepNumber,'.',0));
-
     ui->label_WorkedTotal->setText(QString::number(CurrentRnuStateWorkedTotal,'.',0) + "/" + CurrentReg.Current_WorkedTotal );
 
-   //qDebug()<<"Get_HeartbetError(0x01)"<<Get_HeartbetError(0x01);
-//    if(Get_HeartbetError(0x01) == 0x01)
-//    {
-//        QMessageBox::critical(0,QObject::trUtf8("异常"),
-//                              trUtf8("1号电机离线"));
+    if(A20_IN_Status & CUTSMODE)
+     {
+        ui->toolButton_Mode->setText(trUtf8("连续"));
+     }
+    else if(A20_IN_Status & CUTCMODE)
+    {
+         ui->toolButton_Mode->setText(trUtf8("单次"));
+    }
+    else if(A20_IN_Status & CUTJMODE)
+    {
+        ui->toolButton_Mode->setText(trUtf8("点动")); //>????
+    }
+    else
+    {
+        ui->toolButton_Mode->setText(trUtf8("未知状态"));
+    }
 
-//    }
-//    if(Get_HeartbetError(0x02) == 0x01)
-//    {
-//        QMessageBox::critical(0,QObject::trUtf8("异常"),
-//                              trUtf8("2号电机离线"));
-
-//    }
-
-//    if(Get_HeartbetError(0x03) == 1)
-//    {
-//        QMessageBox::critical(0,QObject::trUtf8("异常"),
-//                              trUtf8("3号电机离线"));
-//         Clean_HeartbetError(0x02);
-//    }
-
-//    if(Get_HeartbetError(0x04) == 0x01)
-//    {
-//        QMessageBox::critical(0,QObject::trUtf8("异常"),
-//                              trUtf8("MT离线"));
-//    }
+    checkMotorState();
 
 }
 
@@ -164,8 +214,8 @@ void RunState::ReflashWorkedTotal()
     if(CurrentRnuStateWorkedTotal == CurrentReg.Current_WorkedTotal.toInt())
     {
          QuitRunState();
-
     }
+
 
 }
 
@@ -198,6 +248,7 @@ void RunState::SendMTEnableSignal()
 
        Set_Motor_Speed_Postion_Abs(0x02,5000,YaxisValue);
        Set_Motor_Speed_Postion_Abs(0x01,5000,XaxisValue);
+       ui->label_Run->setText(trUtf8("定位"));
 
        ChangeRowFlag = 1;
 
@@ -213,6 +264,7 @@ void RunState::SendMTEnableSignal()
        {
           // ReadTrg(0x00);
            Write_MOTOR_One_Data(0x04,0x7001,0x01,0x01,ENTER_ENABLE);
+           ui->label_Run->setText(trUtf8("就绪"));
            PostionReachFlag=0;
            wait_pos_time   = 0;
        }
@@ -262,6 +314,13 @@ void RunState::SendMTEnableSignal()
 }
 
 
+int RunState::concedeState()
+{
+    Set_Motor_Speed_Postion_Rel(0x01,1000,CurrentStepTemp.concedeDistance);
+    ui->label_Run->setText(trUtf8("退让"));
+}
+
+
 
 
 int RunState::CheckPressureState()
@@ -280,6 +339,7 @@ int RunState::CheckPressureState()
 
     case VSlow :
         // qDebug("VSlow");
+        concedeState();
         ui->label_Pressure->setText(trUtf8("工进"));break;
     case  Vkeep  :
          //qDebug("Vkeep");
@@ -306,10 +366,7 @@ void RunState::timerEvent(QTimerEvent *t) //定时器事件
     if(t->timerId()==Ms_Run){
 
       ui->lineEdit_XCurrentPos->setText(QString::number(Get_MOTOR_Demand_Postion(0x01),10));
-
       ui->lineEdit_YCurrentPos->setText(QString::number(Get_MOTOR_Demand_Postion(0x02),10));
-
- //     ReadForRun();
 
       MotorRun();
       CheckPressureState();
@@ -392,25 +449,10 @@ void RunState::initRunState()
 }
 
 
-void RunState::ReadForRun()
+void RunState::ReadForRun(int Type)
 {
     qDebug()<<"Enter ReadForRun data base initial Window!"<<endl;
     bool ok;
-
-//    CurrentStepTemp.Angle = ui->tableWidget_Run->item(ui->tableWidget_Run->currentRow(),StepProgram_Angle)->text().toDouble(&ok);
-//    CurrentStepTemp.AngleCompensate = ui->tableWidget_Run->item(ui->tableWidget_Run->currentRow(),StepProgram_AngleCompensate)->text().toDouble(&ok);
-//    CurrentStepTemp.Yaxis = ui->tableWidget_Run->item(ui->tableWidget_Run->currentRow(),StepProgram_Yaxis)->text().toDouble(&ok);
-//    CurrentStepTemp.Xaxis = ui->tableWidget_Run->item(ui->tableWidget_Run->currentRow(),StepProgram_Xaxis)->text().toDouble(&ok);
-//    CurrentStepTemp.XaxisCorrect = ui->tableWidget_Run->item(ui->tableWidget_Run->currentRow(),StepProgram_XaxisCorrect)->text().toDouble(&ok);
-//    CurrentStepTemp.Distance = ui->tableWidget_Run->item(ui->tableWidget_Run->currentRow(),StepProgram_Distance)->text().toDouble(&ok);
-//    CurrentStepTemp.Pressure = ui->tableWidget_Run->item(ui->tableWidget_Run->currentRow(),StepProgram_Pressure)->text().toDouble(&ok);
-//    CurrentStepTemp.ReturnTime = ui->tableWidget_Run->item(ui->tableWidget_Run->currentRow(),StepProgram_ReturnTime)->text().toDouble(&ok);
-//    CurrentStepTemp.Holding = ui->tableWidget_Run->item(ui->tableWidget_Run->currentRow(),StepProgram_HoldingTime)->text().toDouble(&ok);
-//    CurrentStepTemp.Raxis = ui->tableWidget_Run->item(ui->tableWidget_Run->currentRow(),StepProgram_Raxis)->text().toDouble(&ok);
-
-
-//    CurrentProgramTemp.BroadThickA
-
 
     if(!db.open())
     {
@@ -434,15 +476,15 @@ void RunState::ReadForRun()
               CurrentProgramTemp.UpMold = record.value("UpMold").toDouble(&ok);
               CurrentProgramTemp.LowerMold =  record.value("LowerMold").toDouble(&ok);
               CurrentProgramTemp.ProcessedNum = record.value("WorkedTotal").toDouble(&ok);
-              qDebug()<<" CurrentProgramTemp.Material"<< CurrentProgramTemp.Material;
-              qDebug()<<"record.value().toString()"<<record.value("Name").toString();
+    //          qDebug()<<" CurrentProgramTemp.Material"<< CurrentProgramTemp.Material;
+        //      qDebug()<<"record.value().toString()"<<record.value("Name").toString();
 //              qDebug()<<"record.value().toString()"<<record.value("BoardThick").toString();
 //              qDebug()<<"record.value().toString()"<<record.value("Material").toString();
 
     }
 
     model.setTable(CurrentReg.CurrentProgramName);
-    model.setFilter("ID =" + QString::number(CurrentReg.Current_StepProgramRow + 1, 10));
+    model.setFilter("ID =" + QString::number( Type + 1, 10));//CurrentReg.Current_StepProgramRow
     model.select();
     for(int i=0;i<model.rowCount();i++)
     {
@@ -452,7 +494,7 @@ void RunState::ReadForRun()
               CurrentStepTemp.Yaxis =  record.value("Yaxis").toDouble(&ok);
               CurrentStepTemp.Xaxis = record.value("Xaxis").toDouble(&ok);
               CurrentStepTemp.XaxisCorrect =  record.value("XaxisCorrect").toDouble(&ok);
-              CurrentStepTemp.Distance= record.value("Distance").toDouble(&ok);
+              CurrentStepTemp.concedeDistance= record.value("Distance").toDouble(&ok);
               CurrentStepTemp.Pressure =  record.value("Pressure").toDouble(&ok);
               CurrentStepTemp.Holding = record.value("HoldiAng").toDouble(&ok);
               CurrentStepTemp.ReturnTime =  record.value("ReturnTime").toDouble(&ok);
@@ -491,7 +533,7 @@ void RunState::ReadForRun()
            // qDebug()<<"record.value().toString()"<<record.value("Id").toString();
     }
     model.setTable("Materialdb");
-    model.setFilter("Name = " + QString::number(CurrentProgramTemp.Material + 1 ,10));//
+    model.setFilter("ID = " + QString::number(CurrentProgramTemp.Material + 1 ,10));//
     qDebug()<<"CurrentProgramTemp.Material"<<CurrentProgramTemp.Material;
 
     // qDebug()<<"CurrentProgramTemp.Material"<<CurrentProgramTemp.Material.toStdString();
@@ -563,7 +605,7 @@ void RunState::on_pushButton_Left_5_clicked()
 void RunState::on_tableWidget_Run_itemSelectionChanged()
 {
    //CurrentReg.Current_RunRow = ui->tableWidget_Run->currentRow();
-   ReadForRun();
+   ReadForRun(CurrentRnuStateRow);
 }
 
 

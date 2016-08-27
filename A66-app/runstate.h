@@ -17,7 +17,7 @@ public:
 
     void initRunState();
 
-    void ReadForRun();
+    void ReadForRun(int Type);
     void ReadRunTable();
     void MotorRun();
     int CheckPressureState();
@@ -29,6 +29,8 @@ public:
     void ReflashWorkedTotal();
     void systemCheckSafrState();
     void ReturnRun();
+    int  concedeState();
+    void checkMotorState();
     int CurrentRnuStateWorkedTotal;
 public slots:
     void openRunStateWin();

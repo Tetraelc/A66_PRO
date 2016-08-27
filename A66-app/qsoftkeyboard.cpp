@@ -105,7 +105,7 @@ void qSoftKeyboard::on_BackButton_clicked()
 
 void qSoftKeyboard::on_closeButton_clicked()//Key_Enter
 {
-    //QWSServer::sendKeyEvent(0x01000005,Qt::Key_Enter,Qt::NoModifier,true,false);//只能嵌入式平台下使用
+    QWSServer::sendKeyEvent(0x01000005,Qt::Key_Enter,Qt::NoModifier,true,false);//只能嵌入式平台下使用
      this->close();
 }
 

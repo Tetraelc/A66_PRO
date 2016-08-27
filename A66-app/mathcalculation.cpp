@@ -67,8 +67,8 @@ double MathCalculation::AngleToLength(double m_ba)
     double m_tt =CurrentProgramTemp.BroadThick; //DisMenu[MultiStepProgram].Dis[MspPancel].fword;
     double m_r = CurrentLowerMoldTemp.Radius;//MoldLib[(uint8)DisMenu[MultiStepProgram].Dis[MspMoldNum].fword - 1].MoldRadius;
 //	double m_ba = DisMenu[EachStepProgram].Dis[EspAngle].fword;
-    double m_e =60; //CurrentMaterialTemp.EMold;//MaterLib[(uint8)DisMenu[MultiStepProgram].Dis[MspMaterial].fword - 1].E_Module;
-    double m_o = 80;//CurrentMaterialTemp.StrengthFactor;// MaterLib[(uint8)DisMenu[MultiStepProgram].Dis[MspMaterial].fword - 1].TensileStrength;
+    double m_e =CurrentMaterialTemp.EMold;//MaterLib[(uint8)DisMenu[MultiStepProgram].Dis[MspMaterial].fword - 1].E_Module;
+    double m_o = CurrentMaterialTemp.StrengthFactor;// MaterLib[(uint8)DisMenu[MultiStepProgram].Dis[MspMaterial].fword - 1].TensileStrength;
 
     qDebug()<<"shuzhi"<<ma<<m_l<<m_v<<m_tt<<m_r<<m_e<<m_o;
 

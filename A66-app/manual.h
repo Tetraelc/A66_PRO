@@ -53,6 +53,8 @@ private slots:
 
     void on_toolButton_YReferencePoint_clicked();
 
+    void on_toolButton_Length_clicked();
+
 private:
     Ui::Manual *ui;
     Thread ThreadX;

@@ -373,15 +373,16 @@ $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
                     UNS8 ObjDict_highestSubIndex_obj1603 = 2; /* number of subindex - 1*/
                     UNS32 ObjDict_obj1603[] =
                     {
-                      0x20000408,	/* 536871952 */
-                      0x20010408,	/* 536937504 */
-                      0x20020408
+                      0x20020108,	/* 536871952 */
+                      0x20020208,	/* 536937504 */
+                      0x20020308
                     };
                     subindex ObjDict_Index1603[] =
                      {
                        { RW, uint8, sizeof (UNS8), (void*)&ObjDict_highestSubIndex_obj1603 },
                        { RW, uint32, sizeof (UNS32), (void*)&ObjDict_obj1603[0] },
-                       { RW, uint32, sizeof (UNS32), (void*)&ObjDict_obj1603[1] }
+                       { RW, uint32, sizeof (UNS32), (void*)&ObjDict_obj1603[1] },
+                       { RW, uint32, sizeof (UNS32), (void*)&ObjDict_obj1603[2] }
                      };
 
 /* index 0x1800 :   Transmit PDO 1 Parameter. */

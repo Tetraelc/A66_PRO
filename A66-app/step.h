@@ -6,6 +6,7 @@
 #include <QXmlStreamWriter>
 #include <QFile>
 #include <QMessageBox>
+#include "mathcalculation.h"
 
 namespace Ui {
 class Step;
@@ -86,6 +87,7 @@ private slots:
 private:
     void timerEvent(QTimerEvent *t) ;
     Ui::Step *ui;
+    MathCalculation *mathcal;
     int yValue_Scan ;
 };
 

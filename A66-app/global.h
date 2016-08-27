@@ -195,7 +195,7 @@ struct Stepdata
   double AngleCompensate;
   double Yaxis;
   double XaxisCorrect;
-  double Distance;
+  double concedeDistance;
   double Pressure;
   double Xaxis;
   double ReturnTime;
