@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'programdb.ui'
 **
-** Created: Fri Aug 26 14:29:48 2016
+** Created: Sat Aug 27 10:52:57 2016
 **      by: Qt User Interface Compiler version 4.8.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -222,7 +222,7 @@ public:
         tableWidget_Programdb->setSortingEnabled(false);
         tableWidget_Programdb->setRowCount(1);
         tableWidget_Programdb->setColumnCount(9);
-        tableWidget_Programdb->horizontalHeader()->setVisible(true);
+        tableWidget_Programdb->horizontalHeader()->setVisible(false);
         tableWidget_Programdb->horizontalHeader()->setCascadingSectionResizes(false);
         tableWidget_Programdb->horizontalHeader()->setDefaultSectionSize(80);
         tableWidget_Programdb->horizontalHeader()->setHighlightSections(true);
@@ -305,6 +305,9 @@ public:
         pushButton_Left_4->setIconSize(QSize(36, 36));
 
         retranslateUi(Programdb);
+
+        comboBox_P_material->setCurrentIndex(-1);
+
 
         QMetaObject::connectSlotsByName(Programdb);
     } // setupUi

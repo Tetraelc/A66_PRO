@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'wrokedtotal.h'
 **
-** Created: Fri Aug 26 14:09:29 2016
+** Created: Sat Aug 27 09:57:00 2016
 **      by: The Qt Meta Object Compiler version 63 (Qt 4.8.1)
 **
 ** WARNING! All changes made in this file will be lost!

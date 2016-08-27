@@ -153,6 +153,13 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
 
    // QWSServer::setCursorVisible(false);
+   // QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
+    //QTextCodec::setCodecForCStrings(QTextCodec::codecForName("GB2312"));
+
+    QTextCodec *codec = QTextCodec::codecForName("UTF-8");
+    QTextCodec::setCodecForTr(codec);
+    QTextCodec::setCodecForLocale(QTextCodec::codecForLocale());
+    QTextCodec::setCodecForCStrings(QTextCodec::codecForLocale());
 
     Sql_Init();
     MainWindow w;

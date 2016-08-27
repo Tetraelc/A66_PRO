@@ -429,14 +429,16 @@ void RunState::ReadForRun()
               CurrentProgramTemp.ProgramName=record.value("Name").toString();
               CurrentProgramTemp.BroadThick = record.value("BoardThick").toDouble(&ok);
               CurrentProgramTemp.BroadWideth = record.value("BoardWide").toDouble(&ok);
-              CurrentProgramTemp.Material = record.value("Material").toDouble(&ok);
+              CurrentProgramTemp.Material = record.value("Material").toInt();//QString::fromUtf8(
               CurrentProgramTemp.StepNumber =  record.value("StepTotal").toDouble(&ok);
               CurrentProgramTemp.UpMold = record.value("UpMold").toDouble(&ok);
               CurrentProgramTemp.LowerMold =  record.value("LowerMold").toDouble(&ok);
               CurrentProgramTemp.ProcessedNum = record.value("WorkedTotal").toDouble(&ok);
+              qDebug()<<" CurrentProgramTemp.Material"<< CurrentProgramTemp.Material;
               qDebug()<<"record.value().toString()"<<record.value("Name").toString();
-              qDebug()<<"record.value().toString()"<<record.value("BoardThick").toString();
-              qDebug()<<"record.value().toString()"<<record.value("Material").toString();
+//              qDebug()<<"record.value().toString()"<<record.value("BoardThick").toString();
+//              qDebug()<<"record.value().toString()"<<record.value("Material").toString();
+
     }
 
     model.setTable(CurrentReg.CurrentProgramName);
@@ -455,7 +457,7 @@ void RunState::ReadForRun()
               CurrentStepTemp.Holding = record.value("HoldiAng").toDouble(&ok);
               CurrentStepTemp.ReturnTime =  record.value("ReturnTime").toDouble(&ok);
               CurrentStepTemp.Raxis= record.value("Raxis").toDouble(&ok);
-            qDebug()<<"record.value().AngleCompensate()"<<record.value("AngleCompensate").toString();
+            //qDebug()<<"record.value().AngleCompensate()"<<record.value("AngleCompensate").toString();
     }
 
     model.setTable("UpMold");
@@ -489,8 +491,10 @@ void RunState::ReadForRun()
            // qDebug()<<"record.value().toString()"<<record.value("Id").toString();
     }
     model.setTable("Materialdb");
-    model.setFilter("Name =" + CurrentProgramTemp.Material);
+    model.setFilter("Name = " + QString::number(CurrentProgramTemp.Material + 1 ,10));//
     qDebug()<<"CurrentProgramTemp.Material"<<CurrentProgramTemp.Material;
+
+    // qDebug()<<"CurrentProgramTemp.Material"<<CurrentProgramTemp.Material.toStdString();
     model.select();
     for(int i=0;i<model.rowCount();i++)
     {

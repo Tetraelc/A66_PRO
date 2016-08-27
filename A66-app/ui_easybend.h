@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'easybend.ui'
 **
-** Created: Fri Aug 26 14:08:00 2016
+** Created: Sat Aug 27 09:54:53 2016
 **      by: Qt User Interface Compiler version 4.8.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
