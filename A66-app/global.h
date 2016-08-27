@@ -211,7 +211,7 @@ struct ProgramFiles
   double StepNumber;
   double BroadWideth;
   double BroadThick;
-  QString Material;
+  int Material;
   double UpMold;
   double LowerMold;
   double ProcessedNum;
