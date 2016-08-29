@@ -18,12 +18,14 @@ bool scanAngleFlag = false;
 bool scanAngleCompensateFlag =false;
 
 Step::Step(QWidget *parent) :
-    QWidget(parent),
+    QDialog(parent),
     ui(new Ui::Step)
 {
     ui->setupUi(this);
 
     yValue_Scan =startTimer(10);
+    RunState runstate1 ;
+    runstate1.ReadForRun(CurrentReg.Current_StepProgramRow);
 
 }
 
@@ -48,6 +50,8 @@ void Step::openStepWin()
 
     Display_StepProgramItem();
     ui->tableWidget_Step->selectRow(0);
+    RunState runstate1 ;
+    runstate1.ReadForRun(CurrentReg.Current_StepProgramRow);
 
 }
 
@@ -59,7 +63,7 @@ void Step::timerEvent(QTimerEvent *t) //定时器事件
 //         MathCalculation *mathcal = new MathCalculation;
         if(scanAngleFlag == true || scanAngleCompensateFlag  == true)
         {
-             CurrentStepTemp.Yaxis = mathcal->AngleToYDis(QString::number(CurrentStepTemp.Angle,'.',0).toInt(),QString::number(CurrentStepTemp.AngleCompensate,'.',0).toInt(),0,CurrentProgramTemp.BroadThick,0, CurrentStepTemp.Yzero);
+             CurrentStepTemp.Yaxis = mathcal.AngleToYDis(QString::number(CurrentStepTemp.Angle,'.',0).toInt(),QString::number(CurrentStepTemp.AngleCompensate,'.',0).toInt(),0,CurrentProgramTemp.BroadThick,0, CurrentStepTemp.Yzero);
              scanAngleFlag = false;
              scanAngleCompensateFlag = false;
              ui->lineEdit_S_Yaxis->setText(QString::number(CurrentStepTemp.Yaxis,'.',0));
@@ -69,7 +73,7 @@ void Step::timerEvent(QTimerEvent *t) //定时器事件
 //             double MathCalculation::pressureCal(double boardWidth,double boardTick,double strength,double moldV)
         }
 
-        CurrentStepTemp.Pressure = mathcal->pressureCal(CurrentProgramTemp.BroadWideth,CurrentProgramTemp.BroadThick,CurrentMaterialTemp.StrengthFactor,CurrentLowerMoldTemp.D_V);
+        CurrentStepTemp.Pressure = mathcal.pressureCal(CurrentProgramTemp.BroadWideth,CurrentProgramTemp.BroadThick,CurrentMaterialTemp.StrengthFactor,CurrentLowerMoldTemp.D_V);
         ui->lineEdit_S_pressure->setText(QString::number(CurrentStepTemp.Pressure,'.',0));
         ui->tableWidget_Step->setItem(ui->tableWidget_Step->currentRow(),StepProgram_Pressure,new QTableWidgetItem(QString::number(CurrentStepTemp.Pressure,'.',0)));
     }
@@ -252,8 +256,7 @@ void Step::Update_StepProgramItem(int Id,int Col,QString Value)
 //工步编程tableWidget_Step和lineEdit_S建立链接
 void Step::on_lineEdit_S_Angle_returnPressed()
 {
-    RunState *runstate1 = new  RunState;
-    runstate1->ReadForRun(CurrentReg.Current_StepProgramRow);
+
     bool ok;
     if( (ui->lineEdit_S_Angle->text().toInt() >= CurrentLowerMoldTemp.Angle) && (ui->lineEdit_S_Angle->text().toInt() <= 180) )
     {
@@ -274,8 +277,7 @@ void Step::on_lineEdit_S_AngleCompensate_returnPressed()
 {
 
     bool ok;
-    RunState *runstate1 = new  RunState;
-    runstate1->ReadForRun(CurrentReg.Current_StepProgramRow);
+
     if( (ui->lineEdit_S_AngleCompensate->text().toInt() >= -90) && (ui->lineEdit_S_AngleCompensate->text().toInt() <= 90) )
     {
         CurrentStepTemp.AngleCompensate = ui->lineEdit_S_AngleCompensate->text().toDouble(&ok);

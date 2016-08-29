@@ -3,7 +3,7 @@
 #include "global.h"
 
 SystemInfo::SystemInfo(QWidget *parent) :
-    QWidget(parent),
+    QDialog(parent),
     ui(new Ui::SystemInfo)
 {
     ui->setupUi(this);

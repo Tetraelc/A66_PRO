@@ -16,6 +16,7 @@
 void openBeep();
 void Sql_Init();
 QString SystemWarnInformation(int WarnID);
+QString SystemTipsInformation(int TipsID);
 
 
 #define FootStart		0x01//¶ÁœÅÌ€¿ª¹ØÐÅºÅ  IN1
@@ -23,7 +24,7 @@ QString SystemWarnInformation(int WarnID);
 /*********************ÔËÐÐÄ£Êœ:µ¥ŽÎ,Á¬Ðø,µã¶¯**********************/
 #define CUTSMODE			0x08//µ¥ŽÎÄ£Êœ  IN4
 #define CUTCMODE			0x04//Á¬ÐøÄ£Êœ  IN3
-#define CUTJMODE			0x0C//µã¶¯Ä£Êœ
+#define CUTJMODE			0x00//µã¶¯Ä£Êœ
 #define CUTEMODE			0x00//µ¥ŽÎÁ¬Ðø¶ŒÓÐÐ§£¬ŽíÎóÄ£Êœ
 #define CutMode		        0x0C//ŒôÇÐ·œÊœ on Á¬Ðø off µ¥ŽÎ
 #define UpperPoint		    0X10//ÉÏËÀµãÐÅºÅÊäÈë on Î»ÓÚÉÏËÀµã IN5
@@ -42,10 +43,15 @@ QString SystemWarnInformation(int WarnID);
 #define ENTER_ENABLE  0xAA
 #define ENTER_DISENABLE  0x55
 
+#define ARMFlag 1
+
 
 
 
 #define UpperPointAlarm   1
+
+#define RunTip   2
+#define PrepareTip   1
 
 extern int ProgIndex;
 extern int ProgNameNum;
@@ -92,6 +98,7 @@ struct _CURRENTREG
   int Current_StepProgramRow;
   int StepProgramRowTotal;
   int Current_MotorAlarm;
+  int Current_MotorTips;
 //  int CurrentRnuStateWorkedTotal;
   QString Current_WorkedTotal;
 

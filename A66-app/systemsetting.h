@@ -1,7 +1,7 @@
 #ifndef SYSTEMSETTING_H
 #define SYSTEMSETTING_H
 
-#include <QWidget>
+#include <QDialog>
 #include <QXmlStreamReader>
 #include <QXmlStreamWriter>
 #include <QFile>
@@ -13,7 +13,7 @@ namespace Ui {
 class SystemSetting;
 }
 
-class SystemSetting : public QWidget
+class SystemSetting : public QDialog
 {
     Q_OBJECT
     

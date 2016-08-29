@@ -17,8 +17,8 @@ qSoftKeyboard::qSoftKeyboard()
    // form.EscButton->setProperty("buttonValue", QVariant(int(Qt::Key_Clear)));
     connect(form.BackButton,SIGNAL(clicked()),this,SLOT(BackspaceContent()));
 
-    Moulds *mds=new Moulds;
-    connect(this, SIGNAL(redoKeyValue()), mds, SLOT(redoKeyAngleValue()));
+//    Moulds *mds=new Moulds;
+//    connect(this, SIGNAL(redoKeyValue()), mds, SLOT(redoKeyAngleValue()));
 
     //connect(form.EscButton,SIGNAL(clicked()),this,SLOT(BackspaceContent()));
 
@@ -105,7 +105,10 @@ void qSoftKeyboard::on_BackButton_clicked()
 
 void qSoftKeyboard::on_closeButton_clicked()//Key_Enter
 {
+#if ARMFlag
     QWSServer::sendKeyEvent(0x01000005,Qt::Key_Enter,Qt::NoModifier,true,false);//只能嵌入式平台下使用
+#else
+#endif
      this->close();
 }
 

@@ -18,7 +18,7 @@ extern "C"{
      #include "canfestivalAPI.h"
      #include "ObjDict.h"
 SystemSetting::SystemSetting(QWidget *parent) :
-    QWidget(parent),
+    QDialog(parent),
     ui(new Ui::SystemSetting)
 {
     ui->setupUi(this);

@@ -1,17 +1,18 @@
 #ifndef PROGRAMDB_H
 #define PROGRAMDB_H
 
-#include <QWidget>
+#include <QDialog>
 #include <QXmlStreamReader>
 #include <QXmlStreamWriter>
 #include <QFile>
 #include <QMessageBox>
+#include "mainwindow.h"
 
 namespace Ui {
 class Programdb;
 }
 
-class Programdb : public QWidget
+class Programdb : public QDialog
 {
     Q_OBJECT
     
@@ -24,6 +25,7 @@ public:
     void DeleteProgramLib();
     void Update_ProgramLibItem(int Id,int Col,QString Value);
     void ReflashMaterialdb();
+
 //    int Materialtemp[50];
 
 
@@ -34,7 +36,7 @@ public slots:
 
     void LowerMoldDialog(int num);
     void UpMoldDialog(int num);
-
+    void closeProgramWin();
 
 signals:
 
@@ -44,6 +46,7 @@ signals:
     void Sig_NewStepData();
     void ReflashProgram();
     void sig_returnMainwindow();
+
 
 
 

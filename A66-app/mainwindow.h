@@ -22,11 +22,12 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
     void initWindow();
-
+    void MainWinState();
 public slots:
     void openMainWindowWin();
     void ReturnProgramdb();
     void ReFlashProgName();
+
 
 private slots:
 
@@ -62,6 +63,8 @@ signals:
     void openEasyBendWidget();
     void openInfoWidget();
     void sig_UpperPointAlarm();
+    void sig_closeProgramdbWin();
+
     
 private:
     void timerEvent(QTimerEvent *t); //定时器事件

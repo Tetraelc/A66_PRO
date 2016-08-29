@@ -1,7 +1,7 @@
 #ifndef STEP_H
 #define STEP_H
 
-#include <QWidget>
+#include <QDialog>
 #include <QXmlStreamReader>
 #include <QXmlStreamWriter>
 #include <QFile>
@@ -12,7 +12,7 @@ namespace Ui {
 class Step;
 }
 
-class Step : public QWidget
+class Step : public QDialog
 {
     Q_OBJECT
     
@@ -87,7 +87,7 @@ private slots:
 private:
     void timerEvent(QTimerEvent *t) ;
     Ui::Step *ui;
-    MathCalculation *mathcal;
+    MathCalculation mathcal;
     int yValue_Scan ;
 };
 

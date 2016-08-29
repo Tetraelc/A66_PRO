@@ -98,7 +98,7 @@ void  MotorThread::run()
 
 int main(int argc, char *argv[])
 {
-#if 1
+#if    ARMFlag
     CanopenInit();
 ///////////////////////////////
     printf("to_socket\n");
@@ -173,7 +173,7 @@ int main(int argc, char *argv[])
     MyThread ThreadA;
     ThreadA.start();
 
-    Programdb Pg;
+    Programdb Pg ;
     Pg.setWindowFlags(Qt::FramelessWindowHint);
     Pg.move(0,WIDGET_Y);
     Pg.show();

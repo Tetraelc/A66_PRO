@@ -36,7 +36,11 @@ void openBeep()
 void Sql_Init()
 {
     db.setHostName("localhost"); //设置数据库主机名
+#if ARMFlag
     db.setDatabaseName("/opt/tetra/A66-app/A66-app.db"); //设置数据库名
+#else
+    db.setDatabaseName("A66-app.db"); //设置数据库名/opt/tetra/A66-app/
+#endif
     db.setUserName("root");//设置数据库登入用户名
     db.setPassword("123456");//设计数据库登入密码
 }
@@ -69,8 +73,35 @@ QString SystemWarnInformation(int WarnID)//UpperPointAlarm
 
     return WarnInformation;
 
+}
+
+QString SystemTipsInformation(int TipsID)
+{
+
+    QString TipsInformation;
+    if(!db.open())
+    {
+        QMessageBox::critical(0,QObject::tr("Error"),
+                              db.lastError().text());//打开数据库连接
+    }
+
+    QSqlTableModel model;
+    model.setTable("SystemTips");
+    model.setFilter("ID = " + QString::number(TipsID,10));
+    model.select();
+
+    for(int i=0;i<model.rowCount();i++)
+    {
+            QSqlRecord record = model.record(i);
+            TipsInformation = record.value("Info").toString();
+    }
 
 
+    db.close();//释放数据库
+    qDebug()<<"WarnID"<<TipsID;
+    qDebug()<<"WarnInformation"<<TipsInformation;
+
+    return TipsInformation;
 
 }
 

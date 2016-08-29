@@ -1,7 +1,7 @@
 #ifndef MOULDS_H
 #define MOULDS_H
 
-#include <QWidget>
+#include <QDialog>
 #include <QXmlStreamReader>
 #include <QXmlStreamWriter>
 #include <QFile>
@@ -14,7 +14,7 @@ namespace Ui {
 class Moulds;
 }
 
-class Moulds : public QWidget
+class Moulds : public QDialog
 {
     Q_OBJECT
     

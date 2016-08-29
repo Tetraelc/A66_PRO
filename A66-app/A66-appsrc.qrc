@@ -17,6 +17,8 @@
         <file>ICO/X轴.png</file>
         <file>ICO/LowerMold.png</file>
         <file>ICO/UpMold.png</file>
+        <file>ICO/iGD25.png</file>
+        <file>ICO/iGD34.png</file>
     </qresource>
     <qresource prefix="/ico">
         <file>ICO/P1-DEL.png</file>

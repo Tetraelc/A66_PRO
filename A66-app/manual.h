@@ -1,7 +1,7 @@
 #ifndef MANUAL_H
 #define MANUAL_H
 
-#include <QWidget>
+#include <QDialog>
 #include <qtimer.h>
 #include <QTimer>
 #include <QThread>
@@ -11,7 +11,7 @@ namespace Ui {
 class Manual;
 }
 
-class Manual : public QWidget
+class Manual : public QDialog
 {
     Q_OBJECT
     

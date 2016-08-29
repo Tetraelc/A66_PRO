@@ -15,7 +15,7 @@
 QString m_strCtrlName;
 
 Moulds::Moulds(QWidget *parent) :
-    QWidget(parent),
+    QDialog(parent),
     ui(new Ui::Moulds)
 {
     ui->setupUi(this);

@@ -6,6 +6,7 @@
 #include "manualadjustdate.h"
 #include "global.h"
 #include "yreferencepoint.h"
+#include "deleoplength.h"
 
 
 extern bool stopped;
@@ -40,7 +41,7 @@ extern "C"{
      #include "ObjDict.h"
 
 Manual::Manual(QWidget *parent) :
-    QWidget(parent),
+    QDialog(parent),
     ui(new Ui::Manual)
 {
     ui->setupUi(this);
@@ -383,17 +384,17 @@ void Manual::on_pushButton_M_YForWard_released()
 void Manual::on_pushButton_Adjust_clicked()
 {
 
-    ManualAdjustDate *mad = new ManualAdjustDate;
-    connect(mad, SIGNAL(sig_sndManualX(QString)),this, SLOT(ChangeXCurrentPostion(QString)));
-    connect(mad, SIGNAL(sig_sndManualY(QString)),this, SLOT(ChangeYCurrentPostion(QString)));
-    connect(mad, SIGNAL(sig_sndManualR(QString)),this, SLOT(ChangeRCurrentPostion(QString)));
+    ManualAdjustDate mad;
+    connect(&mad, SIGNAL(sig_sndManualX(QString)),this, SLOT(ChangeXCurrentPostion(QString)));
+    connect(&mad, SIGNAL(sig_sndManualY(QString)),this, SLOT(ChangeYCurrentPostion(QString)));
+    connect(&mad, SIGNAL(sig_sndManualR(QString)),this, SLOT(ChangeRCurrentPostion(QString)));
     QRect AdjusttRect = ui->pushButton_Adjust->rect();
     qDebug()<<"AdjusttRect"<<AdjusttRect.left();
      qDebug()<<"AdjusttRect"<<AdjusttRect.bottomLeft();
 
     QPoint madPoint = QPoint(627, 90);
-    mad->move(madPoint);
-    mad->show();
+    mad.move(madPoint);
+    mad.exec();
 
 }
 
@@ -438,13 +439,14 @@ void Manual::on_pushButton_B6_7_clicked()
 
 void Manual::on_toolButton_YReferencePoint_clicked()
 {
-    YReferencePoint *yrp =new YReferencePoint;
-    yrp->exec();
+    YReferencePoint yrp;
+    yrp.exec();
 
 }
 
 void Manual::on_toolButton_Length_clicked()
 {
-
+    deleopLength dl;
+    dl.exec();
 
 }

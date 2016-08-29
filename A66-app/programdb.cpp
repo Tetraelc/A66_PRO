@@ -23,27 +23,20 @@
 
 int MaterialIndexFlag =0;
 Programdb::Programdb(QWidget *parent) :
-    QWidget(parent),
+    QDialog(parent),
     ui(new Ui::Programdb)
 {
     ui->setupUi(this);
 
-
-
-   initProgram();
-
-
+    initProgram();
+    CurrentReg.Current_MotorTips = PrepareTip;
 //    MainWindow *wd = new MainWindow;
-////    wd->openMainWindowWin();
-////    Programdb *pg=new Programdb;
 //    connect(this, SIGNAL(sig_returnMainwindow()), wd, SLOT(openMainWindowWin()));
 //    connect(this, SIGNAL(ReflashProgram()), wd, SLOT(ReFlashProgName()));
 //    connect(wd, SIGNAL(openProgramWidget()), this, SLOT(openProgramWin()));
-//    wd->setWindowFlags(Qt::FramelessWindowHint);
-//    wd->show();
-//    wd->move(0,MAIN_WIDGET_Y);
 
-   connect(ui->comboBox_P_material,SIGNAL(currentIndexChanged(const QString &)),this,SLOT(UpdtaeMaterialDat()));
+    connect(ui->comboBox_P_material,SIGNAL(currentIndexChanged(const QString &)),this,SLOT(UpdtaeMaterialDat()));
+//    Programdb *pb = new Programdb;
 
 }
 
@@ -67,8 +60,17 @@ void Programdb::openProgramWin()
     connect(ui->comboBox_P_material,SIGNAL(currentIndexChanged(const QString &)),this,SLOT(UpdtaeMaterialDat()));
    // qDebug()<<"Materialtemp[0]"<<CurrentReg.Materialtemp[0];
 
-
 }
+
+void Programdb::closeProgramWin()
+{
+    this->close();
+}
+
+
+
+
+
 
 void Programdb::initProgram(void)
 {
@@ -158,6 +160,7 @@ void Programdb::ReflashProgramWrokedNum(int Num)
 
 void Programdb::Display_ProgramItem()
 {
+
     bool ok;
 
     for (int i=0;i<50;i++)
@@ -186,7 +189,7 @@ void Programdb::Display_ProgramItem()
         ui->tableWidget_Programdb->setRowCount(1);
         ui->tableWidget_Programdb->clear();
     }
-
+    ui->tableWidget_Programdb->clearContents();
     for(int i=0;i<model.rowCount();i++)
     {
             QSqlRecord record = model.record(i);
@@ -195,27 +198,9 @@ void Programdb::Display_ProgramItem()
             ui->tableWidget_Programdb->setItem(i,Program_Name,new QTableWidgetItem(record.value("Name").toString()));
             ui->tableWidget_Programdb->setItem(i,Program_BoardWide,new QTableWidgetItem(QString::number(record.value("BoardWide").toDouble(&ok),10,2)));
             ui->tableWidget_Programdb->setItem(i,Program_BoardThick,new QTableWidgetItem(QString::number(record.value("BoardThick").toDouble(&ok),10,2)));//******NEW********//
-           // qDebug()<<"record.value("").toInt()"<<record.value("Material").toInt();
-           // qDebug()<<"record.value("").toString()"<<record.value("Material").toString();
             ui->comboBox_P_material->setCurrentIndex(record.value("Material").toInt());
-
-
             CurrentReg.Materialtemp[i] = record.value("Material").toInt();
-
-           // qDebug()<<" -----------------------------Materialtemp[i]"<< CurrentReg.Materialtemp[i];
-
-//            if(ReflashMaterialFalg > 0)
-//            {
-//                fristMaterialIndex = record.value("Material").toInt();
-//                qDebug()<<"fristMaterialIndex"<<fristMaterialIndex;
-
-//            }
-//            ReflashMaterialFalg ++;
             ui->tableWidget_Programdb->setItem(i,Program_Material,new QTableWidgetItem(ui->comboBox_P_material->currentText()));
-          //  qDebug()<<"currentText"<<ui->comboBox_P_material->currentText();
-          // qDebug()<<"currentIndex"<<ui->comboBox_P_material->currentIndex();
-
-
             ui->tableWidget_Programdb->setItem(i,Program_LowerMold,new QTableWidgetItem(record.value("LowerMold").toString() ));//+ "/" + record.value("UpMold").toString()
             ui->tableWidget_Programdb->setItem(i,Program_UpMold,new QTableWidgetItem(record.value("UpMold").toString()));
             ui->tableWidget_Programdb->setItem(i,Program_ProcessNum,new QTableWidgetItem(record.value("WorkedTotal").toString()));
@@ -237,6 +222,8 @@ void Programdb::Display_ProgramItem()
             }
            // qDebug()<<"StepNum_str"<<StepNum_str;
     }
+
+  //
 
 
     db.close();//释放数据库

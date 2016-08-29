@@ -38,6 +38,8 @@ RunState::RunState(QWidget *parent) :
 {
     ui->setupUi(this);
     initRunState();
+    CurrentReg.Current_MotorTips = RunTip;
+
 
 
 //    killTimer();
@@ -91,21 +93,21 @@ void RunState::ReturnRun()
 void RunState::initWorkedTotalDialog()
 {
 
-    if(!(A20_IN_Status & UpperPoint))
-    {
-        ReturnRun();
-        //CurrentReg.Current_MotorAlarm = UpperPointAlarm;
-        SystemWarn *warn = new SystemWarn;
-        warn->exec();
+//    if(!(A20_IN_Status & UpperPoint))
+//    {
+//        ReturnRun();
+//        //CurrentReg.Current_MotorAlarm = UpperPointAlarm;
+//        SystemWarn *warn = new SystemWarn;
+//        warn->exec();
 
-        if(!(A20_IN_Status & UpperPoint))
-        {
-             emit openProgramwindow();
-             qDebug("openProgramwindow");
-        }
+//        if(!(A20_IN_Status & UpperPoint))
+//        {
+//             emit openProgramwindow();
+//             qDebug("openProgramwindow");
+//        }
 
 
-    }
+//    }
 //    else
 //    {
 
@@ -176,7 +178,6 @@ void RunState::checkMotorState()
 
 
 
-
 void RunState::MotorRun()
 {
 //#define CUTSMODE			0x08//µ¥ŽÎÄ£Êœ  IN4
@@ -215,11 +216,7 @@ void RunState::ReflashWorkedTotal()
     {
          QuitRunState();
     }
-
-
 }
-
-
 
 void RunState::StopRun()
 {
@@ -291,6 +288,7 @@ void RunState::SendMTEnableSignal()
 
    if((A20_IN_Status & UpperPoint) && Back_state)
    {
+       Write_MOTOR_One_Data(0x04,0x7001,0x01,0x01,ENTER_DISENABLE);
        Back_state = false;
        PostionReachFlag =1;
        if(ChangeRowFlag == 1)
@@ -352,7 +350,7 @@ int RunState::CheckPressureState()
     case Vback   :
          //qDebug("Vback");
             Back_state = true;
-            Write_MOTOR_One_Data(0x04,0x7001,0x01,0x01,0x55);
+
             ui->label_Pressure->setText(trUtf8("回程"));break;
 
     }

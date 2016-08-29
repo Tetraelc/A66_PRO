@@ -1,13 +1,13 @@
 #ifndef SYSTEMINFO_H
 #define SYSTEMINFO_H
 
-#include <QWidget>
+#include <QDialog>
 
 namespace Ui {
 class SystemInfo;
 }
 
-class SystemInfo : public QWidget
+class SystemInfo : public QDialog
 {
     Q_OBJECT
     
