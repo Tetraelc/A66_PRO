@@ -838,7 +838,7 @@
     <enum>Qt::ToolButtonTextUnderIcon</enum>
    </property>
   </widget>
-  <widget class="QToolButton" name="pushButton_Left_5">
+  <widget class="QToolButton" name="pushButton_Length">
    <property name="geometry">
     <rect>
      <x>930</x>
@@ -850,11 +850,11 @@
    <property name="font">
     <font>
      <family>Sans Serif</family>
-     <pointsize>12</pointsize>
+     <pointsize>9</pointsize>
     </font>
    </property>
    <property name="text">
-    <string/>
+    <string>展开长度</string>
    </property>
    <property name="iconSize">
     <size>
@@ -880,6 +880,9 @@
      <family>Sans Serif</family>
      <pointsize>12</pointsize>
     </font>
+   </property>
+   <property name="text">
+    <string>大圆弧</string>
    </property>
    <property name="iconSize">
     <size>

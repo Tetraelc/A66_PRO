@@ -43,7 +43,7 @@ void MainWindow::timerEvent(QTimerEvent *t) //定时器事件
 
 void MainWindow::MainWinState()
 {
-    //ui->toolButton_State->setText( SystemTipsInformation(CurrentReg.Current_MotorTips));
+    ui->toolButton_State->setText(CurrentReg.Current_MotorTipResult);
 }
 
 
@@ -107,8 +107,6 @@ void MainWindow::ReturnProgramdb()
      emit openProgramWidget();
    //  openBeep();
 
-
-
 }
 
 
@@ -125,11 +123,7 @@ void MainWindow::on_pushButton_T3_clicked()
     ui->toolButton_B3->setEnabled(true);
     ui->toolButton_B4->setEnabled(true);
     ui->toolButton_B5->setEnabled(true);
-
-
-
     openBeep();
-
 }
 
 void MainWindow::on_pushButton_T2_clicked()

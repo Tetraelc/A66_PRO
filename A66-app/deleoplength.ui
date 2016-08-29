@@ -128,7 +128,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>100</string>
+    <string/>
    </property>
   </widget>
   <widget class="QToolButton" name="toolButton_comfirm">

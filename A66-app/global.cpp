@@ -3,6 +3,7 @@
 
 #define DEV_PATH "/sys/class/gpio/"
 
+int fastmode =0;
 int ProgIndex=0;
 int ProgNameNum=1;
 int StepIndex=0;
@@ -68,8 +69,8 @@ QString SystemWarnInformation(int WarnID)//UpperPointAlarm
 
 
     db.close();//释放数据库
-    qDebug()<<"WarnID"<<WarnID;
-    qDebug()<<"WarnInformation"<<WarnInformation;
+//    qDebug()<<"WarnID"<<WarnID;
+//    qDebug()<<"WarnInformation"<<WarnInformation;
 
     return WarnInformation;
 
@@ -98,8 +99,8 @@ QString SystemTipsInformation(int TipsID)
 
 
     db.close();//释放数据库
-    qDebug()<<"WarnID"<<TipsID;
-    qDebug()<<"WarnInformation"<<TipsInformation;
+//    qDebug()<<"WarnID"<<TipsID;
+//    qDebug()<<"WarnInformation"<<TipsInformation;
 
     return TipsInformation;
 

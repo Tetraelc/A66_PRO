@@ -43,7 +43,7 @@ QString SystemTipsInformation(int TipsID);
 #define ENTER_ENABLE  0xAA
 #define ENTER_DISENABLE  0x55
 
-#define ARMFlag 1
+#define ARMFlag 0
 
 
 
@@ -53,6 +53,7 @@ QString SystemTipsInformation(int TipsID);
 #define RunTip   2
 #define PrepareTip   1
 
+extern int fastmode;
 extern int ProgIndex;
 extern int ProgNameNum;
 extern int StepIndex;
@@ -99,6 +100,7 @@ struct _CURRENTREG
   int StepProgramRowTotal;
   int Current_MotorAlarm;
   int Current_MotorTips;
+  QString Current_MotorTipResult;
 //  int CurrentRnuStateWorkedTotal;
   QString Current_WorkedTotal;
 
@@ -111,8 +113,8 @@ extern struct _CURRENTREG CurrentReg;
 
 enum {
     UpMold_Id = 0,
-    UpMold_Angle = 1,
-    UpMold_Height = 2,
+    UpMold_Angle = 2,
+    UpMold_Height = 1,
     UpMold_Radius = 3,
     UpMold_Impedance = 4
 };

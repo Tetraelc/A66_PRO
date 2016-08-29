@@ -76,7 +76,7 @@ void Moulds::initMoulds(void)
 {
     Display_UpMoldItem();
     Display_LowerMoldItem();
-     Display_MaterialItem();
+    Display_MaterialItem();
 
     ui->tableWidget_UpMoulds->selectRow(0);
     ui->tableWidget_LowerMoulds->selectRow(0);
@@ -94,6 +94,10 @@ void Moulds::initMoulds(void)
     ui->lineEdit_U_Angle->setText(ui->tableWidget_UpMoulds->item(ui->tableWidget_UpMoulds->currentRow(),UpMold_Angle)->text());
     ui->lineEdit_U_Radius->setText(ui->tableWidget_UpMoulds->item(ui->tableWidget_UpMoulds->currentRow(),UpMold_Radius)->text());
 //    ui->lineEdit_U_Impedance->setText(ui->tableWidget_UpMoulds->item(ui->tableWidget_UpMoulds->currentRow(),UpMold_Impedance)->text());
+
+    ui->lineEdit_Strengrht->setText(ui->tableWidget_Material->item(CurrentReg.Current_MaterialRow,Material_StrengthFactor)->text());
+    ui->lineEdit_EMold->setText(ui->tableWidget_Material->item(CurrentReg.Current_MaterialRow,Material_EMold)->text());
+    ui->lineEdit_MaterialName->setText(ui->tableWidget_Material->item(CurrentReg.Current_MaterialRow,Material_Name)->text().split("-").at(1));
 
 }
 
@@ -770,7 +774,13 @@ void Moulds::on_pushButton_M_Del_clicked()
 
 void Moulds::on_tableWidget_Material_itemSelectionChanged()
 {
-     CurrentReg.Current_MaterialRow = ui->tableWidget_Material->currentRow();
+
+    CurrentReg.Current_MaterialRow = ui->tableWidget_Material->currentRow();
+    ui->lineEdit_Strengrht->setText(ui->tableWidget_Material->item(CurrentReg.Current_MaterialRow,Material_StrengthFactor)->text());
+    ui->lineEdit_EMold->setText(ui->tableWidget_Material->item(CurrentReg.Current_MaterialRow,Material_EMold)->text());
+    ui->lineEdit_MaterialName->setText(ui->tableWidget_Material->item(CurrentReg.Current_MaterialRow,Material_Name)->text().split("-").at(1));
+
+
 }
 
 
@@ -815,8 +825,8 @@ void Moulds::on_lineEdit_Strengrht_returnPressed()
 
 void Moulds::on_lineEdit_MaterialName_returnPressed()
 {
-    ui->tableWidget_Material->setItem(ui->tableWidget_Material->currentRow(),Material_Name,new QTableWidgetItem(ui->comboBox_material->currentText() + ui->lineEdit_MaterialName->text()));
-    Update_MaterialItem(ui->tableWidget_Material->item(ui->tableWidget_Material->currentRow(),Material_Id)->text().toInt(),Material_Name,ui->comboBox_material->currentText() + ui->lineEdit_MaterialName->text());
+    ui->tableWidget_Material->setItem(ui->tableWidget_Material->currentRow(),Material_Name,new QTableWidgetItem(ui->comboBox_material->currentText() + "-" + ui->lineEdit_MaterialName->text()));
+    Update_MaterialItem(ui->tableWidget_Material->item(ui->tableWidget_Material->currentRow(),Material_Id)->text().toInt(),Material_Name,ui->comboBox_material->currentText() + "-"  + ui->lineEdit_MaterialName->text());
 
 }
 

@@ -58,6 +58,8 @@ void Programdb::openProgramWin()
     Display_ProgramItem();
     ui->comboBox_P_material->setCurrentIndex(CurrentReg.Materialtemp[0]);
     connect(ui->comboBox_P_material,SIGNAL(currentIndexChanged(const QString &)),this,SLOT(UpdtaeMaterialDat()));
+    CurrentReg.Current_MotorTips = PrepareTip;
+    CurrentReg.Current_MotorTipResult = SystemTipsInformation(CurrentReg.Current_MotorTips);
    // qDebug()<<"Materialtemp[0]"<<CurrentReg.Materialtemp[0];
 
 }
@@ -160,7 +162,6 @@ void Programdb::ReflashProgramWrokedNum(int Num)
 
 void Programdb::Display_ProgramItem()
 {
-
     bool ok;
 
     for (int i=0;i<50;i++)
@@ -189,7 +190,7 @@ void Programdb::Display_ProgramItem()
         ui->tableWidget_Programdb->setRowCount(1);
         ui->tableWidget_Programdb->clear();
     }
-    ui->tableWidget_Programdb->clearContents();
+   //ui->tableWidget_Programdb->clearContents();
     for(int i=0;i<model.rowCount();i++)
     {
             QSqlRecord record = model.record(i);

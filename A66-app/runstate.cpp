@@ -23,6 +23,8 @@ int XaxisValue;
 int YaxisValue;
 int ChangeRowFlag =0;
 int PostionReachFlag =0;
+int concedeModeFlag = 1;
+int VbackTime;
 unsigned char Trg_Pos;
 unsigned char Cont_Pos;
 bool Back_state = false;
@@ -38,8 +40,6 @@ RunState::RunState(QWidget *parent) :
 {
     ui->setupUi(this);
     initRunState();
-    CurrentReg.Current_MotorTips = RunTip;
-
 
 
 //    killTimer();
@@ -58,9 +58,12 @@ void RunState::openRunStateWin()
     this->move(0,WIDGET_Y);
 
     ReadRunTable();
+    CurrentRnuStateRow =0;
     ReadForRun(CurrentRnuStateRow);
     CurrentRnuStateWorkedTotal=0;
 
+    CurrentReg.Current_MotorTips = RunTip;
+    CurrentReg.Current_MotorTipResult = SystemTipsInformation(CurrentReg.Current_MotorTips);
 
     initWorkedTotalDialog();
 
@@ -243,6 +246,8 @@ void RunState::SendMTEnableSignal()
    {
        qDebug("-------------------------------------------------------------------------------------------------");
 
+       qDebug()<<"XaxisValue"<<XaxisValue;
+       qDebug()<<"YaxisValue"<<YaxisValue;
        Set_Motor_Speed_Postion_Abs(0x02,5000,YaxisValue);
        Set_Motor_Speed_Postion_Abs(0x01,5000,XaxisValue);
        ui->label_Run->setText(trUtf8("定位"));
@@ -291,6 +296,7 @@ void RunState::SendMTEnableSignal()
        Write_MOTOR_One_Data(0x04,0x7001,0x01,0x01,ENTER_DISENABLE);
        Back_state = false;
        PostionReachFlag =1;
+       concedeModeFlag = 1;
        if(ChangeRowFlag == 1)
        {
            CurrentRnuStateRow++;
@@ -314,8 +320,12 @@ void RunState::SendMTEnableSignal()
 
 int RunState::concedeState()
 {
-    Set_Motor_Speed_Postion_Rel(0x01,1000,CurrentStepTemp.concedeDistance);
-    ui->label_Run->setText(trUtf8("退让"));
+//    if(concedeModeFlag == 1)
+//    {
+//        Set_Motor_Speed_Postion_Rel(0x01,1000,CurrentStepTemp.concedeDistance);
+//        ui->label_Run->setText(trUtf8("退让"));
+//        concedeModeFlag = 0;
+//    }
 }
 
 
@@ -330,9 +340,16 @@ int RunState::CheckPressureState()
         //qDebug("Vstop");
          ui->label_Pressure->setText(trUtf8("停止"));
          SendMTEnableSignal();
+
         break;
     case VFast:
         //qDebug("VFast");
+
+        if(VbackTime > 10000 && fastmode == 1 )
+        {
+            //进行换步
+            VbackTime = 0;
+        }
          ui->label_Pressure->setText(trUtf8("快下"));break;
 
     case VSlow :
@@ -344,12 +361,14 @@ int RunState::CheckPressureState()
         ui->label_Pressure->setText(trUtf8("保压"));break;
     case Vunload :
          //qDebug("Vunload");
+
         ui->label_Pressure->setText(trUtf8("卸荷"));break;
 
 
     case Vback   :
          //qDebug("Vback");
             Back_state = true;
+            VbackTime++;
 
             ui->label_Pressure->setText(trUtf8("回程"));break;
 
