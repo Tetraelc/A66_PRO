@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LowerMold>
+    <LowerMlodNum>
+        <Num>4</Num>
+    </LowerMlodNum>
+    <Value molds="0">
+        <Height0>120.00</Height0>
+        <D_V0>26.00</D_V0>
+        <Angle0>0.0</Angle0>
+        <Radius0>0.00</Radius0>
+        <SpeedChangePos0>16</SpeedChangePos0>
+        <SpeedSafeDis0>13.00</SpeedSafeDis0>
+        <Impedance0>0.00</Impedance0>
+    </Value>
+    <Value molds="1">
+        <Height1>120.00</Height1>
+        <D_V1>6.00</D_V1>
+        <Angle1>30.0</Angle1>
+        <Radius1>1.00</Radius1>
+        <SpeedChangePos1>10</SpeedChangePos1>
+        <SpeedSafeDis1>4.00</SpeedSafeDis1>
+        <Impedance1>0.00</Impedance1>
+    </Value>
+    <Value molds="2">
+        <Height2>120.00</Height2>
+        <D_V2>6.00</D_V2>
+        <Angle2>30.0</Angle2>
+        <Radius2>1.00</Radius2>
+        <SpeedChangePos2>4</SpeedChangePos2>
+        <SpeedSafeDis2>10.00</SpeedSafeDis2>
+        <Impedance2>0.00</Impedance2>
+    </Value>
+    <Value molds="3">
+        <Height3>120.00</Height3>
+        <D_V3>6.00</D_V3>
+        <Angle3>30.0</Angle3>
+        <Radius3>1.00</Radius3>
+        <SpeedChangePos3>10</SpeedChangePos3>
+        <SpeedSafeDis3>4.00</SpeedSafeDis3>
+        <Impedance3>0.00</Impedance3>
+    </Value>
+</LowerMold>

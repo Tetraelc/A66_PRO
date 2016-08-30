@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<UpMold>
+    <UpMlodNum>
+        <Num>3</Num>
+    </UpMlodNum>
+    <Value molds="0">
+        <Height0>170.00</Height0>
+        <Angle0>56.0</Angle0>
+        <Radius0>1.00</Radius0>
+        <Impedance0>80.00</Impedance0>
+    </Value>
+    <Value molds="1">
+        <Height1>16.00</Height1>
+        <Angle1>18.0</Angle1>
+        <Radius1>1.00</Radius1>
+        <Impedance1>80.00</Impedance1>
+    </Value>
+    <Value molds="2">
+        <Height2>170.00</Height2>
+        <Angle2>56.0</Angle2>
+        <Radius2>1.00</Radius2>
+        <Impedance2>80.00</Impedance2>
+    </Value>
+</UpMold>
