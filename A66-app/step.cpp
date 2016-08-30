@@ -88,11 +88,11 @@ void Step::timerEvent(QTimerEvent *t) //定时器事件
 
 void Step::Display_StepProgramItem()
 {
-    if(!db.open())
-    {
-        QMessageBox::critical(0,QObject::tr("Error"),
-                              db.lastError().text());//打开数据库连接
-    }
+//    if(!db.open())
+//    {
+//        QMessageBox::critical(0,QObject::tr("Error"),
+//                              db.lastError().text());//打开数据库连接
+//    }
 
     QSqlTableModel model;
     model.setTable(CurrentReg.CurrentProgramName);
@@ -135,18 +135,18 @@ void Step::Display_StepProgramItem()
 
     }
 
-    db.close();//释放数据库
+    //db.close();//释放数据库
 
 }
 
 
 void  Step::NewStepProgram()
 {
-   if(!db.open())
-   {
-       QMessageBox::critical(0,QObject::tr("Error"),
-                             db.lastError().text());//打开数据库连接
-   }
+//   if(!db.open())
+//   {
+//       QMessageBox::critical(0,QObject::tr("Error"),
+//                             db.lastError().text());//打开数据库连接
+//   }
    QSqlTableModel model_StepTotal;
    QSqlTableModel model;
    model.setTable(CurrentReg.CurrentProgramName);
@@ -175,7 +175,7 @@ void  Step::NewStepProgram()
        model_StepTotal.setRecord(0,record);
        model_StepTotal.submitAll();
    }
-   db.close();//释放数据库
+   //db.close();//释放数据库
 }
 
 
@@ -214,7 +214,7 @@ void  Step::DeleteStepProgram()
        model_StepTotal.submitAll();
    }
 
-   db.close();//释放数据库
+   //db.close();//释放数据库
 }
 
 
@@ -222,11 +222,11 @@ void Step::Update_StepProgramItem(int Id,int Col,QString Value)
 {
     QString Str_Id=QString::number(Id,10);
 
-    if(!db.open())
-    {
-        QMessageBox::critical(0,QObject::tr("Error"),
-                              db.lastError().text());//打开数据库连接
-    }
+//    if(!db.open())
+//    {
+//        QMessageBox::critical(0,QObject::tr("Error"),
+//                              db.lastError().text());//打开数据库连接
+//    }
 
     QSqlTableModel model;
     model.setTable(CurrentReg.CurrentProgramName);
@@ -264,7 +264,7 @@ void Step::Update_StepProgramItem(int Id,int Col,QString Value)
         model.submitAll();
     }
 
-    db.close();//释放数据库
+    //db.close();//释放数据库
 }
 
 //工步编程tableWidget_Step和lineEdit_S建立链接
@@ -439,11 +439,11 @@ void Step::on_tableWidget_Step_itemSelectionChanged()
 {
     QString CurrentStepProgramId = ui->tableWidget_Step->item(ui->tableWidget_Step->currentRow(),StepProgram_Id)->text();
 
-   if(!db.open())
-   {
-       QMessageBox::critical(0,QObject::tr("Error"),
-                             db.lastError().text());//打开数据库连接
-   }
+//   if(!db.open())
+//   {
+//       QMessageBox::critical(0,QObject::tr("Error"),
+//                             db.lastError().text());//打开数据库连接
+//   }
 
    QSqlTableModel model;
    model.setTable(CurrentReg.CurrentProgramName);
@@ -474,7 +474,7 @@ void Step::on_tableWidget_Step_itemSelectionChanged()
    }
    CurrentReg.Current_StepProgramRow = ui->tableWidget_Step->currentRow();
 
-   db.close();//释放数据库
+   //db.close();//释放数据库
 
 }
 

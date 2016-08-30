@@ -66,6 +66,8 @@ extern int UpMoldNum;
 extern int LowerMoldNum;
 extern int ReflashMaterialFalg;
 
+extern bool EditableFalg;
+
 extern QSqlDatabase db;
 
 #define MAIN_WIDGET_Y    0
@@ -103,6 +105,7 @@ struct _CURRENTREG
   QString Current_MotorTipResult;
 //  int CurrentRnuStateWorkedTotal;
   QString Current_WorkedTotal;
+  double developLength;
 
   int Materialtemp[50];
 

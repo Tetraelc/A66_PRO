@@ -7,7 +7,7 @@
 #include "systemwarn.h"
 #include "deleoplength.h"
 
-
+int developLengthFlag = 0;
 
 extern "C"{
      #include "canfestival.h"
@@ -38,6 +38,12 @@ void MainWindow::timerEvent(QTimerEvent *t) //定时器事件
 
         ui->toolButton_ProName->setText(CurrentReg.CurrentProgramName);
         MainWinState();
+        if(developLengthFlag == 1)
+        {
+            ui->toolButton_State->setText(trUtf8("展开长度 :") + QString::number( CurrentReg.developLength,'.',2));
+            developLengthFlag =0;
+        }
+
 
     }
 }
@@ -72,11 +78,29 @@ void MainWindow::initWindow()
     connect(syswarn, SIGNAL(ReturnProgramdbWin()), this, SLOT(ReturnProgramdb()));
 
 
+
+
 //    pg->setWindowFlags(Qt::FramelessWindowHint);
 //    pg->move(0,WIDGET_Y);
 //    pg->show();
     ui->toolButton_B0->setEnabled(false);
 }
+void MainWindow::openProgramwindows()
+{
+//    programwin=new Programdb;
+//    connect(programwin, SIGNAL(sig_returnMainwindow()), this, SLOT(openMainWindowWin()));
+//   // connect(this, SIGNAL(openProgramWidget()), pg, SLOT(openProgramWin()));
+//    programwin->setAttribute(Qt::WA_DeleteOnClose);
+//    programwin->show();
+}
+
+void MainWindow::closeProgramwindows()
+{
+//    programwin->close();
+}
+
+
+
 
 void MainWindow::openMainWindowWin()
 {
@@ -91,8 +115,7 @@ void MainWindow::openMainWindowWin()
 void MainWindow::ReturndevelopLength(double num)
 {
 
-    ui->toolButton_State->setText(trUtf8("展开长度 :") + QString::number(num ,'.',0));
-    qDebug("zhankanchangdu");
+      developLengthFlag = 1;
 }
 void MainWindow::ReFlashProgName()
 {
@@ -138,6 +161,7 @@ void MainWindow::on_pushButton_T3_clicked()
 void MainWindow::on_pushButton_T2_clicked()
 {
     emit openProgramWidget();
+
     ui->toolButton_T1->setText(trUtf8(" 程序库"));
     ui->toolButton_B0->setEnabled(false);
     ui->toolButton_B1->setEnabled(true);
@@ -152,6 +176,11 @@ void MainWindow::on_pushButton_T2_clicked()
 void MainWindow::on_toolButton_B0_clicked()
 {
     emit openProgramWidget();
+//    Programdb openTwoWin;
+//    openTwoWin
+//    openTwoWin.openProgramWin();
+
+    openProgramwindows();
     ui->toolButton_T1->setText(trUtf8(" 程序库"));
     ui->toolButton_T1->setIcon(QIcon("./ICO/P1-PROG.png"));
     ui->toolButton_B0->setEnabled(false);
@@ -171,8 +200,12 @@ void MainWindow::on_toolButton_B1_clicked()
 //    Programdb *pg=new Programdb;
 //    connect(this, SIGNAL(sig_closeProgramdbWin()), pg, SLOT(closeProgramWin()));
 //    emit sig_closeProgramdbWin();
-
+    //closeProgramwindows();
     emit openStepWidget();
+
+//    Step openStep;
+//    openStep.openStepWin();
+
     ui->toolButton_T1->setText(trUtf8(" 工步"));
     ui->toolButton_T1->setIcon(QIcon("./ICO/P1-EDIT.png"));
     ui->toolButton_B0->setEnabled(true);

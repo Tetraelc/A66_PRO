@@ -18,6 +18,7 @@ deleopLength::~deleopLength()
 
 void deleopLength::on_toolButton_comfirm_clicked()
 {
+
     if(ui->lineEdit_Angle->text().toInt() % 5 == 0 && ui->lineEdit_Angle->text().toInt() >= 60 && ui->lineEdit_Angle->text().toInt() <= 180)
     {
         MainWindow *win =new MainWindow;
@@ -25,14 +26,18 @@ void deleopLength::on_toolButton_comfirm_clicked()
         bool ok;
         MathCalculation mathcal;
         double Length = mathcal.delelopLength(ui->lineEdit_A->text().toDouble(&ok),ui->lineEdit_B->text().toDouble(&ok),ui->lineEdit_Thick->text().toDouble(&ok),ui->lineEdit_Angle->text().toDouble(&ok));
+        CurrentReg.developLength = Length;
         emit sig_developLength(Length);
         qDebug()<<"Length"<<Length;
         // ui->label_delevoplength->setText(QString::number(Length,'.',4));
     }else
     {
-        ui->lineEdit_A->redo();
-        qDebug()<<"Length---------";
+        ui->lineEdit_Angle->clear();
     }
-    this->close();
+    if(ui->lineEdit_A->text() != "" && ui->lineEdit_B->text() != "" && ui->lineEdit_Thick->text() != "" && ui->lineEdit_Angle->text() != "")
+    {
+        this->close();
+    }
+
 
 }

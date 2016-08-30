@@ -109,11 +109,11 @@ void Moulds::initMoulds(void)
 
 void Moulds::Display_UpMoldItem()
 {
-    if(!db.open())
-    {
-        QMessageBox::critical(0,QObject::tr("Error"),
-                              db.lastError().text());//打开数据库连接
-    }
+//    if(!db.open())
+//    {
+//        QMessageBox::critical(0,QObject::tr("Error"),
+//                              db.lastError().text());//打开数据库连接
+//    }
 
     QSqlTableModel model;
     model.setTable("UpMold");
@@ -141,18 +141,18 @@ void Moulds::Display_UpMoldItem()
     }
 
    // ui->tableWidget_UpMoulds->selectRow(0);
-    db.close();//释放数据库
+    //db.close();//释放数据库
 
 }
 
 
 void Moulds::Display_LowerMoldItem()
 {
-    if(!db.open())
-    {
-        QMessageBox::critical(0,QObject::tr("Error"),
-                              db.lastError().text());//打开数据库连接
-    }
+//    if(!db.open())
+//    {
+//        QMessageBox::critical(0,QObject::tr("Error"),
+//                              db.lastError().text());//打开数据库连接
+//    }
 
     QSqlTableModel model;
     model.setTable("LowerMold");
@@ -183,7 +183,7 @@ void Moulds::Display_LowerMoldItem()
             ui->tableWidget_LowerMoulds->setItem(i,LowerMold_Impedance,new QTableWidgetItem(record.value("Impedance").toString()));
     }
 
-    db.close();//释放数据库
+    //db.close();//释放数据库
 
 }
 
@@ -256,11 +256,11 @@ void Moulds::on_tableWidget_LowerMoulds_itemSelectionChanged()
 {
      QString CurrentLowerMoldId = ui->tableWidget_LowerMoulds->item(ui->tableWidget_LowerMoulds->currentRow(),LowerMold_Id)->text();
 
-    if(!db.open())
-    {
-        QMessageBox::critical(0,QObject::tr("Error"),
-                              db.lastError().text());//打开数据库连接
-    }
+//    if(!db.open())
+//    {
+//        QMessageBox::critical(0,QObject::tr("Error"),
+//                              db.lastError().text());//打开数据库连接
+//    }
 
     QSqlTableModel model;
     model.setTable("LowerMold");
@@ -283,7 +283,7 @@ void Moulds::on_tableWidget_LowerMoulds_itemSelectionChanged()
     }
     Current_LowerMoldRow = ui->tableWidget_LowerMoulds->currentRow();
 
-    db.close();//释放数据库
+    //db.close();//释放数据库
 
 }
 
@@ -291,11 +291,11 @@ void Moulds::on_tableWidget_UpMoulds_itemSelectionChanged()
 {
 
     QString CurrentUpMpldId = ui->tableWidget_UpMoulds->item(ui->tableWidget_UpMoulds->currentRow(),UpMold_Id)->text();
-    if(!db.open())
-    {
-        QMessageBox::critical(0,QObject::tr("Error"),
-                              db.lastError().text());//打开数据库连接
-    }
+//    if(!db.open())
+//    {
+//        QMessageBox::critical(0,QObject::tr("Error"),
+//                              db.lastError().text());//打开数据库连接
+//    }
 
     QSqlTableModel model;
     model.setTable("UpMold");
@@ -316,7 +316,7 @@ void Moulds::on_tableWidget_UpMoulds_itemSelectionChanged()
 
      Current_UpMoldRow = ui->tableWidget_UpMoulds->currentRow();
   //  ui->tableWidget_UpMoulds->selectRow(0);
-    db.close();//释放数据库
+    //db.close();//释放数据库
 
 
 }
@@ -325,11 +325,11 @@ void Moulds::Update_UpMoldItem(int Id,int Col,QString Value)
 {
     QString Str_Id=QString::number(Id,10);
 
-    if(!db.open())
-    {
-        QMessageBox::critical(0,QObject::tr("Error"),
-                              db.lastError().text());//打开数据库连接
-    }
+//    if(!db.open())
+//    {
+//        QMessageBox::critical(0,QObject::tr("Error"),
+//                              db.lastError().text());//打开数据库连接
+//    }
 
     qDebug()<<"Value"<<Value;
 
@@ -359,7 +359,7 @@ void Moulds::Update_UpMoldItem(int Id,int Col,QString Value)
         model.submitAll();
     }
 
-    db.close();//释放数据库
+    //db.close();//释放数据库
 }
 
 
@@ -367,11 +367,11 @@ void Moulds::Update_LowerMoldItem(int Id,int Col,QString Value)
 {
     QString Str_Id=QString::number(Id,10);
 
-    if(!db.open())
-    {
-        QMessageBox::critical(0,QObject::tr("Error"),
-                              db.lastError().text());//打开数据库连接
-    }
+//    if(!db.open())
+//    {
+//        QMessageBox::critical(0,QObject::tr("Error"),
+//                              db.lastError().text());//打开数据库连接
+//    }
 
     QSqlTableModel model;
     model.setTable("LowerMold");
@@ -402,7 +402,7 @@ void Moulds::Update_LowerMoldItem(int Id,int Col,QString Value)
         model.submitAll();
     }
 
-    db.close();//释放数据库
+    //db.close();//释放数据库
 }
 
 
@@ -426,11 +426,11 @@ void Moulds::on_pushButton_U_Del_clicked()
 void  Moulds::DeleteUpMold()
 {
     QString CurrentUpMoldId = ui->tableWidget_UpMoulds->item(ui->tableWidget_UpMoulds->currentRow(),UpMold_Id)->text();
-   if(!db.open())
-   {
-       QMessageBox::critical(0,QObject::tr("Error"),
-                             db.lastError().text());//打开数据库连接
-   }
+//   if(!db.open())
+//   {
+//       QMessageBox::critical(0,QObject::tr("Error"),
+//                             db.lastError().text());//打开数据库连接
+//   }
 
 
    QSqlTableModel model;
@@ -447,18 +447,18 @@ void  Moulds::DeleteUpMold()
    query.exec("UPDATE UpMold SET ID = ID - 1 WHERE ID > " + QString::number(Current_UpMoldRow,10));
 
 
-   db.close();//释放数据库
+   //db.close();//释放数据库
 }
 
 
 void  Moulds::NewUpMold()
 {
     //QString CurrentLowerMpldId = ui->tableWidget_UpMoulds->item(ui->tableWidget_UpMoulds->currentRow(),UpMold_Id)->text();
-   if(!db.open())
-   {
-       QMessageBox::critical(0,QObject::tr("Error"),
-                             db.lastError().text());//打开数据库连接
-   }
+//   if(!db.open())
+//   {
+//       QMessageBox::critical(0,QObject::tr("Error"),
+//                             db.lastError().text());//打开数据库连接
+//   }
 
 
    QSqlTableModel model;
@@ -472,18 +472,18 @@ void  Moulds::NewUpMold()
 
    model.submitAll();
 
-   db.close();//释放数据库
+   //db.close();//释放数据库
 }
 
 
 void  Moulds::DeleteLowerMold()
 {
     QString CurrentLowerMoldId = ui->tableWidget_LowerMoulds->item(ui->tableWidget_LowerMoulds->currentRow(),LowerMold_Id)->text();
-   if(!db.open())
-   {
-       QMessageBox::critical(0,QObject::tr("Error"),
-                             db.lastError().text());//打开数据库连接
-   }
+//   if(!db.open())
+//   {
+//       QMessageBox::critical(0,QObject::tr("Error"),
+//                             db.lastError().text());//打开数据库连接
+//   }
 
 
    QSqlTableModel model;
@@ -498,7 +498,7 @@ void  Moulds::DeleteLowerMold()
 
    QSqlQuery query;
    query.exec("UPDATE LowerMold SET ID = ID - 1 WHERE ID > " + QString::number(Current_LowerMoldRow,10));
-   db.close();//释放数据库
+   //db.close();//释放数据库
 
 }
 
@@ -518,11 +518,11 @@ void Moulds::on_pushButton_D_Del_clicked()
 void  Moulds::NewLowerMold()
 {
     //QString CurrentLowerMpldId = ui->tableWidget_UpMoulds->item(ui->tableWidget_UpMoulds->currentRow(),UpMold_Id)->text();
-   if(!db.open())
-   {
-       QMessageBox::critical(0,QObject::tr("Error"),
-                             db.lastError().text());//打开数据库连接
-   }
+//   if(!db.open())
+//   {
+//       QMessageBox::critical(0,QObject::tr("Error"),
+//                             db.lastError().text());//打开数据库连接
+//   }
 
 
    QSqlTableModel model;
@@ -539,7 +539,7 @@ void  Moulds::NewLowerMold()
    model.setData(model.index(row,LowerMold_Impedance),ui->tableWidget_LowerMoulds->item(ui->tableWidget_LowerMoulds->currentRow(),LowerMold_Impedance)->text());
 
    model.submitAll();
-   db.close();//释放数据库
+   //db.close();//释放数据库
 }
 
 
@@ -643,11 +643,11 @@ void Moulds::on_pushButton_Left_10_clicked()
 
 void Moulds::Display_MaterialItem()
 {
-    if(!db.open())
-    {
-        QMessageBox::critical(0,QObject::tr("Error"),
-                              db.lastError().text());//打开数据库连接
-    }
+//    if(!db.open())
+//    {
+//        QMessageBox::critical(0,QObject::tr("Error"),
+//                              db.lastError().text());//打开数据库连接
+//    }
 
     QSqlTableModel model;
     model.setTable("Materialdb");
@@ -675,7 +675,7 @@ void Moulds::Display_MaterialItem()
     }
 
 
-    db.close();//释放数据库
+    //db.close();//释放数据库
      //ui->tableWidget_Material->selectRow(0);
 }
 
@@ -683,11 +683,11 @@ void Moulds::Display_MaterialItem()
 void  Moulds::DeleteMaterial()
 {
     QString CurrentMaterialId = ui->tableWidget_Material->item(ui->tableWidget_Material->currentRow(),Material_Id)->text();
-   if(!db.open())
-   {
-       QMessageBox::critical(0,QObject::tr("Error"),
-                             db.lastError().text());//打开数据库连接
-   }
+//   if(!db.open())
+//   {
+//       QMessageBox::critical(0,QObject::tr("Error"),
+//                             db.lastError().text());//打开数据库连接
+//   }
 
 
    QSqlTableModel model;
@@ -704,18 +704,18 @@ void  Moulds::DeleteMaterial()
    query.exec("UPDATE Materialdb SET ID = ID - 1 WHERE ID > " + QString::number(CurrentReg.Current_MaterialRow,10));
 
 
-   db.close();//释放数据库
+   //db.close();//释放数据库
 }
 
 
 void  Moulds::NewMaterial()
 {
     //QString CurrentLowerMpldId = ui->tableWidget_UpMoulds->item(ui->tableWidget_UpMoulds->currentRow(),UpMold_Id)->text();
-   if(!db.open())
-   {
-       QMessageBox::critical(0,QObject::tr("Error"),
-                             db.lastError().text());//打开数据库连接
-   }
+//   if(!db.open())
+//   {
+//       QMessageBox::critical(0,QObject::tr("Error"),
+//                             db.lastError().text());//打开数据库连接
+//   }
 
    QSqlTableModel model;
    model.setTable("Materialdb");
@@ -726,7 +726,7 @@ void  Moulds::NewMaterial()
    model.setData(model.index(row,Material_StrengthFactor),ui->tableWidget_Material->item(ui->tableWidget_Material->currentRow(),Material_StrengthFactor)->text());
    model.submitAll();
 
-   db.close();//释放数据库
+   //db.close();//释放数据库
 }
 
 
@@ -804,11 +804,11 @@ void Moulds::Update_MaterialItem(int Id,int Col,QString Value)
 {
     QString Str_Id=QString::number(Id,10);
 
-    if(!db.open())
-    {
-        QMessageBox::critical(0,QObject::tr("Error"),
-                              db.lastError().text());//打开数据库连接
-    }
+//    if(!db.open())
+//    {
+//        QMessageBox::critical(0,QObject::tr("Error"),
+//                              db.lastError().text());//打开数据库连接
+//    }
 
     QSqlTableModel model;
     model.setTable("Materialdb");
@@ -829,7 +829,7 @@ void Moulds::Update_MaterialItem(int Id,int Col,QString Value)
         model.submitAll();
     }
 
-    db.close();//释放数据库
+    //db.close();//释放数据库
 }
 
 void Moulds::on_lineEdit_Strengrht_returnPressed()

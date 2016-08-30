@@ -3,6 +3,7 @@
 
 #define DEV_PATH "/sys/class/gpio/"
 
+bool EditableFalg = false;
 int fastmode =0;
 int ProgIndex=0;
 int ProgNameNum=1;
@@ -44,17 +45,22 @@ void Sql_Init()
 #endif
     db.setUserName("root");//设置数据库登入用户名
     db.setPassword("123456");//设计数据库登入密码
+    if(!db.open())
+    {
+        QMessageBox::critical(0,QObject::tr("Error"),
+                              db.lastError().text());//打开数据库连接
+    }
 }
 
 QString SystemWarnInformation(int WarnID)//UpperPointAlarm
 {
 
     QString WarnInformation;
-    if(!db.open())
-    {
-        QMessageBox::critical(0,QObject::tr("Error"),
-                              db.lastError().text());//打开数据库连接
-    }
+//    if(!db.open())
+//    {
+//        QMessageBox::critical(0,QObject::tr("Error"),
+//                              db.lastError().text());//打开数据库连接
+//    }
 
     QSqlTableModel model;
     model.setTable("SystemAlarm");
@@ -68,7 +74,7 @@ QString SystemWarnInformation(int WarnID)//UpperPointAlarm
     }
 
 
-    db.close();//释放数据库
+    //db.close();//释放数据库
 //    qDebug()<<"WarnID"<<WarnID;
 //    qDebug()<<"WarnInformation"<<WarnInformation;
 
@@ -80,12 +86,11 @@ QString SystemTipsInformation(int TipsID)
 {
 
     QString TipsInformation;
-    if(!db.open())
-    {
-        QMessageBox::critical(0,QObject::tr("Error"),
-                              db.lastError().text());//打开数据库连接
-    }
-
+//    if(!db.open())
+//    {
+//        QMessageBox::critical(0,QObject::tr("Error"),
+//                              db.lastError().text());//打开数据库连接
+//    }
     QSqlTableModel model;
     model.setTable("SystemTips");
     model.setFilter("ID = " + QString::number(TipsID,10));
@@ -98,7 +103,7 @@ QString SystemTipsInformation(int TipsID)
     }
 
 
-    db.close();//释放数据库
+    //db.close();//释放数据库
 //    qDebug()<<"WarnID"<<TipsID;
 //    qDebug()<<"WarnInformation"<<TipsInformation;
 

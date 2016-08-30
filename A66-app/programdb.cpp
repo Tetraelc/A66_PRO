@@ -111,11 +111,11 @@ void Programdb::initProgram(void)
 void Programdb::ReflashMaterialdb()
 {
     ui->comboBox_P_material->clear();
-    if(!db.open())
-    {
-        QMessageBox::critical(0,QObject::tr("Error"),
-                              db.lastError().text());//打开数据库连接
-    }
+//    if(!db.open())
+//    {
+//        QMessageBox::critical(0,QObject::tr("Error"),
+//                              db.lastError().text());//打开数据库连接
+//    }
 
     QSqlTableModel model;
     model.setTable("Materialdb");
@@ -129,7 +129,7 @@ void Programdb::ReflashMaterialdb()
     }
 
     ui->comboBox_P_material->setCurrentIndex(0);
-    db.close();//释放数据库
+    //db.close();//释放数据库
 
 }
 
@@ -150,11 +150,11 @@ void Programdb::Display_ProgramItem()
         CurrentReg.Materialtemp[i] = 0;
     }
 
-    if(!db.open())
-    {
-        QMessageBox::critical(0,QObject::tr("Error"),
-                              db.lastError().text());//打开数据库连接
-    }
+//    if(!db.open())
+//    {
+//        QMessageBox::critical(0,QObject::tr("Error"),
+//                              db.lastError().text());//打开数据库连接
+//    }
     QSqlTableModel modelStep_temp;
     QSqlTableModel model_temp;
     QSqlTableModel model;
@@ -209,18 +209,18 @@ void Programdb::Display_ProgramItem()
   //
 
 
-    db.close();//释放数据库
+    //db.close();//释放数据库
 
 }
 
 
 bool  Programdb::NewProgramLib(QString str)
 {
-   if(!db.open())
-   {
-       QMessageBox::critical(0,QObject::tr("Error"),
-                             db.lastError().text());//打开数据库连接
-   }
+//   if(!db.open())
+//   {
+//       QMessageBox::critical(0,QObject::tr("Error"),
+//                             db.lastError().text());//打开数据库连接
+//   }
 
    if(str == "")    //输入不能为空
    {
@@ -274,7 +274,7 @@ bool  Programdb::NewProgramLib(QString str)
    model.setData(model.index(row,Program_ProcessNum),"0");
 
    model.submitAll();
-   db.close();//释放数据库
+   //db.close();//释放数据库
 
    emit sig_NewClose();
    disconnect(ui->comboBox_P_material,SIGNAL(currentIndexChanged(const QString &)),this,SLOT(UpdtaeMaterialDat()));
@@ -289,11 +289,11 @@ bool  Programdb::NewProgramLib(QString str)
 void  Programdb::DeleteProgramLib()
 {
     QString CurrentProgramId = ui->tableWidget_Programdb->item(ui->tableWidget_Programdb->currentRow(),Program_Id)->text();
-   if(!db.open())
-   {
-       QMessageBox::critical(0,QObject::tr("Error"),
-                             db.lastError().text());//打开数据库连接
-   }
+//   if(!db.open())
+//   {
+//       QMessageBox::critical(0,QObject::tr("Error"),
+//                             db.lastError().text());//打开数据库连接
+//   }
 
    QSqlTableModel model;
    model.setTable("ProgramLib");
@@ -310,7 +310,7 @@ void  Programdb::DeleteProgramLib()
    query.exec("DROP TABLE " + ui->tableWidget_Programdb->item(ui->tableWidget_Programdb->currentRow(),Program_Name)->text());
 
    query.exec("UPDATE ProgramLib SET ID = ID - 1 WHERE ID > " + QString::number(CurrentReg.Current_ProgramLibRow,10));
-   db.close();//释放数据库
+   //db.close();//释放数据库
 
 }
 
@@ -319,11 +319,11 @@ void Programdb::Update_ProgramLibItem(int Id,int Col,QString Value)
 {
     QString Str_Id=QString::number(Id,10);
 
-    if(!db.open())
-    {
-        QMessageBox::critical(0,QObject::tr("Error"),
-                              db.lastError().text());//打开数据库连接
-    }
+//    if(!db.open())
+//    {
+//        QMessageBox::critical(0,QObject::tr("Error"),
+//                              db.lastError().text());//打开数据库连接
+//    }
 
 
     QSqlTableModel model;
@@ -359,7 +359,7 @@ void Programdb::Update_ProgramLibItem(int Id,int Col,QString Value)
         model.submitAll();
     }
 
-    db.close();//释放数据库
+    //db.close();//释放数据库
 }
 
 
@@ -370,11 +370,11 @@ void Programdb::on_tableWidget_Programdb_itemSelectionChanged()
    CurrentReg.CurrentProgramName = ui->tableWidget_Programdb->item(ui->tableWidget_Programdb->currentRow(),Program_Name)->text();
    qDebug()<<"CurrentReg.CurrentProgramName"<<CurrentReg.CurrentProgramName;
 
-   if(!db.open())
-   {
-       QMessageBox::critical(0,QObject::tr("Error"),
-                             db.lastError().text());//打开数据库连接
-   }
+//   if(!db.open())
+//   {
+//       QMessageBox::critical(0,QObject::tr("Error"),
+//                             db.lastError().text());//打开数据库连接
+//   }
 
    QSqlTableModel model;
    model.setTable("ProgramLib");
@@ -403,7 +403,7 @@ void Programdb::on_tableWidget_Programdb_itemSelectionChanged()
 
    ui->label_pic->setPixmap(pix);
 
-   db.close();//释放数据库
+   //db.close();//释放数据库
 
    emit ReflashProgram();
 
