@@ -21,11 +21,11 @@ chooseLowerMoldDialog::chooseLowerMoldDialog(QWidget *parent) :
     ui->tableWidget_LowerMoulds->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
     ui->tableWidget_LowerMoulds->horizontalHeader()->setClickable(false);    //******NEW********//
 
-    if(!db.open())
-    {
-        QMessageBox::critical(0,QObject::tr("Error"),
-                              db.lastError().text());//打开数据库连接
-    }
+//    if(!db.open())
+//    {
+//        QMessageBox::critical(0,QObject::tr("Error"),
+//                              db.lastError().text());//打开数据库连接
+//    }
 
     QSqlTableModel model;
     model.setTable("LowerMold");
@@ -63,7 +63,7 @@ chooseLowerMoldDialog::chooseLowerMoldDialog(QWidget *parent) :
     }
 
    // ui->tableWidget_LowerMoulds->selectRow(0);
-    db.close();//释放数据库
+    //db.close();//释放数据库
 //    ui->tableWidget_LowerMoulds ->setRowCount(LowerMoldNum);
 //    ui->tableWidget_LowerMoulds->selectRow(0);
 //    for(int i=0;i<LowerMoldNum;i++)

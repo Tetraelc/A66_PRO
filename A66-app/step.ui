@@ -80,6 +80,9 @@
     <property name="focusPolicy">
      <enum>Qt::ClickFocus</enum>
     </property>
+    <property name="readOnly">
+     <bool>true</bool>
+    </property>
    </widget>
    <widget class="QLineEdit" name="lineEdit_S_Xaxis">
     <property name="geometry">
@@ -290,6 +293,9 @@
     </property>
     <property name="focusPolicy">
      <enum>Qt::ClickFocus</enum>
+    </property>
+    <property name="readOnly">
+     <bool>true</bool>
     </property>
    </widget>
    <widget class="QLineEdit" name="lineEdit_S_Raxis">

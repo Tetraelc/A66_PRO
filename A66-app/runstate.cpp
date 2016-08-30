@@ -395,11 +395,11 @@ void RunState::timerEvent(QTimerEvent *t) //定时器事件
 
 void RunState::ReadRunTable()
 {
-    if(!db.open())
-    {
-        QMessageBox::critical(0,QObject::tr("Error"),
-                              db.lastError().text());//打开数据库连接
-    }
+//    if(!db.open())
+//    {
+//        QMessageBox::critical(0,QObject::tr("Error"),
+//                              db.lastError().text());//打开数据库连接
+//    }
 
     QSqlTableModel model;
     model.setTable(CurrentReg.CurrentProgramName);
@@ -435,32 +435,12 @@ void RunState::ReadRunTable()
     }
 
    // ui->tableWidget_UpMoulds->selectRow(0);
-    db.close();//释放数据库
+    //db.close();//释放数据库
 
 }
 
 void RunState::initRunState()
 {
-    qDebug()<<"Enter initRunState data base initial Window!"<<endl;
-    for(int i=0;i<50;i++)
-    {
-      for(int j=0;j<10;j++)
-      {
-      ui->tableWidget_Run->setItem(i,j,new QTableWidgetItem(""));
-      }
-    }
-
-   // ui->tableWidget_Run->setRowCount(Program[0].StepNumber);
-
-    //ui->tableWidget_Run->selectRow(0);
-
-//    for(ProgIndex=0;ProgIndex<ProgNameNum;ProgIndex++)
-//    {
-//        for(StepIndex=0;StepIndex<Program[ProgIndex].StepNumber;StepIndex++)
-//        {
-//          readSDataIntoTable();
-//        }
-//    }
 
 
 }
@@ -471,11 +451,11 @@ void RunState::ReadForRun(int Type)
     qDebug()<<"Enter ReadForRun data base initial Window!"<<endl;
     bool ok;
 
-    if(!db.open())
-    {
-        QMessageBox::critical(0,QObject::tr("Error"),
-                              db.lastError().text());//打开数据库连接
-    }
+//    if(!db.open())
+//    {
+//        QMessageBox::critical(0,QObject::tr("Error"),
+//                              db.lastError().text());//打开数据库连接
+//    }
 
     QSqlTableModel model;
     model.setTable("ProgramLib");
@@ -574,7 +554,7 @@ void RunState::ReadForRun(int Type)
     }
 
    // ui->tableWidget_UpMoulds->selectRow(0);
-    db.close();//释放数据库
+    //db.close();//释放数据库
 
 }
 
@@ -604,7 +584,7 @@ void RunState::QuitRunState()
 //        model.setRecord(0,record);
 //        model.submitAll();
 //    }
-//    db.close();//释放数据库
+//    //db.close();//释放数据库
     emit openProgramwindow();
 
     emit ReturnworkedTotal( CurrentRnuStateWorkedTotal);

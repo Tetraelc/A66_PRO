@@ -7,7 +7,7 @@
 #include <QFile>
 #include <QMessageBox>
 #include "mainwindow.h"
-
+#include <QTableWidgetItem>
 namespace Ui {
 class Programdb;
 }
@@ -27,7 +27,6 @@ public:
     void ReflashMaterialdb();
 
 //    int Materialtemp[50];
-
 
 public slots:
     void openProgramWin();
@@ -54,7 +53,7 @@ private slots:
     void on_lineEdit_P_boardThickness_returnPressed();
     void on_lineEdit_P_UpMolds_returnPressed();
     void on_lineEdit_P_LowerMolds_returnPressed();
-    void on_lineEdit_P_Total_returnPressed();
+//    void on_lineEdit_P_Total_returnPressed();
     void UpdtaeMaterialDat();
     void on_tableWidget_Programdb_itemSelectionChanged();
 
@@ -73,8 +72,11 @@ private slots:
 
     void on_pushButton_Left_3_clicked();
 
+    void on_lineEdit_P_BoardWidth_returnPressed();
+
 private:
     Ui::Programdb *ui;
+    QTableWidgetItem * setItemContext;
     int fristMaterialIndex;
 };
 

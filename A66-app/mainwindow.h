@@ -10,6 +10,8 @@
 #include "systemsetting.h"
 #include "easybend.h"
 
+class Programdb;
+
 namespace Ui {
 class MainWindow;
 }
@@ -23,10 +25,15 @@ public:
     ~MainWindow();
     void initWindow();
     void MainWinState();
+    void openProgramwindows();
+    void closeProgramwindows();
+
+
 public slots:
     void openMainWindowWin();
     void ReturnProgramdb();
     void ReFlashProgName();
+    void ReturndevelopLength(double num);
 
 
 private slots:
@@ -69,6 +76,7 @@ signals:
 private:
     void timerEvent(QTimerEvent *t); //定时器事件
     Ui::MainWindow *ui;
+    Programdb *programwin;
     int ProgramName_Scan;
 };
 

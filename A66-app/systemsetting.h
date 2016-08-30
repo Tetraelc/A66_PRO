@@ -22,11 +22,12 @@ public:
     ~SystemSetting();
 
  //   void initSystemSettings(void);
-    void Display_Item(int ClassId);
+    void Display_Item(int ClassId,bool Editable);
     void Update_Item(int Id,double Value);
     QString Select_Item(int Id);
     void TreeWidgetInit();
     void ReadForSystem();
+    void checktSecret();
 
 
     QXmlStreamReader Systemreader;

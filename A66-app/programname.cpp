@@ -177,7 +177,7 @@ void ProgramName::on_panelButton_s_clicked()
 void ProgramName::on_panelButton_d_clicked()
 {
     ui->lineEdit_programName->text().append("D");
-    ui->lineEdit_programName->setText(ui->lineEdit_programName->text().append("F"));
+    ui->lineEdit_programName->setText(ui->lineEdit_programName->text().append("D"));
 }
 
 void ProgramName::on_panelButton_f_clicked()
@@ -267,18 +267,18 @@ void ProgramName::on_BackButton_clicked()
 
 void ProgramName::on_panelButton_Plus_clicked()
 {
-    ui->lineEdit_programName->text().append("*");
-    ui->lineEdit_programName->setText(ui->lineEdit_programName->text().append("*"));
+//    ui->lineEdit_programName->text().append("*");
+//    ui->lineEdit_programName->setText(ui->lineEdit_programName->text().append("*"));
 }
 
 void ProgramName::on_panelButton_Dec_clicked()
 {
-    ui->lineEdit_programName->text().append("#");
-    ui->lineEdit_programName->setText(ui->lineEdit_programName->text().append("#"));
+//    ui->lineEdit_programName->text().append("#");
+//    ui->lineEdit_programName->setText(ui->lineEdit_programName->text().append("#"));
 }
 
 void ProgramName::on_panelButton_star_clicked()
 {
-    ui->lineEdit_programName->text().append("-");
-    ui->lineEdit_programName->setText(ui->lineEdit_programName->text().append("-"));
+//    ui->lineEdit_programName->text().append("-");
+//    ui->lineEdit_programName->setText(ui->lineEdit_programName->text().append("-"));
 }

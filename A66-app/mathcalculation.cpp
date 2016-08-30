@@ -21,6 +21,7 @@ MathCalculation::MathCalculation(QObject *parent) :
 double AngleToLength(double m_ba);
 double MathCalculation::AngleToYDis(double angle,double compensationAngle,unsigned int compensationMode,double boardThick,double moldThick,double YZero)
 {
+
    // uint8 m_No = (uint8)DisMenu[MultiStepProgram].Dis[MspMoldNum].fword;//模具号
     double m_a =  angle ;     //角度
     double m_ac = compensationAngle; //补偿值

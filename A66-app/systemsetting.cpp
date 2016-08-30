@@ -48,24 +48,39 @@ void SystemSetting::on_treeWidget_System_itemSelectionChanged()
     {
         if(ui->treeWidget_System->currentItem()->parent()->text(0).compare(trUtf8("通用")) == 0)
         {
-           ui->tableWidget_System->setVisible(true);
-           Display_Item(ui->treeWidget_System->currentIndex().row()+10);
+           ui->stackedWidget->setCurrentIndex(0);
+           Display_Item(ui->treeWidget_System->currentIndex().row()+10,true);
+
+           qDebug()<<"ui->tableWidget_System->item(2,2)->text()"<<ui->tableWidget_System->item(2,2)->text();
+           if(ui->tableWidget_System->item(2,2)->text() == "5678")
+           {
+               EditableFalg =true;
+               qDebug("sw");
+              // ui->tableWidget_System->setItem(2,2,new QTableWidgetItem(QString::number(0,10)));
+           }
         }
         if(ui->treeWidget_System->currentItem()->parent()->text(0).compare(trUtf8("轴参数")) == 0)
         {
-           ui->tableWidget_System->setVisible(true);
-           Display_Item(ui->treeWidget_System->currentIndex().row()+20);
+            ui->stackedWidget->setCurrentIndex(0);
+           Display_Item(ui->treeWidget_System->currentIndex().row()+20,EditableFalg);
         }
         if(ui->treeWidget_System->currentItem()->parent()->text(0).compare(trUtf8("高级设置")) == 0 )
         {
-           ui->tableWidget_System->setVisible(true);
-           Display_Item(ui->treeWidget_System->currentIndex().row()+30);
+           ui->stackedWidget->setCurrentIndex(0);
+           Display_Item(ui->treeWidget_System->currentIndex().row()+30,EditableFalg);
         }
         if(ui->treeWidget_System->currentItem()->text(0).compare(trUtf8("阀组配置")) == 0 )
         {
-           ui->tableWidget_System->setVisible(false);
+            ui->stackedWidget->setCurrentIndex(2);
+        }
+        if(ui->treeWidget_System->currentItem()->text(0).compare(trUtf8("工厂设置")) == 0 )
+        {
+            ui->stackedWidget->setCurrentIndex(1);
         }
 
+
+
+      // checktSecret();
     }
 
 
@@ -80,9 +95,24 @@ void SystemSetting::timerEvent(QTimerEvent *t) //定时器事件
         deal_write_config_event();
         deal_read_config_event();
 
+
     }
 }
 
+
+void SystemSetting::checktSecret()
+{
+
+//    if(ui->treeWidget_System->currentItem()->parent() != NULL)
+//    {
+
+        if(ui->treeWidget_System->currentItem()->text(0).compare(trUtf8("常量")) == 0 )
+        {
+            Display_Item(ui->treeWidget_System->currentIndex().row()+10,true);
+
+        }
+//    }
+}
 
 void SystemSetting::TreeWidgetInit()
 {
@@ -90,15 +120,16 @@ void SystemSetting::TreeWidgetInit()
 }
 
 
-void SystemSetting::Display_Item(int ClassId)
+void SystemSetting::Display_Item(int ClassId,bool Editable)
 {
     QString Str_ClassId=QString::number(ClassId,10);
     qDebug()<<"ClassId"<<ClassId;
-    if(!db.open())
-    {
-        QMessageBox::critical(0,QObject::tr("Error"),
-                              db.lastError().text());//打开数据库连接
-    }
+//    if(!db.open())
+//    {
+//        QMessageBox::critical(0,QObject::tr("Error"),
+//                              db.lastError().text());//打开数据库连接
+//    }
+
 
     QSqlTableModel model;
     model.setTable("Setup");
@@ -122,14 +153,24 @@ void SystemSetting::Display_Item(int ClassId)
         ui->tableWidget_System->setItem(i,Table_Value,new QTableWidgetItem(record.value("Value").toString()));
         ui->tableWidget_System->setItem(i,Table_Info,new QTableWidgetItem(record.value("Introduce").toString()));
 
+        if(Editable)
+        {
         ui->tableWidget_System->item(i,0)->setFlags(ui->tableWidget_System->item(i,Table_Id)->flags() & ~Qt::ItemIsEditable & ~Qt::ItemIsSelectable);
         ui->tableWidget_System->item(i,1)->setFlags(ui->tableWidget_System->item(i,Table_Name)->flags() & ~Qt::ItemIsEditable & ~Qt::ItemIsSelectable);
-//        ui->tableWidget_System->item(i,2)->setFlags(ui->tableWidget_System->item(i,2)->flags() & Qt::ItemIsEditable );
+        //ui->tableWidget_System->item(i,2)->setFlags(ui->tableWidget_System->item(i,Table_Value)->flags() & Qt::ItemIsEnabled & Qt::ItemIsSelectable );
         ui->tableWidget_System->item(i,3)->setFlags(ui->tableWidget_System->item(i,Table_Info)->flags() & ~Qt::ItemIsEditable & ~Qt::ItemIsSelectable);
+        }
+        else
+        {
+            ui->tableWidget_System->item(i,0)->setFlags(ui->tableWidget_System->item(i,Table_Id)->flags() & ~Qt::ItemIsEditable & ~Qt::ItemIsSelectable);
+            ui->tableWidget_System->item(i,1)->setFlags(ui->tableWidget_System->item(i,Table_Name)->flags() & ~Qt::ItemIsEditable & ~Qt::ItemIsSelectable);
+            ui->tableWidget_System->item(i,2)->setFlags(ui->tableWidget_System->item(i,Table_Value)->flags() & ~Qt::ItemIsEditable & ~Qt::ItemIsSelectable);
+            ui->tableWidget_System->item(i,3)->setFlags(ui->tableWidget_System->item(i,Table_Info)->flags() & ~Qt::ItemIsEditable & ~Qt::ItemIsSelectable);
+        }
 
     }
 
-    db.close();//释放数据库
+    //db.close();//释放数据库
 
     Table_Editable_Flag = 1;
 }
@@ -142,11 +183,11 @@ void SystemSetting::Update_Item(int Id,double Value)
     double Max_Value;
     double Min_Value;
 
-    if(!db.open())
-    {
-        QMessageBox::critical(0,QObject::tr("Error"),
-                              db.lastError().text());//打开数据库连接
-    }
+//    if(!db.open())
+//    {
+//        QMessageBox::critical(0,QObject::tr("Error"),
+//                              db.lastError().text());//打开数据库连接
+//    }
 
     QSqlQuery query;
     query.exec("SELECT MAXVALUE,MINVALUE  FROM Setup WHERE ID = " +  Str_Id);
@@ -168,7 +209,7 @@ void SystemSetting::Update_Item(int Id,double Value)
     query.exec("UPDATE Setup SET Value =" + Str_Value + " WHERE ID = " + Str_Id);
 
 
-    db.close();//释放数据库
+    //db.close();//释放数据库
 }
 
 
@@ -179,11 +220,11 @@ QString SystemSetting::Select_Item(int Id)
     QString CurrentValue;
     bool ok;
 
-    if(!db.open())
-    {
-        QMessageBox::critical(0,QObject::tr("Error"),
-                              db.lastError().text());//打开数据库连接
-    }
+//    if(!db.open())
+//    {
+//        QMessageBox::critical(0,QObject::tr("Error"),
+//                              db.lastError().text());//打开数据库连接
+//    }
 
     QSqlQuery query;
     query.exec("SELECT  VALUE  FROM Setup WHERE ID = "+Str_Id);
@@ -193,7 +234,7 @@ QString SystemSetting::Select_Item(int Id)
         break;
     }
 
-    db.close();//释放数据库X轴
+    //db.close();//释放数据库X轴
     return CurrentValue;
 }
 
@@ -239,11 +280,11 @@ void SystemSetting::ReadForSystem()
     qDebug()<<"Enter ReadForRun data base initial Window!"<<endl;
     bool ok;
 
-    if(!db.open())
-    {
-        QMessageBox::critical(0,QObject::tr("Error"),
-                              db.lastError().text());//打开数据库连接
-    }
+//    if(!db.open())
+//    {
+//        QMessageBox::critical(0,QObject::tr("Error"),
+//                              db.lastError().text());//打开数据库连接
+//    }
 
     QSqlTableModel model;
     model.setTable("Setup");
@@ -264,7 +305,7 @@ void SystemSetting::ReadForSystem()
 
 
    // ui->tableWidget_UpMoulds->selectRow(0);
-    db.close();//释放数据库
+    //db.close();//释放数据库
 
 }
 

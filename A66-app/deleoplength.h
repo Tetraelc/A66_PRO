@@ -14,6 +14,8 @@ class deleopLength : public QDialog
 public:
     explicit deleopLength(QWidget *parent = 0);
     ~deleopLength();
+signals:
+    void sig_developLength(double num);
     
 private slots:
     void on_toolButton_comfirm_clicked();

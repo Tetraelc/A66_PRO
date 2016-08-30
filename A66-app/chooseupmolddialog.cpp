@@ -19,11 +19,11 @@ chooseUpMoldDialog::chooseUpMoldDialog(QWidget *parent) :
     ui->tableWidget_UpMoulds->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
     ui->tableWidget_UpMoulds->horizontalHeader()->setClickable(false);    //******NEW********//
 
-    if(!db.open())
-    {
-        QMessageBox::critical(0,QObject::tr("Error"),
-                              db.lastError().text());//打开数据库连接
-    }
+//    if(!db.open())
+//    {
+//        QMessageBox::critical(0,QObject::tr("Error"),
+//                              db.lastError().text());//打开数据库连接
+//    }
 
     QSqlTableModel model;
     model.setTable("UpMold");
@@ -52,7 +52,7 @@ chooseUpMoldDialog::chooseUpMoldDialog(QWidget *parent) :
     }
 
    // ui->tableWidget_UpMoulds->selectRow(0);
-    db.close();//释放数据库
+    //db.close();//释放数据库
 
 
 //    ui->tableWidget_UpMoulds->setRowCount(UpMoldNum);
