@@ -46,19 +46,30 @@ void SystemSetting::on_treeWidget_System_itemSelectionChanged()
 
     if(ui->treeWidget_System->currentItem()->parent() != NULL)
     {
-        if(ui->treeWidget_System->currentItem()->parent()->text(0).compare(trUtf8("通用")) == 0)
-        {
-           ui->stackedWidget->setCurrentIndex(0);
-           Display_Item(ui->treeWidget_System->currentIndex().row()+10,true);
+//        if(ui->treeWidget_System->currentItem()->parent()->text(0).compare(trUtf8("通用")) == 0)
+//        {
 
-           qDebug()<<"ui->tableWidget_System->item(2,2)->text()"<<ui->tableWidget_System->item(2,2)->text();
-           if(ui->tableWidget_System->item(2,2)->text() == "5678")
-           {
-               EditableFalg =true;
-               qDebug("sw");
-              // ui->tableWidget_System->setItem(2,2,new QTableWidgetItem(QString::number(0,10)));
-           }
-        }
+
+
+            if(ui->treeWidget_System->currentItem()->text(0).compare(trUtf8("常量")) == 0 )
+            {
+                ui->stackedWidget->setCurrentIndex(0);
+                Display_Item(10,true);
+
+
+
+
+            }
+            if(ui->treeWidget_System->currentItem()->text(0).compare(trUtf8("诊断")) == 0 )
+            {
+                ui->stackedWidget->setCurrentIndex(0);
+                Display_Item(11,true);
+
+            }
+
+//           qDebug()<<"ui->tableWidget_System->item(2,2)->text()"<<ui->tableWidget_System->item(2,2)->text();
+
+//        }
         if(ui->treeWidget_System->currentItem()->parent()->text(0).compare(trUtf8("轴参数")) == 0)
         {
             ui->stackedWidget->setCurrentIndex(0);
@@ -206,7 +217,10 @@ void SystemSetting::Update_Item(int Id,double Value)
 
     QString Str_Value=QString::number(Value,'.',4);
 
-    query.exec("UPDATE Setup SET Value =" + Str_Value + " WHERE ID = " + Str_Id);
+    if(Id != 62)
+    {
+     query.exec("UPDATE Setup SET Value =" + Str_Value + " WHERE ID = " + Str_Id);
+    }
 
 
     //db.close();//释放数据库
@@ -266,11 +280,24 @@ void SystemSetting::on_tableWidget_System_cellChanged(int row, int column)
 
         CurrentValue=ui->tableWidget_System->item(ui->tableWidget_System->currentRow(),2)->text().toDouble(&ok);
 
+        if(CurrentId == Secret_Id)
+        {
+            CurrentReg.CurrentSecret = ui->tableWidget_System->item(2,2)->text();
+        }
+
+        if( CurrentReg.CurrentSecret == "5678")
+        {
+            EditableFalg =true;
+        }
+
          qDebug()<<"222222222";
 
         Update_Item(CurrentId,CurrentValue);
         Table_Editable_Flag =0;
-        ui->tableWidget_System->setItem(ui->tableWidget_System->currentRow(),2,new QTableWidgetItem(Select_Item(CurrentId)));
+        if(CurrentId != Secret_Id)
+        {
+         ui->tableWidget_System->setItem(ui->tableWidget_System->currentRow(),2,new QTableWidgetItem(Select_Item(CurrentId)));
+        }
         Table_Editable_Flag =1;
     }
 }

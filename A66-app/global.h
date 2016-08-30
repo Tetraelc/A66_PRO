@@ -72,6 +72,7 @@ extern QSqlDatabase db;
 
 #define MAIN_WIDGET_Y    0
 #define WIDGET_Y    MAIN_WIDGET_Y + 100
+#define Secret_Id  62
 
 
 struct _VALUESTATE
@@ -106,6 +107,7 @@ struct _CURRENTREG
 //  int CurrentRnuStateWorkedTotal;
   QString Current_WorkedTotal;
   double developLength;
+  QString CurrentSecret;
 
   int Materialtemp[50];
 

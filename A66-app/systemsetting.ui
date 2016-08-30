@@ -140,7 +140,7 @@
       </font>
      </property>
      <property name="editTriggers">
-      <set>QAbstractItemView::AllEditTriggers</set>
+      <set>QAbstractItemView::CurrentChanged</set>
      </property>
      <property name="selectionMode">
       <enum>QAbstractItemView::ExtendedSelection</enum>
@@ -1049,9 +1049,6 @@
     </widget>
    </widget>
   </widget>
-  <zorder>treeWidget_System</zorder>
-  <zorder>stackedWidget</zorder>
-  <zorder>widget_System</zorder>
  </widget>
  <resources/>
  <connections/>
