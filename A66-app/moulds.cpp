@@ -36,6 +36,10 @@ Moulds::Moulds(QWidget *parent) :
     ui->tableWidget_LowerMoulds->horizontalHeader()->setClickable(false);    //******NEW********//
     ui->tableWidget_LowerMoulds->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
 
+    ui->tableWidget_Material->horizontalHeader()->setStretchLastSection(true);
+    ui->tableWidget_Material->horizontalHeader()->setClickable(false);    //******NEW********//
+    ui->tableWidget_Material->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
+
 }
 
 
@@ -672,7 +676,7 @@ void Moulds::Display_MaterialItem()
 
 
     db.close();//释放数据库
-     ui->tableWidget_Material->selectRow(0);
+     //ui->tableWidget_Material->selectRow(0);
 }
 
 
@@ -720,7 +724,6 @@ void  Moulds::NewMaterial()
    model.setData(model.index(row,Material_Name),ui->tableWidget_Material->item(ui->tableWidget_Material->currentRow(),Material_Name)->text());
    model.setData(model.index(row,Material_EMold),ui->tableWidget_Material->item(ui->tableWidget_Material->currentRow(),Material_EMold)->text());
    model.setData(model.index(row,Material_StrengthFactor),ui->tableWidget_Material->item(ui->tableWidget_Material->currentRow(),Material_StrengthFactor)->text());
-
    model.submitAll();
 
    db.close();//释放数据库
@@ -779,6 +782,19 @@ void Moulds::on_tableWidget_Material_itemSelectionChanged()
     ui->lineEdit_Strengrht->setText(ui->tableWidget_Material->item(CurrentReg.Current_MaterialRow,Material_StrengthFactor)->text());
     ui->lineEdit_EMold->setText(ui->tableWidget_Material->item(CurrentReg.Current_MaterialRow,Material_EMold)->text());
     ui->lineEdit_MaterialName->setText(ui->tableWidget_Material->item(CurrentReg.Current_MaterialRow,Material_Name)->text().split("-").at(1));
+
+    if(ui->tableWidget_Material->item(CurrentReg.Current_MaterialRow,Material_Name)->text().split("-").at(0).compare(trUtf8("铝")) == 0 )
+    {
+        ui->comboBox_material->setCurrentIndex(0);
+    }
+    if(ui->tableWidget_Material->item(CurrentReg.Current_MaterialRow,Material_Name)->text().split("-").at(0).compare(trUtf8("不锈钢")) == 0 )
+    {
+        ui->comboBox_material->setCurrentIndex(1);
+    }
+    if(ui->tableWidget_Material->item(CurrentReg.Current_MaterialRow,Material_Name)->text().split("-").at(0).compare(trUtf8("铁")) == 0 )
+    {
+        ui->comboBox_material->setCurrentIndex(2);
+    }
 
 
 }

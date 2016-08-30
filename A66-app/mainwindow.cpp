@@ -5,6 +5,7 @@
 #include <QDesktopWidget>
 #include "systeminfo.h"
 #include "systemwarn.h"
+#include "deleoplength.h"
 
 
 
@@ -43,7 +44,7 @@ void MainWindow::timerEvent(QTimerEvent *t) //定时器事件
 
 void MainWindow::MainWinState()
 {
-    ui->toolButton_State->setText(CurrentReg.Current_MotorTipResult);
+    //ui->toolButton_State->setText(CurrentReg.Current_MotorTipResult);
 }
 
 
@@ -70,6 +71,7 @@ void MainWindow::initWindow()
     SystemWarn *syswarn =new SystemWarn;
     connect(syswarn, SIGNAL(ReturnProgramdbWin()), this, SLOT(ReturnProgramdb()));
 
+
 //    pg->setWindowFlags(Qt::FramelessWindowHint);
 //    pg->move(0,WIDGET_Y);
 //    pg->show();
@@ -85,6 +87,13 @@ void MainWindow::openMainWindowWin()
 
 }
 
+
+void MainWindow::ReturndevelopLength(double num)
+{
+
+    ui->toolButton_State->setText(trUtf8("展开长度 :") + QString::number(num ,'.',0));
+    qDebug("zhankanchangdu");
+}
 void MainWindow::ReFlashProgName()
 {
 

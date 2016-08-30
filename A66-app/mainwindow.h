@@ -27,6 +27,7 @@ public slots:
     void openMainWindowWin();
     void ReturnProgramdb();
     void ReFlashProgName();
+    void ReturndevelopLength(double num);
 
 
 private slots:

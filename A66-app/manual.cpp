@@ -446,7 +446,5 @@ void Manual::on_toolButton_YReferencePoint_clicked()
 
 void Manual::on_toolButton_Length_clicked()
 {
-    deleopLength dl;
-    dl.exec();
 
 }

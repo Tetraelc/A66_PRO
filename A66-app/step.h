@@ -33,7 +33,8 @@ public:
     void initStep(void);
 
 
-//signals:
+signals:
+
 //    void reflashProIndex();
 //    void reflashStepNum();
 
@@ -83,6 +84,8 @@ private slots:
     void on_pushButton_Left_2_clicked();
 
     void on_pushButton_Left_3_clicked();
+
+    void on_pushButton_Length_clicked();
 
 private:
     void timerEvent(QTimerEvent *t) ;

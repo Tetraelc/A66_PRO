@@ -43,7 +43,7 @@ QString SystemTipsInformation(int TipsID);
 #define ENTER_ENABLE  0xAA
 #define ENTER_DISENABLE  0x55
 
-#define ARMFlag 0
+#define ARMFlag  0
 
 
 
@@ -191,9 +191,10 @@ enum
 
 enum {
     Material_Id = 0,
-    Material_Name = 1,
+    Material_Name = 1,    
+    Material_StrengthFactor =2,
     Material_EMold = 3,
-    Material_StrengthFactor =2
+    Material_Type = 4
 };
 
 

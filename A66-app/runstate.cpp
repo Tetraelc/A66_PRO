@@ -441,26 +441,6 @@ void RunState::ReadRunTable()
 
 void RunState::initRunState()
 {
-    qDebug()<<"Enter initRunState data base initial Window!"<<endl;
-    for(int i=0;i<50;i++)
-    {
-      for(int j=0;j<10;j++)
-      {
-      ui->tableWidget_Run->setItem(i,j,new QTableWidgetItem(""));
-      }
-    }
-
-   // ui->tableWidget_Run->setRowCount(Program[0].StepNumber);
-
-    //ui->tableWidget_Run->selectRow(0);
-
-//    for(ProgIndex=0;ProgIndex<ProgNameNum;ProgIndex++)
-//    {
-//        for(StepIndex=0;StepIndex<Program[ProgIndex].StepNumber;StepIndex++)
-//        {
-//          readSDataIntoTable();
-//        }
-//    }
 
 
 }

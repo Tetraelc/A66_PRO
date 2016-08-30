@@ -879,7 +879,7 @@
     <enum>Qt::NoFocus</enum>
    </property>
    <property name="text">
-    <string>#</string>
+    <string/>
    </property>
    <property name="buttonValue" stdset="0">
     <char>
@@ -1207,7 +1207,7 @@
     <enum>Qt::NoFocus</enum>
    </property>
    <property name="text">
-    <string>*</string>
+    <string/>
    </property>
    <property name="buttonValue" stdset="0">
     <char>
@@ -1740,7 +1740,7 @@
     <enum>Qt::NoFocus</enum>
    </property>
    <property name="text">
-    <string>-</string>
+    <string/>
    </property>
    <property name="buttonValue" stdset="0">
     <char>
