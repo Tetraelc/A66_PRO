@@ -263,24 +263,24 @@ void RunState::SendMTEnableSignal()
    {
       if(motor[0].Wrte_Multi_Finsh_state == SUCCESS_SEND && motor[1].Wrte_Multi_Finsh_state == SUCCESS_SEND)
       {
-           wait_pos_time++;
-           if(wait_pos_time >20)
-           {
-               if((temp1 == 0x400) && (temp2 == 0x400) &&  PostionReachFlag == 1)
-               {
+          wait_pos_time++;
+          if(wait_pos_time >20)
+          {
+              if((temp1 == 0x400) && (temp2 == 0x400) &&  PostionReachFlag == 1)
+              {
 
-                   Write_MOTOR_One_Data(0x04,0x7001,0x01,0x01,ENTER_ENABLE);
-                   ui->label_Run->setText(trUtf8("就绪"));
-                   PostionReachFlag=0;
-                   wait_pos_time   = 0;
-                   motor[0].Wrte_Multi_Finsh_state = NO_SEND;
-                   motor[1].Wrte_Multi_Finsh_state = NO_SEND;
-                   sendOneStep = 2;
-                   ChangeRowFlag = 1;
+                  Write_MOTOR_One_Data(0x04,0x7001,0x01,0x01,ENTER_ENABLE);
+                  ui->label_Run->setText(trUtf8("就绪"));
+                  PostionReachFlag=0;
+                  wait_pos_time   = 0;
+                  motor[0].Wrte_Multi_Finsh_state = NO_SEND;
+                  motor[1].Wrte_Multi_Finsh_state = NO_SEND;
+                  sendOneStep = 2;
+                  ChangeRowFlag = 1;
                }
            }
        }
-       else if(motor[0].Wrte_Multi_Finsh_state == FAIL_SEND && motor[1].Wrte_Multi_Finsh_state == FAIL_SEND)
+       else if(motor[0].Wrte_Multi_Finsh_state == FAIL_SEND || motor[1].Wrte_Multi_Finsh_state == FAIL_SEND)
        {
            TrasmitError++;
            //发送失败的处理
@@ -311,7 +311,9 @@ void RunState::SendMTEnableSignal()
    {
       changeStep();
    }
-
+   qDebug("sendOneStep=%d",sendOneStep);
+   qDebug("motor[0].Wrte_Multi_Finsh_state = %d", motor[0].Wrte_Multi_Finsh_state);
+   qDebug("motor[1].Wrte_Multi_Finsh_state = %d", motor[1].Wrte_Multi_Finsh_state);
 
 }
 /*******************************换步*************************/

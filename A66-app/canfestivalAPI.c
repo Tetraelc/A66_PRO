@@ -299,6 +299,7 @@ UNS8 Write_MOTOR_Multi_Data(S_Data_trans *buf,UNS8 nodeId)
     }
     else
     {
+        motor[nodeId-1].Wrte_Multi_Finsh_state = FAIL_SEND;
         return 0xFF;
     }
 }
@@ -420,20 +421,20 @@ UNS8 Set_Motor_Speed_Postion_Rel(UNS8 nodeId,UNS32 speed,UNS32 postion)
 //                   return  FAIL_SEND;
 //               }
 //        }
-    if(motor[nodeId-1].SDO_status != SDO_free)
-        {
-            return YES_BUSY;
-        }
-    else
-        {
+//    if(motor[nodeId-1].SDO_status != SDO_free)
+//        {
+//            return YES_BUSY;
+//        }
+//    else
+//        {
         set_Postion_Speed_buf[nodeId-1].data[1].Data     =  postion;
         set_Postion_Speed_buf[nodeId-1].data[2].Data     =  speed;
         set_Postion_Speed_buf[nodeId-1].data[3].Data     =  0x7f;
         // Send_Motor_Speed_Postion(&ObjDict_Data,nodeId);
         Write_MOTOR_Multi_Data(&set_Postion_Speed_buf[nodeId-1],nodeId);
-        return NO_BUSY;
+ //       return NO_BUSY;
 
-        }
+//       }
 
 }
 UNS8 Set_Motor_Speed_Postion_Abs(UNS8 nodeId,UNS32 speed,UNS32 postion)
