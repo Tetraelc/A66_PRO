@@ -131,8 +131,8 @@ struct struct_CO_Data {
     lss_transfer_t lss_transfer;
     lss_StoreConfiguration_t  lss_StoreConfiguration;
 #endif
-    S_Data_trans* sdo_write_multi_buf;
-    S_Data_trans* sdo_read_multi_buf;
+    S_Data_trans* sdo_write_multi_buf[8];
+    S_Data_trans* sdo_read_multi_buf[8];
 };
 
 

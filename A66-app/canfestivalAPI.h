@@ -41,7 +41,7 @@ typedef struct {
 
 /***写入多个数数据标志***/
     UNS8 Wrte_Multi_Finsh_state;
-
+    UNS8 Write_One_Finsh_state;
     UNS8 Read_one_state;
 
     UNS8 Read_Multi_Finsh_state;
@@ -117,7 +117,7 @@ UNS8 Set_Motor_Speed_Postion_Rel(UNS8 nodeId,UNS32 speed,UNS32 postion);
 UNS8 Set_Motor_Speed_Postion_Abs(UNS8 nodeId,UNS32 speed,UNS32 postion);
 UNS8 Stop_MOTOR(UNS8 nodeId);
 
-void Write_MOTOR_One_Data(UNS8 nodeId, UNS16 Index,UNS8 Subindex,UNS8 count,UNS8 data);
+UNS8 Write_MOTOR_One_Data(UNS8 nodeId, UNS16 Index,UNS8 Subindex,UNS8 count,UNS8 data);
 
 UNS8 Write_MOTOR_Multi_Data(S_Data_trans *buf,UNS8 nodeId);
 UNS8 Read_MOTOR_Multi_Data(S_Data_trans *buf,UNS8 nodeId);

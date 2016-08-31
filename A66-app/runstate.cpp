@@ -18,7 +18,8 @@
 #include "mathcalculation.h"
 
 
-int set_count =0;
+unsigned char sendOneStep = 0;
+
 int XaxisValue;
 int YaxisValue;
 int ChangeRowFlag =0;
@@ -26,10 +27,15 @@ int PostionReachFlag =0;
 int concedeModeFlag = 1;
 int VbackTime;
 
-unsigned char SetError;
+unsigned char TrasmitError;
 unsigned char Trg_Pos;
 unsigned char Cont_Pos;
 bool Back_state = false;
+bool fastmodeState =false;
+unsigned char X1_ID = 1;
+unsigned char Y1_ID = 2;
+unsigned char R1_ID = 3;
+unsigned char MT_ID = 4;
 extern "C"{
      #include "canfestival.h"
      #include "canfestivalAPI.h"
@@ -120,7 +126,7 @@ void RunState::initWorkedTotalDialog()
         CurrentReg.Current_WorkedTotal =200;
         ui->tableWidget_Run->selectRow(CurrentRnuStateRow);
         StopRun();
-        set_count = 0;
+        sendOneStep = 0;
         PostionReachFlag = 1;
         ChangeRowFlag =0 ;
         WrokedTotal *wk =new WrokedTotal;
@@ -185,9 +191,6 @@ void RunState::checkMotorState()
 
 void RunState::MotorRun()
 {
-//#define CUTSMODE			0x08//µ¥ŽÎÄ£Êœ  IN4
-//#define CUTCMODE			0x04//Á¬ÐøÄ£Êœ  IN3
-//#define CUTJMODE
     ui->tableWidget_Run->selectRow(CurrentRnuStateRow);
     ui->label_ProgramName->setText(CurrentProgramTemp.ProgramName);
     ui->label_CurrentStep->setText( QString::number(CurrentRnuStateRow + 1,'.',0) + "/" +  QString::number(CurrentProgramTemp.StepNumber,'.',0));
@@ -244,113 +247,131 @@ void RunState::SendMTEnableSignal()
     XaxisValue = CurrentStepTemp.Xaxis;
     YaxisValue = CurrentStepTemp.Yaxis;
 
-   if(set_count==0)
-   {
-       //qDebug("-------------------------------------------------------------------------------------------------");
 
-    //   qDebug()<<"XaxisValue"<<XaxisValue;
-  //     qDebug()<<"YaxisValue"<<YaxisValue;
+    temp1 = MOTOR_STATUS[0] & 0x400;
+    temp2 = MOTOR_STATUS[1] & 0x400;
+   if(sendOneStep == 0) //第一步发送数据  开始定位
+   {
        Set_Motor_Speed_Postion_Abs(0x02,5000,YaxisValue);
        Set_Motor_Speed_Postion_Abs(0x01,5000,XaxisValue);
-       ui->label_Run->setText(trUtf8("定位"));
-
-       ChangeRowFlag = 1;
-
+       ui->label_Run->setText(trUtf8("定位"));      
+       sendOneStep = 1;
+       qDebug()<<"XaxisValue"<<XaxisValue;
+       qDebug()<<"YaxisValue"<<YaxisValue;
    }
-  set_count++;
-  wait_pos_time++;
-  temp1 = MOTOR_STATUS[0] & 0x400;
-  temp2 = MOTOR_STATUS[1] & 0x400;
-  if(motor[0].Wrte_Multi_Finsh_state == SUCCESS_SEND && motor[1].Wrte_Multi_Finsh_state == SUCCESS_SEND)
-  {
-
-   if(wait_pos_time >200)
+   else if (sendOneStep == 1)//第二步等待定位完成  发送A20启动
    {
-       if((temp1 == 0x400) && (temp2 == 0x400) &&  PostionReachFlag == 1)
+      if(motor[0].Wrte_Multi_Finsh_state == SUCCESS_SEND && motor[1].Wrte_Multi_Finsh_state == SUCCESS_SEND)
+      {
+           wait_pos_time++;
+           if(wait_pos_time >20)
+           {
+               if((temp1 == 0x400) && (temp2 == 0x400) &&  PostionReachFlag == 1)
+               {
+
+                   Write_MOTOR_One_Data(0x04,0x7001,0x01,0x01,ENTER_ENABLE);
+                   ui->label_Run->setText(trUtf8("就绪"));
+                   PostionReachFlag=0;
+                   wait_pos_time   = 0;
+                   motor[0].Wrte_Multi_Finsh_state = NO_SEND;
+                   motor[1].Wrte_Multi_Finsh_state = NO_SEND;
+                   sendOneStep = 2;
+                   ChangeRowFlag = 1;
+               }
+           }
+       }
+       else if(motor[0].Wrte_Multi_Finsh_state == FAIL_SEND && motor[1].Wrte_Multi_Finsh_state == FAIL_SEND)
        {
-          // ReadTrg(0x00);
-           Write_MOTOR_One_Data(0x04,0x7001,0x01,0x01,ENTER_ENABLE);
-           ui->label_Run->setText(trUtf8("就绪"));
-           PostionReachFlag=0;
-           wait_pos_time   = 0;
+           TrasmitError++;
+           //发送失败的处理
            motor[0].Wrte_Multi_Finsh_state = NO_SEND;
            motor[1].Wrte_Multi_Finsh_state = NO_SEND;
-       }
-   }
-   else if(motor[0].Wrte_Multi_Finsh_state == FAIL_SEND && motor[1].Wrte_Multi_Finsh_state == FAIL_SEND)
-   {
-       SetError++;
-       //发送失败的处理
-       motor[0].Wrte_Multi_Finsh_state = NO_SEND;
-       motor[1].Wrte_Multi_Finsh_state = NO_SEND;
-       if(SetError > 3)
-       {
-            SetError = 0;
-            //发送错误.要检查网络了
-       }
-       else
-       {
-           Set_Motor_Speed_Postion_Abs(0x02,5000,YaxisValue);
-           Set_Motor_Speed_Postion_Abs(0x01,5000,XaxisValue);
+           if(TrasmitError > 3)
+           {
+                TrasmitError = 0;
+                sendOneStep = 2;//要考虑
+                //发送错误.要检查网络了做个显示
+           }
+           else
+           {
+              sendOneStep = 0;
+           }
        }
 
    }
-  }
-//   else
-//   {
-//       ReadTrg(0x01);
-//   }
-
-//   if(Trg_Pos ==0x01 && Cont_Pos == 0x01)// diyici anxia
-//   {
-//         PostionReachFlag = 1;
-//   }
-
-//   if(PostionReachFlag == 1)
-//   {
-//       if(Trg_Pos ==0x0 && Cont_Pos == 0x0)
-//       {
-//            Write_MOTOR_One_Data(0x04,0x7001,0x01,0x01,0xAA);
-//            PostionReachFlag = 0;
-//       }
-//   }
-
-
-   if((A20_IN_Status & UpperPoint) && Back_state)
+   else if (sendOneStep == 2) //等待A20到达上至点发送数据关闭命令||(fastmodeState == true))&&
    {
-       Write_MOTOR_One_Data(0x04,0x7001,0x01,0x01,ENTER_DISENABLE);
-       Back_state = false;
-       PostionReachFlag =1;
-       concedeModeFlag = 1;
-       if(ChangeRowFlag == 1)
+       if(((A20_IN_Status & UpperPoint)&&(Back_state == true)))
        {
-           CurrentRnuStateRow++;
-
-           ui->tableWidget_Run->selectRow(ui->tableWidget_Run->currentRow()+1);
-
-          if(CurrentRnuStateRow == CurrentProgramTemp.StepNumber )
-          {
-              CurrentRnuStateRow=0;
-              CurrentRnuStateWorkedTotal ++ ;
-          }
-            set_count = 0;
+            Write_MOTOR_One_Data(MT_ID,0x7001,0x01,0x01,ENTER_DISENABLE);
+            sendOneStep = 3;
        }
-       ChangeRowFlag = 0;
+   }
+   else if (sendOneStep == 3)//等待命令发送完成 ，进行换步
+   {
+      changeStep();
+   }
 
-  }
 
+}
+/*******************************换步*************************/
+void RunState::changeStep()
+{
+   if(motor[MT_ID-1].Write_One_Finsh_state == SUCCESS_SEND)
+    {
+        motor[MT_ID-1].Write_One_Finsh_state = NO_SEND;
 
+        if(ChangeRowFlag == 1)
+        {
+             qDebug("CurrentRnuStateRow=%d",CurrentRnuStateRow);
+
+            CurrentRnuStateRow++;
+
+           // ui->tableWidget_Run->selectRow(ui->tableWidget_Run->currentRow()+1);
+
+           if(CurrentRnuStateRow == CurrentProgramTemp.StepNumber )
+           {
+               CurrentRnuStateRow=0;
+               CurrentRnuStateWorkedTotal ++ ;
+           }
+        }
+           ChangeRowFlag = 0;
+           sendOneStep = 0;
+           Back_state = false;
+           fastmodeState = false;
+           PostionReachFlag =1;
+           concedeModeFlag = 1;
+         //  VbackTime = 0;
+
+    }
+    else if (motor[MT_ID-1].Write_One_Finsh_state == FAIL_SEND)
+    {
+        motor[MT_ID-1].Write_One_Finsh_state = NO_SEND;
+        if(TrasmitError > 3)
+        {
+             TrasmitError = 0;
+             Back_state = false;
+             PostionReachFlag =1;
+             sendOneStep = 0;
+             //发送停止错误.要检查网络了做个显示
+        }
+        else
+        {
+                 sendOneStep = 0;
+        }
+
+    }
 }
 
 
 int RunState::concedeState()
 {
-//    if(concedeModeFlag == 1)
-//    {
-//        Set_Motor_Speed_Postion_Rel(0x01,1000,CurrentStepTemp.concedeDistance);
-//        ui->label_Run->setText(trUtf8("退让"));
-//        concedeModeFlag = 0;
-//    }
+    if(concedeModeFlag == 1)
+    {
+        Set_Motor_Speed_Postion_Rel(0x01,1000,CurrentStepTemp.concedeDistance);
+        ui->label_Run->setText(trUtf8("退让"));
+        concedeModeFlag = 0;
+    }
 }
 
 
@@ -370,10 +391,15 @@ int RunState::CheckPressureState()
     case VFast:
         //qDebug("VFast");
 
-        if(VbackTime > 10000 && fastmode == 1 )
+        if((VbackTime > 50) && (Back_state == true)) //&& fastmode == 1 )
         {
-            //进行换步
-            VbackTime = 0;
+//           sendOneStep = 2;
+//           fastmodeState = true;
+//           VbackTime = 0;
+           qDebug("VFastmode");
+          //  changeStep();
+
+
         }
          ui->label_Pressure->setText(trUtf8("快下"));break;
 
