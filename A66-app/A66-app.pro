@@ -52,7 +52,8 @@ SOURCES += main.cpp\
     systemwarn.cpp \
     mathcalculation.cpp \
     yreferencepoint.cpp \
-    deleoplength.cpp
+    deleoplength.cpp \
+    homingmode.cpp
 
 HEADERS  += mainwindow.h \
     step.h \
@@ -103,7 +104,8 @@ HEADERS  += mainwindow.h \
     systemwarn.h \
     mathcalculation.h \
     yreferencepoint.h \
-    deleoplength.h
+    deleoplength.h \
+    homingmode.h
 
 FORMS    += mainwindow.ui \
     step.ui \
@@ -122,7 +124,8 @@ FORMS    += mainwindow.ui \
     systeminfo.ui \
     systemwarn.ui \
     yreferencepoint.ui \
-    deleoplength.ui
+    deleoplength.ui \
+    homingmode.ui
 
 RESOURCES += \
     A66-appsrc.qrc

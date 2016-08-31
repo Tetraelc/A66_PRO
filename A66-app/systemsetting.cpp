@@ -10,6 +10,7 @@
 #include <QSqlTableModel>
 #include <QSqlRecord>
 #include "global.h"
+#include "systemwarn.h"
 
 int Write_Button_state = 0;
 int Read_Button_state  = 0;
@@ -46,40 +47,38 @@ void SystemSetting::on_treeWidget_System_itemSelectionChanged()
 
     if(ui->treeWidget_System->currentItem()->parent() != NULL)
     {
-//        if(ui->treeWidget_System->currentItem()->parent()->text(0).compare(trUtf8("通用")) == 0)
-//        {
+        if(ui->treeWidget_System->currentItem()->parent()->text(0).compare(trUtf8("通用")) == 0)
+        {
 
+            ui->stackedWidget->setCurrentIndex(0);
+            Display_Item(ui->treeWidget_System->currentIndex().row()+10,true,false);
 
-
-            if(ui->treeWidget_System->currentItem()->text(0).compare(trUtf8("常量")) == 0 )
-            {
-                ui->stackedWidget->setCurrentIndex(0);
-                Display_Item(10,true);
-
-
-
-
-            }
-            if(ui->treeWidget_System->currentItem()->text(0).compare(trUtf8("诊断")) == 0 )
-            {
-                ui->stackedWidget->setCurrentIndex(0);
-                Display_Item(11,true);
-
-            }
+//            if(ui->treeWidget_System->currentItem()->text(0).compare(trUtf8("常量")) == 0 )
+//            {
+//                ui->stackedWidget->setCurrentIndex(0);
+//                Display_Item(10,true);
+//            }
+//            if(ui->treeWidget_System->currentItem()->text(0).compare(trUtf8("诊断")) == 0 )
+//            {
+//                ui->stackedWidget->setCurrentIndex(0);
+//                Display_Item(11,true);
+//            }
 
 //           qDebug()<<"ui->tableWidget_System->item(2,2)->text()"<<ui->tableWidget_System->item(2,2)->text();
 
-//        }
+        }
+
         if(ui->treeWidget_System->currentItem()->parent()->text(0).compare(trUtf8("轴参数")) == 0)
         {
             ui->stackedWidget->setCurrentIndex(0);
-           Display_Item(ui->treeWidget_System->currentIndex().row()+20,EditableFalg);
+           Display_Item(ui->treeWidget_System->currentIndex().row()+20,EditableFalg,false);
         }
-        if(ui->treeWidget_System->currentItem()->parent()->text(0).compare(trUtf8("高级设置")) == 0 )
+        if(ui->treeWidget_System->currentItem()->text(0).compare(trUtf8("轴配置")) == 0 )
         {
            ui->stackedWidget->setCurrentIndex(0);
-           Display_Item(ui->treeWidget_System->currentIndex().row()+30,EditableFalg);
+           Display_Item(Factory_Id,FactoryAxisFalg,true);
         }
+
         if(ui->treeWidget_System->currentItem()->text(0).compare(trUtf8("阀组配置")) == 0 )
         {
             ui->stackedWidget->setCurrentIndex(2);
@@ -117,11 +116,11 @@ void SystemSetting::checktSecret()
 //    if(ui->treeWidget_System->currentItem()->parent() != NULL)
 //    {
 
-        if(ui->treeWidget_System->currentItem()->text(0).compare(trUtf8("常量")) == 0 )
-        {
-            Display_Item(ui->treeWidget_System->currentIndex().row()+10,true);
+//        if(ui->treeWidget_System->currentItem()->text(0).compare(trUtf8("常量")) == 0 )
+//        {
+//            Display_Item(ui->treeWidget_System->currentIndex().row()+10,true);
 
-        }
+//        }
 //    }
 }
 
@@ -131,7 +130,89 @@ void SystemSetting::TreeWidgetInit()
 }
 
 
-void SystemSetting::Display_Item(int ClassId,bool Editable)
+
+void SystemSetting::ReadForSystemDat()
+{
+    qDebug()<<"Enter ReadForSystem data base initial Window!"<<endl;
+    bool ok;
+
+//    if(!db.open())
+//    {
+//        QMessageBox::critical(0,QObject::tr("Error"),
+//                              db.lastError().text());//打开数据库连接
+//    }
+
+    QSqlTableModel model;
+    model.setTable("Setup");
+    model.setFilter("Class = " Xaxis_Id);
+    model.select();
+    for(int i=0;i<model.rowCount();i++)
+    {
+            QSqlRecord record = model.record(i);
+            XaxisParameterTemp[i] = record.value("Value").toDouble(&ok);
+    }
+    model.setFilter("Class = " Yaxis_Id);
+    model.select();
+    for(int i=0;i<model.rowCount();i++)
+    {
+            QSqlRecord record = model.record(i);
+            YaxisParameterTemp[i] = record.value("Value").toDouble(&ok);
+    }
+    model.setFilter("Class = " Raxis_Id);
+    model.select();
+    for(int i=0;i<model.rowCount();i++)
+    {
+            QSqlRecord record = model.record(i);
+            RaxisParameterTemp[i] = record.value("Value").toDouble(&ok);
+    }
+    SystemDatChange();
+    //db.close();//释放数据库
+}
+
+void SystemSetting::SystemDatChange()
+{
+
+    ////X轴参数
+     XaxisParameter.LeadScrew = XaxisParameterTemp[0];
+     XaxisParameter.MotorDirection = XaxisParameterTemp[1];
+     XaxisParameter.RunSpeed = XaxisParameterTemp[2];
+     XaxisParameter.ManualSpeed = XaxisParameterTemp[3];
+     XaxisParameter.MaxDistance = XaxisParameterTemp[4];
+     XaxisParameter.MinDistance = XaxisParameterTemp[5];
+     XaxisParameter.PositioningMode = XaxisParameterTemp[6];
+     XaxisParameter.OverrunDistance = XaxisParameterTemp[7];
+     XaxisParameter.ReferencePosMode = XaxisParameterTemp[8];
+     XaxisParameter.ReferencePos = XaxisParameterTemp[9];
+      ////Y轴参数
+     YaxisParameter.LeadScrew = YaxisParameterTemp[0];
+     YaxisParameter.MotorDirection = YaxisParameterTemp[1];
+     YaxisParameter.RunSpeed = YaxisParameterTemp[2];
+     YaxisParameter.ManualSpeed = YaxisParameterTemp[3];
+     YaxisParameter.MaxDistance = YaxisParameterTemp[4];
+     YaxisParameter.MinDistance = YaxisParameterTemp[5];
+     YaxisParameter.PositioningMode = YaxisParameterTemp[6];
+     YaxisParameter.OverrunDistance = YaxisParameterTemp[7];
+     YaxisParameter.ReferencePosMode = YaxisParameterTemp[8];
+     YaxisParameter.ReferencePos = YaxisParameterTemp[9];
+      ////R轴参数
+     RaxisParameter.LeadScrew = RaxisParameterTemp[0];
+     RaxisParameter.MotorDirection = RaxisParameterTemp[1];
+     RaxisParameter.RunSpeed = RaxisParameterTemp[2];
+     RaxisParameter.ManualSpeed = RaxisParameterTemp[3];
+     RaxisParameter.MaxDistance = RaxisParameterTemp[4];
+     RaxisParameter.MinDistance = RaxisParameterTemp[5];
+     RaxisParameter.PositioningMode = RaxisParameterTemp[6];
+     RaxisParameter.OverrunDistance = RaxisParameterTemp[7];
+     RaxisParameter.ReferencePosMode = RaxisParameterTemp[8];
+     RaxisParameter.ReferencePos = RaxisParameterTemp[9];
+
+}
+
+
+
+
+
+void SystemSetting::Display_Item(int ClassId,bool Editable,bool FristEnable)
 {
     QString Str_ClassId=QString::number(ClassId,10);
     qDebug()<<"ClassId"<<ClassId;
@@ -140,7 +221,6 @@ void SystemSetting::Display_Item(int ClassId,bool Editable)
 //        QMessageBox::critical(0,QObject::tr("Error"),
 //                              db.lastError().text());//打开数据库连接
 //    }
-
 
     QSqlTableModel model;
     model.setTable("Setup");
@@ -165,18 +245,33 @@ void SystemSetting::Display_Item(int ClassId,bool Editable)
         ui->tableWidget_System->setItem(i,Table_Info,new QTableWidgetItem(record.value("Introduce").toString()));
 
         if(Editable)
-        {
-        ui->tableWidget_System->item(i,0)->setFlags(ui->tableWidget_System->item(i,Table_Id)->flags() & ~Qt::ItemIsEditable & ~Qt::ItemIsSelectable);
-        ui->tableWidget_System->item(i,1)->setFlags(ui->tableWidget_System->item(i,Table_Name)->flags() & ~Qt::ItemIsEditable & ~Qt::ItemIsSelectable);
-        //ui->tableWidget_System->item(i,2)->setFlags(ui->tableWidget_System->item(i,Table_Value)->flags() & Qt::ItemIsEnabled & Qt::ItemIsSelectable );
-        ui->tableWidget_System->item(i,3)->setFlags(ui->tableWidget_System->item(i,Table_Info)->flags() & ~Qt::ItemIsEditable & ~Qt::ItemIsSelectable);
+        {                    
+            ui->tableWidget_System->item(i,0)->setFlags(ui->tableWidget_System->item(i,Table_Id)->flags() & ~Qt::ItemIsEditable & ~Qt::ItemIsSelectable);
+            ui->tableWidget_System->item(i,1)->setFlags(ui->tableWidget_System->item(i,Table_Name)->flags() & ~Qt::ItemIsEditable & ~Qt::ItemIsSelectable);
+            //ui->tableWidget_System->item(i,2)->setFlags(ui->tableWidget_System->item(i,Table_Value)->flags() & Qt::ItemIsEnabled & Qt::ItemIsSelectable );
+            ui->tableWidget_System->item(i,3)->setFlags(ui->tableWidget_System->item(i,Table_Info)->flags() & ~Qt::ItemIsEditable & ~Qt::ItemIsSelectable);
+
         }
         else
         {
-            ui->tableWidget_System->item(i,0)->setFlags(ui->tableWidget_System->item(i,Table_Id)->flags() & ~Qt::ItemIsEditable & ~Qt::ItemIsSelectable);
-            ui->tableWidget_System->item(i,1)->setFlags(ui->tableWidget_System->item(i,Table_Name)->flags() & ~Qt::ItemIsEditable & ~Qt::ItemIsSelectable);
-            ui->tableWidget_System->item(i,2)->setFlags(ui->tableWidget_System->item(i,Table_Value)->flags() & ~Qt::ItemIsEditable & ~Qt::ItemIsSelectable);
-            ui->tableWidget_System->item(i,3)->setFlags(ui->tableWidget_System->item(i,Table_Info)->flags() & ~Qt::ItemIsEditable & ~Qt::ItemIsSelectable);
+            if(FristEnable)
+            {
+                ui->tableWidget_System->item(i,0)->setFlags(ui->tableWidget_System->item(i,Table_Id)->flags() & ~Qt::ItemIsEditable & ~Qt::ItemIsSelectable);
+                ui->tableWidget_System->item(i,1)->setFlags(ui->tableWidget_System->item(i,Table_Name)->flags() & ~Qt::ItemIsEditable & ~Qt::ItemIsSelectable);
+                if(i>0)
+                {
+                    ui->tableWidget_System->item(i,2)->setFlags(ui->tableWidget_System->item(i,Table_Value)->flags() & ~Qt::ItemIsEditable & ~Qt::ItemIsSelectable);
+                }
+                 ui->tableWidget_System->item(i,3)->setFlags(ui->tableWidget_System->item(i,Table_Info)->flags() & ~Qt::ItemIsEditable & ~Qt::ItemIsSelectable);
+            }
+            else
+            {
+                ui->tableWidget_System->item(i,0)->setFlags(ui->tableWidget_System->item(i,Table_Id)->flags() & ~Qt::ItemIsEditable & ~Qt::ItemIsSelectable);
+                ui->tableWidget_System->item(i,1)->setFlags(ui->tableWidget_System->item(i,Table_Name)->flags() & ~Qt::ItemIsEditable & ~Qt::ItemIsSelectable);
+                ui->tableWidget_System->item(i,2)->setFlags(ui->tableWidget_System->item(i,Table_Value)->flags() & ~Qt::ItemIsEditable & ~Qt::ItemIsSelectable);
+                ui->tableWidget_System->item(i,3)->setFlags(ui->tableWidget_System->item(i,Table_Info)->flags() & ~Qt::ItemIsEditable & ~Qt::ItemIsSelectable);
+            }
+
         }
 
     }
@@ -217,7 +312,7 @@ void SystemSetting::Update_Item(int Id,double Value)
 
     QString Str_Value=QString::number(Value,'.',4);
 
-    if(Id != 62)
+    if(Id != Secret_Index && Id != Factory_Index)
     {
      query.exec("UPDATE Setup SET Value =" + Str_Value + " WHERE ID = " + Str_Id);
     }
@@ -267,6 +362,51 @@ void SystemSetting::openSystemSettingWin()
 }
 
 
+void SystemSetting::on_toolButton_InitDAT_clicked()
+{
+
+    QSqlQuery query;
+    query.exec("UPDATE  Setup  SET  VALUE = INITVALUE");
+
+    CurrentReg.Current_MotorTips = DataInitTip;
+    aralmOrTipFalg = false;
+    SystemWarn SaveDATWarn;
+    SaveDATWarn.exec();
+
+}
+
+void SystemSetting::on_toolButton_SaveDAT_clicked()
+{
+//    QSqlQuery query;
+//    query.exec(" ");
+     #if ARMFlag
+     system("sqlite3 /opt/tetra/A66-app/A66-app.db .dump > /opt/tetra/A66-app/A66-app.bak");
+     #else
+     system("sqlite3 A66-app.db .dump > /home/tetra/gitA66/A66-app/A66-app.bak");
+     #endif
+     CurrentReg.Current_MotorTips = DataSaveTip;
+     aralmOrTipFalg = false;
+     SystemWarn SaveDATWarn;
+     SaveDATWarn.exec();
+
+}
+
+void SystemSetting::on_toolButton_ResumeDAT_clicked()
+{
+ #if ARMFlag
+    system("rm /opt/tetra/A66-app/A66-app.db");
+    system("sqlite3 /opt/tetra/A66-app/A66-app.db < A66-app.bak");
+ #else
+    system("rm /home/tetra/gitA66/A66-app/A66-app.db");
+    system("sqlite3 /home/tetra/gitA66/A66-app/A66-app.db < /home/tetra/gitA66/A66-app/A66-app.bak");
+ #endif
+    CurrentReg.Current_MotorTips = DataResumeTip;
+    aralmOrTipFalg = false;
+    SystemWarn SaveDATWarn;
+    SaveDATWarn.exec();
+}
+
+
 
 void SystemSetting::on_tableWidget_System_cellChanged(int row, int column)
 {
@@ -280,25 +420,39 @@ void SystemSetting::on_tableWidget_System_cellChanged(int row, int column)
 
         CurrentValue=ui->tableWidget_System->item(ui->tableWidget_System->currentRow(),2)->text().toDouble(&ok);
 
-        if(CurrentId == Secret_Id)
+        if(CurrentId == Secret_Index)
         {
             CurrentReg.CurrentSecret = ui->tableWidget_System->item(2,2)->text();
         }
 
-        if( CurrentReg.CurrentSecret == "5678")
+        if(CurrentId == Factory_Index)
+        {
+            CurrentReg.CurrentSecret = ui->tableWidget_System->item(0,2)->text();
+            qDebug()<<"Factory_Id"<<Factory_Id;
+        }
+
+        if( CurrentReg.CurrentSecret == SYSTEMSECRET)
         {
             EditableFalg =true;
         }
 
-         qDebug()<<"222222222";
-
         Update_Item(CurrentId,CurrentValue);
         Table_Editable_Flag =0;
-        if(CurrentId != Secret_Id)
+        if(CurrentId != Secret_Index && CurrentId != Factory_Index )
         {
          ui->tableWidget_System->setItem(ui->tableWidget_System->currentRow(),2,new QTableWidgetItem(Select_Item(CurrentId)));
         }
         Table_Editable_Flag =1;
+        qDebug()<<"CurrentReg.CurrentSecret"<<CurrentReg.CurrentSecret;
+
+        if( CurrentReg.CurrentSecret == FACTORYSECRET)
+        {
+            FactoryAxisFalg =true;
+            Display_Item(Factory_Id,FactoryAxisFalg,true);
+
+        }
+
+
     }
 }
 
@@ -1151,6 +1305,7 @@ int SystemSetting::deal_read_config_event()
 }
 
 }
+
 
 
 

@@ -121,7 +121,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>1</number>
    </property>
    <widget class="QWidget" name="page">
     <widget class="QTableWidget" name="tableWidget_System">
@@ -152,7 +152,7 @@
       <number>4</number>
      </property>
      <attribute name="horizontalHeaderVisible">
-      <bool>true</bool>
+      <bool>false</bool>
      </attribute>
      <attribute name="horizontalHeaderHighlightSections">
       <bool>false</bool>
@@ -183,7 +183,7 @@
     </widget>
    </widget>
    <widget class="QWidget" name="page_3">
-    <widget class="QToolButton" name="toolButton">
+    <widget class="QToolButton" name="toolButton_InitDAT">
      <property name="geometry">
       <rect>
        <x>100</x>
@@ -196,7 +196,7 @@
       <string>初始化</string>
      </property>
     </widget>
-    <widget class="QToolButton" name="toolButton_2">
+    <widget class="QToolButton" name="toolButton_SaveDAT">
      <property name="geometry">
       <rect>
        <x>100</x>
@@ -209,7 +209,7 @@
       <string>备份数据</string>
      </property>
     </widget>
-    <widget class="QToolButton" name="toolButton_3">
+    <widget class="QToolButton" name="toolButton_ResumeDAT">
      <property name="geometry">
       <rect>
        <x>100</x>

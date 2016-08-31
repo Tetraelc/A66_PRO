@@ -332,6 +332,7 @@ void RunState::SendMTEnableSignal()
           {
               CurrentRnuStateRow=0;
               CurrentRnuStateWorkedTotal ++ ;
+
           }
             set_count = 0;
        }

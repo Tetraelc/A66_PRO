@@ -22,53 +22,19 @@ public:
     ~SystemSetting();
 
  //   void initSystemSettings(void);
-    void Display_Item(int ClassId,bool Editable);
+    void Display_Item(int ClassId,bool Editable,bool FristEnable);
     void Update_Item(int Id,double Value);
     QString Select_Item(int Id);
     void TreeWidgetInit();
     void ReadForSystem();
     void checktSecret();
+    void ReadForSystemDat();
+    void SystemDatChange();
 
 
-    QXmlStreamReader Systemreader;
-
-
-
-    struct DataType
-    {
-        double MaxValue;
-        double MinValue;
-        double NormValue;
-        double DeInitValue;
-    };
-    struct DataType SystemTemp[50];
-
-    struct SystemData
-    {
-        struct DataType  Language;
-        struct DataType  Units;
-        struct DataType  ConcedeTime;
-        struct DataType  PressureKeepingTime;
-        struct DataType  RemovalTime;
-        struct DataType  FrameStrength;
-    };
-
-    struct SystemData SystemParamete;
-    struct AxisParameter
-    {
-        struct DataType  LeadScrew;
-        struct DataType  MotorDirection;
-        struct DataType  EncodeDirection;
-        struct DataType  RunSpeed;
-        struct DataType  MaxDistance;
-        struct DataType  MinDistance;
-        struct DataType  PositioningAccuracy;
-        struct DataType  PositioningMode;
-        struct DataType  OverrunDistance;
-    };
-    struct AxisParameter XAxisParameter;
-    struct AxisParameter YAxisParameter;
-    struct AxisParameter RAxisParameter;
+    double XaxisParameterTemp[10];
+    double YaxisParameterTemp[10];
+    double RaxisParameterTemp[10];
 
 
     int StepNameNum;
@@ -96,6 +62,12 @@ private slots:
     void on_toolButton_readConfig_clicked();
 
     void on_toolButton_confirm_clicked();
+
+    void on_toolButton_InitDAT_clicked();
+
+    void on_toolButton_SaveDAT_clicked();
+
+    void on_toolButton_ResumeDAT_clicked();
 
 private:
     int deal_write_config_event();

@@ -43,15 +43,23 @@ QString SystemTipsInformation(int TipsID);
 #define ENTER_ENABLE  0xAA
 #define ENTER_DISENABLE  0x55
 
-#define ARMFlag  1
+#define ARMFlag  0
 
 
 
 
+/////报警ID号//////
 #define UpperPointAlarm   1
 
-#define RunTip   2
+
+///////提示ID号///////
 #define PrepareTip   1
+#define RunTip   2
+#define RunFinishTip   3
+#define DataInitTip   4
+#define DataSaveTip   5
+#define DataResumeTip   6
+
 
 extern int fastmode;
 extern int ProgIndex;
@@ -67,13 +75,27 @@ extern int LowerMoldNum;
 extern int ReflashMaterialFalg;
 
 extern bool EditableFalg;
+extern bool FactoryAxisFalg;
+extern bool aralmOrTipFalg;
 
 extern QSqlDatabase db;
 
 #define MAIN_WIDGET_Y    0
 #define WIDGET_Y    MAIN_WIDGET_Y + 100
-#define Secret_Id  62
 
+
+//////密码设置/////
+#define SYSTEMSECRET "5678"
+#define FACTORYSECRET "678901"
+
+
+/////设置界面轴ID///////
+#define Xaxis_Id  "21"
+#define Yaxis_Id  "22"
+#define Raxis_Id  "23"
+#define Secret_Index  62
+#define Factory_Id  32
+#define Factory_Index 67
 
 struct _VALUESTATE
 {
@@ -271,6 +293,24 @@ struct MaterialData
 extern struct MaterialData  CurrentMaterialTemp;
 
 
+struct   _AXISPARAMETER
+{
+    double LeadScrew;
+    bool   MotorDirection;
+    bool   EncodeDirection;
+    double RunSpeed;
+    double ManualSpeed;
+    double MaxDistance;
+    double MinDistance;
+    bool   PositioningMode;
+    double OverrunDistance;
+    double ReferencePosMode;
+    double ReferencePos;
+};
+
+extern struct _AXISPARAMETER  XaxisParameter;
+extern struct _AXISPARAMETER  YaxisParameter;
+extern struct _AXISPARAMETER  RaxisParameter;
 
 
 class Global : public QWidget

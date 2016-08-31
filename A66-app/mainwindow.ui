@@ -462,26 +462,6 @@
      </property>
     </widget>
    </widget>
-   <widget class="QLineEdit" name="lineEdit">
-    <property name="geometry">
-     <rect>
-      <x>180</x>
-      <y>220</y>
-      <width>113</width>
-      <height>26</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="lineEdit_2">
-    <property name="geometry">
-     <rect>
-      <x>180</x>
-      <y>290</y>
-      <width>113</width>
-      <height>26</height>
-     </rect>
-    </property>
-   </widget>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>

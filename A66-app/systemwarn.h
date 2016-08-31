@@ -14,11 +14,12 @@ class SystemWarn : public QDialog
 public:
     explicit SystemWarn(QWidget *parent = 0);
     ~SystemWarn();
-
+    void SystemCheckTip(int TipID);
+    void SystemCheckAlarm(int WarnID);
 signals:
     void ReturnProgramdbWin();
 public slots:
-    void SystemCheckAlarm(int WarnID);
+
     
 private slots:
     void on_buttonBox_accepted();

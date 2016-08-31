@@ -288,48 +288,48 @@ bool MainWindow::on_toolButton_Start_clicked()
 {
 //    SystemWarnInformation(UpperPointAlarm);
 
-    if(!(A20_IN_Status & UpperPoint))
-    {
-//        ReturnRun();
-        CurrentReg.Current_MotorAlarm = UpperPointAlarm;
-        SystemWarnInformation(CurrentReg.Current_MotorAlarm);
-        Write_MOTOR_One_Data(0x04,0x7001,0x01,0x01,ENTER_RETURN);
-        SystemWarn warn;
-        warn.exec();
+//    if(!(A20_IN_Status & UpperPoint))
+//    {
+////        ReturnRun();
+//        CurrentReg.Current_MotorAlarm = UpperPointAlarm;
+//       // SystemWarnInformation(CurrentReg.Current_MotorAlarm);
+//        Write_MOTOR_One_Data(0x04,0x7001,0x01,0x01,ENTER_RETURN);
+//        SystemWarn warn;
+//        warn.exec();
 
 
-        if(!(A20_IN_Status & UpperPoint))
-        {
-             //emit openProgramwindow();
-            emit openProgramWidget();
-            ui->toolButton_T1->setText(trUtf8(" 程序库"));
-            ui->toolButton_T1->setIcon(QIcon("./ICO/P1-PROG.png"));
-            ui->toolButton_B0->setEnabled(false);
-            ui->toolButton_B1->setEnabled(true);
-            ui->toolButton_B2->setEnabled(true);
-            ui->toolButton_B3->setEnabled(true);
-            ui->toolButton_B4->setEnabled(true);
-            ui->toolButton_B5->setEnabled(true);
-            ui->toolButton_Start->setEnabled(true);
+//        if(!(A20_IN_Status & UpperPoint))
+//        {
+//             //emit openProgramwindow();
+//            emit openProgramWidget();
+//            ui->toolButton_T1->setText(trUtf8(" 程序库"));
+//            ui->toolButton_T1->setIcon(QIcon("./ICO/P1-PROG.png"));
+//            ui->toolButton_B0->setEnabled(false);
+//            ui->toolButton_B1->setEnabled(true);
+//            ui->toolButton_B2->setEnabled(true);
+//            ui->toolButton_B3->setEnabled(true);
+//            ui->toolButton_B4->setEnabled(true);
+//            ui->toolButton_B5->setEnabled(true);
+//            ui->toolButton_Start->setEnabled(true);
 
-             qDebug("openProgramwindow");
-        }
-        else
-        {
-            emit openRunStateWidget();
-            ui->toolButton_T1->setText(trUtf8(" 运行"));
-            ui->toolButton_T1->setIcon(QIcon("./ICO/P1-RUN.png"));
-            ui->toolButton_B0->setEnabled(false);
-            ui->toolButton_B1->setEnabled(false);
-            ui->toolButton_B2->setEnabled(false);
-            ui->toolButton_B3->setEnabled(false);
-            ui->toolButton_B4->setEnabled(false);
-            ui->toolButton_B5->setEnabled(false);
-            ui->toolButton_Start->setEnabled(false);
-        }
-    }
-    else
-    {
+//             qDebug("openProgramwindow");
+//        }
+//        else
+//        {
+//            emit openRunStateWidget();
+//            ui->toolButton_T1->setText(trUtf8(" 运行"));
+//            ui->toolButton_T1->setIcon(QIcon("./ICO/P1-RUN.png"));
+//            ui->toolButton_B0->setEnabled(false);
+//            ui->toolButton_B1->setEnabled(false);
+//            ui->toolButton_B2->setEnabled(false);
+//            ui->toolButton_B3->setEnabled(false);
+//            ui->toolButton_B4->setEnabled(false);
+//            ui->toolButton_B5->setEnabled(false);
+//            ui->toolButton_Start->setEnabled(false);
+//        }
+//    }
+//    else
+//    {
         emit openRunStateWidget();
         ui->toolButton_T1->setText(trUtf8(" 运行"));
         ui->toolButton_T1->setIcon(QIcon("./ICO/P1-RUN.png"));
@@ -341,7 +341,7 @@ bool MainWindow::on_toolButton_Start_clicked()
         ui->toolButton_B5->setEnabled(false);
         ui->toolButton_Start->setEnabled(false);
 
-    }
+//    }
     openBeep();
 }
 

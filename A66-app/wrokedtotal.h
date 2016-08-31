@@ -18,6 +18,8 @@ public:
 private slots:
     void on_toolButton_clicked();
 
+    void on_toolButton_Quit_clicked();
+
 private:
     Ui::WrokedTotal *ui;
 };

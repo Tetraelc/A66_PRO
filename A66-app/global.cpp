@@ -3,7 +3,9 @@
 
 #define DEV_PATH "/sys/class/gpio/"
 
+bool aralmOrTipFalg = false;
 bool EditableFalg = false;
+bool FactoryAxisFalg = false;
 int fastmode =0;
 int ProgIndex=0;
 int ProgNameNum=1;
@@ -26,6 +28,10 @@ struct LowerMoldData  CurrentLowerMoldTemp;
 struct _CURRENTREG CurrentReg;
 struct _VALUESTATE ValveReg;
 struct MaterialData  CurrentMaterialTemp;
+
+struct _AXISPARAMETER  XaxisParameter;
+struct _AXISPARAMETER  YaxisParameter;
+struct _AXISPARAMETER  RaxisParameter;
 
 void openBeep()
 {
@@ -93,6 +99,7 @@ QString SystemTipsInformation(int TipsID)
 //    }
     QSqlTableModel model;
     model.setTable("SystemTips");
+
     model.setFilter("ID = " + QString::number(TipsID,10));
     model.select();
 
@@ -100,9 +107,10 @@ QString SystemTipsInformation(int TipsID)
     {
             QSqlRecord record = model.record(i);
             TipsInformation = record.value("Info").toString();
+
     }
 
-
+  qDebug()<<"TipsInformation"<<TipsInformation;
     //db.close();//释放数据库
 //    qDebug()<<"WarnID"<<TipsID;
 //    qDebug()<<"WarnInformation"<<TipsInformation;

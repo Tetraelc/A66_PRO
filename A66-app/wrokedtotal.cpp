@@ -2,6 +2,7 @@
 #include "ui_wrokedtotal.h"
 #include "global.h"
 #include "QDebug"
+#include "mainwindow.h"
 
 WrokedTotal::WrokedTotal(QWidget *parent) :
     QDialog(parent),
@@ -24,4 +25,11 @@ void WrokedTotal::on_toolButton_clicked()
         qDebug()<<"Current_WorkedTota------------------------------l"<<CurrentReg.Current_WorkedTotal;
         this->close();
     }
+}
+
+void WrokedTotal::on_toolButton_Quit_clicked()
+{
+
+    MainWindow MainWin;
+    MainWin.ReturnProgramdb();
 }
