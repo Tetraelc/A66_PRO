@@ -25,6 +25,8 @@ int ChangeRowFlag =0;
 int PostionReachFlag =0;
 int concedeModeFlag = 1;
 int VbackTime;
+
+unsigned char SetError;
 unsigned char Trg_Pos;
 unsigned char Cont_Pos;
 bool Back_state = false;
@@ -244,10 +246,10 @@ void RunState::SendMTEnableSignal()
 
    if(set_count==0)
    {
-       qDebug("-------------------------------------------------------------------------------------------------");
+       //qDebug("-------------------------------------------------------------------------------------------------");
 
-       qDebug()<<"XaxisValue"<<XaxisValue;
-       qDebug()<<"YaxisValue"<<YaxisValue;
+    //   qDebug()<<"XaxisValue"<<XaxisValue;
+  //     qDebug()<<"YaxisValue"<<YaxisValue;
        Set_Motor_Speed_Postion_Abs(0x02,5000,YaxisValue);
        Set_Motor_Speed_Postion_Abs(0x01,5000,XaxisValue);
        ui->label_Run->setText(trUtf8("定位"));
@@ -259,6 +261,8 @@ void RunState::SendMTEnableSignal()
   wait_pos_time++;
   temp1 = MOTOR_STATUS[0] & 0x400;
   temp2 = MOTOR_STATUS[1] & 0x400;
+  if(motor[0].Wrte_Multi_Finsh_state == SUCCESS_SEND && motor[1].Wrte_Multi_Finsh_state == SUCCESS_SEND)
+  {
 
    if(wait_pos_time >200)
    {
@@ -269,8 +273,29 @@ void RunState::SendMTEnableSignal()
            ui->label_Run->setText(trUtf8("就绪"));
            PostionReachFlag=0;
            wait_pos_time   = 0;
+           motor[0].Wrte_Multi_Finsh_state = NO_SEND;
+           motor[1].Wrte_Multi_Finsh_state = NO_SEND;
        }
    }
+   else if(motor[0].Wrte_Multi_Finsh_state == FAIL_SEND && motor[1].Wrte_Multi_Finsh_state == FAIL_SEND)
+   {
+       SetError++;
+       //发送失败的处理
+       motor[0].Wrte_Multi_Finsh_state = NO_SEND;
+       motor[1].Wrte_Multi_Finsh_state = NO_SEND;
+       if(SetError > 3)
+       {
+            SetError = 0;
+            //发送错误.要检查网络了
+       }
+       else
+       {
+           Set_Motor_Speed_Postion_Abs(0x02,5000,YaxisValue);
+           Set_Motor_Speed_Postion_Abs(0x01,5000,XaxisValue);
+       }
+
+   }
+  }
 //   else
 //   {
 //       ReadTrg(0x01);

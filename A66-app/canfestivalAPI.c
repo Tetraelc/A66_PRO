@@ -382,7 +382,8 @@ UNS8 Set_Motor_Speed_Postion_Rel(UNS8 nodeId,UNS32 speed,UNS32 postion)
         set_Postion_Speed_buf[nodeId-1].data[1].Data     =  postion;
         set_Postion_Speed_buf[nodeId-1].data[2].Data     =  speed;
         set_Postion_Speed_buf[nodeId-1].data[3].Data     =  0x7f;
-        Send_Motor_Speed_Postion(&ObjDict_Data,nodeId);
+       // Send_Motor_Speed_Postion(&ObjDict_Data,nodeId);
+        Write_MOTOR_Multi_Data(&set_Postion_Speed_buf[nodeId-1],nodeId);
         return NO_BUSY;
         USG_USER(0x00,"0000000000000000000000000000000000000000000000000000000000000",0);
         }
@@ -399,7 +400,8 @@ UNS8 Set_Motor_Speed_Postion_Abs(UNS8 nodeId,UNS32 speed,UNS32 postion)
         set_Postion_Speed_buf[nodeId-1].data[1].Data     =  postion;
         set_Postion_Speed_buf[nodeId-1].data[2].Data     =  speed;
         set_Postion_Speed_buf[nodeId-1].data[3].Data     =  0x3f;
-        Send_Motor_Speed_Postion(&ObjDict_Data,nodeId);
+        // Send_Motor_Speed_Postion(&ObjDict_Data,nodeId);
+         Write_MOTOR_Multi_Data(&set_Postion_Speed_buf[nodeId-1],nodeId);
         return NO_BUSY;
         USG_USER(0x00,"0000000000000000000000000000000000000000000000000000000000000",0);
         }

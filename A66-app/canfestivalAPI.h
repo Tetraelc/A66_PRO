@@ -48,6 +48,8 @@ typedef struct {
 
 /*****错误标志****/
     UNS8 HeartbeatError;
+    UNS32 SendCountError;
+    UNS32 ReadCountError;
 
 
 
