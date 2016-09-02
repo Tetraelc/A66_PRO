@@ -216,27 +216,27 @@ void Moulds::on_lineEdit_U_Impedance_returnPressed()
 void Moulds::on_lineEdit_D_Height_returnPressed()
 {
     ui->tableWidget_LowerMoulds->setItem(ui->tableWidget_LowerMoulds->currentRow(), LowerMold_Height, new QTableWidgetItem(ui->lineEdit_D_Height->text()));
-    Update_LowerMoldItem(ui->tableWidget_UpMoulds->item(ui->tableWidget_UpMoulds->currentRow(),LowerMold_Id)->text().toInt(),LowerMold_Height,ui->lineEdit_D_Height->text());
+    Update_LowerMoldItem(ui->tableWidget_UpMoulds->item(ui->tableWidget_LowerMoulds->currentRow(),LowerMold_Id)->text().toInt(),LowerMold_Height,ui->lineEdit_D_Height->text());
 }
 void Moulds::on_lineEdit_D_V_returnPressed()
 {
     ui->tableWidget_LowerMoulds->setItem(ui->tableWidget_LowerMoulds->currentRow(), LowerMold_DV, new QTableWidgetItem(ui->lineEdit_D_V->text()));
-    Update_LowerMoldItem(ui->tableWidget_UpMoulds->item(ui->tableWidget_UpMoulds->currentRow(),LowerMold_Id)->text().toInt(),LowerMold_DV,ui->lineEdit_D_V->text());
+    Update_LowerMoldItem(ui->tableWidget_UpMoulds->item(ui->tableWidget_LowerMoulds->currentRow(),LowerMold_Id)->text().toInt(),LowerMold_DV,ui->lineEdit_D_V->text());
 }
 void Moulds::on_lineEdit_D_Angle_returnPressed()
 {
     ui->tableWidget_LowerMoulds->setItem(ui->tableWidget_LowerMoulds->currentRow(), LowerMold_Angle, new QTableWidgetItem(ui->lineEdit_D_Angle->text()));
-    Update_LowerMoldItem(ui->tableWidget_UpMoulds->item(ui->tableWidget_UpMoulds->currentRow(),LowerMold_Id)->text().toInt(),LowerMold_Angle,ui->lineEdit_D_Angle->text());
+    Update_LowerMoldItem(ui->tableWidget_UpMoulds->item(ui->tableWidget_LowerMoulds->currentRow(),LowerMold_Id)->text().toInt(),LowerMold_Angle,ui->lineEdit_D_Angle->text());
 }
 void Moulds::on_lineEdit_D_Radius_returnPressed()
 {
     ui->tableWidget_LowerMoulds->setItem(ui->tableWidget_LowerMoulds->currentRow(), LowerMold_Radius, new QTableWidgetItem(ui->lineEdit_D_Radius->text()));
-    Update_LowerMoldItem(ui->tableWidget_UpMoulds->item(ui->tableWidget_UpMoulds->currentRow(),LowerMold_Id)->text().toInt(),LowerMold_Radius,ui->lineEdit_D_Radius->text());
+    Update_LowerMoldItem(ui->tableWidget_UpMoulds->item(ui->tableWidget_LowerMoulds->currentRow(),LowerMold_Id)->text().toInt(),LowerMold_Radius,ui->lineEdit_D_Radius->text());
 }
 void Moulds::on_lineEdit_D_Speed_returnPressed()
 {
     ui->tableWidget_LowerMoulds->setItem(ui->tableWidget_LowerMoulds->currentRow(), LowerMold_SpeedPostion, new QTableWidgetItem(ui->lineEdit_D_Speed->text()));
-    Update_LowerMoldItem(ui->tableWidget_UpMoulds->item(ui->tableWidget_UpMoulds->currentRow(),LowerMold_Id)->text().toInt(),LowerMold_SpeedPostion,ui->lineEdit_D_Speed->text());
+    Update_LowerMoldItem(ui->tableWidget_UpMoulds->item(ui->tableWidget_LowerMoulds->currentRow(),LowerMold_Id)->text().toInt(),LowerMold_SpeedPostion,ui->lineEdit_D_Speed->text());
     //ui->tableWidget_LowerMoulds->setItem(ui->tableWidget_LowerMoulds->currentRow(), 5, new QTableWidgetItem(ui->lineEdit_D_Speed->text()));
 }
 void Moulds::on_lineEdit_D_XCorrect_returnPressed()
@@ -851,6 +851,13 @@ void Moulds::on_lineEdit_EMold_returnPressed()
 {
     ui->tableWidget_Material->setItem(ui->tableWidget_Material->currentRow(), Material_EMold, new QTableWidgetItem(ui->lineEdit_Strengrht->text()));
     Update_MaterialItem(ui->tableWidget_Material->item(ui->tableWidget_Material->currentRow(),Material_Id)->text().toInt(),Material_EMold,ui->lineEdit_EMold->text());
+
+}
+
+void Moulds::on_comboBox_material_currentIndexChanged(int index)
+{
+    ui->tableWidget_Material->setItem(ui->tableWidget_Material->currentRow(),Material_Name,new QTableWidgetItem(ui->comboBox_material->currentText() + "-" + ui->lineEdit_MaterialName->text()));
+    Update_MaterialItem(ui->tableWidget_Material->item(ui->tableWidget_Material->currentRow(),Material_Id)->text().toInt(),Material_Name,ui->comboBox_material->currentText() + "-"  + ui->lineEdit_MaterialName->text());
 
 }
 

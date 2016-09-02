@@ -210,6 +210,7 @@ void Master_post_SlaveBootup(CO_Data* d, UNS8 nodeId)
         masterSendNMTstateChange (d, nodeId, NMT_Start_Node);
         d->NMTable[nodeId] = Operational;
     }
+
            ConfigureSlaveNode(d,nodeId);
       //  check_and_start_node(d,nodeid);
       //  masterSendNMTstateChange (d, nodeid, NMT_Start_Node);

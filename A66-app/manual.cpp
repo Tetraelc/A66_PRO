@@ -7,13 +7,14 @@
 #include "global.h"
 #include "yreferencepoint.h"
 #include "deleoplength.h"
+#include "systemsetting.h"
 
 
 extern bool stopped;
 extern QString ReturnMotorValue;
 
 extern int XMotorStatusWord,YMotorStatusWord;
-extern int MotorXDisplayFalg,MotorYDisplayFalg;
+extern int MotorXDisplayFalg,MotorYDisplayFalg,MotorRDisplayFalg;
 extern int MotorXDisplayValue,MotorYDisplayValue;
 
 int ManualVisiableFlag =0;
@@ -65,6 +66,8 @@ void Manual::openManualWin()
     this->setWindowFlags(Qt::FramelessWindowHint);
     this->show();
     this->move(0,WIDGET_Y);
+    SystemSetting syssetting;
+    syssetting.ReadForSystemDat();
 
     qDebug()<<"openManualWin";
 }
@@ -83,11 +86,20 @@ void Manual::timerEvent(QTimerEvent *t) //定时器事件
 
 //        if(MotorXDisplayFalg == 1)
 //        {
-           ui->lineEdit_ManualX->setText(QString::number(Get_MOTOR_Demand_Postion(0x01),10));
+
+           double Dis_XPos =Get_MOTOR_Demand_Postion(0x01) * XaxisParameter.LeadScrew /1000;
+           double Dis_YPos =Get_MOTOR_Demand_Postion(0x02) * XaxisParameter.LeadScrew /1000;
+           double Dis_RPos =Get_MOTOR_Demand_Postion(0x03) * XaxisParameter.LeadScrew /1000;
+
+           ui->lineEdit_ManualX->setText(QString::number(Dis_XPos,'.',2));
 //        }
 //        if(MotorYDisplayFalg == 1)
 //        {
-           ui->lineEdit_ManualY->setText(QString::number(Get_MOTOR_Demand_Postion(0x02),10));
+           ui->lineEdit_ManualY->setText(QString::number(Dis_YPos,'.',2));
+//        }
+//        if(MotorRDisplayFalg == 1)
+//        {
+          ui->lineEdit_ManualR->setText(QString::number(Dis_RPos,'.',2));
 //        }
 
     }
@@ -102,6 +114,9 @@ void Manual::timerEvent(QTimerEvent *t) //定时器事件
         CheckINState();
         CheckRunState();
         CheckOutState();
+        ui->lineEdit_error1->setText(QString::number(motor[0].SendCountError+motor[0].ReadCountError,10));
+        ui->lineEdit_error2->setText(QString::number(motor[1].SendCountError+motor[1].ReadCountError,10));
+        ui->lineEdit_error3->setText(QString::number(motor[2].SendCountError+motor[2].ReadCountError,10));
 
     }
 
@@ -197,12 +212,13 @@ int Manual::CheckOutState()
     else
         ui->label_OUT8->setEnabled(false);
 
+
 }
 int Manual::Checkstatus(int motor_id)
 {
 
     UNS16 status = 0x00;
-    int temp1,temp2;
+    int temp1,temp2,temp3;
 
     status = MOTOR_STATUS[motor_id-1] & STATUS_MASK;
     MSG_USER(0x8000,"MOTOR_STATUS[motor_id-1]",MOTOR_STATUS[motor_id-1]);
@@ -250,6 +266,7 @@ int Manual::Checkstatus(int motor_id)
     }
       temp1 = MOTOR_STATUS[0] & 0x400;
       temp2 = MOTOR_STATUS[1] & 0x400;
+      temp3 = MOTOR_STATUS[2] & 0x400;
 
 //    MOTOR_STATUS[motor_id-1] = 0;
          if(temp1 == 0x400)
@@ -257,22 +274,31 @@ int Manual::Checkstatus(int motor_id)
             ui->toolButton_X->setEnabled(false);
            // ui->label_X->setText(trUtf8("停止"));
          }
+         else
+         {
+             ui->toolButton_X->setEnabled(true);
+            // ui->label_X->setText(trUtf8("运行"));
+         }
          if(temp2 == 0x400)
          {
             ui->toolButton_Y->setEnabled(false);
             // ui->label_Y->setText(trUtf8("停止"));
          }
-
-         if(temp1 == 0x400 )
+         else
          {
-            ui->toolButton_X->setEnabled(true);
-           // ui->label_X->setText(trUtf8("运行"));
+             ui->toolButton_Y->setEnabled(true);
+            // ui->label_Y->setText(trUtf8("运行"));
          }
-
-         if(temp2 == 0x400)
+         if(temp3 == 0x400)
          {
-            ui->toolButton_Y->setEnabled(true);
-           // ui->label_Y->setText(trUtf8("运行"));
+            ui->toolButton_R->setEnabled(false);
+            // ui->label_Y->setText(trUtf8("停止"));
+         }
+         else
+         {
+             ui->toolButton_R->setEnabled(true);
+            // ui->label_Y->setText(trUtf8("运行"));
+
          }
 
 
@@ -306,7 +332,23 @@ void Manual::on_pushButton_M_XBack_pressed()
     MotorXDisplayFalg=1;
 //    ThreadX.start();
 //    stopped=false;
-    Set_Motor_Speed_Postion_Rel(0x01,ManualSpeedValue,-100000000);
+     qDebug()<<"XaxisParameter.LeadScrew"<<XaxisParameter.LeadScrew;
+     qDebug()<<"XaxisParameter.EncodeDirection"<<XaxisParameter.MotorDirection;
+     unsigned long ManualSpeed_temp = XaxisParameter.ManualSpeed;
+     long LeadScrew_temp =1000000*1000/ XaxisParameter.LeadScrew;
+
+    if(XaxisParameter.MotorDirection == 1)
+    {
+        Set_Motor_Speed_Postion_Rel(0x01,ManualSpeed_temp,-1 * LeadScrew_temp);
+    }
+    else
+    {
+
+        Set_Motor_Speed_Postion_Rel(0x01,ManualSpeed_temp ,LeadScrew_temp);
+        qDebug()<<"XaxisParameter.EncodeDirectionflase";
+    }
+
+   // qDebug()<<"XaxisParameter.ManualSpeed"<<XaxisParameter.ManualSpeed;
 
 }
 
@@ -325,7 +367,18 @@ void Manual::on_pushButton_M_XForWard_pressed()
     MotorXDisplayFalg=1;
 //    ThreadX.start();
 //    stopped=false;
-    Set_Motor_Speed_Postion_Rel(0x01,ManualSpeedValue,100000000);
+    unsigned long XManualSpeed_temp = XaxisParameter.ManualSpeed;
+    long XLeadScrew_temp = 1000000*1000/XaxisParameter.LeadScrew;
+    qDebug()<<"XLeadScrew_temp"<<XLeadScrew_temp;
+    if(XaxisParameter.MotorDirection == 1)
+    {
+         Set_Motor_Speed_Postion_Rel(0x01,XManualSpeed_temp,XLeadScrew_temp);
+    }
+    else
+    {
+         Set_Motor_Speed_Postion_Rel(0x01,XManualSpeed_temp,-1*XLeadScrew_temp);
+    }
+
 
 
 }
@@ -345,7 +398,19 @@ void Manual::on_pushButton_M_YBack_pressed()
     MotorYDisplayFalg=1;
 //    ThreadX.start();
 //    stopped=false;
-    Set_Motor_Speed_Postion_Rel(0x02,ManualSpeedValue,-100000000);
+    qDebug()<<"YaxisParameter.ManualSpeed"<<YaxisParameter.ManualSpeed;
+    qDebug()<<"YaxisParameter.LeadScrew"<<YaxisParameter.LeadScrew;
+    unsigned long YManualSpeed_temp = YaxisParameter.ManualSpeed;
+     long YLeadScrew_temp = 1000000*1000/YaxisParameter.LeadScrew;
+    if(YaxisParameter.MotorDirection == 1)
+    {
+             Set_Motor_Speed_Postion_Rel(0x02,YManualSpeed_temp,-1 * YLeadScrew_temp);
+
+    }
+    else
+    {
+       Set_Motor_Speed_Postion_Rel(0x02,YManualSpeed_temp,YLeadScrew_temp);
+    }
 
 }
 
@@ -359,14 +424,22 @@ void Manual::on_pushButton_M_YBack_released()
 }
 
 
-
 void Manual::on_pushButton_M_YForWard_pressed()
 {
 
     MotorYDisplayFalg=1;
 //    ThreadX.start();
 //    stopped=false;
-    Set_Motor_Speed_Postion_Rel(0x02,ManualSpeedValue,100000000);
+    unsigned long YManualSpeed_temp = YaxisParameter.ManualSpeed;
+     long YLeadScrew_temp = 1000000*1000/YaxisParameter.LeadScrew;
+    if(YaxisParameter.MotorDirection == 1)
+    {
+         Set_Motor_Speed_Postion_Rel(0x02,YManualSpeed_temp,YLeadScrew_temp);
+    }
+    else
+    {
+         Set_Motor_Speed_Postion_Rel(0x02,YManualSpeed_temp,-1 * YLeadScrew_temp);
+    }
 
 }
 
@@ -377,6 +450,55 @@ void Manual::on_pushButton_M_YForWard_released()
     //Set_Motor_Speed_Postion(0x02,0,0);
 //    ThreadX.stop();
     MotorYDisplayFalg=0;
+
+}
+
+
+void Manual::on_pushButton_M_RForWard_pressed()
+{
+     MotorRDisplayFalg=1;
+
+     unsigned long RManualSpeed_temp = RaxisParameter.ManualSpeed;
+     unsigned long RLeadScrew_temp = 1000000*1000/RaxisParameter.LeadScrew;
+     if(RaxisParameter.MotorDirection == 1)
+     {
+         Set_Motor_Speed_Postion_Rel(0x03,RManualSpeed_temp,RLeadScrew_temp);
+     }
+     else
+     {
+         Set_Motor_Speed_Postion_Rel(0x03,RManualSpeed_temp,-1 * RLeadScrew_temp);
+     }
+}
+
+void Manual::on_pushButton_M_RForWard_released()
+{
+     Stop_MOTOR(0x03);
+     MotorRDisplayFalg=0;
+}
+
+void Manual::on_pushButton_M_RBack_pressed()
+{
+    MotorRDisplayFalg=1;
+    unsigned long RManualSpeed_temp = RaxisParameter.ManualSpeed;
+    unsigned long RLeadScrew_temp = 1000000*1000/RaxisParameter.LeadScrew;
+    if(RaxisParameter.MotorDirection == 1)
+    {
+        Set_Motor_Speed_Postion_Rel(0x03,RManualSpeed_temp,-1 * RLeadScrew_temp);
+    }
+    else
+    {
+        Set_Motor_Speed_Postion_Rel(0x03,RManualSpeed_temp,RLeadScrew_temp);
+    }
+}
+
+void Manual::on_pushButton_M_RBack_released()
+{
+    Stop_MOTOR(0x03);
+    MotorRDisplayFalg=0;
+}
+void Manual::on_toolButton_Length_clicked()
+{
+
 
 }
 
@@ -402,6 +524,7 @@ void Manual::ChangeXCurrentPostion(QString str)
 {
 
     ui->lineEdit_ManualX->setText(str);
+
     Adjust_ManualDate.data[1].Data = str.toInt();
     Write_MOTOR_Multi_Data(&Adjust_ManualDate,0x01);
 
@@ -432,6 +555,7 @@ void Manual::on_pushButton_B6_7_clicked()
         ui->frame_State->setVisible(false);
     }
      ManualVisiableFlag = ~ManualVisiableFlag;
+
 }
 
 
@@ -440,11 +564,8 @@ void Manual::on_pushButton_B6_7_clicked()
 void Manual::on_toolButton_YReferencePoint_clicked()
 {
     YReferencePoint yrp;
+    yrp.setWindowFlags(Qt::FramelessWindowHint);
     yrp.exec();
 
 }
 
-void Manual::on_toolButton_Length_clicked()
-{
-
-}

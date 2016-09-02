@@ -3,6 +3,8 @@
 
 #include <QWidget>
 
+
+
 namespace Ui {
 class RunState;
 }
@@ -31,6 +33,7 @@ public:
     void ReturnRun();
     int  concedeState();
     void checkMotorState();
+    void changeStep();
     int CurrentRnuStateWorkedTotal;
 public slots:
     void openRunStateWin();

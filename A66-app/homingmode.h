@@ -14,6 +14,10 @@ class HomingMode : public QDialog
 public:
     explicit HomingMode(QWidget *parent = 0);
     ~HomingMode();
+    void timerEvent(QTimerEvent *t) ;//定时器事件
+
+public slots:
+    void openHomingModeWin();
     
 private:
     Ui::HomingMode *ui;

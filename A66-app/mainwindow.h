@@ -60,6 +60,8 @@ private slots:
 
     void on_toolButton_4_clicked();
 
+    void on_toolButton_clicked();
+
 signals:
     void openStepWidget();
     void openProgramWidget();
@@ -71,6 +73,7 @@ signals:
     void openInfoWidget();
     void sig_UpperPointAlarm();
     void sig_closeProgramdbWin();
+    void openHomingModeWidget();
 
     
 private:

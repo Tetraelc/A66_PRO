@@ -7,14 +7,15 @@
 #include "canfestivalAPI.h"
 
 /*Froward declaration*/
-#define MOTOR_1  0x00  // Ïàµ±ÓÚSDO0
+#define MOTOR_1  0x00
 #define MOTOR_2  0x01
-#define MOTOR_3  0x02  // Ïàµ±ÓÚSDO0
+#define MOTOR_3  0x02
 #define MOTOR_4  0x03
 
 #define YES_BUSY 0x01
 #define NO_BUSY  0x00
 
+#define RE_TIME   3
 #define len_8    0x01
 #define len_16   0x02
 #define len_32   0x04
@@ -28,11 +29,33 @@ extern UNS8 ObjDict_obj1280_Node_ID_of_the_SDO_Server ;
 static UNS8 SDO_STEP(CO_Data* d,UNS8 nodeId,S_Data_trans* cmd,UNS8* Step,SDOCallback_t Callback);
 static void CheckSDORead(CO_Data* d, UNS8 nodeId);
 S_motor motor[MAX_MOTOR_NUM] ; //motor
-
-S_Data_trans init_buf = {0x04,0x6040,0x00,0x02,0x06,
-                              0x6040,0x00,0x02,0x0f,                       
-                              0x605a,0x00,0x02,0x06,
-                              0x6060,0x00,0x01,0x01};
+S_Data_trans init_buf[8] = {{0x08,0x6040,0x00,0x02,0x06,                       //id0x01
+                                  0x6040,0x00,0x02,0x0f,
+                                  0x1800,0x05,0x02,0x11,//PDO时间
+                                  0x1800,0x02,0x01,0xfe,//触发模式
+                                  0x1017,0x00,0x02,101,
+                                  0x605a,0x00,0x02,0x06,
+                                  0x6060,0x00,0x01,0x01,
+                                  0x6093,0x01,0x04,0x0a},
+                            {0x07,0x6040,0x00,0x02,0x06,
+                                  0x6040,0x00,0x02,0x0f,
+                                  0x1800,0x05,0x02,0x12,
+                                  0x1800,0x02,0x01,0xfe,//触发模式
+                                  0x1017,0x00,0x02,106,
+                                  0x605a,0x00,0x02,0x06,
+                                  0x6060,0x00,0x01,0x01,
+                                  0x6093,0x01,0x04,0x0a},
+                            {0x07,0x6040,0x00,0x02,0x06,
+                                  0x6040,0x00,0x02,0x0f,
+                                  0x1800,0x05,0x02,0x13,
+                                  0x1800,0x02,0x01,0xfe,//触发模式
+                                  0x1017,0x00,0x02,111,
+                                  0x605a,0x00,0x02,0x06,
+                                  0x6060,0x00,0x01,0x01,
+                                  0x6093,0x01,0x04,0x0a},
+                           };
+//                                  0x607B,0x01,0x04,0xAA,// 最小限位
+//                                  0x607B,0x02,0x04,0xAA,// 最大限位
 S_Data_trans set_Postion_Speed_buf[4] = {{0x04,0x6040,0x00,0x02,0x0f,
                                            0x607A,0x00,0x04,0x0000, // weizhi
                                            0x6081,0x00,0x04,0x0000, //Speed
@@ -66,14 +89,27 @@ S_Data_trans Config_valve_buf      = {0x09,0x7000,0x02,0x01,0x00,
                                            0x7000,0x01,0x01,0xAA
                                      };
 
-S_Data_trans Adjust_ManualDate    = {0x07,0x6060,0x00,0x01,0x06,
-                                          0x607c,0x00,0x04,0x1000,
-                                          0x6099,0x01,0x04,0x1000,
-                                          0x6099,0x02,0x04,0x1000,
-                                          0x609a,0x00,0x04,0x50,
+S_Data_trans Adjust_ManualDate    = {0x05,0x6060,0x00,0x01,0x06,
+                                          0x607c,0x00,0x04,0x0,
+                                          0x6040,0x00,0x02,0x0f,
                                           0x6040,0x00,0x02,0x7f,
                                           0x6060,0x00,0x01,0x01
                                     };
+S_Data_trans SystemSet_MT           = { 0x03,0x7000,0x08,0x02,0x00,
+                                             0x7000,0x09,0x02,0x00,
+                                             0x7000,0x01,0x01,0xAA,//上面是液压轴
+                                       };
+S_Data_trans SystemSet_Motor        = { 0x02, 0x607B,0x01,0x04,0xAA,// 最小限位
+                                              0x607B,0x02,0x04,0xAA,// 最大限位
+                                              0x6093,0x01,0x04,0x0a,
+                                       };
+S_Data_trans HomingModeDate    = {0x05,0x6060,0x00,0x01,0x06,
+                                       0x6098,0x00,0x01,0x01,//正限位开关
+                                       0x6040,0x00,0x02,0x0f,
+                                       0x6040,0x00,0x02,0x1f,
+                                       0x6060,0x00,0x01,0x01,
+                                    };
+
 
 
 /**
@@ -148,23 +184,29 @@ static void CheckSDOAndContinue(CO_Data* d, UNS8 nodeId)
     UNS32 abortCode;
     if(getWriteResultNetworkDict (d, nodeId, &abortCode) != SDO_FINISHED)
     {
-        if(motor[nodeId-1].SDO_status     == SDO_Write_Multi_check)
+        if(motor[nodeId-1].SDO_status        == SDO_Write_Multi_check)
         {
              MSG_USER(0x00,"Master : Failed SDO_WRITE_Multi_check \n", motor[nodeId].initStep);
+        }
+        else if(motor[nodeId-1].SDO_status   == SDO_Write_One_check)
+        {
+             motor[nodeId-1].Write_One_Finsh_state = FAIL_SEND;
         }
         MSG_USER(0x00,"Master : Failed in initializing slave \n", motor[nodeId].initStep);
         MSG_USER(0x01,"Master : Failed in initializing slave \n", abortCode);
         closeSDOtransfer(d, nodeId, SDO_CLIENT);
-        motor[nodeId-1].SDO_status  = SDO_free;
+
         motor[nodeId-1].Wrte_Multi_Finsh_state = FAIL_SEND;
         motor[nodeId-1].Write_multi_step = 0;
+        motor[nodeId-1].SDO_status  = SDO_free;
+
     }
     /* Finalise last SDO transfer with this node */
     else
     {
-        MSG_USER(0x9999,"-----------------SDO_SEND_OK____________________________",
-        motor[nodeId-1].initStep);
+        MSG_USER(0x9999,"-----------------SDO_SEND_OK____________________________", motor[nodeId-1].initStep);
         closeSDOtransfer(d, nodeId, SDO_CLIENT);
+
         if(motor[nodeId-1].SDO_status      == SDO_ConfigureSlaveNode_check)
         {
         ConfigureSlaveNode(d, nodeId);
@@ -173,9 +215,10 @@ static void CheckSDOAndContinue(CO_Data* d, UNS8 nodeId)
         {
          Send_Motor_Speed_Postion(d, nodeId);
         }
-        if( motor[nodeId-1].SDO_status     == SDO_Write_One_check)
+        if(  motor[nodeId-1].SDO_status     == SDO_Write_One_check)
         {
-
+             motor[nodeId-1].Write_One_Finsh_state = SUCCESS_SEND;
+             motor[nodeId-1].SDO_status  = SDO_free;
         }
         if( motor[nodeId-1].SDO_status     == SDO_Write_Multi_check)
         {
@@ -186,28 +229,7 @@ static void CheckSDOAndContinue(CO_Data* d, UNS8 nodeId)
     }
 
 }
-/**
-  * @brief   璁剧疆motor鍥炶皟鐢?  * @param   motor id濡傛灉杈撳叆
-  * @retval status
-  */
-static void CheckSetMotor(CO_Data* d, UNS8 nodeId)
-{
-    UNS32 abortCode;
-    if(getWriteResultNetworkDict (d, nodeId, &abortCode) != SDO_FINISHED)
-    {
-        MSG_USER(0x00,"Master : Failed in initializing slave \n", motor[nodeId-1].Set_motor_step);
-        MSG_USER(0x01,"Master : Failed in initializing slave \n", abortCode);
-        closeSDOtransfer(d, nodeId, SDO_CLIENT);
-    }
-    /* Finalise last SDO transfer with this node */
-    else
-    {
-        MSG_USER(0x9999,"-----------------SDO_SEND_OK____________________________",motor[nodeId-1].Set_motor_step);
-        closeSDOtransfer(d, nodeId, SDO_CLIENT);
-        Send_Motor_Speed_Postion(d, nodeId);
-    }
 
-}
 
 /**
   * @brief  鍐欏叆motor鍥炶皟鐢?  * @param   motor id濡傛灉杈撳叆
@@ -232,20 +254,41 @@ static void CheckSDOWrite(CO_Data* d, UNS8 nodeId)
 
 
 
-void Write_MOTOR_One_Data(UNS8 nodeId, UNS16 Index,UNS8 Subindex,UNS8 count,UNS8 data)
+UNS8 Write_MOTOR_One_Data(UNS8 nodeId, UNS16 Index,UNS8 Subindex,UNS8 count,UNS8 data)
 {
     UNS8 Ret;
-    Ret = writeNetworkDictCallBack(&ObjDict_Data, /* CO_Data* d*/
-                    nodeId, /* UNS8 nodeId*/
-                    Index, /* UNS16 index*/
-                    Subindex, /* UNS8 subindex*/
-                    count, /* UNS8 count*/
-                    0, /* UNS8 dataType*/
-                    &data,/* void *data*/
-                    CheckSDOWrite,/* Callback*/
-                    0); /* no block mode */
-  //  if(Ret)
-    //    MSG_ERR(0x1A04,"Erreur writeNetworkDictCallBackAI",Ret);
+    if(motor[nodeId-1].SDO_status == SDO_free)
+    {
+        Ret = writeNetworkDictCallBack(&ObjDict_Data, /* CO_Data* d*/
+                        nodeId, /* UNS8 nodeId*/
+                        Index, /* UNS16 index*/
+                        Subindex, /* UNS8 subindex*/
+                        count, /* UNS8 count*/
+                        0, /* UNS8 dataType*/
+                        &data,/* void *data*/
+                        CheckSDOAndContinue,/* Callback*/
+                        0); /* no block mode */
+        if(Ret == 0)
+        {
+            motor[nodeId-1].SDO_status = SDO_Write_One_check;
+            motor[nodeId-1].Write_One_Finsh_state = RUN_SEND;
+            return 0;
+        }
+        else
+        {
+            motor[nodeId-1].SDO_status = SDO_free;
+            motor[nodeId-1].Write_One_Finsh_state = FAIL_SEND;
+            return 0xff;
+        }
+
+
+    }
+
+
+
+    else
+        return 0xff;
+
 }
 
 void Write_Multi_Data(CO_Data* d, UNS8 nodeId)
@@ -253,16 +296,15 @@ void Write_Multi_Data(CO_Data* d, UNS8 nodeId)
      UNS8 reslut ;
      motor[nodeId-1].SDO_status = SDO_Write_Multi_check;
 
-     reslut = SDO_STEP(d,nodeId,ObjDict_Data.sdo_write_multi_buf,&motor[nodeId-1].Write_multi_step,CheckSDOAndContinue);
+     reslut = SDO_STEP(d,nodeId,ObjDict_Data.sdo_write_multi_buf[nodeId-1],&motor[nodeId-1].Write_multi_step,CheckSDOAndContinue);
     if(reslut == 0)
     {
         MSG_ERR(0x000,"Wrte_Multi_Finsh_state",motor[nodeId-1].Wrte_Multi_Finsh_state);
         motor[nodeId-1].Write_multi_step = 0;
         motor[nodeId-1].SDO_status = SDO_free;
         motor[nodeId-1].Wrte_Multi_Finsh_state = SUCCESS_SEND;
-
     }
-    else if(reslut ==0xff)
+    else if(reslut == 0xff)
     {
         MSG_ERR(0x000,"Wrte_Multi_Finsh_state",motor[nodeId-1].Wrte_Multi_Finsh_state);
         motor[nodeId-1].Write_multi_step = 0;
@@ -272,21 +314,27 @@ void Write_Multi_Data(CO_Data* d, UNS8 nodeId)
 
 }
 /*
-
+   0 表示正常发送
+   ff表示发送失败
    返回 RUN_SEND正在发送
         SUCESSS_SEND
   */
 
 UNS8 Write_MOTOR_Multi_Data(S_Data_trans *buf,UNS8 nodeId)
 {
-    ObjDict_Data.sdo_write_multi_buf = buf;
+    ObjDict_Data.sdo_write_multi_buf[nodeId-1] = buf;
 
-    if(motor[nodeId-1].SDO_status == SDO_free)
+    if(motor[nodeId-1].SDO_status == SDO_free) //线路正在发送数据
     {
          motor[nodeId-1].Wrte_Multi_Finsh_state = RUN_SEND;
          MSG_USER(0x8888,"----------Write_MOTOR_Multi_Data-----------",0);
-        Write_Multi_Data(&ObjDict_Data, nodeId);
-        return motor[nodeId-1].Wrte_Multi_Finsh_state;
+         Write_Multi_Data(&ObjDict_Data, nodeId);
+         return 0x00;
+    }
+    else
+    {
+        motor[nodeId-1].Wrte_Multi_Finsh_state = FAIL_SEND;
+        return 0xFF;
     }
 }
 
@@ -294,7 +342,7 @@ void ConfigureSlaveNode(CO_Data* d, UNS8 nodeId)
 {
       UNS8 reslut;
        motor[nodeId-1].SDO_status = SDO_ConfigureSlaveNode_check;
-      reslut = SDO_STEP(d,nodeId,&init_buf,&motor[nodeId-1].initStep,CheckSDOAndContinue);
+       reslut = SDO_STEP(d,nodeId,&init_buf[nodeId-1],&motor[nodeId-1].initStep,CheckSDOAndContinue);
       if(reslut == 0)
      {
       motor[nodeId-1].initStep = 0;
@@ -342,7 +390,7 @@ static UNS8 SDO_STEP(CO_Data* d,UNS8 nodeId,S_Data_trans* cmd,UNS8* Step,SDOCall
         &Data,/*void *data*/
         Callback, /*SDOCallback_t Callback*/
         0); /* use block mode */
-  if(relsut == 0xff)
+  if(relsut != 0x00)
   return 0xff;
   else
       return 0xAA;
@@ -373,20 +421,54 @@ UNS8 Stop_MOTOR(UNS8 nodeId)
   */
 UNS8 Set_Motor_Speed_Postion_Rel(UNS8 nodeId,UNS32 speed,UNS32 postion)
 {
-    if(motor[nodeId-1].SDO_status != SDO_free)
-        {
-            return YES_BUSY;
-        }
-    else
-        {
+//        static UNS8 wait_send_finish;
+//        static UNS8 TransmitError;
+//        set_Postion_Speed_buf[nodeId-1].data[1].Data     =  postion;
+//        set_Postion_Speed_buf[nodeId-1].data[2].Data     =  speed;
+//        set_Postion_Speed_buf[nodeId-1].data[3].Data     =  0x7f;
+//        if(wait_send_finish == 0)
+//        {
+//            if(Write_MOTOR_Multi_Data(&set_Postion_Speed_buf[nodeId-1],nodeId) == 0x00)//发送成功
+//            {
+//                wait_send_finish  = 1;
+//            }
+//            else
+//            {
+//                return FAIL_SEND; //还没出口就失败了
+//            }
+//        }
+//        else if((wait_send_finish == 1) && ((motor[nodeId-1].Wrte_Multi_Finsh_state == SUCCESS_SEND)))
+//        {
+//                motor[nodeId-1].Wrte_Multi_Finsh_state = NO_SEND;
+//                motor[nodeId-1].SDO_status = SDO_free;
+//                wait_send_finish = 0;
+//                return SUCCESS_SEND;
+//        }
+//         else if((wait_send_finish == 1) && ((motor[nodeId-1].Wrte_Multi_Finsh_state == FAIL_SEND)))
+//        {
+//               motor[nodeId-1].Wrte_Multi_Finsh_state = NO_SEND;
+//               TransmitError++;
+//               wait_send_finish = 0;
+//               if(TransmitError >RE_TIME) //重发机制
+//               {
+//                   TransmitError = 0;
+//                   return  FAIL_SEND;
+//               }
+//        }
+//    if(motor[nodeId-1].SDO_status != SDO_free)
+//        {
+//            return YES_BUSY;
+//        }
+//    else
+//        {
         set_Postion_Speed_buf[nodeId-1].data[1].Data     =  postion;
         set_Postion_Speed_buf[nodeId-1].data[2].Data     =  speed;
         set_Postion_Speed_buf[nodeId-1].data[3].Data     =  0x7f;
-       // Send_Motor_Speed_Postion(&ObjDict_Data,nodeId);
+        // Send_Motor_Speed_Postion(&ObjDict_Data,nodeId);
         Write_MOTOR_Multi_Data(&set_Postion_Speed_buf[nodeId-1],nodeId);
-        return NO_BUSY;
-        USG_USER(0x00,"0000000000000000000000000000000000000000000000000000000000000",0);
-        }
+ //       return NO_BUSY;
+
+//       }
 
 }
 UNS8 Set_Motor_Speed_Postion_Abs(UNS8 nodeId,UNS32 speed,UNS32 postion)
@@ -401,9 +483,9 @@ UNS8 Set_Motor_Speed_Postion_Abs(UNS8 nodeId,UNS32 speed,UNS32 postion)
         set_Postion_Speed_buf[nodeId-1].data[2].Data     =  speed;
         set_Postion_Speed_buf[nodeId-1].data[3].Data     =  0x3f;
         // Send_Motor_Speed_Postion(&ObjDict_Data,nodeId);
-         Write_MOTOR_Multi_Data(&set_Postion_Speed_buf[nodeId-1],nodeId);
+        Write_MOTOR_Multi_Data(&set_Postion_Speed_buf[nodeId-1],nodeId);
         return NO_BUSY;
-        USG_USER(0x00,"0000000000000000000000000000000000000000000000000000000000000",0);
+
         }
 
 }
@@ -478,7 +560,7 @@ void Read_Multi_data(CO_Data* d,UNS8 nodeId)
 {
     UNS8 reslut ;
     motor[nodeId-1].SDO_status = SDO_Read_Multi_check;
-    reslut = SDO_Read_STEP(d,nodeId,ObjDict_Data.sdo_read_multi_buf,&motor[nodeId-1].Read_multi_step,CheckSDORead);
+    reslut = SDO_Read_STEP(d,nodeId,ObjDict_Data.sdo_read_multi_buf[nodeId-1],&motor[nodeId-1].Read_multi_step,CheckSDORead);
     if(reslut == 0x00)
     {
         MSG_USER(0x000,"read to successd------------------------",0x0);
@@ -502,7 +584,7 @@ void Read_Multi_data(CO_Data* d,UNS8 nodeId)
 
 UNS8 Read_MOTOR_Multi_Data(S_Data_trans *buf,UNS8 nodeId)
 {
-    ObjDict_Data.sdo_read_multi_buf = buf;
+    ObjDict_Data.sdo_read_multi_buf[nodeId-1] = buf;
 
     if(motor[nodeId-1].SDO_status == SDO_free)
     {

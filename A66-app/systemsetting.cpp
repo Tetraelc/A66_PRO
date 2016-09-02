@@ -11,7 +11,6 @@
 #include <QSqlRecord>
 #include "global.h"
 #include "systemwarn.h"
-
 int Write_Button_state = 0;
 int Read_Button_state  = 0;
 extern "C"{
@@ -165,6 +164,13 @@ void SystemSetting::ReadForSystemDat()
             QSqlRecord record = model.record(i);
             RaxisParameterTemp[i] = record.value("Value").toDouble(&ok);
     }
+    model.setFilter("Class = " MT_Id);
+    model.select();
+    for(int i=0;i<model.rowCount();i++)
+    {
+            QSqlRecord record = model.record(i);
+            MTParameterTemp[i] = record.value("Value").toDouble(&ok);
+    }
     SystemDatChange();
     //db.close();//释放数据库
 }
@@ -195,20 +201,61 @@ void SystemSetting::SystemDatChange()
      YaxisParameter.ReferencePosMode = YaxisParameterTemp[8];
      YaxisParameter.ReferencePos = YaxisParameterTemp[9];
       ////R轴参数
-     RaxisParameter.LeadScrew = RaxisParameterTemp[0];
-     RaxisParameter.MotorDirection = RaxisParameterTemp[1];
-     RaxisParameter.RunSpeed = RaxisParameterTemp[2];
-     RaxisParameter.ManualSpeed = RaxisParameterTemp[3];
-     RaxisParameter.MaxDistance = RaxisParameterTemp[4];
-     RaxisParameter.MinDistance = RaxisParameterTemp[5];
-     RaxisParameter.PositioningMode = RaxisParameterTemp[6];
-     RaxisParameter.OverrunDistance = RaxisParameterTemp[7];
-     RaxisParameter.ReferencePosMode = RaxisParameterTemp[8];
-     RaxisParameter.ReferencePos = RaxisParameterTemp[9];
+     RaxisParameter.LeadScrew = RaxisParameterTemp[1];
+     RaxisParameter.MotorDirection = RaxisParameterTemp[2];
+     RaxisParameter.RunSpeed = RaxisParameterTemp[3];
+     RaxisParameter.ManualSpeed = RaxisParameterTemp[4];
+     RaxisParameter.MaxDistance = RaxisParameterTemp[5];
+     RaxisParameter.MinDistance = RaxisParameterTemp[6];
+     RaxisParameter.PositioningMode = RaxisParameterTemp[7];
+     RaxisParameter.OverrunDistance = RaxisParameterTemp[8];
+     RaxisParameter.ReferencePosMode = RaxisParameterTemp[9];
+     RaxisParameter.ReferencePos = RaxisParameterTemp[10];
+
+     ////MT轴参数////
+     MTParameter.KeepTime = MTParameterTemp[0];
+     MTParameter.UnloadTime = MTParameterTemp[1];
+     MTParameter.VbackMode = MTParameterTemp[2];
+     MTParameter.UnloadTime = MTParameterTemp[3];
+     MTParameter.SingleMode = MTParameterTemp[4];
+
 
 }
 
 
+
+void SystemSetting::SystemWriteMotor(unsigned char nodeId)
+{
+    if(nodeId == 0x01)
+    {
+        SystemSet_Motor.data[0].Data = XaxisParameter.MaxDistance ;
+        SystemSet_Motor.data[1].Data = XaxisParameter.MinDistance ;
+    }
+    if(nodeId == 0x02)
+    {
+        SystemSet_Motor.data[0].Data = YaxisParameter.MaxDistance ;
+        SystemSet_Motor.data[1].Data = YaxisParameter.MinDistance ;
+    }
+
+    if(nodeId == 0x03)
+    {
+        SystemSet_Motor.data[0].Data = RaxisParameter.MaxDistance ;
+        SystemSet_Motor.data[1].Data = RaxisParameter.MinDistance ;
+    }
+
+
+    Write_MOTOR_Multi_Data(&SystemSet_Motor,nodeId);
+
+
+}
+
+void SystemSetting::SystemWriteMT()
+{
+
+     SystemSet_MT.data[0].Data = MTParameter.KeepTime;
+     SystemSet_MT.data[1].Data = MTParameter.UnloadTime;
+     Write_MOTOR_Multi_Data(&SystemSet_MT,MT_ID);
+}
 
 
 
@@ -371,6 +418,7 @@ void SystemSetting::on_toolButton_InitDAT_clicked()
     CurrentReg.Current_MotorTips = DataInitTip;
     aralmOrTipFalg = false;
     SystemWarn SaveDATWarn;
+    SaveDATWarn.setWindowFlags(Qt::FramelessWindowHint);
     SaveDATWarn.exec();
 
 }
@@ -387,6 +435,7 @@ void SystemSetting::on_toolButton_SaveDAT_clicked()
      CurrentReg.Current_MotorTips = DataSaveTip;
      aralmOrTipFalg = false;
      SystemWarn SaveDATWarn;
+     SaveDATWarn.setWindowFlags(Qt::FramelessWindowHint);
      SaveDATWarn.exec();
 
 }
@@ -403,6 +452,7 @@ void SystemSetting::on_toolButton_ResumeDAT_clicked()
     CurrentReg.Current_MotorTips = DataResumeTip;
     aralmOrTipFalg = false;
     SystemWarn SaveDATWarn;
+    SaveDATWarn.setWindowFlags(Qt::FramelessWindowHint);
     SaveDATWarn.exec();
 }
 
@@ -1153,7 +1203,7 @@ void SystemSetting::on_toolButton_confirm_clicked()
 {
 
     Write_Button_state = 1;
-
+    WriteConfig();
 }
 void SystemSetting::on_toolButton_readConfig_clicked()
 {
@@ -1169,9 +1219,7 @@ int SystemSetting::deal_write_config_event()
 
     if(Write_Button_state == 1)
 {
-   // read_One_Data(0x04,0x7000,0x01);
-  //  Write_Button_state = 0;
-    WriteConfig();
+
     Config_valve_buf.data[0].Data = ValveReg.VFaststate;
     Config_valve_buf.data[1].Data = ValveReg.VSlowstate;
     Config_valve_buf.data[2].Data = ValveReg.VKeepstate;
@@ -1247,7 +1295,6 @@ int SystemSetting::deal_write_config_event()
         QMessageBox::critical(0,QObject::trUtf8("写入配置信息"),
                               trUtf8("发送失败"));
 
-
          qDebug("25555555555555555555555555555555553332");
     }
 
@@ -1281,7 +1328,7 @@ int SystemSetting::deal_read_config_event()
             Read_Button_state = 0;
             motor[3].Read_Multi_Finsh_state = NO_SEND;
             motor[3].SDO_status = SDO_free;
-               qDebug("motor[3].Read_Multi_Finsh_state == SUCCESS_SEND---------------");
+           qDebug("motor[3].Read_Multi_Finsh_state == SUCCESS_SEND---------------");
         }
         else if (motor[3].Read_Multi_Finsh_state == FAIL_SEND)
         {

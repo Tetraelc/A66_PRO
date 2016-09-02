@@ -21,7 +21,7 @@ void WrokedTotal::on_toolButton_clicked()
 {
     if( ui->lineEdit_workedTotal->text() != "")
     {
-        CurrentReg.Current_WorkedTotal = ui->lineEdit_workedTotal->text();
+        CurrentReg.Current_WorkedTotal = ui->lineEdit_workedTotal->text().toInt();
         qDebug()<<"Current_WorkedTota------------------------------l"<<CurrentReg.Current_WorkedTotal;
         this->close();
     }

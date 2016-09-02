@@ -8,6 +8,7 @@ int MotorXDisplayValue,MotorYDisplayValue;
 int XMotorStatusWord,YMotorStatusWord;
 int MotorXDisplayFalg=0;
 int MotorYDisplayFalg=0;
+int MotorRDisplayFalg=0;
 extern QString ReturnMotorValue;
 bool stopped;
 extern "C"{

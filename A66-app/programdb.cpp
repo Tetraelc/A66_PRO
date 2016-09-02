@@ -52,14 +52,19 @@ void Programdb::openProgramWin()
     this->move(0,WIDGET_Y);
     disconnect(ui->comboBox_P_material,SIGNAL(currentIndexChanged(const QString &)),this,SLOT(UpdtaeMaterialDat()));
     ui->tableWidget_Programdb->selectRow(CurrentReg.Current_ProgramLibRow);
+    qDebug()<<"CurrentReg.Current_ProgramLibRow"<<CurrentReg.Current_ProgramLibRow;
     ReflashMaterialFalg = 1;
   //  ReflashMaterialdb();
     ReflashMaterialdb();
     Display_ProgramItem();
     ui->comboBox_P_material->setCurrentIndex(CurrentReg.Materialtemp[0]);
     connect(ui->comboBox_P_material,SIGNAL(currentIndexChanged(const QString &)),this,SLOT(UpdtaeMaterialDat()));
-    CurrentReg.Current_MotorTips = PrepareTip;
-    CurrentReg.Current_MotorTipResult = SystemTipsInformation(CurrentReg.Current_MotorTips);
+    ui->tableWidget_Programdb->setItem(ui->tableWidget_Programdb->item(ui->tableWidget_Programdb->currentRow(),Program_Id)->text().toInt(),Program_ProcessNum,new QTableWidgetItem(QString::number( CurrentReg.Current_WorkedTotal,10)));
+
+
+    qDebug()<<"CurrentReg.Current_WorkedTotal"<<CurrentReg.Current_WorkedTotal;
+//    CurrentReg.Current_MotorTips = PrepareTip;
+//    CurrentReg.Current_MotorTipResult = SystemTipsInformation(CurrentReg.Current_MotorTips);
    // qDebug()<<"Materialtemp[0]"<<CurrentReg.Materialtemp[0];
 
 }
@@ -76,7 +81,6 @@ void Programdb::initProgram(void)
 
 
     Display_ProgramItem();
-    CurrentReg.Current_ProgramLibRow=0;
     ui->tableWidget_Programdb->selectRow(CurrentReg.Current_ProgramLibRow);
     CurrentReg.CurrentProgramName = ui->tableWidget_Programdb->item(ui->tableWidget_Programdb->currentRow(),Program_Name)->text();
 //初始化lineEdit
@@ -137,7 +141,9 @@ void Programdb::ReflashMaterialdb()
 
 void Programdb::ReflashProgramWrokedNum(int Num)
 {
+    qDebug()<<"Num"<<Num;
     Update_ProgramLibItem(ui->tableWidget_Programdb->item(ui->tableWidget_Programdb->currentRow(),Program_Id)->text().toInt(),Program_ProcessNum,QString::number( Num,10));
+
 }
 
 
@@ -412,8 +418,20 @@ void Programdb::on_tableWidget_Programdb_itemSelectionChanged()
 //工步编程tableWidget_Programdb和lineEdit_P建立链接
 void Programdb::on_lineEdit_P_boardThickness_returnPressed()
 {
-    ui->tableWidget_Programdb->setItem(ui->tableWidget_Programdb->currentRow(), Program_BoardThick, new QTableWidgetItem(ui->lineEdit_P_boardThickness->text()));
-    Update_ProgramLibItem(ui->tableWidget_Programdb->item(ui->tableWidget_Programdb->currentRow(),Program_Id)->text().toInt(),Program_BoardThick,ui->lineEdit_P_boardThickness->text());
+    RunState runstate1 ;
+    runstate1.ReadForRun(CurrentReg.Current_StepProgramRow);
+    if(ui->lineEdit_P_boardThickness->text().toInt() > 0 && ui->lineEdit_P_boardThickness->text().toInt() <= 9999)
+    {
+        ui->tableWidget_Programdb->setItem(ui->tableWidget_Programdb->currentRow(), Program_BoardThick, new QTableWidgetItem(ui->lineEdit_P_boardThickness->text()));
+        Update_ProgramLibItem(ui->tableWidget_Programdb->item(ui->tableWidget_Programdb->currentRow(),Program_Id)->text().toInt(),Program_BoardThick,ui->lineEdit_P_boardThickness->text());
+        qDebug("sw");
+    }
+    else
+    {
+        ui->tableWidget_Programdb->setItem(ui->tableWidget_Programdb->currentRow(), Program_BoardThick, new QTableWidgetItem(QString::number(CurrentProgramTemp.BroadThick,'.',0)));
+        ui->lineEdit_P_boardThickness->setText(QString::number(CurrentProgramTemp.BroadThick,'.',0));
+        qDebug("ws");
+    }
 }
 
 
@@ -442,13 +460,25 @@ void Programdb::on_lineEdit_P_LowerMolds_returnPressed()
 //}
 void Programdb::on_lineEdit_P_BoardWidth_returnPressed()
 {
-    ui->tableWidget_Programdb->setItem(ui->tableWidget_Programdb->currentRow(), Program_BoardWide, new QTableWidgetItem(ui->lineEdit_P_BoardWidth->text()));
-    Update_ProgramLibItem(ui->tableWidget_Programdb->item(ui->tableWidget_Programdb->currentRow(),Program_Id)->text().toInt(),Program_BoardWide,ui->lineEdit_P_BoardWidth->text());
+    RunState runstate1 ;
+    runstate1.ReadForRun(CurrentReg.Current_StepProgramRow);
+    if(ui->lineEdit_P_BoardWidth->text().toInt() > 0 && ui->lineEdit_P_BoardWidth->text().toInt() <=9999)
+    {
+        ui->tableWidget_Programdb->setItem(ui->tableWidget_Programdb->currentRow(), Program_BoardWide, new QTableWidgetItem(ui->lineEdit_P_BoardWidth->text()));
+        Update_ProgramLibItem(ui->tableWidget_Programdb->item(ui->tableWidget_Programdb->currentRow(),Program_Id)->text().toInt(),Program_BoardWide,ui->lineEdit_P_BoardWidth->text());
+    }
+    else
+    {
+        ui->tableWidget_Programdb->setItem(ui->tableWidget_Programdb->currentRow(), Program_BoardThick, new QTableWidgetItem(QString::number(CurrentProgramTemp.BroadWideth,'.',0)));
+        ui->lineEdit_P_boardThickness->setText(QString::number(CurrentProgramTemp.BroadWideth,'.',0));
+    }
+
 }
 
 void Programdb::on_pushButton_clicked()
 {
     chooseUpMoldDialog *UM = new chooseUpMoldDialog;
+    UM->setWindowFlags(Qt::FramelessWindowHint);
     UM->move(200,200);
     connect(UM, SIGNAL(sig_sndUpMold(int)), this, SLOT(UpMoldDialog(int)));
     UM->exec();
@@ -458,6 +488,7 @@ void Programdb::on_pushButton_clicked()
 void Programdb::on_pushButton_2_clicked()
 {
     chooseLowerMoldDialog *LM =new chooseLowerMoldDialog;
+    LM->setWindowFlags(Qt::FramelessWindowHint);
     LM->move(200,200);
     connect(LM, SIGNAL(sig_sndLowerMold(int)), this, SLOT(LowerMoldDialog(int)));
     LM->exec();

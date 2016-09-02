@@ -53,12 +53,12 @@ void SystemWarn::SystemCheckTip(int TipID)
 
     switch(TipID)
     {
-    case 1:ui->label_DisplayAlarm->setText(SystemTipsInformation(PrepareTip));
-        break;
-    case 2:ui->label_DisplayAlarm->setText(SystemTipsInformation(RunTip));
-        break;
-    case 3:ui->label_DisplayAlarm->setText(SystemTipsInformation(RunFinishTip));
-        break;
+//    case 1:ui->label_DisplayAlarm->setText(SystemTipsInformation(PrepareTip));
+//        break;
+//    case 2:ui->label_DisplayAlarm->setText(SystemTipsInformation(RunTip));
+//        break;
+//    case 3:ui->label_DisplayAlarm->setText(SystemTipsInformation(RunFinishTip));
+//        break;
     case 4:ui->label_DisplayAlarm->setText(SystemTipsInformation(DataInitTip));
         qDebug()<<"SystemTipsInformation(DataInitTip)"<<SystemTipsInformation(4);
         break;

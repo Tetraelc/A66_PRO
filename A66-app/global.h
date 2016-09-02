@@ -45,7 +45,10 @@ QString SystemTipsInformation(int TipsID);
 
 #define ARMFlag  0
 
-
+#define X1_ID   1
+#define Y1_ID   2
+#define R1_ID   3
+#define MT_ID   4
 
 
 /////报警ID号//////
@@ -53,12 +56,20 @@ QString SystemTipsInformation(int TipsID);
 
 
 ///////提示ID号///////
-#define PrepareTip   1
-#define RunTip   2
+#define PrepareTip     1
+#define RunTip         2
 #define RunFinishTip   3
-#define DataInitTip   4
-#define DataSaveTip   5
-#define DataResumeTip   6
+#define DataInitTip    4
+#define DataSaveTip    5
+#define DataResumeTip  6
+#define Offline1Tip    7
+#define Offline2Tip    8
+#define Offline3Tip    9
+#define OfflineMTTip   10
+#define NoDeinit1Tip   11
+#define NoDeinit2Tip   12
+#define NoDeinit3Tip   13
+
 
 
 extern int fastmode;
@@ -93,6 +104,7 @@ extern QSqlDatabase db;
 #define Xaxis_Id  "21"
 #define Yaxis_Id  "22"
 #define Raxis_Id  "23"
+#define MT_Id     "20"
 #define Secret_Index  62
 #define Factory_Id  32
 #define Factory_Index 67
@@ -127,7 +139,7 @@ struct _CURRENTREG
   int Current_MotorTips;
   QString Current_MotorTipResult;
 //  int CurrentRnuStateWorkedTotal;
-  QString Current_WorkedTotal;
+  int Current_WorkedTotal;
   double developLength;
   QString CurrentSecret;
 
@@ -296,8 +308,7 @@ extern struct MaterialData  CurrentMaterialTemp;
 struct   _AXISPARAMETER
 {
     double LeadScrew;
-    bool   MotorDirection;
-    bool   EncodeDirection;
+    unsigned char  MotorDirection;
     double RunSpeed;
     double ManualSpeed;
     double MaxDistance;
@@ -312,6 +323,18 @@ extern struct _AXISPARAMETER  XaxisParameter;
 extern struct _AXISPARAMETER  YaxisParameter;
 extern struct _AXISPARAMETER  RaxisParameter;
 
+
+struct   _MTPARAMETER
+{
+    unsigned int  KeepTime;
+    unsigned int  UnloadTime;
+    bool          VbackMode;
+    unsigned int  VbackTime;
+    bool          SingleMode;
+
+};
+
+extern struct _MTPARAMETER  MTParameter;
 
 class Global : public QWidget
 {

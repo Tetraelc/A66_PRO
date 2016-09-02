@@ -116,6 +116,8 @@ private slots:
 
     void on_lineEdit_EMold_returnPressed();
 
+    void on_comboBox_material_currentIndexChanged(int index);
+
 private:
     Ui::Moulds *ui;
 

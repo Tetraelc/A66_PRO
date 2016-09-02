@@ -55,6 +55,14 @@ private slots:
 
     void on_toolButton_Length_clicked();
 
+    void on_pushButton_M_RForWard_pressed();
+
+    void on_pushButton_M_RForWard_released();
+
+    void on_pushButton_M_RBack_pressed();
+
+    void on_pushButton_M_RBack_released();
+
 private:
     Ui::Manual *ui;
     Thread ThreadX;

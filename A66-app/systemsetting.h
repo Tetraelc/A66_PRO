@@ -30,11 +30,14 @@ public:
     void checktSecret();
     void ReadForSystemDat();
     void SystemDatChange();
+    void SystemWriteMotor(unsigned char nodeId);
+    void SystemWriteMT();
 
 
     double XaxisParameterTemp[10];
     double YaxisParameterTemp[10];
     double RaxisParameterTemp[10];
+    double MTParameterTemp[10];
 
 
     int StepNameNum;
