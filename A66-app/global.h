@@ -78,6 +78,7 @@ extern int ProgNameNum;
 extern int StepIndex;
 extern int CurrentStep;
 
+extern int MutiMaterial;
 extern int UpMoldIndex;
 extern int LowerMoldIndex;
 
@@ -152,8 +153,8 @@ extern struct _CURRENTREG CurrentReg;
 
 enum {
     UpMold_Id = 0,
-    UpMold_Angle = 2,
-    UpMold_Height = 1,
+    UpMold_Angle = 1,
+    UpMold_Height = 2,
     UpMold_Radius = 3,
     UpMold_Impedance = 4
 };

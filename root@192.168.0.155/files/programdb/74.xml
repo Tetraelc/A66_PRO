@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Progromdb>
+    <parameter>
+        <BoardThickness>36</BoardThickness>
+        <material>铝</material>
+        <Upmold>3</Upmold>
+        <Lowermold>4</Lowermold>
+        <processed>2568</processed>
+        <StepNum>1</StepNum>
+    </parameter>
+    <Step>
+        <Angle0>0</Angle0>
+        <AngleCompensate0>0</AngleCompensate0>
+        <Yaxis0>0</Yaxis0>
+        <Xaxis0>0</Xaxis0>
+        <XaxisCorrect0>0</XaxisCorrect0>
+        <distance0>0</distance0>
+        <pressure0>0</pressure0>
+        <ReturnTime0>0</ReturnTime0>
+        <Holding0>0</Holding0>
+        <Raxis0>0</Raxis0>
+    </Step>
+</Progromdb>
