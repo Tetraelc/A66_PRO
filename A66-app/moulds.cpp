@@ -104,6 +104,29 @@ void Moulds::initMoulds(void)
     ui->lineEdit_EMold->setText(ui->tableWidget_Material->item(CurrentReg.Current_MaterialRow,Material_EMold)->text());
     ui->lineEdit_MaterialName->setText(ui->tableWidget_Material->item(CurrentReg.Current_MaterialRow,Material_Name)->text().split("-").at(1));
 
+    //限制lineEdit的数据格式
+    QRegExp rx("^(-?[0]|-?[1-9][0-9]{0,3})(?:\\.\\d{1,3})?$|(^\\t?$)");
+    QRegExpValidator *pReg = new QRegExpValidator(rx, this);
+    ui->lineEdit_U_Height->setValidator(pReg);
+    ui->lineEdit_U_Angle->setValidator(pReg);
+    ui->lineEdit_U_Radius->setValidator(pReg);
+//    ui->lineEdit_U_Impedance->setValidator(pReg);
+
+    ui->lineEdit_D_Height->setValidator(pReg);
+    ui->lineEdit_D_V->setValidator(pReg);
+    ui->lineEdit_D_Angle->setValidator(pReg);
+    ui->lineEdit_D_Radius->setValidator(pReg);
+    ui->lineEdit_D_Speed->setValidator(pReg);
+
+    ui->lineEdit_MaterialName->setValidator(pReg);
+    ui->lineEdit_EMold->setValidator(pReg);
+    ui->lineEdit_Strengrht->setValidator(pReg);
+
+
+
+//    ui->lineEdit_D_XCorrect->setValidator(pReg);
+//    ui->lineEdit_D_Impedance->setValidator(pReg);
+
 }
 
 
@@ -191,6 +214,42 @@ void Moulds::Display_LowerMoldItem()
 
 void Moulds::ReadforMold()
 {
+    bool ok;
+
+
+    QSqlTableModel model;
+    model.setTable("UpMold");
+    model.setFilter("ID =" +QString::number(ui->tableWidget_UpMoulds->currentRow()+1,10));
+    model.select();
+   // qDebug("sw");
+    for(int i=0;i<model.rowCount();i++)
+    {
+            QSqlRecord record = model.record(i);
+              CurrentUpMoldTemp.Angle = record.value("Angle").toDouble(&ok);
+              CurrentUpMoldTemp.Height = record.value("Height").toDouble(&ok);
+              CurrentUpMoldTemp.Radius =  record.value("Radius").toDouble(&ok);
+              CurrentUpMoldTemp.Impedance = record.value("Impedance").toDouble(&ok);
+
+           // qDebug()<<"record.value().toString()"<<record.value("Id").toString();
+    }
+
+    model.setTable("LowerMold");
+    model.setFilter("ID =" +QString::number(ui->tableWidget_LowerMoulds->currentRow()+1,10));
+    model.select();
+    for(int i=0;i<model.rowCount();i++)
+    {
+            QSqlRecord record = model.record(i);
+              CurrentLowerMoldTemp.Angle = record.value("Angle").toDouble(&ok);
+              CurrentLowerMoldTemp.Height = record.value("Height").toDouble(&ok);
+              CurrentLowerMoldTemp.Radius =  record.value("Radius").toDouble(&ok);
+              CurrentLowerMoldTemp.Impedance = record.value("Impedance").toDouble(&ok);
+              CurrentLowerMoldTemp.SpeedChangePos = record.value("SpeedPostion").toDouble(&ok);
+              CurrentLowerMoldTemp.D_V =  record.value("D_V").toDouble(&ok);
+              CurrentLowerMoldTemp.SpeedSafeDis = record.value("SpeedChange").toDouble(&ok);
+
+           qDebug()<<"record.value().toString()"<<record.value("D_V").toString();
+    }
+
 
 
 
@@ -204,8 +263,11 @@ void Moulds::ReadforMold()
 void Moulds::on_lineEdit_U_Height_returnPressed()
 {
     bool ok;
-    RunState runstate1 ;
-    runstate1.ReadForRun(CurrentReg.Current_StepProgramRow);
+    ReadforMold();
+    if(ui->lineEdit_U_Height->text() == "")
+    {
+        ui->lineEdit_U_Height->setText("0");
+    }
 
     if( (ui->lineEdit_U_Height->text().toDouble(&ok) > 0) && (ui->lineEdit_U_Height->text().toDouble(&ok) <= 9999) )
     {
@@ -221,8 +283,11 @@ void Moulds::on_lineEdit_U_Height_returnPressed()
 void Moulds::on_lineEdit_U_Angle_returnPressed()
 {
     bool ok;
-    RunState runstate1 ;
-    runstate1.ReadForRun(CurrentReg.Current_StepProgramRow);
+    ReadforMold();
+    if(ui->lineEdit_U_Angle->text() == "")
+    {
+        ui->lineEdit_U_Angle->setText("0");
+    }
 
     if( (ui->lineEdit_U_Angle->text().toDouble(&ok) >= -90) && (ui->lineEdit_U_Angle->text().toDouble(&ok) <= 90) )
     {
@@ -238,9 +303,7 @@ void Moulds::on_lineEdit_U_Angle_returnPressed()
 void Moulds::on_lineEdit_U_Radius_returnPressed()
 {
     bool ok;
-    RunState runstate1 ;
-    runstate1.ReadForRun(CurrentReg.Current_StepProgramRow);
-
+    ReadforMold();
     if((ui->lineEdit_U_Radius->text().toDouble(&ok) > 0) && (ui->lineEdit_U_Radius->text().toDouble(&ok) <= 9999) )
     {
         ui->tableWidget_UpMoulds->setItem(ui->tableWidget_UpMoulds->currentRow(), UpMold_Radius, new QTableWidgetItem(ui->lineEdit_U_Radius->text()));
@@ -263,8 +326,7 @@ void Moulds::on_lineEdit_U_Impedance_returnPressed()
 void Moulds::on_lineEdit_D_Height_returnPressed()
 {
     bool ok;
-    RunState runstate1 ;
-    runstate1.ReadForRun(CurrentReg.Current_StepProgramRow);
+    ReadforMold();
 
     if((ui->lineEdit_D_Height->text().toDouble(&ok) > 0) && (ui->lineEdit_D_Height->text().toDouble(&ok) <= 9999) )
     {
@@ -280,8 +342,7 @@ void Moulds::on_lineEdit_D_Height_returnPressed()
 void Moulds::on_lineEdit_D_V_returnPressed()
 {
     bool ok;
-    RunState runstate1 ;
-    runstate1.ReadForRun(CurrentReg.Current_StepProgramRow);
+    ReadforMold();
 
     if((ui->lineEdit_D_V->text().toDouble(&ok) > 0) && (ui->lineEdit_D_V->text().toDouble(&ok) <= 9999) )
     {
@@ -297,8 +358,7 @@ void Moulds::on_lineEdit_D_V_returnPressed()
 void Moulds::on_lineEdit_D_Angle_returnPressed()
 {
     bool ok;
-    RunState runstate1 ;
-    runstate1.ReadForRun(CurrentReg.Current_StepProgramRow);
+    ReadforMold();
 
     if((ui->lineEdit_D_Angle->text().toDouble(&ok) > 0) && (ui->lineEdit_D_Angle->text().toDouble(&ok) <= 9999) )
     {
@@ -314,8 +374,7 @@ void Moulds::on_lineEdit_D_Angle_returnPressed()
 void Moulds::on_lineEdit_D_Radius_returnPressed()
 {
     bool ok;
-    RunState runstate1 ;
-    runstate1.ReadForRun(CurrentReg.Current_StepProgramRow);
+    ReadforMold();
 
     if((ui->lineEdit_D_Radius->text().toDouble(&ok) > 0) && (ui->lineEdit_D_Radius->text().toDouble(&ok) <= 9999) )
     {
@@ -331,8 +390,7 @@ void Moulds::on_lineEdit_D_Radius_returnPressed()
 void Moulds::on_lineEdit_D_Speed_returnPressed()
 {
     bool ok;
-    RunState runstate1 ;
-    runstate1.ReadForRun(CurrentReg.Current_StepProgramRow);
+    ReadforMold();
 
     if((ui->lineEdit_D_Speed->text().toDouble(&ok) > 0) && (ui->lineEdit_D_Speed->text().toDouble(&ok) <= 9999) )
     {
@@ -984,7 +1042,7 @@ void Moulds::on_lineEdit_MaterialName_returnPressed()
 
 void Moulds::on_lineEdit_EMold_returnPressed()
 {
-    ui->tableWidget_Material->setItem(ui->tableWidget_Material->currentRow(), Material_EMold, new QTableWidgetItem(ui->lineEdit_Strengrht->text()));
+    ui->tableWidget_Material->setItem(ui->tableWidget_Material->currentRow(), Material_EMold, new QTableWidgetItem(ui->lineEdit_EMold->text()));
     Update_MaterialItem(ui->tableWidget_Material->item(ui->tableWidget_Material->currentRow(),Material_Id)->text().toInt(),Material_EMold,ui->lineEdit_EMold->text());
 
 }

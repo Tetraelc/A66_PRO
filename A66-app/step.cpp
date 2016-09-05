@@ -27,7 +27,20 @@ Step::Step(QWidget *parent) :
     yValue_Scan =startTimer(10);
 //    RunState runstate1 ;
 //    runstate1.ReadForRun(CurrentReg.Current_StepProgramRow);
+    QRegExp rx("^(-?[0]|-?[1-9][0-9]{0,3})(?:\\.\\d{1,3})?$|(^\\t?$)");
+    QRegExpValidator *pReg = new QRegExpValidator(rx, this);
+    ui->lineEdit_S_Angle->setValidator(pReg);
 
+    ui->lineEdit_S_distance->setValidator(pReg);
+    ui->lineEdit_S_Raxis->setValidator(pReg);
+    ui->lineEdit_S_return->setValidator(pReg);
+    ui->lineEdit_S_Xaxis->setValidator(pReg);
+    ui->lineEdit_S_pressure->setValidator(pReg);
+    ui->lineEdit_S_Yaxis->setValidator(pReg);
+    ui->lineEdit_S_Holding->setValidator(pReg);
+
+    ui->lineEdit_S_AngleCompensate->setValidator(pReg);
+    ui->lineEdit_S_XaxisCorrect->setValidator(pReg);
 
 }
 
@@ -116,18 +129,18 @@ void Step::Display_StepProgramItem()
             QSqlRecord record = model.record(i);
             ui->tableWidget_Step->setItem(i,StepProgram_Id,new QTableWidgetItem(record.value("Id").toString()));
             ui->tableWidget_Step->setItem(i,StepProgram_Angle,new QTableWidgetItem(record.value("Angle").toString()));
-            if(record.value("AngleCompensate").toInt() > 0)
-            {
-             ui->tableWidget_Step->setItem(i,StepProgram_AngleCompensate,new QTableWidgetItem("+" + record.value("AngleCompensate").toString()));
-            }
-            else
-            {
+//            if(record.value("AngleCompensate").toInt() > 0)
+//            {
+//             ui->tableWidget_Step->setItem(i,StepProgram_AngleCompensate,new QTableWidgetItem("+" + record.value("AngleCompensate").toString()));
+//            }
+//            else
+//            {
              ui->tableWidget_Step->setItem(i,StepProgram_AngleCompensate,new QTableWidgetItem( record.value("AngleCompensate").toString()));
-            }
+//            }
 
             ui->tableWidget_Step->setItem(i,StepProgram_Yaxis,new QTableWidgetItem(record.value("Yaxis").toString()));
             ui->tableWidget_Step->setItem(i,StepProgram_Xaxis,new QTableWidgetItem(record.value("Xaxis").toString()));
-            ui->tableWidget_Step->setItem(i,StepProgram_XaxisCorrect,new QTableWidgetItem("+" + record.value("XaxisCorrect").toString()));
+            ui->tableWidget_Step->setItem(i,StepProgram_XaxisCorrect,new QTableWidgetItem(record.value("XaxisCorrect").toString()));
             ui->tableWidget_Step->setItem(i,StepProgram_Distance,new QTableWidgetItem(record.value("Distance").toString()));
             ui->tableWidget_Step->setItem(i,StepProgram_Pressure,new QTableWidgetItem(record.value("Pressure").toString()));
             ui->tableWidget_Step->setItem(i,StepProgram_ReturnTime,new QTableWidgetItem(record.value("ReturnTime").toString()));
@@ -275,7 +288,7 @@ void Step::on_lineEdit_S_Angle_returnPressed()
     RunState runstate1 ;
     runstate1.ReadForRun(CurrentReg.Current_StepProgramRow);
     bool ok;
-    if( (ui->lineEdit_S_Angle->text().toInt() >= CurrentLowerMoldTemp.Angle) && (ui->lineEdit_S_Angle->text().toInt() <= 180) )
+    if( (ui->lineEdit_S_Angle->text().toDouble(&ok) >= CurrentLowerMoldTemp.Angle) && (ui->lineEdit_S_Angle->text().toDouble(&ok) <= 180) )
     {
         CurrentStepTemp.Angle = ui->lineEdit_S_Angle->text().toDouble(&ok);
         ui->tableWidget_Step->setItem(ui->tableWidget_Step->currentRow(), StepProgram_Angle, new QTableWidgetItem(ui->lineEdit_S_Angle->text()));
@@ -296,41 +309,41 @@ void Step::on_lineEdit_S_AngleCompensate_returnPressed()
     RunState runstate1 ;
     runstate1.ReadForRun(CurrentReg.Current_StepProgramRow);
 
-    if(ui->lineEdit_S_AngleCompensate->text().left(1) == "+")
-    {
+//    if(ui->lineEdit_S_AngleCompensate->text().left(1) == "+")
+//    {
         if( (ui->lineEdit_S_AngleCompensate->text().toDouble(&ok) > -90) && (ui->lineEdit_S_AngleCompensate->text().toDouble(&ok) <= 90) )
         {
             //CurrentStepTemp.XaxisCorrect = ui->lineEdit_S_XaxisCorrect->text().toDouble(&ok);
-            ui->tableWidget_Step->setItem(ui->tableWidget_Step->currentRow(), StepProgram_AngleCompensate, new QTableWidgetItem("+"+ui->lineEdit_S_AngleCompensate->text().split("+").at(1)));
-            Update_StepProgramItem(ui->tableWidget_Step->item(ui->tableWidget_Step->currentRow(),StepProgram_Id)->text().toInt(),StepProgram_AngleCompensate,ui->lineEdit_S_AngleCompensate->text().split("+").at(1));
-            ui->lineEdit_S_AngleCompensate->setText("+"+ui->lineEdit_S_AngleCompensate->text().split("+").at(1));
-        }
-        else
-        {
-            ui->tableWidget_Step->setItem(ui->tableWidget_Step->currentRow(), StepProgram_AngleCompensate, new QTableWidgetItem("+"+QString::number(CurrentStepTemp.AngleCompensate,'.',0).split("+").at(1)));
-            ui->lineEdit_S_AngleCompensate->setText("+"+QString::number(CurrentStepTemp.AngleCompensate,'.',0).split("+").at(1));
-        }
-
-    }
-
-   else
-    {
-
-        if( (ui->lineEdit_S_AngleCompensate->text().toDouble(&ok)  > -90) && (ui->lineEdit_S_AngleCompensate->text().toDouble(&ok)  <= 90) )
-        {
-            //CurrentStepTemp.XaxisCorrect = ui->lineEdit_S_XaxisCorrect->text().toDouble(&ok);
-            ui->tableWidget_Step->setItem(ui->tableWidget_Step->currentRow(), StepProgram_AngleCompensate, new QTableWidgetItem("+"+ui->lineEdit_S_AngleCompensate->text()));
+            ui->tableWidget_Step->setItem(ui->tableWidget_Step->currentRow(), StepProgram_AngleCompensate, new QTableWidgetItem(ui->lineEdit_S_AngleCompensate->text()));
             Update_StepProgramItem(ui->tableWidget_Step->item(ui->tableWidget_Step->currentRow(),StepProgram_Id)->text().toInt(),StepProgram_AngleCompensate,ui->lineEdit_S_AngleCompensate->text());
-            ui->lineEdit_S_AngleCompensate->setText("+"+ui->lineEdit_S_AngleCompensate->text());
+            ui->lineEdit_S_AngleCompensate->setText(ui->lineEdit_S_AngleCompensate->text());
         }
         else
         {
-            ui->tableWidget_Step->setItem(ui->tableWidget_Step->currentRow(), StepProgram_AngleCompensate, new QTableWidgetItem("+"+QString::number(CurrentStepTemp.AngleCompensate,'.',0)));
-            ui->lineEdit_S_AngleCompensate->setText("+"+QString::number(CurrentStepTemp.AngleCompensate,'.',0));
+            ui->tableWidget_Step->setItem(ui->tableWidget_Step->currentRow(), StepProgram_AngleCompensate, new QTableWidgetItem(QString::number(CurrentStepTemp.AngleCompensate,'.',0)));
+            ui->lineEdit_S_AngleCompensate->setText(QString::number(CurrentStepTemp.AngleCompensate,'.',0));
         }
 
+//    }
 
-    }
+//   else
+//    {
+
+//        if( (ui->lineEdit_S_AngleCompensate->text().toDouble(&ok)  > -90) && (ui->lineEdit_S_AngleCompensate->text().toDouble(&ok)  <= 90) )
+//        {
+//            //CurrentStepTemp.XaxisCorrect = ui->lineEdit_S_XaxisCorrect->text().toDouble(&ok);
+//            ui->tableWidget_Step->setItem(ui->tableWidget_Step->currentRow(), StepProgram_AngleCompensate, new QTableWidgetItem("+"+ui->lineEdit_S_AngleCompensate->text()));
+//            Update_StepProgramItem(ui->tableWidget_Step->item(ui->tableWidget_Step->currentRow(),StepProgram_Id)->text().toInt(),StepProgram_AngleCompensate,ui->lineEdit_S_AngleCompensate->text());
+//            ui->lineEdit_S_AngleCompensate->setText("+"+ui->lineEdit_S_AngleCompensate->text());
+//        }
+//        else
+//        {
+//            ui->tableWidget_Step->setItem(ui->tableWidget_Step->currentRow(), StepProgram_AngleCompensate, new QTableWidgetItem("+"+QString::number(CurrentStepTemp.AngleCompensate,'.',0)));
+//            ui->lineEdit_S_AngleCompensate->setText("+"+QString::number(CurrentStepTemp.AngleCompensate,'.',0));
+//        }
+
+
+//    }
 
 
 
@@ -376,43 +389,49 @@ void Step::on_lineEdit_S_XaxisCorrect_returnPressed()
     RunState runstate1 ;
     runstate1.ReadForRun(CurrentReg.Current_StepProgramRow);
 
-    if(ui->lineEdit_S_XaxisCorrect->text().left(1) == "+")
+    if(ui->lineEdit_S_XaxisCorrect->text() == "")
     {
+        ui->lineEdit_S_XaxisCorrect->setText("0");
+    }
+
+
+//    if(ui->lineEdit_S_XaxisCorrect->text().left(1) == "+")
+//    {
         if( (ui->lineEdit_S_XaxisCorrect->text().toDouble(&ok) > 0) && (ui->lineEdit_S_XaxisCorrect->text().toDouble(&ok) <= 9999) )
         {
             //CurrentStepTemp.XaxisCorrect = ui->lineEdit_S_XaxisCorrect->text().toDouble(&ok);
-            ui->tableWidget_Step->setItem(ui->tableWidget_Step->currentRow(), StepProgram_XaxisCorrect, new QTableWidgetItem("+"+ui->lineEdit_S_XaxisCorrect->text().split("+").at(1)));
-            Update_StepProgramItem(ui->tableWidget_Step->item(ui->tableWidget_Step->currentRow(),StepProgram_Id)->text().toInt(),StepProgram_XaxisCorrect,ui->lineEdit_S_XaxisCorrect->text().split("+").at(1));
-            ui->lineEdit_S_XaxisCorrect->setText("+"+ui->lineEdit_S_XaxisCorrect->text().split("+").at(1));
-            qDebug()<<"ui->lineEdit_S_XaxisCorrect->text()"<<ui->lineEdit_S_XaxisCorrect->text();
-        }
-        else
-        {
-            ui->tableWidget_Step->setItem(ui->tableWidget_Step->currentRow(), StepProgram_XaxisCorrect, new QTableWidgetItem("+"+QString::number(CurrentStepTemp.XaxisCorrect,'.',0).split("+").at(1)));
-            ui->lineEdit_S_XaxisCorrect->setText("+"+QString::number(CurrentStepTemp.XaxisCorrect,'.',0).split("+").at(1));
-        }
-
-    }
-
-   else
-    {
-
-        if( (ui->lineEdit_S_XaxisCorrect->text().toDouble(&ok)  > 0) && (ui->lineEdit_S_XaxisCorrect->text().toDouble(&ok)  <= 9999) )
-        {
-            //CurrentStepTemp.XaxisCorrect = ui->lineEdit_S_XaxisCorrect->text().toDouble(&ok);
-            ui->tableWidget_Step->setItem(ui->tableWidget_Step->currentRow(), StepProgram_XaxisCorrect, new QTableWidgetItem("+"+ui->lineEdit_S_XaxisCorrect->text()));
+            ui->tableWidget_Step->setItem(ui->tableWidget_Step->currentRow(), StepProgram_XaxisCorrect, new QTableWidgetItem(ui->lineEdit_S_XaxisCorrect->text()));
             Update_StepProgramItem(ui->tableWidget_Step->item(ui->tableWidget_Step->currentRow(),StepProgram_Id)->text().toInt(),StepProgram_XaxisCorrect,ui->lineEdit_S_XaxisCorrect->text());
-            ui->lineEdit_S_XaxisCorrect->setText("+"+ui->lineEdit_S_XaxisCorrect->text());
+            ui->lineEdit_S_XaxisCorrect->setText(ui->lineEdit_S_XaxisCorrect->text());
             qDebug()<<"ui->lineEdit_S_XaxisCorrect->text()"<<ui->lineEdit_S_XaxisCorrect->text();
         }
         else
         {
-            ui->tableWidget_Step->setItem(ui->tableWidget_Step->currentRow(), StepProgram_XaxisCorrect, new QTableWidgetItem("+"+QString::number(CurrentStepTemp.XaxisCorrect,'.',0)));
-            ui->lineEdit_S_XaxisCorrect->setText("+"+QString::number(CurrentStepTemp.XaxisCorrect,'.',0));
+            ui->tableWidget_Step->setItem(ui->tableWidget_Step->currentRow(), StepProgram_XaxisCorrect, new QTableWidgetItem(QString::number(CurrentStepTemp.XaxisCorrect,'.',0)));
+            ui->lineEdit_S_XaxisCorrect->setText(QString::number(CurrentStepTemp.XaxisCorrect,'.',0));
         }
 
+//    }
 
-    }
+//   else
+//    {
+
+//        if( (ui->lineEdit_S_XaxisCorrect->text().toDouble(&ok)  > 0) && (ui->lineEdit_S_XaxisCorrect->text().toDouble(&ok)  <= 9999) )
+//        {
+//            //CurrentStepTemp.XaxisCorrect = ui->lineEdit_S_XaxisCorrect->text().toDouble(&ok);
+//            ui->tableWidget_Step->setItem(ui->tableWidget_Step->currentRow(), StepProgram_XaxisCorrect, new QTableWidgetItem("+"+ui->lineEdit_S_XaxisCorrect->text()));
+//            Update_StepProgramItem(ui->tableWidget_Step->item(ui->tableWidget_Step->currentRow(),StepProgram_Id)->text().toInt(),StepProgram_XaxisCorrect,ui->lineEdit_S_XaxisCorrect->text());
+//            ui->lineEdit_S_XaxisCorrect->setText("+"+ui->lineEdit_S_XaxisCorrect->text());
+//            qDebug()<<"ui->lineEdit_S_XaxisCorrect->text()"<<ui->lineEdit_S_XaxisCorrect->text();
+//        }
+//        else
+//        {
+//            ui->tableWidget_Step->setItem(ui->tableWidget_Step->currentRow(), StepProgram_XaxisCorrect, new QTableWidgetItem("+"+QString::number(CurrentStepTemp.XaxisCorrect,'.',0)));
+//            ui->lineEdit_S_XaxisCorrect->setText("+"+QString::number(CurrentStepTemp.XaxisCorrect,'.',0));
+//        }
+
+
+//    }
 
 }
 void Step::on_lineEdit_S_distance_returnPressed()
@@ -521,13 +540,13 @@ void Step::on_tableWidget_Step_itemSelectionChanged()
 
            ui->lineEdit_S_Angle->setText(record.value("Angle").toString());
            ui->lineEdit_S_AngleCompensate->setText(record.value("AngleCompensate").toString());
-           if(record.value("AngleCompensate").toInt() > 0)
-           {
-               ui->lineEdit_S_AngleCompensate->setText("+"+ ui->lineEdit_S_AngleCompensate->text());
-           }
+//           if(record.value("AngleCompensate").toInt() > 0)
+//           {
+               ui->lineEdit_S_AngleCompensate->setText(ui->lineEdit_S_AngleCompensate->text());
+//           }
            ui->lineEdit_S_Yaxis->setText(record.value("Yaxis").toString());
            ui->lineEdit_S_Xaxis->setText(record.value("Xaxis").toString());
-           ui->lineEdit_S_XaxisCorrect->setText("+"+record.value("XaxisCorrect").toString());
+           ui->lineEdit_S_XaxisCorrect->setText(record.value("XaxisCorrect").toString());
 
            ui->lineEdit_S_distance->setText(record.value("Distance").toString());
            ui->lineEdit_S_pressure->setText(record.value("Pressure").toString());

@@ -29,6 +29,7 @@ private slots:
     void ProNewisEmpty();
     void ProNewClose();
     void ProNewMulName();
+    void ProNewisAZ();
     
     void on_panelButton_1_clicked();
 

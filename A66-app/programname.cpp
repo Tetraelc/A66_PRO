@@ -7,6 +7,7 @@ ProgramName::ProgramName(QWidget *parent) :
     ui(new Ui::ProgramName)
 {
     ui->setupUi(this);
+
 }
 
 ProgramName::~ProgramName()
@@ -29,6 +30,11 @@ void ProgramName::on_programName_cancal_clicked()
 void ProgramName::ProNewisEmpty()
 {
     ui->label_isEmpty->setText(trUtf8("输入不能为空"));
+}
+
+void ProgramName::ProNewisAZ()
+{
+    ui->label_isEmpty->setText(trUtf8("开头输入字母"));
 }
 
 void ProgramName::ProNewClose()

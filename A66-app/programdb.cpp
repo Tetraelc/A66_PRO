@@ -109,6 +109,11 @@ void Programdb::initProgram(void)
     Display_ProgramItem();
     ui->comboBox_P_material->setCurrentIndex(CurrentReg.Materialtemp[0]);
 
+    QRegExp rx("^(-?[0]|-?[1-9][0-9]{0,3})(?:\\.\\d{1,3})?$|(^\\t?$)");
+    QRegExpValidator *pReg = new QRegExpValidator(rx, this);
+    ui->lineEdit_P_boardThickness->setValidator(pReg);
+    ui->lineEdit_P_BoardWidth->setValidator(pReg);
+
 
 }
 
@@ -227,6 +232,13 @@ bool  Programdb::NewProgramLib(QString str)
 //       QMessageBox::critical(0,QObject::tr("Error"),
 //                             db.lastError().text());//打开数据库连接
 //   }
+
+    if(!(str < "Z"&& str>"A"))
+    {
+          qDebug("---------------------------");
+         emit sig_NewisAZ();
+         return false;
+    }
 
    if(str == "")    //输入不能为空
    {
@@ -543,6 +555,8 @@ void Programdb::on_pushButton_Left_2_clicked()
 //    ProgramName1->setWindowFlags(Qt::FramelessWindowHint);
     ProgramName1->move(200,250);
     connect(ProgramName1, SIGNAL(sig_sndNewName(QString)), this, SLOT(NewProgramLib(QString)));
+
+    connect(this, SIGNAL(sig_NewisAZ()), ProgramName1, SLOT(ProNewisAZ()));
     connect(this, SIGNAL(sig_NewisEmpty()), ProgramName1, SLOT(ProNewisEmpty()));
     connect(this, SIGNAL(sig_NewClose()), ProgramName1, SLOT(ProNewClose()));
     connect(this, SIGNAL(sig_MulName()), ProgramName1, SLOT(ProNewMulName()));

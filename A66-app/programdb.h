@@ -38,7 +38,7 @@ public slots:
     void closeProgramWin();
 
 signals:
-
+    void sig_NewisAZ();
     void sig_NewisEmpty();
     void sig_NewClose();
     void sig_MulName();

@@ -38,6 +38,12 @@ SystemSetting::SystemSetting(QWidget *parent) :
     ui->tableWidget_System->horizontalHeader()->setStretchLastSection(true);
     ui->tableWidget_System->horizontalHeader()->setClickable(false);
 
+    QRegExp rx("^(-?[0]|-?[1-9][0-9]{0,3})$");
+    QRegExpValidator *pReg = new QRegExpValidator(rx, this);
+    ui->lineEdit_KeepTime ->setValidator(pReg);
+    ui->lineEdit_UnloadTime->setValidator(pReg);
+    ui->lineEdit_3->setValidator(pReg);
+
 }
 
 void SystemSetting::on_treeWidget_System_itemSelectionChanged()
