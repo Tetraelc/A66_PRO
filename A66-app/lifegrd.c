@@ -381,7 +381,7 @@ void proceedNODE_GUARD(CO_Data* d, Message* m )
       ** Only answer to the NMT NodeGuarding request, the master is
       ** not checked (not implemented)
       */
-      if (nodeId == *d->bDeviceNodeId )
+      if (nodeId == *d->bDeviceNodeId )  //节点守护
         {
           Message msg;
           UNS16 tmp = *d->bDeviceNodeId + 0x700;
@@ -425,6 +425,12 @@ void proceedNODE_GUARD(CO_Data* d, Message* m )
           MSG_WAR(0x3100, "The NMT is a bootup from node : ", nodeId);
           /* call post SlaveBootup with NodeId */
           (*d->post_SlaveBootup)(d, nodeId);
+      }
+
+      if(d->NMTable[nodeId] == Pre_operational)//
+      {
+           MSG_WAR(0x3100, "The NMT is a Pre_operational from node : ", nodeId);
+           (*d->post_SlavePreInit)(d, nodeId);
       }
 
       if( d->NMTable[nodeId] != Unknown_state ) {
@@ -545,6 +551,6 @@ void heartbeatStop(CO_Data* d)
 void _heartbeatError(CO_Data* d, UNS8 heartbeatID){}
 void _post_SlaveBootup(CO_Data* d, UNS8 SlaveID){}
 void _post_SlaveStateChange(CO_Data* d, UNS8 nodeId, e_nodeState newNodeState){}
-
+void _post_SlavePreInit(CO_Data* d, UNS8 SlaveID){}
 
 

@@ -42,8 +42,9 @@ void _post_SlaveBootup(CO_Data* d, UNS8 SlaveID);
 
 typedef void (*post_SlaveStateChange_t)(CO_Data*, UNS8, e_nodeState);
 void _post_SlaveStateChange(CO_Data* d, UNS8 nodeId, e_nodeState newNodeState);
-
-
+///自定义
+typedef void (*post_SlavePreInit_t)(CO_Data*, UNS8);
+void _post_SlavePreInit(CO_Data* d, UNS8 SlaveID);
 
 /*************************************************************************
  * Functions

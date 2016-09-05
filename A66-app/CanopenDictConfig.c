@@ -204,19 +204,32 @@ void Master_post_TPDO(CO_Data* d)
 void Master_post_SlaveBootup(CO_Data* d, UNS8 nodeId)
 {
          // ConfigureSlaveNode(d,nodeid);
+
     Clean_HeartbetError(nodeId);
     if(nodeId == 0x04)//mtzhuji
     {
         masterSendNMTstateChange (d, nodeId, NMT_Start_Node);
         d->NMTable[nodeId] = Operational;
+        motor[nodeId-1].initStatus = 1;
     }
-
-           ConfigureSlaveNode(d,nodeId);
       //  check_and_start_node(d,nodeid);
       //  masterSendNMTstateChange (d, nodeid, NMT_Start_Node);
         MSG_USER(0, "Master_post_SlaveBootup %d", nodeId);
 }
-
+void Master_pos_SlavePreInit(CO_Data* d, UNS8 nodeId)
+{
+    if(motor[nodeId-1].SDO_status == SDO_free)
+    {
+    Clean_HeartbetError(nodeId);
+//    if(nodeId == 0x04)//mtzhuji
+//    {
+//        masterSendNMTstateChange (d, nodeId, NMT_Start_Node);
+//        d->NMTable[nodeId] = Operational;
+//    }
+    ConfigureSlaveNode(d,nodeId);
+    MSG_USER(0, "on pre for init %d", nodeId);
+    }
+}
 void Master_post_SlaveStateChange(CO_Data* d, UNS8 nodeId, e_nodeState newNodeState)
 {
         static UNS8 NodeIdNum = 0;
@@ -251,6 +264,7 @@ void CANOpenMasterInit(CO_Data* d)
     d->post_emcy             = Master_post_emcy;
     d->post_SlaveBootup      = Master_post_SlaveBootup;
     d->post_SlaveStateChange = Master_post_SlaveStateChange;
+    d->post_SlavePreInit     = Master_pos_SlavePreInit;
     Init_MOTOR();
 }
 /**

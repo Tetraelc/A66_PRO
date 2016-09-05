@@ -567,14 +567,14 @@ void RunState::ReadForRun(int Type)
     for(int i=0;i<model.rowCount();i++)
     {
             QSqlRecord record = model.record(i);
-              CurrentProgramTemp.ProgramName=record.value("Name").toString();
-              CurrentProgramTemp.BroadThick = record.value("BoardThick").toDouble(&ok);
-              CurrentProgramTemp.BroadWideth = record.value("BoardWide").toDouble(&ok);
-              CurrentProgramTemp.Material = record.value("Material").toInt();//QString::fromUtf8(
-              CurrentProgramTemp.StepNumber =  record.value("StepTotal").toDouble(&ok);
-              CurrentProgramTemp.UpMold = record.value("UpMold").toDouble(&ok);
-              CurrentProgramTemp.LowerMold =  record.value("LowerMold").toDouble(&ok);
-              CurrentProgramTemp.ProcessedNum = record.value("WorkedTotal").toDouble(&ok);
+               CurrentProgramTemp.ProgramName=record.value("Name").toString();
+               CurrentProgramTemp.BroadThick = record.value("BoardThick").toDouble(&ok);
+               CurrentProgramTemp.BroadWideth = record.value("BoardWide").toDouble(&ok);
+               CurrentProgramTemp.Material = record.value("Material").toInt();//QString::fromUtf8(
+               CurrentProgramTemp.StepNumber =  record.value("StepTotal").toDouble(&ok);
+               CurrentProgramTemp.UpMold = record.value("UpMold").toDouble(&ok);
+               CurrentProgramTemp.LowerMold =  record.value("LowerMold").toDouble(&ok);
+               CurrentProgramTemp.ProcessedNum = record.value("WorkedTotal").toDouble(&ok);
     //          qDebug()<<" CurrentProgramTemp.Material"<< CurrentProgramTemp.Material;
         //      qDebug()<<"record.value().toString()"<<record.value("Name").toString();
 //              qDebug()<<"record.value().toString()"<<record.value("BoardThick").toString();

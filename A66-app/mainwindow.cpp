@@ -24,10 +24,10 @@ MainWindow::MainWindow(QWidget *parent) :
     SystemSetting sys;
     sys.ReadForSystemDat();
 
-    sys.SystemWriteMotor(0x01);//写电机参数
-    sys.SystemWriteMotor(0x02);//写电机参数
-    sys.SystemWriteMotor(0x03);//写电机参数
-    sys.SystemWriteMT();//写MT参数
+//    sys.SystemWriteMotor(0x01);//写电机参数
+//    sys.SystemWriteMotor(0x02);//写电机参数
+//    sys.SystemWriteMotor(0x03);//写电机参数
+//    sys.SystemWriteMT();//写MT参数
 
 
     ProgramName_Scan = startTimer(800);
