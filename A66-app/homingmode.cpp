@@ -6,6 +6,9 @@
 
 
 static int time_count1 =0;
+static int arrivedSwitch_X = 0;
+static int arrivedSwitch_Y = 0;
+static int arrivedSwitch_R = 0;
 extern "C"{
      #include "canfestival.h"
      #include "canfestivalAPI.h"
@@ -68,38 +71,57 @@ void HomingMode::timerEvent(QTimerEvent *t) //定时器事件
                     if(time_count1 > 10)
                     {
                       time_count1 = 0;
-                      if((MOTOR_STATUS[0] & 0x1000 ) == 0x1000 )
+                      if((MOTOR_STATUS[0] & 0x1400 ) == 0x1400 )
                       {
-                          ui->label_X->setText(trUtf8("归零完成"));
+                         ui->label_X->setText(trUtf8("归零完成"));
+                          arrivedSwitch_X = 1;
                       }
                       else
                       {
-                           ui->label_X->setText(trUtf8("正在归零"));
+                            ui->label_X->setText(trUtf8("正在归零"));
                       }
-                      if((MOTOR_STATUS[1] & 0x1000)  == 0x1000)
+                      if((MOTOR_STATUS[1] & 0x1400)  == 0x1400)
                       {
                           ui->label_Y->setText(trUtf8("归零完成"));
+                          arrivedSwitch_Y = 1;
                       }
                       else
                       {
-                           ui->label_Y->setText(trUtf8("正在归零"));
+                          ui->label_Y->setText(trUtf8("正在归零"));
                       }
-                      if((MOTOR_STATUS[2] & 0x1000)  == 0x1000 )
+                      if((MOTOR_STATUS[2] & 0x1400)  == 0x1400 )
                       {
 
-                          ui->label_R->setText(trUtf8("归零完成"));
+                         ui->label_R->setText(trUtf8("归零完成"));
+                          arrivedSwitch_R = 1;
                       }
                       else
                       {
                            ui->label_R->setText(trUtf8("正在归零"));
                       }
-                      if( (MOTOR_STATUS[0] & 0x1000 == 0) && (MOTOR_STATUS[1] & 0x1000 == 0) && (MOTOR_STATUS[2] & 0x1000 == 0))
+//                      if( (MOTOR_STATUS[0] & 0x8000 == 0x8000))
+//                      {
+//                          arrivedSwitch_X = 1;
+//                          ui->label_X->setText(trUtf8("到达开关"));
+//                      }
+//                      if( (MOTOR_STATUS[1] & 0x8000 == 0x8000))
+//                      {
+//                          arrivedSwitch_Y = 1;
+//                      }
+//                      if( (MOTOR_STATUS[2] & 0x8000 == 0x8000))
+//                      {
+//                          arrivedSwitch_R = 1;
+//                      }
+                      if(arrivedSwitch_X ==1 && arrivedSwitch_Y ==1 && arrivedSwitch_R ==1)
                       {
                           HomgingModeFlag = 0;
-
-//                          Write_MOTOR_One_Data(X1_ID,0x6060,0x00,0x01,0x01);
-//                          Write_MOTOR_One_Data(Y1_ID,0x6060,0x00,0x01,0x01);
-//                          Write_MOTOR_One_Data(R1_ID,0x6060,0x00,0x01,0x01);
+                          arrivedSwitch_X =0;
+                          arrivedSwitch_Y =0;
+                          arrivedSwitch_R = 0;
+                          Write_MOTOR_One_Data(X1_ID,0x6060,0x00,0x01,0x01);
+                          Write_MOTOR_One_Data(Y1_ID,0x6060,0x00,0x01,0x01);
+                          Write_MOTOR_One_Data(R1_ID,0x6060,0x00,0x01,0x01);
+                            ui->label_R->setText(trUtf8("全部回零完成"));
                           ui->toolButton_RunHoming->setEnabled(true);
                          // killTimer(Homging_Scan);
                       }
