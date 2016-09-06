@@ -37,6 +37,7 @@ signals:
 
 //    void reflashProIndex();
 //    void reflashStepNum();
+    void  sig_developLength(double Length);
 
 public slots:
     void openStepWin();

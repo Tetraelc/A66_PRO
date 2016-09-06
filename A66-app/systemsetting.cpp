@@ -207,6 +207,7 @@ void SystemSetting::SystemDatChange()
      YaxisParameter.ReferencePosMode = YaxisParameterTemp[8];
      YaxisParameter.ReferencePos = YaxisParameterTemp[9];
       ////R轴参数
+     RaxisParameter.ENABLE_AXIS = RaxisParameterTemp[0];
      RaxisParameter.LeadScrew = RaxisParameterTemp[1];
      RaxisParameter.MotorDirection = RaxisParameterTemp[2];
      RaxisParameter.RunSpeed = RaxisParameterTemp[3];

@@ -1,3 +1,4 @@
+
 #include "runstate.h"
 #include "ui_runstate.h"
 #include <QDebug>
@@ -112,7 +113,6 @@ void RunState::initWorkedTotalDialog()
 //             qDebug("openProgramwindow");
 //        }
 
-
 //    }
 //    else
 //    {
@@ -124,7 +124,12 @@ void RunState::initWorkedTotalDialog()
         sendOneStep = 0;
         PostionReachFlag = 1;
         ChangeRowFlag =0 ;
+        motor[0].Wrte_Multi_Finsh_state = NO_SEND;
+        motor[1].Wrte_Multi_Finsh_state = NO_SEND;
+        motor[2].Wrte_Multi_Finsh_state = NO_SEND;
+        motor[MT_ID-1].Write_One_Finsh_state = NO_SEND;
         WrokedTotal *wk =new WrokedTotal;
+        wk->setWindowFlags(Qt::FramelessWindowHint);
         wk->exec();
         Ms_Run = startTimer(20);
 
@@ -139,7 +144,7 @@ void RunState::checkMotorState()
      if(Get_HeartbetError(0x01) == 0x01)
      {
 
-         CurrentReg.Current_MotorTips = Offline1Tip;
+         CurrentReg.Current_MotorTips = Motor1Tip;
          CurrentReg.Current_MotorTipResult.append(SystemTipsInformation(CurrentReg.Current_MotorTips));
 //         QMessageBox::critical(0,QObject::trUtf8("异常"),
 //                               trUtf8("1号电机离线"));
@@ -148,7 +153,7 @@ void RunState::checkMotorState()
      }
      if(Get_HeartbetError(0x02) == 0x01)
      {
-         CurrentReg.Current_MotorTips = Offline2Tip;
+         CurrentReg.Current_MotorTips = Motor2Tip;
          CurrentReg.Current_MotorTipResult.append("/").append(SystemTipsInformation(CurrentReg.Current_MotorTips));
 //         QMessageBox::critical(0,QObject::trUtf8("异常"),
 //                               trUtf8("2号电机离线"));
@@ -157,26 +162,32 @@ void RunState::checkMotorState()
 
 //     if(Get_HeartbetError(0x03) == 1)
 //     {
-//         CurrentReg.Current_MotorTips = Offline3Tip;
+//         CurrentReg.Current_MotorTips = Motor3Tip;
 //         CurrentReg.Current_MotorTipResult.append("/").append(SystemTipsInformation(CurrentReg.Current_MotorTips));
 ////         QMessageBox::critical(0,QObject::trUtf8("异常"),
 ////                               trUtf8("3号电机离线"));
 ////          Clean_HeartbetError(0x02);
 //     }
 
+
      if(Get_HeartbetError(0x04) == 0x01)
      {
-         CurrentReg.Current_MotorTips = OfflineMTTip;
+         CurrentReg.Current_MotorTips = MTTip;
          CurrentReg.Current_MotorTipResult.append("/").append(SystemTipsInformation(CurrentReg.Current_MotorTips));
 //         QMessageBox::critical(0,QObject::trUtf8("异常"),
 //                               trUtf8("MT离线"));
 //         Clean_HeartbetError(0x03);
      }
 
+     if(Get_HeartbetError(0x01) == 0x01 | Get_HeartbetError(0x02) == 0x01 | Get_HeartbetError(0x03) == 0x01 | Get_HeartbetError(0x04) == 0x01 )
+     {
+         CurrentReg.Current_MotorTips = OfflineTip;
+         CurrentReg.Current_MotorTipResult.append(SystemTipsInformation(CurrentReg.Current_MotorTips));
 
+     }
      if(motor[0].initStatus == 0)
      {
-         CurrentReg.Current_MotorTips = NoDeinit1Tip;
+         CurrentReg.Current_MotorTips = Motor1Tip;
          CurrentReg.Current_MotorTipResult.append("/").append(SystemTipsInformation(CurrentReg.Current_MotorTips));
 //         QMessageBox::critical(0,QObject::trUtf8("异常"),
 //                               trUtf8("1号电机未初始化！要重新打开电机"));
@@ -184,7 +195,7 @@ void RunState::checkMotorState()
      }
      if(motor[1].initStatus == 0)
      {
-         CurrentReg.Current_MotorTips = NoDeinit2Tip;
+         CurrentReg.Current_MotorTips = Motor2Tip;
          CurrentReg.Current_MotorTipResult.append("/").append(SystemTipsInformation(CurrentReg.Current_MotorTips));
 //         QMessageBox::critical(0,QObject::trUtf8("异常"),
 //                               trUtf8("2号电机未初始化！要重新打开电机"));
@@ -192,7 +203,7 @@ void RunState::checkMotorState()
      }
 //     if(motor[2].initStatus == 0)
 //     {
-//         CurrentReg.Current_MotorTips = NoDeinit3Tip;
+//         CurrentReg.Current_MotorTips = Motor3Tip;
 //         CurrentReg.Current_MotorTipResult.append("/").append(SystemTipsInformation(CurrentReg.Current_MotorTips));
 ////         QMessageBox::critical(0,QObject::trUtf8("异常"),
 ////                               trUtf8("3号电机未初始化！要重新打开电机"));
@@ -256,12 +267,17 @@ void RunState::ReadTrg( unsigned char pin )
 }
 
 int wait_pos_time = 0;
-void RunState::SendMTEnableSignal()
+///XY轴///////
+void RunState::SendMTEnableSignalXYAxis()
 {
     int temp1,temp2,temp3;
     XaxisValue = CurrentStepTemp.Xaxis;
     YaxisValue = CurrentStepTemp.Yaxis;
     RaxisValue = CurrentStepTemp.Raxis;
+
+    qDebug()<<"XaxisValue"<<XaxisValue;
+    qDebug()<<"YaxisValue"<<YaxisValue;
+    qDebug()<<"RaxisValue"<<RaxisValue;
 
 
     temp1 = MOTOR_STATUS[0] & 0x400;
@@ -270,30 +286,32 @@ void RunState::SendMTEnableSignal()
    if(sendOneStep == 0) //第一步发送数据  开始定位
    {
        qDebug()<<"CurrentStepTemp.Raxis"<<CurrentStepTemp.Raxis;
-       if(XaxisParameter.MotorDirection == 1)
-       {
-           Set_Motor_Speed_Postion_Abs(0x01,XaxisParameter.RunSpeed,XaxisValue*1000/XaxisParameter.LeadScrew);
-       }
-       else
-       {
-           Set_Motor_Speed_Postion_Abs(0x01,XaxisParameter.RunSpeed,XaxisValue*-1000/XaxisParameter.LeadScrew);
-       }
-       if(YaxisParameter.MotorDirection == 1)
-       {
-           Set_Motor_Speed_Postion_Abs(0x02,YaxisParameter.RunSpeed,YaxisValue*1000/YaxisParameter.LeadScrew);
-       }
-       else
-       {
-           Set_Motor_Speed_Postion_Abs(0x02,YaxisParameter.RunSpeed,YaxisValue*-1000/YaxisParameter.LeadScrew);
-       }
-//       if(RaxisParameter.MotorDirection == 1)
+//       if(XaxisParameter.MotorDirection == 1)
 //       {
-//           Set_Motor_Speed_Postion_Abs(0x03,RaxisParameter.RunSpeed,RaxisValue*1000/RaxisParameter.LeadScrew);
+           Set_Motor_Speed_Postion_Abs(0x01,XaxisParameter.RunSpeed,XaxisValue*1000/XaxisParameter.LeadScrew);
 //       }
 //       else
 //       {
-//           Set_Motor_Speed_Postion_Abs(0x03,RaxisParameter.RunSpeed,RaxisValue*-1000/RaxisParameter.LeadScrew);
+//           Set_Motor_Speed_Postion_Abs(0x01,XaxisParameter.RunSpeed,XaxisValue*-1000/XaxisParameter.LeadScrew);
 //       }
+//       if(YaxisParameter.MotorDirection == 1)
+//       {
+           Set_Motor_Speed_Postion_Abs(0x02,YaxisParameter.RunSpeed,YaxisValue*1000/YaxisParameter.LeadScrew);
+//       }
+//       else
+//       {
+//           Set_Motor_Speed_Postion_Abs(0x02,YaxisParameter.RunSpeed,YaxisValue*-1000/YaxisParameter.LeadScrew);
+//       }
+
+//           if(RaxisParameter.MotorDirection == 1)
+//           {
+//               Set_Motor_Speed_Postion_Abs(0x03,RaxisParameter.RunSpeed,RaxisValue*1000/RaxisParameter.LeadScrew);
+//           }
+//           else
+//           {
+//               Set_Motor_Speed_Postion_Abs(0x03,RaxisParameter.RunSpeed,RaxisValue*-1000/RaxisParameter.LeadScrew);
+//           }
+
 
        ui->label_Run->setText(trUtf8("定位"));      
        sendOneStep = 1;
@@ -302,6 +320,7 @@ void RunState::SendMTEnableSignal()
    }
    else if (sendOneStep == 1)//第二步等待定位完成  发送A20启动
    {
+
       if(motor[0].Wrte_Multi_Finsh_state == SUCCESS_SEND && motor[1].Wrte_Multi_Finsh_state == SUCCESS_SEND )//&& motor[2].Wrte_Multi_Finsh_state == SUCCESS_SEND
       {
           wait_pos_time++;
@@ -362,6 +381,119 @@ void RunState::SendMTEnableSignal()
 //   qDebug("motor[1].Wrte_Multi_Finsh_state = %d", motor[1].Wrte_Multi_Finsh_state);
 
 }
+
+
+///XYR轴///////
+void RunState::SendMTEnableSignalXYRAxis()
+{
+    int temp1,temp2,temp3;
+    XaxisValue = CurrentStepTemp.Xaxis;
+    YaxisValue = CurrentStepTemp.Yaxis;
+    RaxisValue = CurrentStepTemp.Raxis;
+
+
+    temp1 = MOTOR_STATUS[0] & 0x400;
+    temp2 = MOTOR_STATUS[1] & 0x400;
+    temp3 = MOTOR_STATUS[2] & 0x400;
+   if(sendOneStep == 0) //第一步发送数据  开始定位
+   {
+       qDebug()<<"CurrentStepTemp.Raxis"<<CurrentStepTemp.Raxis;
+//       if(XaxisParameter.MotorDirection == 1)
+//       {
+           Set_Motor_Speed_Postion_Abs(0x01,XaxisParameter.RunSpeed,XaxisValue*1000/XaxisParameter.LeadScrew);
+//       }
+//       else
+//       {
+//           Set_Motor_Speed_Postion_Abs(0x01,XaxisParameter.RunSpeed,XaxisValue*-1000/XaxisParameter.LeadScrew);
+//       }
+//       if(YaxisParameter.MotorDirection == 1)
+//       {
+           Set_Motor_Speed_Postion_Abs(0x02,YaxisParameter.RunSpeed,YaxisValue*1000/YaxisParameter.LeadScrew);
+//       }
+//       else
+//       {
+//           Set_Motor_Speed_Postion_Abs(0x02,YaxisParameter.RunSpeed,YaxisValue*-1000/YaxisParameter.LeadScrew);
+//       }
+
+//       if(RaxisParameter.MotorDirection == 1)
+//       {
+           Set_Motor_Speed_Postion_Abs(0x03,RaxisParameter.RunSpeed,RaxisValue*1000/RaxisParameter.LeadScrew);
+//       }
+//       else
+//       {
+//           Set_Motor_Speed_Postion_Abs(0x03,RaxisParameter.RunSpeed,RaxisValue*-1000/RaxisParameter.LeadScrew);
+//       }
+
+
+       ui->label_Run->setText(trUtf8("定位"));
+       sendOneStep = 1;
+//       qDebug()<<"XaxisValue"<<XaxisValue;
+//       qDebug()<<"YaxisValue"<<YaxisValue;
+   }
+   else if (sendOneStep == 1)//第二步等待定位完成  发送A20启动
+   {
+
+      if(motor[0].Wrte_Multi_Finsh_state == SUCCESS_SEND && motor[1].Wrte_Multi_Finsh_state == SUCCESS_SEND && motor[2].Wrte_Multi_Finsh_state == SUCCESS_SEND)
+      {
+          wait_pos_time++;
+          if(wait_pos_time >20)
+          {
+              if((temp1 == 0x400) && (temp2 == 0x400)  && PostionReachFlag == 1 && (temp3 == 0x400))
+              {
+
+                  Write_MOTOR_One_Data(0x04,0x7001,0x01,0x01,ENTER_ENABLE);
+                  ui->label_Run->setText(trUtf8("就绪"));
+                  PostionReachFlag = 0;
+                  wait_pos_time   = 0;
+                  motor[0].Wrte_Multi_Finsh_state = NO_SEND;
+                  motor[1].Wrte_Multi_Finsh_state = NO_SEND;
+                  motor[2].Wrte_Multi_Finsh_state = NO_SEND;
+                  sendOneStep = 2;
+                  ChangeRowFlag = 1;
+               }
+           }
+       }
+       else if(motor[0].Wrte_Multi_Finsh_state == FAIL_SEND || motor[1].Wrte_Multi_Finsh_state == FAIL_SEND || motor[2].Wrte_Multi_Finsh_state == FAIL_SEND)
+       {
+           TrasmitError++;
+           //发送失败的处理
+           motor[0].Wrte_Multi_Finsh_state = NO_SEND;
+           motor[1].Wrte_Multi_Finsh_state = NO_SEND;
+           motor[2].Wrte_Multi_Finsh_state = NO_SEND;
+           if(TrasmitError > 10)
+           {
+                TrasmitError = 0;
+                sendOneStep = 0;//要考虑
+                motor[0].SendCountError++;
+                motor[1].SendCountError++;
+                motor[2].SendCountError++;
+                //发送错误.要检查网络了做个显示
+           }
+           else
+           {
+              sendOneStep = 0;
+           }
+       }
+
+   }
+   else if (sendOneStep == 2) //等待A20到达上至点发送数据关闭命令||(fastmodeState == true))&&
+   {
+       if(((A20_IN_Status & UpperPoint)&&(Back_state == true)))
+       {
+            Write_MOTOR_One_Data(MT_ID,0x7001,0x01,0x01,ENTER_DISENABLE);
+            sendOneStep = 3;
+       }
+   }
+   else if (sendOneStep == 3)//等待命令发送完成 ，进行换步
+   {
+      changeStep();
+   }
+//   qDebug("sendOneStep=%d",sendOneStep);
+//   qDebug("motor[0].Wrte_Multi_Finsh_state = %d", motor[0].Wrte_Multi_Finsh_state);
+//   qDebug("motor[1].Wrte_Multi_Finsh_state = %d", motor[1].Wrte_Multi_Finsh_state);
+
+}
+
 /*******************************换步*************************/
 void RunState::changeStep()
 {
@@ -433,7 +565,15 @@ int RunState::CheckPressureState()
     case Vstop  :
         //qDebug("Vstop");
          ui->label_Pressure->setText(trUtf8("停止"));
-         SendMTEnableSignal();
+         if(RaxisParameter.ENABLE_AXIS == 0)
+         {
+            SendMTEnableSignalXYAxis();
+         }
+         else
+         {
+           SendMTEnableSignalXYRAxis();
+         }
+
 
         break;
     case VFast:
@@ -454,10 +594,11 @@ int RunState::CheckPressureState()
 
     case VSlow :
         // qDebug("VSlow");
-        concedeState();
+
         ui->label_Pressure->setText(trUtf8("工进"));break;
     case  Vkeep  :
          //qDebug("Vkeep");
+        concedeState();
         ui->label_Pressure->setText(trUtf8("保压"));break;
     case Vunload :
          //qDebug("Vunload");
@@ -567,14 +708,14 @@ void RunState::ReadForRun(int Type)
     for(int i=0;i<model.rowCount();i++)
     {
             QSqlRecord record = model.record(i);
-              CurrentProgramTemp.ProgramName=record.value("Name").toString();
-              CurrentProgramTemp.BroadThick = record.value("BoardThick").toDouble(&ok);
-              CurrentProgramTemp.BroadWideth = record.value("BoardWide").toDouble(&ok);
-              CurrentProgramTemp.Material = record.value("Material").toInt();//QString::fromUtf8(
-              CurrentProgramTemp.StepNumber =  record.value("StepTotal").toDouble(&ok);
-              CurrentProgramTemp.UpMold = record.value("UpMold").toDouble(&ok);
-              CurrentProgramTemp.LowerMold =  record.value("LowerMold").toDouble(&ok);
-              CurrentProgramTemp.ProcessedNum = record.value("WorkedTotal").toDouble(&ok);
+               CurrentProgramTemp.ProgramName=record.value("Name").toString();
+               CurrentProgramTemp.BroadThick = record.value("BoardThick").toDouble(&ok);
+               CurrentProgramTemp.BroadWideth = record.value("BoardWide").toDouble(&ok);
+               CurrentProgramTemp.Material = record.value("Material").toInt();//QString::fromUtf8(
+               CurrentProgramTemp.StepNumber =  record.value("StepTotal").toDouble(&ok);
+               CurrentProgramTemp.UpMold = record.value("UpMold").toDouble(&ok);
+               CurrentProgramTemp.LowerMold =  record.value("LowerMold").toDouble(&ok);
+               CurrentProgramTemp.ProcessedNum = record.value("WorkedTotal").toDouble(&ok);
     //          qDebug()<<" CurrentProgramTemp.Material"<< CurrentProgramTemp.Material;
         //      qDebug()<<"record.value().toString()"<<record.value("Name").toString();
 //              qDebug()<<"record.value().toString()"<<record.value("BoardThick").toString();
@@ -671,8 +812,7 @@ void RunState::QuitRunState()
     Stop_MOTOR(0x03);
     sendOneStep = 0;//状态清零
 
-    Programdb *prodb = new Programdb;
-     connect(this, SIGNAL(ReturnworkedTotal(int )), prodb, SLOT(ReflashProgramWrokedNum(int )));
+
 //    if(!db.open())
 //    {
 //        QMessageBox::critical(0,QObject::tr("Error"),

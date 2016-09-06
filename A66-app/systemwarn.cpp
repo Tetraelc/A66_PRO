@@ -60,12 +60,12 @@ void SystemWarn::SystemCheckTip(int TipID)
 //    case 3:ui->label_DisplayAlarm->setText(SystemTipsInformation(RunFinishTip));
 //        break;
     case 4:ui->label_DisplayAlarm->setText(SystemTipsInformation(DataInitTip));
-        qDebug()<<"SystemTipsInformation(DataInitTip)"<<SystemTipsInformation(4);
         break;
     case 5:ui->label_DisplayAlarm->setText(SystemTipsInformation(DataSaveTip));
         break;
     case 6:ui->label_DisplayAlarm->setText(SystemTipsInformation(DataResumeTip));
-        qDebug("11");
+        break;
+    case 7:ui->label_DisplayAlarm->setText(SystemTipsInformation(DataResumeTip));
         break;
 
     default :break;

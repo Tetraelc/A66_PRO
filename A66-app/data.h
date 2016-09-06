@@ -131,8 +131,10 @@ struct struct_CO_Data {
     lss_transfer_t lss_transfer;
     lss_StoreConfiguration_t  lss_StoreConfiguration;
 #endif
+    post_SlavePreInit_t post_SlavePreInit;
     S_Data_trans* sdo_write_multi_buf[8];
     S_Data_trans* sdo_read_multi_buf[8];
+
 };
 
 
@@ -327,6 +329,7 @@ struct struct_CO_Data {
     _post_emcy,              /* post_emcy */\
     /* LSS */\
     lss_Initializer\
+    _post_SlavePreInit\
 }
 
 #ifdef __cplusplus

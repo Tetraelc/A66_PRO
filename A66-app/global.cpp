@@ -3,6 +3,7 @@
 
 #define DEV_PATH "/sys/class/gpio/"
 
+int HomgingModeFlag = 0;
 bool aralmOrTipFalg = false;
 bool EditableFalg = false;
 bool FactoryAxisFalg = false;

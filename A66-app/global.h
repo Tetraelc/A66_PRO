@@ -43,7 +43,7 @@ QString SystemTipsInformation(int TipsID);
 #define ENTER_ENABLE  0xAA
 #define ENTER_DISENABLE  0x55
 
-#define ARMFlag  0
+#define ARMFlag  1
 
 #define X1_ID   1
 #define Y1_ID   2
@@ -62,16 +62,17 @@ QString SystemTipsInformation(int TipsID);
 #define DataInitTip    4
 #define DataSaveTip    5
 #define DataResumeTip  6
-#define Offline1Tip    7
-#define Offline2Tip    8
-#define Offline3Tip    9
-#define OfflineMTTip   10
-#define NoDeinit1Tip   11
-#define NoDeinit2Tip   12
-#define NoDeinit3Tip   13
+#define Motor1Tip    7
+#define Motor2Tip    8
+#define Motor3Tip    9
+#define MTTip   10
+#define OfflineTip   11
+#define DeinitTip   12
 
 
 
+
+extern int HomgingModeFlag ;
 extern int fastmode;
 extern int ProgIndex;
 extern int ProgNameNum;
@@ -203,8 +204,8 @@ enum {
     Program_BoardWide = 3,
     Program_BoardThick = 4,
     Program_Material = 5,
-    Program_UpMold = 7,
-    Program_LowerMold = 6,
+    Program_UpMold = 6,
+    Program_LowerMold = 7,
     Program_ProcessNum= 8
 
 };
@@ -308,15 +309,16 @@ extern struct MaterialData  CurrentMaterialTemp;
 
 struct   _AXISPARAMETER
 {
+    int ENABLE_AXIS;
     double LeadScrew;
     unsigned char  MotorDirection;
     double RunSpeed;
     double ManualSpeed;
     double MaxDistance;
     double MinDistance;
-    bool   PositioningMode;
+    unsigned char   PositioningMode;
     double OverrunDistance;
-    double ReferencePosMode;
+    unsigned char  ReferencePosMode;
     double ReferencePos;
 };
 

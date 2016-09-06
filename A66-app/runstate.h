@@ -26,7 +26,8 @@ public:
     void StopRun();
     void ReadTrg( unsigned char pin );
     void initWorkedTotalDialog();
-    void SendMTEnableSignal();
+    void SendMTEnableSignalXYAxis();
+    void SendMTEnableSignalXYRAxis();
     void QuitRunState();
     void ReflashWorkedTotal();
     void systemCheckSafrState();

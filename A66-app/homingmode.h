@@ -19,8 +19,13 @@ public:
 public slots:
     void openHomingModeWin();
     
+private slots:
+
+    void on_toolButton_RunHoming_clicked();
+
 private:
     Ui::HomingMode *ui;
+    int Homging_Scan;
 };
 
 #endif // HOMINGMODE_H

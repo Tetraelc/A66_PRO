@@ -30,6 +30,9 @@ Programdb::Programdb(QWidget *parent) :
 
     initProgram();
     CurrentReg.Current_MotorTips = PrepareTip;
+
+//    RunState *runstate1 = new RunState;
+//     connect(runstate1, SIGNAL(ReturnworkedTotal(int )), this, SLOT(ReflashProgramWrokedNum(int )));
 //    MainWindow *wd = new MainWindow;
 //    connect(this, SIGNAL(sig_returnMainwindow()), wd, SLOT(openMainWindowWin()));
 //    connect(this, SIGNAL(ReflashProgram()), wd, SLOT(ReFlashProgName()));
@@ -552,7 +555,8 @@ void Programdb::on_pushButton_Left_1_clicked()//程序库向上按钮
 void Programdb::on_pushButton_Left_2_clicked()
 {
     ProgramName  *ProgramName1=new ProgramName;
-//    ProgramName1->setWindowFlags(Qt::FramelessWindowHint);
+
+    ProgramName1->setWindowFlags(Qt::FramelessWindowHint);
     ProgramName1->move(200,250);
     connect(ProgramName1, SIGNAL(sig_sndNewName(QString)), this, SLOT(NewProgramLib(QString)));
 

@@ -209,19 +209,17 @@ void Moulds::Display_LowerMoldItem()
 
     //db.close();//释放数据库
 
+
 }
 
 
 void Moulds::ReadforMold()
 {
     bool ok;
-
-
     QSqlTableModel model;
     model.setTable("UpMold");
     model.setFilter("ID =" +QString::number(ui->tableWidget_UpMoulds->currentRow()+1,10));
     model.select();
-   // qDebug("sw");
     for(int i=0;i<model.rowCount();i++)
     {
             QSqlRecord record = model.record(i);
@@ -239,21 +237,18 @@ void Moulds::ReadforMold()
     for(int i=0;i<model.rowCount();i++)
     {
             QSqlRecord record = model.record(i);
-              CurrentLowerMoldTemp.Angle = record.value("Angle").toDouble(&ok);
               CurrentLowerMoldTemp.Height = record.value("Height").toDouble(&ok);
-              CurrentLowerMoldTemp.Radius =  record.value("Radius").toDouble(&ok);
-              CurrentLowerMoldTemp.Impedance = record.value("Impedance").toDouble(&ok);
-              CurrentLowerMoldTemp.SpeedChangePos = record.value("SpeedPostion").toDouble(&ok);
               CurrentLowerMoldTemp.D_V =  record.value("D_V").toDouble(&ok);
+              CurrentLowerMoldTemp.Angle = record.value("Angle").toDouble(&ok);          
+              CurrentLowerMoldTemp.Radius =  record.value("Radius").toDouble(&ok);
+              CurrentLowerMoldTemp.SpeedChangePos = record.value("SpeedPostion").toDouble(&ok);            
               CurrentLowerMoldTemp.SpeedSafeDis = record.value("SpeedChange").toDouble(&ok);
+              CurrentLowerMoldTemp.Impedance = record.value("Impedance").toDouble(&ok);
 
-           qDebug()<<"record.value().toString()"<<record.value("D_V").toString();
+           qDebug()<<"record.value()----------.toString()"<<record.value("D_V").toString();
     }
 
-
-
-
-
+//    qDebug()<<"record.value()+++++++++++++++.toString()";
 
 
 }
@@ -327,17 +322,27 @@ void Moulds::on_lineEdit_D_Height_returnPressed()
 {
     bool ok;
     ReadforMold();
-
+     qDebug("0000");
     if((ui->lineEdit_D_Height->text().toDouble(&ok) > 0) && (ui->lineEdit_D_Height->text().toDouble(&ok) <= 9999) )
     {
+        qDebug("1111");
+        qDebug()<<"ui->tableWidget_LowerMoulds->currentRow()"<<ui->tableWidget_LowerMoulds->currentRow();
+        qDebug()<<"ui->lineEdit_D_Height->text()"<<ui->lineEdit_D_Height->text();
+
+        qDebug()<<"ui->lineEdit_D_Height->text()"<<ui->lineEdit_D_Height->text();
         ui->tableWidget_LowerMoulds->setItem(ui->tableWidget_LowerMoulds->currentRow(), LowerMold_Height, new QTableWidgetItem(ui->lineEdit_D_Height->text()));
-        Update_LowerMoldItem(ui->tableWidget_UpMoulds->item(ui->tableWidget_LowerMoulds->currentRow(),LowerMold_Id)->text().toInt(),LowerMold_Height,ui->lineEdit_D_Height->text());
+        qDebug("--------");
+//         Update_UpMoldItem(ui->tableWidget_UpMoulds->item(ui->tableWidget_UpMoulds->currentRow(),UpMold_Id)->text().toInt(),UpMold_Radius,ui->lineEdit_U_Radius->text());
+        Update_LowerMoldItem(ui->tableWidget_LowerMoulds->item(ui->tableWidget_LowerMoulds->currentRow(),LowerMold_Id)->text().toInt(),LowerMold_Height,ui->lineEdit_D_Height->text());
+        qDebug("+++++++");
     }
     else
     {
+         qDebug("2222");
         ui->tableWidget_LowerMoulds->setItem(ui->tableWidget_LowerMoulds->currentRow(), LowerMold_Height, new QTableWidgetItem(QString::number(CurrentLowerMoldTemp.Height,'.',0)));
         ui->lineEdit_D_Height->setText(QString::number(CurrentLowerMoldTemp.Height,'.',0));
     }
+    qDebug("3333");
 }
 void Moulds::on_lineEdit_D_V_returnPressed()
 {
@@ -347,7 +352,7 @@ void Moulds::on_lineEdit_D_V_returnPressed()
     if((ui->lineEdit_D_V->text().toDouble(&ok) > 0) && (ui->lineEdit_D_V->text().toDouble(&ok) <= 9999) )
     {
         ui->tableWidget_LowerMoulds->setItem(ui->tableWidget_LowerMoulds->currentRow(), LowerMold_DV, new QTableWidgetItem(ui->lineEdit_D_V->text()));
-        Update_LowerMoldItem(ui->tableWidget_UpMoulds->item(ui->tableWidget_LowerMoulds->currentRow(),LowerMold_Id)->text().toInt(),LowerMold_DV,ui->lineEdit_D_V->text());
+        Update_LowerMoldItem(ui->tableWidget_LowerMoulds->item(ui->tableWidget_LowerMoulds->currentRow(),LowerMold_Id)->text().toInt(),LowerMold_DV,ui->lineEdit_D_V->text());
     }
     else
     {
@@ -363,7 +368,7 @@ void Moulds::on_lineEdit_D_Angle_returnPressed()
     if((ui->lineEdit_D_Angle->text().toDouble(&ok) > 0) && (ui->lineEdit_D_Angle->text().toDouble(&ok) <= 9999) )
     {
         ui->tableWidget_LowerMoulds->setItem(ui->tableWidget_LowerMoulds->currentRow(), LowerMold_Angle, new QTableWidgetItem(ui->lineEdit_D_Angle->text()));
-        Update_LowerMoldItem(ui->tableWidget_UpMoulds->item(ui->tableWidget_LowerMoulds->currentRow(),LowerMold_Id)->text().toInt(),LowerMold_Angle,ui->lineEdit_D_Angle->text());
+        Update_LowerMoldItem(ui->tableWidget_LowerMoulds->item(ui->tableWidget_LowerMoulds->currentRow(),LowerMold_Id)->text().toInt(),LowerMold_Angle,ui->lineEdit_D_Angle->text());
     }
     else
     {
@@ -379,7 +384,7 @@ void Moulds::on_lineEdit_D_Radius_returnPressed()
     if((ui->lineEdit_D_Radius->text().toDouble(&ok) > 0) && (ui->lineEdit_D_Radius->text().toDouble(&ok) <= 9999) )
     {
         ui->tableWidget_LowerMoulds->setItem(ui->tableWidget_LowerMoulds->currentRow(), LowerMold_Radius, new QTableWidgetItem(ui->lineEdit_D_Radius->text()));
-        Update_LowerMoldItem(ui->tableWidget_UpMoulds->item(ui->tableWidget_LowerMoulds->currentRow(),LowerMold_Id)->text().toInt(),LowerMold_Radius,ui->lineEdit_D_Radius->text());
+        Update_LowerMoldItem(ui->tableWidget_LowerMoulds->item(ui->tableWidget_LowerMoulds->currentRow(),LowerMold_Id)->text().toInt(),LowerMold_Radius,ui->lineEdit_D_Radius->text());
     }
     else
     {
@@ -395,7 +400,7 @@ void Moulds::on_lineEdit_D_Speed_returnPressed()
     if((ui->lineEdit_D_Speed->text().toDouble(&ok) > 0) && (ui->lineEdit_D_Speed->text().toDouble(&ok) <= 9999) )
     {
         ui->tableWidget_LowerMoulds->setItem(ui->tableWidget_LowerMoulds->currentRow(), LowerMold_SpeedPostion, new QTableWidgetItem(ui->lineEdit_D_Speed->text()));
-        Update_LowerMoldItem(ui->tableWidget_UpMoulds->item(ui->tableWidget_LowerMoulds->currentRow(),LowerMold_Id)->text().toInt(),LowerMold_SpeedPostion,ui->lineEdit_D_Speed->text());
+        Update_LowerMoldItem(ui->tableWidget_LowerMoulds->item(ui->tableWidget_LowerMoulds->currentRow(),LowerMold_Id)->text().toInt(),LowerMold_SpeedPostion,ui->lineEdit_D_Speed->text());
     }
     else
     {
@@ -625,7 +630,7 @@ void  Moulds::NewUpMold()
 //       QMessageBox::critical(0,QObject::tr("Error"),
 //                             db.lastError().text());//打开数据库连接
 //   }
-
+       ui->pushButton_Left_8->setEnabled(false);
 
        QSqlTableModel model;
        model.setTable("UpMold");
@@ -637,6 +642,7 @@ void  Moulds::NewUpMold()
        model.setData(model.index(row,UpMold_Impedance),ui->tableWidget_UpMoulds->item(ui->tableWidget_UpMoulds->currentRow(),UpMold_Impedance)->text());
 
        model.submitAll();
+       ui->pushButton_Left_8->setEnabled(true);
 
    //db.close();//释放数据库
 }
@@ -666,6 +672,7 @@ void  Moulds::DeleteLowerMold()
    query.exec("UPDATE LowerMold SET ID = ID - 1 WHERE ID > " + QString::number(Current_LowerMoldRow,10));
    //db.close();//释放数据库
 
+
 }
 
 
@@ -689,22 +696,21 @@ void  Moulds::NewLowerMold()
 //       QMessageBox::critical(0,QObject::tr("Error"),
 //                             db.lastError().text());//打开数据库连接
 //   }
+       QSqlTableModel model;
+       model.setTable("LowerMold");
+       int row = 0;
+       model.insertRows(row,1);
+
+       model.setData(model.index(row,LowerMold_Height),ui->tableWidget_LowerMoulds->item(ui->tableWidget_LowerMoulds->currentRow(),LowerMold_Height)->text());
+       model.setData(model.index(row,LowerMold_DV),ui->tableWidget_LowerMoulds->item(ui->tableWidget_LowerMoulds->currentRow(),LowerMold_DV)->text());
+       model.setData(model.index(row,LowerMold_Angle),ui->tableWidget_LowerMoulds->item(ui->tableWidget_LowerMoulds->currentRow(),LowerMold_Angle)->text());
+       model.setData(model.index(row,LowerMold_Radius),ui->tableWidget_LowerMoulds->item(ui->tableWidget_LowerMoulds->currentRow(),LowerMold_Radius)->text());
+       model.setData(model.index(row,LowerMold_SpeedPostion),ui->tableWidget_LowerMoulds->item(ui->tableWidget_LowerMoulds->currentRow(),LowerMold_SpeedPostion)->text());
+       model.setData(model.index(row,LowerMold_SpeedChange),ui->tableWidget_LowerMoulds->item(ui->tableWidget_LowerMoulds->currentRow(),LowerMold_SpeedChange)->text());
+       model.setData(model.index(row,LowerMold_Impedance),ui->tableWidget_LowerMoulds->item(ui->tableWidget_LowerMoulds->currentRow(),LowerMold_Impedance)->text());
+       model.submitAll();
 
 
-   QSqlTableModel model;
-   model.setTable("LowerMold");
-   int row = 0;
-   model.insertRows(row,1);
-
-   model.setData(model.index(row,LowerMold_Height),ui->tableWidget_LowerMoulds->item(ui->tableWidget_LowerMoulds->currentRow(),LowerMold_Height)->text());
-   model.setData(model.index(row,LowerMold_DV),ui->tableWidget_LowerMoulds->item(ui->tableWidget_LowerMoulds->currentRow(),LowerMold_DV)->text());
-   model.setData(model.index(row,LowerMold_Angle),ui->tableWidget_LowerMoulds->item(ui->tableWidget_LowerMoulds->currentRow(),LowerMold_Angle)->text());
-   model.setData(model.index(row,LowerMold_Radius),ui->tableWidget_LowerMoulds->item(ui->tableWidget_LowerMoulds->currentRow(),LowerMold_Radius)->text());
-   model.setData(model.index(row,LowerMold_SpeedPostion),ui->tableWidget_LowerMoulds->item(ui->tableWidget_LowerMoulds->currentRow(),LowerMold_SpeedPostion)->text());
-   model.setData(model.index(row,LowerMold_SpeedChange),ui->tableWidget_LowerMoulds->item(ui->tableWidget_LowerMoulds->currentRow(),LowerMold_SpeedChange)->text());
-   model.setData(model.index(row,LowerMold_Impedance),ui->tableWidget_LowerMoulds->item(ui->tableWidget_LowerMoulds->currentRow(),LowerMold_Impedance)->text());
-
-   model.submitAll();
    //db.close();//释放数据库
 }
 
@@ -753,18 +759,24 @@ void Moulds::on_pushButton_Left_4_clicked()
 
 void Moulds::on_pushButton_Left_2_clicked()
 {
+    static int i = 0;
+    ui->pushButton_Left_2->setEnabled(false);
     NewLowerMold();
     Display_LowerMoldItem();
     ui->tableWidget_LowerMoulds->selectRow(ui->tableWidget_LowerMoulds->rowCount()-1);
+    ui->pushButton_Left_2->setEnabled(true);
+    qDebug()<<"i"<<i++;
 }
 
 void Moulds::on_pushButton_Left_3_clicked()
 {
+    ui->pushButton_Left_3->setEnabled(false);
     if(ui->tableWidget_LowerMoulds->rowCount()>1)
     {
         DeleteLowerMold();
         Display_LowerMoldItem();
     }
+    ui->pushButton_Left_3->setEnabled(true);
 }
 
 void Moulds::on_pushButton_Left_12_clicked()
@@ -793,18 +805,22 @@ void Moulds::on_pushButton_Left_9_clicked()
 
 void Moulds::on_pushButton_Left_8_clicked()
 {
+    ui->pushButton_Left_8->setEnabled(false);
     NewUpMold();
     Display_UpMoldItem();
     ui->tableWidget_UpMoulds->selectRow(ui->tableWidget_UpMoulds->rowCount()-1);
+    ui->pushButton_Left_8->setEnabled(true);
 }
 
 void Moulds::on_pushButton_Left_10_clicked()
 {
+    ui->pushButton_Left_10->setEnabled(false);
     if(ui->tableWidget_UpMoulds->rowCount()>1)
     {
         DeleteUpMold();
         Display_UpMoldItem();
     }
+     ui->pushButton_Left_10->setEnabled(true);
 }
 
 void Moulds::Display_MaterialItem()
@@ -914,6 +930,23 @@ bool  Moulds::NewMaterial()
    model.setData(model.index(row,Material_Name),ui->tableWidget_Material->item(ui->tableWidget_Material->currentRow(),Material_Name)->text());
    model.setData(model.index(row,Material_EMold),ui->tableWidget_Material->item(ui->tableWidget_Material->currentRow(),Material_EMold)->text());
    model.setData(model.index(row,Material_StrengthFactor),ui->tableWidget_Material->item(ui->tableWidget_Material->currentRow(),Material_StrengthFactor)->text());
+
+   qDebug()<<"ui->tableWidget_Material->item(ui->tableWidget_Material->currentRow(),Material_Name)->text()"<<ui->tableWidget_Material->item(ui->tableWidget_Material->currentRow(),Material_Name)->text().split("-").at(0);
+//    if(ui->tableWidget_Material->item(ui->tableWidget_Material->currentRow(),Material_Name)->text().split("-").at(0).compare(trUtf8("铝"))== 0)
+//    {
+//        qDebug("sw");
+//        model.setData(model.index(row,Material_Type),1);
+//        qDebug("sw");
+//    }
+//    else if(ui->tableWidget_Material->item(ui->tableWidget_Material->currentRow(),Material_Name)->text().split("-").at(0).compare(trUtf8("不锈钢"))== 0)
+//    {
+//       model.setData(model.index(row,Material_Type),2);
+//    }
+//    else if(ui->tableWidget_Material->item(ui->tableWidget_Material->currentRow(),Material_Name)->text().split("-").at(0).compare(trUtf8("铁"))== 0)
+//    {
+//       model.setData(model.index(row,Material_Type),3);
+//    }
+   //
    model.submitAll();
 
    //db.close();//释放数据库

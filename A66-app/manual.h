@@ -63,6 +63,8 @@ private slots:
 
     void on_pushButton_M_RBack_released();
 
+    void on_pushButton_B6_6_clicked();
+
 private:
     Ui::Manual *ui;
     Thread ThreadX;

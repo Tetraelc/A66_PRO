@@ -24,6 +24,7 @@
 #include "global.h"
 #include "manual.h"
 #include "thread.h"
+#include "homingmode.h"
 
 extern int XMotorStatusWord,YMotorStatusWord;
 extern int MotorXDisplayFalg,MotorYDisplayFalg;
@@ -172,6 +173,11 @@ int main(int argc, char *argv[])
 
     MyThread ThreadA;
     ThreadA.start();
+
+//    HomingMode hm;
+//    hm.setWindowFlags(Qt::FramelessWindowHint);
+//    hm.move(0,WIDGET_Y);
+//    hm.show();
 
     Programdb Pg ;
     Pg.setWindowFlags(Qt::FramelessWindowHint);

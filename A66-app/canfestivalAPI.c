@@ -32,23 +32,23 @@ S_motor motor[MAX_MOTOR_NUM] ; //motor
 S_Data_trans init_buf[8] = {{0x08,0x6040,0x00,0x02,0x06,                       //id0x01
                                   0x6040,0x00,0x02,0x0f,
                                   0x1800,0x05,0x02,0x11,//PDO时间
-                                  0x1800,0x02,0x01,0xfe,//触发模式
+                                  0x1800,0x02,0x01,0xff,//触发模式
                                   0x1017,0x00,0x02,101,
                                   0x605a,0x00,0x02,0x06,
                                   0x6060,0x00,0x01,0x01,
                                   0x6093,0x01,0x04,0x0a},
-                            {0x07,0x6040,0x00,0x02,0x06,
+                            {0x08,0x6040,0x00,0x02,0x06,
                                   0x6040,0x00,0x02,0x0f,
                                   0x1800,0x05,0x02,0x12,
-                                  0x1800,0x02,0x01,0xfe,//触发模式
+                                  0x1800,0x02,0x01,0xff,//触发模式
                                   0x1017,0x00,0x02,106,
                                   0x605a,0x00,0x02,0x06,
                                   0x6060,0x00,0x01,0x01,
                                   0x6093,0x01,0x04,0x0a},
-                            {0x07,0x6040,0x00,0x02,0x06,
+                            {0x08,0x6040,0x00,0x02,0x06,
                                   0x6040,0x00,0x02,0x0f,
                                   0x1800,0x05,0x02,0x13,
-                                  0x1800,0x02,0x01,0xfe,//触发模式
+                                  0x1800,0x02,0x01,0xff,//触发模式
                                   0x1017,0x00,0x02,111,
                                   0x605a,0x00,0x02,0x06,
                                   0x6060,0x00,0x01,0x01,
@@ -103,12 +103,25 @@ S_Data_trans SystemSet_Motor        = { 0x02, 0x607B,0x01,0x04,0xAA,// 最小限
                                               0x607B,0x02,0x04,0xAA,// 最大限位
                                               0x6093,0x01,0x04,0x0a,
                                        };
-S_Data_trans HomingModeDate    = {0x05,0x6060,0x00,0x01,0x06,
-                                       0x6098,0x00,0x01,0x01,//正限位开关
-                                       0x6040,0x00,0x02,0x0f,
-                                       0x6040,0x00,0x02,0x1f,
-                                       0x6060,0x00,0x01,0x01,
-                                    };
+S_Data_trans HomingModeDate[3]    = {{0x04,
+                                           0x6060,0x00,0x01,0x06,
+                                           0x6098,0x00,0x01,0x02,//正限位开关
+                                           0x6040,0x00,0x02,0x0f,
+                                           0x6040,0x00,0x02,0x1f,
+                                           },//0x6060,0x00,0x01,0x01,
+                                     {0x04,
+                                           0x6060,0x00,0x01,0x06,
+                                           0x6098,0x00,0x01,0x02,//正限位开关
+                                           0x6040,0x00,0x02,0x0f,
+                                           0x6040,0x00,0x02,0x1f,
+                                           },//0x6060,0x00,0x01,0x01,
+                                      {0x04,
+                                            0x6060,0x00,0x01,0x06,
+                                           0x6098,0x00,0x01,0x02,//正限位开关
+                                           0x6040,0x00,0x02,0x0f,
+                                           0x6040,0x00,0x02,0x1f,
+                                          }, //0x6060,0x00,0x01,0x01,
+                                     };
 
 
 
@@ -186,13 +199,13 @@ static void CheckSDOAndContinue(CO_Data* d, UNS8 nodeId)
     {
         if(motor[nodeId-1].SDO_status        == SDO_Write_Multi_check)
         {
-             MSG_USER(0x00,"Master : Failed SDO_WRITE_Multi_check \n", motor[nodeId].initStep);
+             MSG_USER(0x00,"Master : Failed SDO_WRITE_Multi_check \n", motor[nodeId-1].initStep);
         }
         else if(motor[nodeId-1].SDO_status   == SDO_Write_One_check)
         {
              motor[nodeId-1].Write_One_Finsh_state = FAIL_SEND;
         }
-        MSG_USER(0x00,"Master : Failed in initializing slave \n", motor[nodeId].initStep);
+        MSG_USER(0x00,"Master : Failed in initializing slave \n", motor[nodeId-1].initStep);
         MSG_USER(0x01,"Master : Failed in initializing slave \n", abortCode);
         closeSDOtransfer(d, nodeId, SDO_CLIENT);
 
@@ -340,7 +353,7 @@ UNS8 Write_MOTOR_Multi_Data(S_Data_trans *buf,UNS8 nodeId)
 
 void ConfigureSlaveNode(CO_Data* d, UNS8 nodeId)
 {
-      UNS8 reslut;
+       UNS8 reslut;
        motor[nodeId-1].SDO_status = SDO_ConfigureSlaveNode_check;
        reslut = SDO_STEP(d,nodeId,&init_buf[nodeId-1],&motor[nodeId-1].initStep,CheckSDOAndContinue);
       if(reslut == 0)
@@ -351,6 +364,7 @@ void ConfigureSlaveNode(CO_Data* d, UNS8 nodeId)
       masterSendNMTstateChange (d, nodeId, NMT_Start_Node);
       d->NMTable[nodeId] = Operational;
      }
+
 }
 static UNS8 SDO_STEP(CO_Data* d,UNS8 nodeId,S_Data_trans* cmd,UNS8* Step,SDOCallback_t Callback)
 {

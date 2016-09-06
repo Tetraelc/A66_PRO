@@ -8,7 +8,7 @@
 #include "yreferencepoint.h"
 #include "deleoplength.h"
 #include "systemsetting.h"
-
+#include "mainwindow.h"
 
 extern bool stopped;
 extern QString ReturnMotorValue;
@@ -105,8 +105,8 @@ void Manual::timerEvent(QTimerEvent *t) //定时器事件
     }
     if(t->timerId()==id2){
 
-        Checkstatus(0x01);
-        Checkstatus(0x02);
+//        Checkstatus(0x01);
+//        Checkstatus(0x02);
 
     }
     if(t->timerId()==id3){
@@ -221,8 +221,8 @@ int Manual::Checkstatus(int motor_id)
     int temp1,temp2,temp3;
 
     status = MOTOR_STATUS[motor_id-1] & STATUS_MASK;
-    MSG_USER(0x8000,"MOTOR_STATUS[motor_id-1]",MOTOR_STATUS[motor_id-1]);
-    MSG_USER(0x8000,"status:",status);
+ //   MSG_USER(0x8000,"MOTOR_STATUS[motor_id-1]",MOTOR_STATUS[motor_id-1]);
+  //  MSG_USER(0x8000,"status:",status);
     switch(status)
     {
     case Not_ready_to_switch_on:  MSG_USER(0x8000,"1_Not_ready_to_switch_on",motor_id);  break;
@@ -512,9 +512,10 @@ void Manual::on_pushButton_Adjust_clicked()
     connect(&mad, SIGNAL(sig_sndManualR(QString)),this, SLOT(ChangeRCurrentPostion(QString)));
     QRect AdjusttRect = ui->pushButton_Adjust->rect();
     qDebug()<<"AdjusttRect"<<AdjusttRect.left();
-     qDebug()<<"AdjusttRect"<<AdjusttRect.bottomLeft();
+    qDebug()<<"AdjusttRect"<<AdjusttRect.bottomLeft();
 
     QPoint madPoint = QPoint(627, 90);
+    mad.setWindowFlags(Qt::FramelessWindowHint);
     mad.move(madPoint);
     mad.exec();
 
@@ -569,3 +570,9 @@ void Manual::on_toolButton_YReferencePoint_clicked()
 
 }
 
+
+void Manual::on_pushButton_B6_6_clicked()
+{
+    MainWindow mv;
+    mv.MainWinState();
+}

@@ -102,7 +102,7 @@ extern S_Data_trans set_Postion_Speed_buf[4];
 extern S_Data_trans Config_valve_buf;
 extern S_Data_trans Adjust_ManualDate;
 extern S_Data_trans SystemSet_Motor;
-extern S_Data_trans HomingModeDate;
+extern S_Data_trans HomingModeDate[3];
 extern S_Data_trans SystemSet_MT;
 extern int ManualDat;
 

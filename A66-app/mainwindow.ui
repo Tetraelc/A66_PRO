@@ -188,11 +188,6 @@
       <bool>true</bool>
      </property>
     </widget>
-    <zorder>label</zorder>
-    <zorder>toolButton_T1</zorder>
-    <zorder>toolButton_State</zorder>
-    <zorder>toolButton_ProName</zorder>
-    <zorder>toolButton_B0_2</zorder>
    </widget>
    <widget class="QFrame" name="frame">
     <property name="geometry">
