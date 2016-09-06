@@ -62,13 +62,6 @@ void Programdb::openProgramWin()
     Display_ProgramItem();
     ui->comboBox_P_material->setCurrentIndex(CurrentReg.Materialtemp[0]);
     connect(ui->comboBox_P_material,SIGNAL(currentIndexChanged(const QString &)),this,SLOT(UpdtaeMaterialDat()));
-    ui->tableWidget_Programdb->setItem(ui->tableWidget_Programdb->item(ui->tableWidget_Programdb->currentRow(),Program_Id)->text().toInt(),Program_ProcessNum,new QTableWidgetItem(QString::number( CurrentReg.Current_WorkedTotal,10)));
-
-
-    qDebug()<<"CurrentReg.Current_WorkedTotal"<<CurrentReg.Current_WorkedTotal;
-//    CurrentReg.Current_MotorTips = PrepareTip;
-//    CurrentReg.Current_MotorTipResult = SystemTipsInformation(CurrentReg.Current_MotorTips);
-   // qDebug()<<"Materialtemp[0]"<<CurrentReg.Materialtemp[0];
 
 }
 
@@ -112,7 +105,7 @@ void Programdb::initProgram(void)
     Display_ProgramItem();
     ui->comboBox_P_material->setCurrentIndex(CurrentReg.Materialtemp[0]);
 
-    QRegExp rx("^(-?[0]|-?[1-9][0-9]{0,3})(?:\\.\\d{1,3})?$|(^\\t?$)");
+    QRegExp rx("^(-?[0]|-?[1-9][0-9]{0,3})(?:\\.\\d{1,2})?$|(^\\t?$)");
     QRegExpValidator *pReg = new QRegExpValidator(rx, this);
     ui->lineEdit_P_boardThickness->setValidator(pReg);
     ui->lineEdit_P_BoardWidth->setValidator(pReg);
@@ -149,9 +142,7 @@ void Programdb::ReflashMaterialdb()
 
 void Programdb::ReflashProgramWrokedNum(int Num)
 {
-    qDebug()<<"Num"<<Num;
     Update_ProgramLibItem(ui->tableWidget_Programdb->item(ui->tableWidget_Programdb->currentRow(),Program_Id)->text().toInt(),Program_ProcessNum,QString::number( Num,10));
-
 }
 
 
@@ -332,6 +323,7 @@ void  Programdb::DeleteProgramLib()
 
    query.exec("UPDATE ProgramLib SET ID = ID - 1 WHERE ID > " + QString::number(CurrentReg.Current_ProgramLibRow,10));
    //db.close();//释放数据库
+   ReflashProLinedit();
 
 }
 
@@ -383,50 +375,52 @@ void Programdb::Update_ProgramLibItem(int Id,int Col,QString Value)
     //db.close();//释放数据库
 }
 
+void Programdb::ReflashProLinedit()
+{
+
+    QString CurrentProgramMoldId = ui->tableWidget_Programdb->item(ui->tableWidget_Programdb->currentRow(),Program_Id)->text();
+    CurrentReg.CurrentProgramName = ui->tableWidget_Programdb->item(ui->tableWidget_Programdb->currentRow(),Program_Name)->text();
+    qDebug()<<"CurrentReg.CurrentProgramName"<<CurrentReg.CurrentProgramName;
+
+ //   if(!db.open())
+ //   {
+ //       QMessageBox::critical(0,QObject::tr("Error"),
+ //                             db.lastError().text());//打开数据库连接
+ //   }
+
+    QSqlTableModel model;
+    model.setTable("ProgramLib");
+    model.setFilter("ID = " +CurrentProgramMoldId);
+    model.select();
+
+    for(int i=0;i<model.rowCount();i++)
+    {
+            QSqlRecord record = model.record(i);
+
+            ui->lineEdit_P_boardThickness->setText(record.value("BoardThick").toString());
+            ui->lineEdit_P_UpMolds->setText(record.value("LowerMold").toString());
+            ui->lineEdit_P_LowerMolds->setText(record.value("UpMold").toString());
+            ui->lineEdit_P_BoardWidth->setText(record.value("BoardWide").toString());
+            ui->comboBox_P_material->setCurrentIndex(record.value("Material").toInt());
+            //ui->lineEdit_P_Total->setText(record.value("WorkedTotal").toString());
+            qDebug()<<"record.value(BoardWide).toString()"<<record.value("BoardWide").toString();
+    }
+    CurrentReg.Current_ProgramLibRow = ui->tableWidget_Programdb->currentRow();
+    QPixmap pix;
+    pix.load("PIC/P01.jpg");
+    ui->label_pic->setPixmap(pix);
+    //db.close();//释放数据库
+
+    emit ReflashProgram();
+
+}
+
+
 
 void Programdb::on_tableWidget_Programdb_itemSelectionChanged()
 {
 
-   QString CurrentProgramMoldId = ui->tableWidget_Programdb->item(ui->tableWidget_Programdb->currentRow(),Program_Id)->text();
-   CurrentReg.CurrentProgramName = ui->tableWidget_Programdb->item(ui->tableWidget_Programdb->currentRow(),Program_Name)->text();
-   qDebug()<<"CurrentReg.CurrentProgramName"<<CurrentReg.CurrentProgramName;
-
-//   if(!db.open())
-//   {
-//       QMessageBox::critical(0,QObject::tr("Error"),
-//                             db.lastError().text());//打开数据库连接
-//   }
-
-   QSqlTableModel model;
-   model.setTable("ProgramLib");
-   model.setFilter("ID = " +CurrentProgramMoldId);
-   model.select();
-
-   for(int i=0;i<model.rowCount();i++)
-   {
-           QSqlRecord record = model.record(i);
-
-           ui->lineEdit_P_boardThickness->setText(record.value("BoardThick").toString());
-           ui->lineEdit_P_UpMolds->setText(record.value("LowerMold").toString());
-           ui->lineEdit_P_LowerMolds->setText(record.value("UpMold").toString());
-           ui->lineEdit_P_BoardWidth->setText(record.value("BoardWide").toString());
-           ui->comboBox_P_material->setCurrentIndex(record.value("Material").toInt());
-           //ui->lineEdit_P_Total->setText(record.value("WorkedTotal").toString());
-           qDebug()<<"record.value(BoardWide).toString()"<<record.value("BoardWide").toString();
-   }
-   CurrentReg.Current_ProgramLibRow = ui->tableWidget_Programdb->currentRow();
-
-
-
-
-   QPixmap pix;
-   pix.load("PIC/P01.jpg");
-
-   ui->label_pic->setPixmap(pix);
-
-   //db.close();//释放数据库
-
-   emit ReflashProgram();
+    ReflashProLinedit();
 
 }
 

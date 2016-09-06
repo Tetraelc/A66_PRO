@@ -27,7 +27,7 @@ Step::Step(QWidget *parent) :
     yValue_Scan =startTimer(10);
 //    RunState runstate1 ;
 //    runstate1.ReadForRun(CurrentReg.Current_StepProgramRow);
-    QRegExp rxstep("^(-?[0]|-?[1-9][0-9]{0,3})(?:\\.\\d{1,3})?$|(^\\t?$)");
+    QRegExp rxstep("^(-?[0]|-?[1-9][0-9]{0,3})(?:\\.\\d{1,2})?$|(^\\t?$)");
     QRegExpValidator *pRegstep = new QRegExpValidator(rxstep, this);
 
     ui->lineEdit_S_Raxis->setValidator(pRegstep);
@@ -196,11 +196,11 @@ void  Step::NewStepProgram()
 void  Step::DeleteStepProgram()
 {
     QString CurrentStepProgramId = ui->tableWidget_Step->item(ui->tableWidget_Step->currentRow(),StepProgram_Id)->text();
-   if(!db.open())
-   {
-       QMessageBox::critical(0,QObject::tr("Error"),
-                             db.lastError().text());//打开数据库连接
-   }
+//   if(!db.open())
+//   {
+//       QMessageBox::critical(0,QObject::tr("Error"),
+//                             db.lastError().text());//打开数据库连接
+//   }
 
    QSqlTableModel model_StepTotal;
    QSqlTableModel model;
@@ -227,6 +227,8 @@ void  Step::DeleteStepProgram()
        model_StepTotal.setRecord(0,record);
        model_StepTotal.submitAll();
    }
+
+   ReflashLinedit();
 
    //db.close();//释放数据库
 }
@@ -570,8 +572,10 @@ void Step::on_lineEdit_S_Raxis_returnPressed()
 
 }
 
-void Step::on_tableWidget_Step_itemSelectionChanged()
+
+void Step::ReflashLinedit()
 {
+
     QString CurrentStepProgramId = ui->tableWidget_Step->item(ui->tableWidget_Step->currentRow(),StepProgram_Id)->text();
 
 //   if(!db.open())
@@ -608,8 +612,13 @@ void Step::on_tableWidget_Step_itemSelectionChanged()
 
    }
    CurrentReg.Current_StepProgramRow = ui->tableWidget_Step->currentRow();
+     //db.close();//释放数据库
+}
 
-   //db.close();//释放数据库
+void Step::on_tableWidget_Step_itemSelectionChanged()
+{
+
+    ReflashLinedit();
 
 }
 

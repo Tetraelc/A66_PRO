@@ -105,7 +105,7 @@ void Moulds::initMoulds(void)
     ui->lineEdit_MaterialName->setText(ui->tableWidget_Material->item(CurrentReg.Current_MaterialRow,Material_Name)->text().split("-").at(1));
 
     //限制lineEdit的数据格式
-    QRegExp rx("^(-?[0]|-?[1-9][0-9]{0,3})(?:\\.\\d{1,3})?$|(^\\t?$)");
+    QRegExp rx("^(-?[0]|-?[1-9][0-9]{0,3})(?:\\.\\d{1,2})?$|(^\\t?$)");
     QRegExpValidator *pReg = new QRegExpValidator(rx, this);
     ui->lineEdit_U_Height->setValidator(pReg);
     ui->lineEdit_U_Angle->setValidator(pReg);
@@ -421,10 +421,10 @@ void Moulds::on_lineEdit_D_Impedance_returnPressed()
 //    Update_LowerMoldItem(ui->tableWidget_UpMoulds->item(ui->tableWidget_UpMoulds->currentRow(),LowerMold_Id)->text().toInt(),LowerMold_Impedance,ui->lineEdit_D_Impedance->text());
 }
 
-
-void Moulds::on_tableWidget_LowerMoulds_itemSelectionChanged()
+void Moulds::ReflashLowerLinedit()
 {
-     QString CurrentLowerMoldId = ui->tableWidget_LowerMoulds->item(ui->tableWidget_LowerMoulds->currentRow(),LowerMold_Id)->text();
+
+    QString CurrentLowerMoldId = ui->tableWidget_LowerMoulds->item(ui->tableWidget_LowerMoulds->currentRow(),LowerMold_Id)->text();
 
 //    if(!db.open())
 //    {
@@ -432,33 +432,35 @@ void Moulds::on_tableWidget_LowerMoulds_itemSelectionChanged()
 //                              db.lastError().text());//打开数据库连接
 //    }
 
-    QSqlTableModel model;
-    model.setTable("LowerMold");
-    model.setFilter("ID = " +CurrentLowerMoldId);
-    model.select();
+   QSqlTableModel model;
+   model.setTable("LowerMold");
+   model.setFilter("ID = " +CurrentLowerMoldId);
+   model.select();
 
 
-    for(int i=0;i<model.rowCount();i++)
-    {
-            QSqlRecord record = model.record(i);
+   for(int i=0;i<model.rowCount();i++)
+   {
+           QSqlRecord record = model.record(i);
 
-            ui->lineEdit_D_Height->setText(record.value("Height").toString());
-            ui->lineEdit_D_V->setText(record.value("D_V").toString());
-            ui->lineEdit_D_Angle->setText(record.value("Angle").toString());
-            ui->lineEdit_D_Radius->setText(record.value("Radius").toString());
-            ui->lineEdit_D_Speed->setText(record.value("SpeedPostion").toString());
+           ui->lineEdit_D_Height->setText(record.value("Height").toString());
+           ui->lineEdit_D_V->setText(record.value("D_V").toString());
+           ui->lineEdit_D_Angle->setText(record.value("Angle").toString());
+           ui->lineEdit_D_Radius->setText(record.value("Radius").toString());
+           ui->lineEdit_D_Speed->setText(record.value("SpeedPostion").toString());
 //            ui->lineEdit_D_XCorrect->setText(record.value("SpeedChange").toString());
 //            ui->lineEdit_D_Impedance->setText(record.value("Impedance").toString());
-            //qDebug()<<"record.value().toString()"<<record.value("Id").toString();
-    }
-    Current_LowerMoldRow = ui->tableWidget_LowerMoulds->currentRow();
+           //qDebug()<<"record.value().toString()"<<record.value("Id").toString();
+   }
+   Current_LowerMoldRow = ui->tableWidget_LowerMoulds->currentRow();
 
-    //db.close();//释放数据库
+   //db.close();//释放数据库
+
 
 }
 
-void Moulds::on_tableWidget_UpMoulds_itemSelectionChanged()
+void Moulds::ReflashUpLinedit()
 {
+
 
     QString CurrentUpMpldId = ui->tableWidget_UpMoulds->item(ui->tableWidget_UpMoulds->currentRow(),UpMold_Id)->text();
 //    if(!db.open())
@@ -489,7 +491,18 @@ void Moulds::on_tableWidget_UpMoulds_itemSelectionChanged()
   //  ui->tableWidget_UpMoulds->selectRow(0);
     //db.close();//释放数据库
 
+}
 
+
+
+void Moulds::on_tableWidget_LowerMoulds_itemSelectionChanged()
+{
+  ReflashLowerLinedit();
+}
+
+void Moulds::on_tableWidget_UpMoulds_itemSelectionChanged()
+{
+   ReflashUpLinedit();
 }
 
 void Moulds::Update_UpMoldItem(int Id,int Col,QString Value)
@@ -617,7 +630,7 @@ void  Moulds::DeleteUpMold()
    QSqlQuery query;
    query.exec("UPDATE UpMold SET ID = ID - 1 WHERE ID > " + QString::number(Current_UpMoldRow,10));
 
-
+    ReflashUpLinedit();
    //db.close();//释放数据库
 }
 
@@ -671,6 +684,7 @@ void  Moulds::DeleteLowerMold()
    QSqlQuery query;
    query.exec("UPDATE LowerMold SET ID = ID - 1 WHERE ID > " + QString::number(Current_LowerMoldRow,10));
    //db.close();//释放数据库
+   ReflashLowerLinedit();
 
 
 }
@@ -884,7 +898,7 @@ void  Moulds::DeleteMaterial()
    }
    QSqlQuery query;
    query.exec("UPDATE Materialdb SET ID = ID - 1 WHERE ID > " + QString::number(CurrentReg.Current_MaterialRow,10));
-
+   ReflashMaterialLinedit();
 
    //db.close();//释放数据库
 }
@@ -999,9 +1013,7 @@ void Moulds::on_pushButton_M_Del_clicked()
     }
 }
 
-
-
-void Moulds::on_tableWidget_Material_itemSelectionChanged()
+void Moulds::ReflashMaterialLinedit()
 {
 
     CurrentReg.Current_MaterialRow = ui->tableWidget_Material->currentRow();
@@ -1022,6 +1034,13 @@ void Moulds::on_tableWidget_Material_itemSelectionChanged()
         ui->comboBox_material->setCurrentIndex(2);
     }
 
+
+}
+
+void Moulds::on_tableWidget_Material_itemSelectionChanged()
+{
+
+   ReflashMaterialLinedit();
 
 }
 

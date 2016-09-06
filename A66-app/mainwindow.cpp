@@ -34,6 +34,11 @@ MainWindow::MainWindow(QWidget *parent) :
     CurrentReg.Current_ProgramLibRow =0;
     CurrentReg.Current_WorkedTotal = 0;
 
+    ui->toolButton_T1->setCheckable(false);
+    ui->toolButton_ProName->setCheckable(false);
+
+
+
 //    this->move((QApplication::desktop()->width() - this->width() )/2,(QApplication::desktop()->height() -this->width())/2);
 }
 
@@ -93,8 +98,8 @@ void MainWindow::initWindow()
     connect(this, SIGNAL(openInfoWidget()), Info, SLOT(openInfoWin()));
     SystemWarn *syswarn =new SystemWarn;
     connect(syswarn, SIGNAL(ReturnProgramdbWin()), this, SLOT(ReturnProgramdb()));
-    HomingMode *homing =new HomingMode;
-    connect(this, SIGNAL(openHomingModeWidget()), homing, SLOT(openHomingModeWin()));
+//    HomingMode *homing =new HomingMode;
+//    connect(this, SIGNAL(openHomingModeWidget()), homing, SLOT(openHomingModeWin()));
 
     connect(rs, SIGNAL(ReturnworkedTotal(int )), pg, SLOT(ReflashProgramWrokedNum(int )));
 
@@ -104,6 +109,15 @@ void MainWindow::initWindow()
 //    pg->move(0,WIDGET_Y);
 //    pg->show();
     ui->toolButton_B0->setEnabled(false);
+    ui->toolButton_B1->setEnabled(false);
+    ui->toolButton_B2->setEnabled(false);
+    ui->toolButton_B3->setEnabled(true);
+    ui->toolButton_B4->setEnabled(false);
+    ui->toolButton_B5->setEnabled(false);
+    ui->toolButton_Start->setEnabled(false);
+    ui->toolButton->setEnabled(false);
+
+
 }
 void MainWindow::openProgramwindows()
 {

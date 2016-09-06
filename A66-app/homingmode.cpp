@@ -20,8 +20,12 @@ HomingMode::HomingMode(QWidget *parent) :
     ui->label_Y->setText(trUtf8("执行归零"));
     ui->label_R->setText(trUtf8("执行归零"));
 
-//    MainWindow *mw =new MainWindow;
-//    connect(mw, SIGNAL(openHomingModeWidget()), this, SLOT(openHomingModeWin()));
+    MainWindow *mw =new MainWindow;
+    mw->setWindowFlags(Qt::FramelessWindowHint);
+    mw->move(0,MAIN_WIDGET_Y);
+    mw->show();
+    connect(mw, SIGNAL(openHomingModeWidget()), this, SLOT(openHomingModeWin()));
+    Homging_Scan = startTimer(100);
 }
 
 HomingMode::~HomingMode()
@@ -37,7 +41,7 @@ void HomingMode::openHomingModeWin()
     this->move(0,WIDGET_Y);
     SystemSetting syssetting;
     syssetting.ReadForSystemDat();
-    Homging_Scan = startTimer(100);
+
     ui->toolButton_RunHoming->setEnabled(true);
 
 
@@ -62,7 +66,7 @@ void HomingMode::timerEvent(QTimerEvent *t) //定时器事件
 
                 ui->lineEdit_RHoming->setText(QString::number(Dis_RPos,'.',2));
 
-                qDebug()<<"MOTOR_STATUS[0]"<<MOTOR_STATUS[0] ;
+               // qDebug()<<"MOTOR_STATUS[0]"<<MOTOR_STATUS[0] ;
                 if(HomgingModeFlag == 1)
                 {
                     if(time_count1 > 10)

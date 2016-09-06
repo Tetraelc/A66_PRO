@@ -163,10 +163,10 @@ int main(int argc, char *argv[])
     QTextCodec::setCodecForCStrings(QTextCodec::codecForLocale());
 
     Sql_Init();
-    MainWindow w;
-    w.setWindowFlags(Qt::FramelessWindowHint);
-    w.move(0,MAIN_WIDGET_Y);
-    w.show();
+//    MainWindow w;
+//    w.setWindowFlags(Qt::FramelessWindowHint);
+//    w.move(0,MAIN_WIDGET_Y);
+//    w.show();
 
     qSoftKeyvaule *ic = new qSoftKeyvaule;
     a.setInputContext(ic);
@@ -174,15 +174,15 @@ int main(int argc, char *argv[])
     MyThread ThreadA;
     ThreadA.start();
 
-//    HomingMode hm;
-//    hm.setWindowFlags(Qt::FramelessWindowHint);
-//    hm.move(0,WIDGET_Y);
-//    hm.show();
+    HomingMode hm;
+    hm.setWindowFlags(Qt::FramelessWindowHint);
+    hm.move(0,WIDGET_Y);
+    hm.show();
 
-    Programdb Pg ;
-    Pg.setWindowFlags(Qt::FramelessWindowHint);
-    Pg.move(0,WIDGET_Y);
-    Pg.show();
+//    Programdb Pg ;
+//    Pg.setWindowFlags(Qt::FramelessWindowHint);
+//    Pg.move(0,WIDGET_Y);
+//    Pg.show();
 
 
     

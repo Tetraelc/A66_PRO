@@ -21,9 +21,9 @@
 
 unsigned char sendOneStep = 0;
 
-int XaxisValue;
-int YaxisValue;
-int RaxisValue;
+double XaxisValue;
+double YaxisValue;
+double RaxisValue;
 int ChangeRowFlag =0;
 int PostionReachFlag =0;
 int concedeModeFlag = 1;
@@ -831,16 +831,17 @@ void RunState::QuitRunState()
         model.submitAll();
     }
 //    //db.close();//释放数据库
-    emit openProgramwindow();
-
-    emit ReturnworkedTotal( CurrentRnuStateWorkedTotal);
-
-    openBeep();
-
     CurrentReg.Current_MotorTips = RunFinishTip;
     CurrentReg.Current_MotorTipResult = SystemTipsInformation(CurrentReg.Current_MotorTips);
 
     CurrentReg.Current_WorkedTotal = CurrentRnuStateWorkedTotal;
+
+
+    emit ReturnworkedTotal(CurrentRnuStateWorkedTotal);
+    emit openProgramwindow();
+    openBeep();
+
+
    // CurrentRnuStateWorkedTotal = 0;
 
 }

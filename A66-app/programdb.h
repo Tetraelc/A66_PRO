@@ -25,6 +25,7 @@ public:
     void DeleteProgramLib();
     void Update_ProgramLibItem(int Id,int Col,QString Value);
     void ReflashMaterialdb();
+    void ReflashProLinedit();
 
 //    int Materialtemp[50];
 

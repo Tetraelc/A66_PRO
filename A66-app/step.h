@@ -24,7 +24,7 @@ public:
 
 
 
-
+    void ReflashLinedit();
     void Display_StepProgramItem();
     void NewStepProgram();
     void DeleteStepProgram();

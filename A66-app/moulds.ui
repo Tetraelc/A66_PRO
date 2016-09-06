@@ -38,7 +38,7 @@
     <enum>Qt::WheelFocus</enum>
    </property>
    <property name="currentIndex">
-    <number>2</number>
+    <number>0</number>
    </property>
    <property name="iconSize">
     <size>
@@ -1572,8 +1572,8 @@
      <widget class="QLineEdit" name="lineEdit_U_Height">
       <property name="geometry">
        <rect>
-        <x>128</x>
-        <y>40</y>
+        <x>138</x>
+        <y>100</y>
         <width>100</width>
         <height>30</height>
        </rect>
@@ -1688,8 +1688,8 @@
      <widget class="QLineEdit" name="lineEdit_U_Angle">
       <property name="geometry">
        <rect>
-        <x>128</x>
-        <y>90</y>
+        <x>138</x>
+        <y>40</y>
         <width>100</width>
         <height>30</height>
        </rect>
@@ -1902,8 +1902,8 @@
      <widget class="QLabel" name="label_40">
       <property name="geometry">
        <rect>
-        <x>230</x>
-        <y>50</y>
+        <x>240</x>
+        <y>110</y>
         <width>41</width>
         <height>21</height>
        </rect>
@@ -1950,8 +1950,8 @@
      <widget class="QLabel" name="label_15">
       <property name="geometry">
        <rect>
-        <x>50</x>
-        <y>40</y>
+        <x>60</x>
+        <y>100</y>
         <width>90</width>
         <height>24</height>
        </rect>
@@ -1977,8 +1977,8 @@
      <widget class="QLabel" name="label_16">
       <property name="geometry">
        <rect>
-        <x>50</x>
-        <y>90</y>
+        <x>60</x>
+        <y>40</y>
         <width>90</width>
         <height>24</height>
        </rect>
@@ -2031,8 +2031,8 @@
      <widget class="QLabel" name="label_59">
       <property name="geometry">
        <rect>
-        <x>240</x>
-        <y>100</y>
+        <x>250</x>
+        <y>50</y>
         <width>31</width>
         <height>16</height>
        </rect>
@@ -2265,7 +2265,7 @@
       <rect>
        <x>190</x>
        <y>430</y>
-       <width>93</width>
+       <width>101</width>
        <height>26</height>
       </rect>
      </property>
@@ -2447,7 +2447,7 @@
       <rect>
        <x>190</x>
        <y>390</y>
-       <width>93</width>
+       <width>101</width>
        <height>26</height>
       </rect>
      </property>
@@ -2552,7 +2552,7 @@
     <widget class="QLineEdit" name="lineEdit_MaterialName">
      <property name="geometry">
       <rect>
-       <x>300</x>
+       <x>320</x>
        <y>350</y>
        <width>93</width>
        <height>26</height>
@@ -2685,9 +2685,14 @@
       <rect>
        <x>190</x>
        <y>350</y>
-       <width>90</width>
-       <height>25</height>
+       <width>111</width>
+       <height>31</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+      </font>
      </property>
      <item>
       <property name="text">

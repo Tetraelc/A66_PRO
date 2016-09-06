@@ -34,6 +34,9 @@ public:
     void Update_LowerMoldItem(int Id,int Col,QString Value);
 
     void Display_MaterialItem();
+    void ReflashLowerLinedit();
+    void ReflashUpLinedit();
+    void ReflashMaterialLinedit();
 
     void DeleteMaterial();
     bool NewMaterial();

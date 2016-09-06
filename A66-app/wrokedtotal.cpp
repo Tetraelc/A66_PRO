@@ -9,6 +9,9 @@ WrokedTotal::WrokedTotal(QWidget *parent) :
     ui(new Ui::WrokedTotal)
 {
     ui->setupUi(this);
+    QRegExp rx("^([1-9][0-9]{0,3})$");
+    QRegExpValidator *pReg = new QRegExpValidator(rx, this);
+    ui->lineEdit_workedTotal->setValidator(pReg);
 }
 
 WrokedTotal::~WrokedTotal()
