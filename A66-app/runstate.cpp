@@ -148,7 +148,7 @@ void RunState::checkMotorState()
          CurrentReg.Current_MotorTipResult.append(SystemTipsInformation(CurrentReg.Current_MotorTips));
 //         QMessageBox::critical(0,QObject::trUtf8("异常"),
 //                               trUtf8("1号电机离线"));
-//         Clean_HeartbetError(0x00);
+
 
      }
      if(Get_HeartbetError(0x02) == 0x01)
@@ -157,17 +157,17 @@ void RunState::checkMotorState()
          CurrentReg.Current_MotorTipResult.append("/").append(SystemTipsInformation(CurrentReg.Current_MotorTips));
 //         QMessageBox::critical(0,QObject::trUtf8("异常"),
 //                               trUtf8("2号电机离线"));
-//            Clean_HeartbetError(0x01);
+
      }
 
-//     if(Get_HeartbetError(0x03) == 1)
-//     {
-//         CurrentReg.Current_MotorTips = Motor3Tip;
-//         CurrentReg.Current_MotorTipResult.append("/").append(SystemTipsInformation(CurrentReg.Current_MotorTips));
-////         QMessageBox::critical(0,QObject::trUtf8("异常"),
-////                               trUtf8("3号电机离线"));
-////          Clean_HeartbetError(0x02);
-//     }
+     if(Get_HeartbetError(0x03) == 1)
+     {
+         CurrentReg.Current_MotorTips = Motor3Tip;
+         CurrentReg.Current_MotorTipResult.append("/").append(SystemTipsInformation(CurrentReg.Current_MotorTips));
+//         QMessageBox::critical(0,QObject::trUtf8("异常"),
+//                               trUtf8("3号电机离线"));
+
+     }
 
 
      if(Get_HeartbetError(0x04) == 0x01)
@@ -176,13 +176,17 @@ void RunState::checkMotorState()
          CurrentReg.Current_MotorTipResult.append("/").append(SystemTipsInformation(CurrentReg.Current_MotorTips));
 //         QMessageBox::critical(0,QObject::trUtf8("异常"),
 //                               trUtf8("MT离线"));
-//         Clean_HeartbetError(0x03);
+
      }
 
      if(Get_HeartbetError(0x01) == 0x01 | Get_HeartbetError(0x02) == 0x01 | Get_HeartbetError(0x03) == 0x01 | Get_HeartbetError(0x04) == 0x01 )
      {
          CurrentReg.Current_MotorTips = OfflineTip;
          CurrentReg.Current_MotorTipResult.append(SystemTipsInformation(CurrentReg.Current_MotorTips));
+          Clean_HeartbetError(0x01);
+          Clean_HeartbetError(0x02);
+          Clean_HeartbetError(0x03);
+          Clean_HeartbetError(0x04);
 
      }
      if(motor[0].initStatus == 0)
@@ -201,14 +205,25 @@ void RunState::checkMotorState()
 //                               trUtf8("2号电机未初始化！要重新打开电机"));
 //         motor[1].initStatus = 1;
      }
-//     if(motor[2].initStatus == 0)
-//     {
-//         CurrentReg.Current_MotorTips = Motor3Tip;
-//         CurrentReg.Current_MotorTipResult.append("/").append(SystemTipsInformation(CurrentReg.Current_MotorTips));
-////         QMessageBox::critical(0,QObject::trUtf8("异常"),
-////                               trUtf8("3号电机未初始化！要重新打开电机"));
-////         motor[2].initStatus = 1;
-//     }
+     if(motor[2].initStatus == 0)
+     {
+         CurrentReg.Current_MotorTips = Motor3Tip;
+         CurrentReg.Current_MotorTipResult.append("/").append(SystemTipsInformation(CurrentReg.Current_MotorTips));
+//         QMessageBox::critical(0,QObject::trUtf8("异常"),
+//                               trUtf8("3号电机未初始化！要重新打开电机"));
+//         motor[2].initStatus = 1;
+     }
+     if(motor[0].initStatus == 0 | motor[1].initStatus == 0 | motor[2].initStatus == 0)
+     {
+         CurrentReg.Current_MotorTips = DeinitTip;
+         CurrentReg.Current_MotorTipResult.append(SystemTipsInformation(CurrentReg.Current_MotorTips));
+//         QMessageBox::critical(0,QObject::trUtf8("异常"),
+//                               trUtf8("3号电机未初始化！要重新打开电机"));
+         motor[0].initStatus = 1;
+         motor[1].initStatus = 1;
+         motor[2].initStatus = 1;
+//         motor[2].initStatus = 1;
+     }
 
 
 }

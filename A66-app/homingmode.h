@@ -23,6 +23,8 @@ private slots:
 
     void on_toolButton_RunHoming_clicked();
 
+    void on_toolButton_QuitRunning_clicked();
+
 private:
     Ui::HomingMode *ui;
     int Homging_Scan;

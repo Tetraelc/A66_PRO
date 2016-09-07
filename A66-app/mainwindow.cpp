@@ -50,8 +50,6 @@ MainWindow::~MainWindow()
 
 
 
-
-
 void MainWindow::timerEvent(QTimerEvent *t) //定时器事件
 {
 
@@ -94,15 +92,13 @@ void MainWindow::initWindow()
     connect(pg, SIGNAL(sig_returnMainwindow()), this, SLOT(openMainWindowWin()));
     connect(pg, SIGNAL(ReflashProgram()), this, SLOT(ReFlashProgName()));
     connect(this, SIGNAL(openProgramWidget()), pg, SLOT(openProgramWin()));
+    connect(rs, SIGNAL(ReturnworkedTotal(int )), pg, SLOT(ReflashProgramWrokedNum(int )));
     SystemInfo *Info = new SystemInfo;
     connect(this, SIGNAL(openInfoWidget()), Info, SLOT(openInfoWin()));
     SystemWarn *syswarn =new SystemWarn;
     connect(syswarn, SIGNAL(ReturnProgramdbWin()), this, SLOT(ReturnProgramdb()));
 //    HomingMode *homing =new HomingMode;
 //    connect(this, SIGNAL(openHomingModeWidget()), homing, SLOT(openHomingModeWin()));
-
-    connect(rs, SIGNAL(ReturnworkedTotal(int )), pg, SLOT(ReflashProgramWrokedNum(int )));
-
 
 
 //    pg->setWindowFlags(Qt::FramelessWindowHint);
