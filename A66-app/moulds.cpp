@@ -2,14 +2,8 @@
 #include "ui_moulds.h"
 #include <QDebug>
 #include "qsoftkeyvalue.h"
-#include <QtSql/QSqlDatabase>
 #include <QMessageBox>
-#include <QSqlError>
-#include <QSqlQuery>
 #include <QString>
-#include <QSqlTableModel>
-#include <QSqlRecord>
-#include "global.h"
 #include "runstate.h"
 
 
@@ -40,6 +34,10 @@ Moulds::Moulds(QWidget *parent) :
     ui->tableWidget_Material->horizontalHeader()->setStretchLastSection(true);
     ui->tableWidget_Material->horizontalHeader()->setClickable(false);    //******NEW********//
     ui->tableWidget_Material->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
+
+    QFont font;
+    font.setPointSize(18);
+    ui->comboBox_material->setFont(font);
 
 }
 
@@ -118,9 +116,11 @@ void Moulds::initMoulds(void)
     ui->lineEdit_D_Radius->setValidator(pReg);
     ui->lineEdit_D_Speed->setValidator(pReg);
 
-    ui->lineEdit_MaterialName->setValidator(pReg);
-    ui->lineEdit_EMold->setValidator(pReg);
-    ui->lineEdit_Strengrht->setValidator(pReg);
+    QRegExp rxMaterial("^(-?[0]|-?[1-9][0-9]{0,5})(?:\\.\\d{1,2})?$|(^\\t?$)");
+    QRegExpValidator *pRegMaterial = new QRegExpValidator(rxMaterial, this);
+    ui->lineEdit_MaterialName->setValidator(pRegMaterial);
+    ui->lineEdit_EMold->setValidator(pRegMaterial);
+    ui->lineEdit_Strengrht->setValidator(pRegMaterial);
 
 
 

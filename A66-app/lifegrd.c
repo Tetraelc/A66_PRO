@@ -427,7 +427,7 @@ void proceedNODE_GUARD(CO_Data* d, Message* m )
           (*d->post_SlaveBootup)(d, nodeId);
       }
 
-      if(d->NMTable[nodeId] == Pre_operational)//
+      if(d->NMTable[nodeId] == Operational)//-----------
       {
            MSG_WAR(0x3100, "The NMT is a Pre_operational from node : ", nodeId);
            (*d->post_SlavePreInit)(d, nodeId);

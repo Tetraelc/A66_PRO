@@ -17,7 +17,8 @@ public:
     void Display_YReferenceItem();
     
 private slots:
-    void on_buttonBox_accepted();
+
+    void on_toolButton_comfirm_clicked();
 
 private:
     Ui::YReferencePoint *ui;

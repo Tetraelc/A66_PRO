@@ -9,6 +9,7 @@
 #include <QSqlTableModel>
 #include <QSqlRecord>
 #include <QDebug>
+#include "runstate.h"
 
 chooseLowerMoldDialog::chooseLowerMoldDialog(QWidget *parent) :
     QDialog(parent),
@@ -17,6 +18,8 @@ chooseLowerMoldDialog::chooseLowerMoldDialog(QWidget *parent) :
     ui->setupUi(this);
 
 
+    RunState runstate1 ;
+    runstate1.ReadForRun(CurrentReg.Current_StepProgramRow);
     ui->tableWidget_LowerMoulds->horizontalHeader()->setStretchLastSection(true);
     ui->tableWidget_LowerMoulds->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
     ui->tableWidget_LowerMoulds->horizontalHeader()->setClickable(false);    //******NEW********//
@@ -62,7 +65,7 @@ chooseLowerMoldDialog::chooseLowerMoldDialog(QWidget *parent) :
             //qDebug()<<"record.value().toString()"<<record.value("Id").toString();
     }
 
-   // ui->tableWidget_LowerMoulds->selectRow(0);
+    ui->tableWidget_LowerMoulds->selectRow(CurrentProgramTemp.LowerMold-1);
     //db.close();//释放数据库
 //    ui->tableWidget_LowerMoulds ->setRowCount(LowerMoldNum);
 //    ui->tableWidget_LowerMoulds->selectRow(0);
@@ -83,13 +86,11 @@ chooseLowerMoldDialog::~chooseLowerMoldDialog()
     delete ui;
 }
 
-void chooseLowerMoldDialog::on_buttonBox_accepted()
+void chooseLowerMoldDialog::on_toolButton_Comfirm_clicked()
 {
-
     if(ui->tableWidget_LowerMoulds->currentRow()>=0)
     {
          emit sig_sndLowerMold(ui->tableWidget_LowerMoulds->currentRow()+1);
          this->close();
      }
-
 }

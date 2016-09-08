@@ -47,10 +47,13 @@ RunState::RunState(QWidget *parent) :
 {
     ui->setupUi(this);
     initRunState();
-
+    QFont font;
+    font.setPointSize(28);
+    ui->lineEdit_XCurrentPos->setFont(font);
+    ui->lineEdit_YCurrentPos->setFont(font);
+    ui->lineEdit_RCurrentPos->setFont(font);
 
 //    killTimer();
-
 }
 
 RunState::~RunState()
@@ -149,7 +152,7 @@ void RunState::checkMotorState()
 //         QMessageBox::critical(0,QObject::trUtf8("异常"),
 //                               trUtf8("1号电机离线"));
 
-
+         qDebug("Motor1");
      }
      if(Get_HeartbetError(0x02) == 0x01)
      {
@@ -157,7 +160,7 @@ void RunState::checkMotorState()
          CurrentReg.Current_MotorTipResult.append("/").append(SystemTipsInformation(CurrentReg.Current_MotorTips));
 //         QMessageBox::critical(0,QObject::trUtf8("异常"),
 //                               trUtf8("2号电机离线"));
-
+            qDebug("Motor2");
      }
 
      if(Get_HeartbetError(0x03) == 1)
@@ -166,7 +169,7 @@ void RunState::checkMotorState()
          CurrentReg.Current_MotorTipResult.append("/").append(SystemTipsInformation(CurrentReg.Current_MotorTips));
 //         QMessageBox::critical(0,QObject::trUtf8("异常"),
 //                               trUtf8("3号电机离线"));
-
+        qDebug("Motor3");
      }
 
 
@@ -176,7 +179,7 @@ void RunState::checkMotorState()
          CurrentReg.Current_MotorTipResult.append("/").append(SystemTipsInformation(CurrentReg.Current_MotorTips));
 //         QMessageBox::critical(0,QObject::trUtf8("异常"),
 //                               trUtf8("MT离线"));
-
+        qDebug("Motor4");
      }
 
      if(Get_HeartbetError(0x01) == 0x01 | Get_HeartbetError(0x02) == 0x01 | Get_HeartbetError(0x03) == 0x01 | Get_HeartbetError(0x04) == 0x01 )
@@ -187,6 +190,7 @@ void RunState::checkMotorState()
           Clean_HeartbetError(0x02);
           Clean_HeartbetError(0x03);
           Clean_HeartbetError(0x04);
+          qDebug("Motorclean");
 
      }
      if(motor[0].initStatus == 0)
@@ -300,7 +304,7 @@ void RunState::SendMTEnableSignalXYAxis()
     temp3 = MOTOR_STATUS[2] & 0x400;
    if(sendOneStep == 0) //第一步发送数据  开始定位
    {
-       qDebug()<<"CurrentStepTemp.Raxis"<<CurrentStepTemp.Raxis;
+     //  qDebug()<<"CurrentStepTemp.Raxis"<<CurrentStepTemp.Raxis;
 //       if(XaxisParameter.MotorDirection == 1)
 //       {
            Set_Motor_Speed_Postion_Abs(0x01,XaxisParameter.RunSpeed,XaxisValue*1000/XaxisParameter.LeadScrew);
@@ -637,11 +641,17 @@ void RunState::timerEvent(QTimerEvent *t) //定时器事件
 
     double Dis_XPos =Get_MOTOR_Demand_Postion(0x01) * XaxisParameter.LeadScrew /1000;
     double Dis_YPos =Get_MOTOR_Demand_Postion(0x02) * XaxisParameter.LeadScrew /1000;
-    double Dis_RPos =Get_MOTOR_Demand_Postion(0x03) * XaxisParameter.LeadScrew /1000;
+
 
       ui->lineEdit_XCurrentPos->setText(QString::number(Dis_XPos,'.',2));
       ui->lineEdit_YCurrentPos->setText(QString::number(Dis_YPos,'.',2));
-      ui->lineEdit_RCurrentPos->setText(QString::number(Dis_RPos,'.',2));
+
+      if(RaxisParameter.ENABLE_AXIS == 1)
+      {
+          double Dis_RPos =Get_MOTOR_Demand_Postion(0x03) * XaxisParameter.LeadScrew /1000;
+          ui->lineEdit_RCurrentPos->setText(QString::number(Dis_RPos,'.',2));
+      }
+
 
       MotorRun();
       CheckPressureState();

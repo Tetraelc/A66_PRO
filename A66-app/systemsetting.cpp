@@ -169,6 +169,7 @@ void SystemSetting::ReadForSystemDat()
     {
             QSqlRecord record = model.record(i);
             RaxisParameterTemp[i] = record.value("Value").toDouble(&ok);
+           // qDebug()<<"RaxisParameterTemp[i]"<<RaxisParameterTemp[i];
     }
     model.setFilter("Class = " MT_Id);
     model.select();
@@ -188,42 +189,43 @@ void SystemSetting::SystemDatChange()
      XaxisParameter.LeadScrew = XaxisParameterTemp[0];
      XaxisParameter.MotorDirection = XaxisParameterTemp[1];
      XaxisParameter.RunSpeed = XaxisParameterTemp[2];
-     XaxisParameter.ManualSpeed = XaxisParameterTemp[3];
-     XaxisParameter.MaxDistance = XaxisParameterTemp[4];
-     XaxisParameter.MinDistance = XaxisParameterTemp[5];
+     XaxisParameter.ManualSpeed = XaxisParameterTemp[3] ;
+     XaxisParameter.MaxDistance = XaxisParameterTemp[4] * 1000 / XaxisParameter.LeadScrew;
+     XaxisParameter.MinDistance = XaxisParameterTemp[5]* 1000 / XaxisParameter.LeadScrew;
      XaxisParameter.PositioningMode = XaxisParameterTemp[6];
      XaxisParameter.OverrunDistance = XaxisParameterTemp[7];
      XaxisParameter.ReferencePosMode = XaxisParameterTemp[8];
-     XaxisParameter.ReferencePos = XaxisParameterTemp[9];
+     XaxisParameter.ReferencePos = XaxisParameterTemp[9] * 1000 / XaxisParameter.LeadScrew;
       ////Y轴参数
      YaxisParameter.LeadScrew = YaxisParameterTemp[0];
      YaxisParameter.MotorDirection = YaxisParameterTemp[1];
      YaxisParameter.RunSpeed = YaxisParameterTemp[2];
      YaxisParameter.ManualSpeed = YaxisParameterTemp[3];
-     YaxisParameter.MaxDistance = YaxisParameterTemp[4];
-     YaxisParameter.MinDistance = YaxisParameterTemp[5];
+     YaxisParameter.MaxDistance = YaxisParameterTemp[4] * 1000 / YaxisParameter.LeadScrew;
+     YaxisParameter.MinDistance = YaxisParameterTemp[5] * 1000 / YaxisParameter.LeadScrew;
      YaxisParameter.PositioningMode = YaxisParameterTemp[6];
      YaxisParameter.OverrunDistance = YaxisParameterTemp[7];
      YaxisParameter.ReferencePosMode = YaxisParameterTemp[8];
-     YaxisParameter.ReferencePos = YaxisParameterTemp[9];
+     YaxisParameter.ReferencePos = YaxisParameterTemp[9] * 1000 / YaxisParameter.LeadScrew;
       ////R轴参数
      RaxisParameter.ENABLE_AXIS = RaxisParameterTemp[0];
      RaxisParameter.LeadScrew = RaxisParameterTemp[1];
      RaxisParameter.MotorDirection = RaxisParameterTemp[2];
      RaxisParameter.RunSpeed = RaxisParameterTemp[3];
      RaxisParameter.ManualSpeed = RaxisParameterTemp[4];
-     RaxisParameter.MaxDistance = RaxisParameterTemp[5];
-     RaxisParameter.MinDistance = RaxisParameterTemp[6];
+     RaxisParameter.MaxDistance = RaxisParameterTemp[5] * 1000 / RaxisParameter.LeadScrew;
+     RaxisParameter.MinDistance = RaxisParameterTemp[6] * 1000 / RaxisParameter.LeadScrew;
      RaxisParameter.PositioningMode = RaxisParameterTemp[7];
      RaxisParameter.OverrunDistance = RaxisParameterTemp[8];
      RaxisParameter.ReferencePosMode = RaxisParameterTemp[9];
-     RaxisParameter.ReferencePos = RaxisParameterTemp[10];
+     RaxisParameter.ReferencePos = RaxisParameterTemp[10] * 1000 / RaxisParameter.LeadScrew;
+     qDebug()<<"RaxisParameterTemp[10]"<<RaxisParameterTemp[10];
 
      ////MT轴参数////
      MTParameter.KeepTime = MTParameterTemp[0];
      MTParameter.UnloadTime = MTParameterTemp[1];
      MTParameter.VbackMode = MTParameterTemp[2];
-     MTParameter.UnloadTime = MTParameterTemp[3];
+     MTParameter.VbackTime = MTParameterTemp[3];
      MTParameter.SingleMode = MTParameterTemp[4];
 
 
@@ -235,23 +237,26 @@ void SystemSetting::SystemWriteMotor(unsigned char nodeId)
 {
     if(nodeId == 0x01)
     {
-        SystemSet_Motor.data[0].Data = XaxisParameter.MaxDistance ;
-        SystemSet_Motor.data[1].Data = XaxisParameter.MinDistance ;
+        SystemSet_Motor[0].data[0].Data = XaxisParameter.MinDistance ;
+        SystemSet_Motor[0].data[1].Data = XaxisParameter.MaxDistance ;
+
     }
     if(nodeId == 0x02)
     {
-        SystemSet_Motor.data[0].Data = YaxisParameter.MaxDistance ;
-        SystemSet_Motor.data[1].Data = YaxisParameter.MinDistance ;
+        SystemSet_Motor[1].data[1].Data = YaxisParameter.MinDistance ;
+        SystemSet_Motor[1].data[1].Data = YaxisParameter.MaxDistance ;
+
     }
 
     if(nodeId == 0x03)
     {
-        SystemSet_Motor.data[0].Data = RaxisParameter.MaxDistance ;
-        SystemSet_Motor.data[1].Data = RaxisParameter.MinDistance ;
+        SystemSet_Motor[2].data[0].Data = RaxisParameter.MinDistance ;
+        SystemSet_Motor[2].data[1].Data = RaxisParameter.MaxDistance ;
+
     }
 
 
-    Write_MOTOR_Multi_Data(&SystemSet_Motor,nodeId);
+    Write_MOTOR_Multi_Data(&SystemSet_Motor[nodeId-1],nodeId);
 
 
 }
@@ -259,8 +264,8 @@ void SystemSetting::SystemWriteMotor(unsigned char nodeId)
 void SystemSetting::SystemWriteMT()
 {
 
-     SystemSet_MT.data[0].Data = MTParameter.KeepTime;
-     SystemSet_MT.data[1].Data = MTParameter.UnloadTime;
+     SystemSet_MT.data[0].Data = MTParameter.UnloadTime * 100;
+     SystemSet_MT.data[1].Data = MTParameter.KeepTime * 100;
      Write_MOTOR_Multi_Data(&SystemSet_MT,MT_ID);
 }
 
@@ -292,6 +297,8 @@ void SystemSetting::Display_Item(int ClassId,bool Editable,bool FristEnable)
 
     for(int i=0;i<model.rowCount();i++)
     {
+        ui->tableWidget_System->setRowHeight(i,45);
+
         QSqlRecord record = model.record(i);
         ui->tableWidget_System->setItem(i,Table_Id,new QTableWidgetItem(record.value("Id").toString()));
         ui->tableWidget_System->setItem(i,Table_Name,new QTableWidgetItem(record.value("Name").toString()));
@@ -449,13 +456,13 @@ void SystemSetting::on_toolButton_SaveDAT_clicked()
 
 void SystemSetting::on_toolButton_ResumeDAT_clicked()
 {
- #if ARMFlag
-    system("rm /opt/tetra/A66-app/A66-app.db");
-    system("sqlite3 /opt/tetra/A66-app/A66-app.db < A66-app.bak");
- #else
-    system("rm /home/tetra/gitA66/A66-app/A66-app.db");
-    system("sqlite3 /home/tetra/gitA66/A66-app/A66-app.db < /home/tetra/gitA66/A66-app/A66-app.bak");
- #endif
+// #if ARMFlag
+//    system("rm /opt/tetra/A66-app/A66-app.db");
+//    system("sqlite3 /opt/tetra/A66-app/A66-app.db < A66-app.bak");
+// #else
+//    system("rm /home/tetra/gitA66/A66-app/A66-app.db");
+//    system("sqlite3 /home/tetra/gitA66/A66-app/A66-app.db < /home/tetra/gitA66/A66-app/A66-app.bak");
+// #endif
     CurrentReg.Current_MotorTips = DataResumeTip;
     aralmOrTipFalg = false;
     SystemWarn SaveDATWarn;
@@ -772,8 +779,12 @@ void SystemSetting::WriteConfig()
     ValveReg.Vstopstate = VstopStatus[7] << 7 | VstopStatus[6] << 6 | VstopStatus[5] << 5 | VstopStatus[4] << 4 | VstopStatus[3] << 3  | VstopStatus[2] << 2  | VstopStatus[1] << 1 |VstopStatus[0];
 
 
-    ValveReg.KeepTime  = ui->lineEdit_KeepTime->text().toInt();
-    ValveReg.UnloadTime= ui->lineEdit_UnloadTime->text().toInt();
+//    ValveReg.KeepTime  = ui->lineEdit_KeepTime->text().toInt();
+//    ValveReg.UnloadTime= ui->lineEdit_UnloadTime->text().toInt();
+
+    ValveReg.KeepTime = MTParameter.KeepTime;
+    ValveReg.UnloadTime = MTParameter.UnloadTime;
+
 
     qDebug("VFastState  %X" ,ValveReg.VFaststate);
     qDebug("VSlowstate  %X" ,ValveReg.VSlowstate);
@@ -1201,6 +1212,8 @@ void SystemSetting::ReadConfig(void)
     ui->lineEdit_KeepTime->setText(QString::number(ValveReg.KeepTime,10));
     ui->lineEdit_UnloadTime->setText(QString::number(ValveReg.UnloadTime,10));
 
+    MTParameter.KeepTime = ValveReg.KeepTime;
+    MTParameter.UnloadTime = ValveReg.UnloadTime;
 
 
 
@@ -1249,7 +1262,7 @@ int SystemSetting::deal_write_config_event()
      if(motor[3].Wrte_Multi_Finsh_state == NO_SEND)
     {
         Write_MOTOR_Multi_Data(&Config_valve_buf,0x04);
-        qDebug("11111111111111111111111111111111");
+       // qDebug("11111111111111111111111111111111");
         qDebug("motor[3].Wrte_Multi_Finsh_state = WAIT_FREE_SEND: %d",motor[3].Wrte_Multi_Finsh_state);
     }
     else if(motor[3].Wrte_Multi_Finsh_state == SUCCESS_SEND ) //顺序不能调换
@@ -1257,7 +1270,7 @@ int SystemSetting::deal_write_config_event()
          motor[3].SDO_status = SDO_free;
          read_One_Data(0x04,0x7000,0x01); //进入读取验证配置是否成功
          motor[3].Wrte_Multi_Finsh_state = WAIT_FREE_SEND;
-         qDebug("2222222222222222222222222222222222222");
+        // qDebug("2222222222222222222222222222222222222");
     }
 
     else if (motor[3].Wrte_Multi_Finsh_state == FAIL_SEND)
@@ -1270,7 +1283,7 @@ int SystemSetting::deal_write_config_event()
                               trUtf8("发送失败~。~"));
 
         return 0;
-        qDebug("233333333333333333333333333333333333332");
+       // qDebug("233333333333333333333333333333333333332");
     }
     else if(motor[3].Read_one_state == SUCCESS_SEND)
     {
@@ -1291,7 +1304,7 @@ int SystemSetting::deal_write_config_event()
            qDebug("entern readifelse");
         }
 
-        qDebug("234444444444444444444444444444444444432");
+       // qDebug("234444444444444444444444444444444444432");
     }
     else if(motor[3].Read_one_state == FAIL_SEND)
     {
@@ -1317,7 +1330,7 @@ int SystemSetting::deal_read_config_event()
        if(motor[3].Read_Multi_Finsh_state == NO_SEND)
          {
           Read_MOTOR_Multi_Data(&Config_valve_buf,0x04);
-          qDebug("Read_MOTOR_Multi_Data--1---------------");
+          //qDebug("Read_MOTOR_Multi_Data--1---------------");
          }
         else if(motor[3].Read_Multi_Finsh_state == SUCCESS_SEND)
         {
@@ -1335,7 +1348,7 @@ int SystemSetting::deal_read_config_event()
             Read_Button_state = 0;
             motor[3].Read_Multi_Finsh_state = NO_SEND;
             motor[3].SDO_status = SDO_free;
-           qDebug("motor[3].Read_Multi_Finsh_state == SUCCESS_SEND---------------");
+          // qDebug("motor[3].Read_Multi_Finsh_state == SUCCESS_SEND---------------");
         }
         else if (motor[3].Read_Multi_Finsh_state == FAIL_SEND)
         {
@@ -1344,7 +1357,7 @@ int SystemSetting::deal_read_config_event()
            Read_Button_state = 0;
            motor[3].SDO_status = SDO_free;
            motor[3].Read_Multi_Finsh_state = NO_SEND;
-            qDebug("motor[3].Read_Multi_Finsh_state == FAIL_SEND--------------");
+           // qDebug("motor[3].Read_Multi_Finsh_state == FAIL_SEND--------------");
        }
 //  else
 //  {

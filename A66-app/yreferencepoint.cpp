@@ -9,6 +9,9 @@ YReferencePoint::YReferencePoint(QWidget *parent) :
 {
     ui->setupUi(this);
     Display_YReferenceItem();
+    QRegExp rx("^(-?[0]|-?[1-9][0-9]{0,3})(?:\\.\\d{1,2})?$|(^\\t?$)");
+    QRegExpValidator *pReg = new QRegExpValidator(rx, this);
+    ui->lineEdit_BoardThick->setValidator(pReg);
 }
 
 YReferencePoint::~YReferencePoint()
@@ -41,7 +44,7 @@ void YReferencePoint::Display_YReferenceItem()
 }
 
 
-void YReferencePoint::on_buttonBox_accepted()
+void YReferencePoint::on_toolButton_comfirm_clicked()
 {
     if(ui->lineEdit_YReferencePoint->text() != "")
     {
@@ -65,10 +68,6 @@ void YReferencePoint::on_buttonBox_accepted()
 
         //db.close();//释放数据库
         ui->lineEdit_YReferencePoint->setText(QString::number(ui->lineEdit_YReferencePoint->text().toInt()+ ui->lineEdit_BoardThick->text().toInt(),10));
-        qDebug()<<"111"<<QString::number(ui->lineEdit_YReferencePoint->text().toInt()+ ui->lineEdit_BoardThick->text().toInt(),10);
-
         //this->close();
     }
-
 }
-

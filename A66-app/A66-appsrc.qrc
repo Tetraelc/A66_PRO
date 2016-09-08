@@ -19,6 +19,41 @@
         <file>ICO/UpMold.png</file>
         <file>ICO/iGD25.png</file>
         <file>ICO/iGD34.png</file>
+        <file>ICO/Materialdb.png</file>
+        <file>ICO/HomingMode.png</file>
+        <file>ICO/0001.jpg</file>
+        <file>ICO/001.jpg</file>
+        <file>ICO/0002.jpg</file>
+        <file>ICO/0003.jpg</file>
+        <file>ICO/0004.jpg</file>
+        <file>ICO/0005.jpg</file>
+        <file>ICO/0006.jpg</file>
+        <file>ICO/0007.jpg</file>
+        <file>ICO/0008.jpg</file>
+        <file>ICO/0009.jpg</file>
+        <file>ICO/0010.jpg</file>
+        <file>ICO/0011.jpg</file>
+        <file>ICO/0012.jpg</file>
+        <file>ICO/0013.jpg</file>
+        <file>ICO/0014.jpg</file>
+        <file>ICO/0015.jpg</file>
+        <file>ICO/0016.jpg</file>
+        <file>ICO/0017.jpg</file>
+        <file>ICO/0018.jpg</file>
+        <file>ICO/0019.jpg</file>
+        <file>ICO/0020.jpg</file>
+        <file>ICO/0021.jpg</file>
+        <file>ICO/0022.jpg</file>
+        <file>ICO/0023.jpg</file>
+        <file>ICO/0024.jpg</file>
+        <file>ICO/0025.jpg</file>
+        <file>ICO/P1-SETmini.png</file>
+        <file>ICO/P1-STARTmini.png</file>
+        <file>ICO/P1-HELPmini.png</file>
+        <file>ICO/P1-EDITmini.png</file>
+        <file>ICO/P1-MANUmini.png</file>
+        <file>ICO/P1-MOLDmini.png</file>
+        <file>ICO/P1-PROGmini.png</file>
     </qresource>
     <qresource prefix="/ico">
         <file>ICO/P1-DEL.png</file>

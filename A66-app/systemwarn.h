@@ -22,9 +22,10 @@ public slots:
 
     
 private slots:
-    void on_buttonBox_accepted();
 
-    void on_buttonBox_rejected();
+    void on_toolButton_Comfirm_clicked();
+
+    void on_toolButton_Quit_clicked();
 
 private:
     Ui::SystemWarn *ui;

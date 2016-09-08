@@ -99,14 +99,20 @@ S_Data_trans SystemSet_MT           = { 0x03,0x7000,0x08,0x02,0x00,
                                              0x7000,0x09,0x02,0x00,
                                              0x7000,0x01,0x01,0xAA,//上面是液压轴
                                        };
-S_Data_trans SystemSet_Motor        = { 0x02, 0x607B,0x01,0x04,0xAA,// 最小限位
+S_Data_trans SystemSet_Motor[3]        = { {0x03, 0x607B,0x01,0x04,0xAA,// 最小限位
                                               0x607B,0x02,0x04,0xAA,// 最大限位
-                                              0x6093,0x01,0x04,0x0a,
+                                              0x6093,0x01,0x04,0x0a,},
+                                        {0x03, 0x607B,0x01,0x04,0xAA,// 最小限位
+                                              0x607B,0x02,0x04,0xAA,// 最大限位
+                                              0x6093,0x01,0x04,0x0a,},
+                                        {0x03, 0x607B,0x01,0x04,0xAA,// 最小限位
+                                               0x607B,0x02,0x04,0xAA,// 最大限位
+                                               0x6093,0x01,0x04,0x0a,},
                                        };
 S_Data_trans HomingModeDate[3]    = {{0x06,
                                            0x6060,0x00,0x01,0x06,
                                            0x6098,0x00,0x01,0x02,//正限位开关
-                                            0x607c,0x00,0x04,550,
+                                            0x607c,0x00,0x04,550,// 参考点
                                            0x6099,0x01,0x04,1000,
                                            0x6040,0x00,0x02,0x0f,
                                            0x6040,0x00,0x02,0x1f,
@@ -115,7 +121,7 @@ S_Data_trans HomingModeDate[3]    = {{0x06,
                                      {0x06,
                                            0x6060,0x00,0x01,0x06,
                                            0x6098,0x00,0x01,0x02,//正限位开关
-                                            0x607c,0x00,0x04,550,
+                                            0x607c,0x00,0x04,550,// 参考点
                                             0x6099,0x01,0x04,1000,
                                            0x6040,0x00,0x02,0x0f,
                                            0x6040,0x00,0x02,0x1f,
@@ -124,7 +130,7 @@ S_Data_trans HomingModeDate[3]    = {{0x06,
                                       {0x06,
                                             0x6060,0x00,0x01,0x06,
                                            0x6098,0x00,0x01,0x02,//正限位开关
-                                            0x607c,0x00,0x04,550,
+                                            0x607c,0x00,0x04,550,// 参考点
                                            0x6099,0x01,0x04,1000,
                                            0x6040,0x00,0x02,0x0f,
                                            0x6040,0x00,0x02,0x1f,
@@ -149,10 +155,10 @@ void Init_MOTOR(void)
     motor[MOTOR_2].initStep = 0;
     motor[MOTOR_3].initStep = 0;
     motor[MOTOR_4].initStep = 0;
-    motor[MOTOR_1].initStatus = 0;
-    motor[MOTOR_2].initStatus = 0;
-    motor[MOTOR_3].initStatus = 0;
-    motor[MOTOR_4].initStatus = 0;
+//    motor[MOTOR_1].initStatus = 0;
+//    motor[MOTOR_2].initStatus = 0;
+//    motor[MOTOR_3].initStatus = 0;
+//    motor[MOTOR_4].initStatus = 0;
     motor[MOTOR_1].isSendSDOBusy = NO_BUSY;
     motor[MOTOR_2].isSendSDOBusy = NO_BUSY;
     motor[MOTOR_3].isSendSDOBusy = NO_BUSY;

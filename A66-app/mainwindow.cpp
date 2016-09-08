@@ -21,22 +21,30 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     initWindow();
 
-    SystemSetting sys;
-    sys.ReadForSystemDat();
-
-//    sys.SystemWriteMotor(0x01);//写电机参数
-//    sys.SystemWriteMotor(0x02);//写电机参数
-//    sys.SystemWriteMotor(0x03);//写电机参数
-//    sys.SystemWriteMT();//写MT参数
 
 
     ProgramName_Scan = startTimer(800);
     CurrentReg.Current_ProgramLibRow =0;
     CurrentReg.Current_WorkedTotal = 0;
 
-    ui->toolButton_T1->setCheckable(false);
-    ui->toolButton_ProName->setCheckable(false);
 
+    //ui->toolButton_T1->setCheckable(false);
+//    QPixmap pix;
+//    pix.load("/opt/tetra/A66-app/PIC/P01.jpg");
+//    ui->label_pic->setPixmap(pix);
+
+    ui->label_Text->setText(trUtf8("回零模式"));
+    QPixmap pix;
+    pix.load("/opt/tetra/A66-app/ICO/HomingModemini.png");
+    ui->label_Picture->setPixmap(pix);
+
+//    ui->toolButton_T1->setIcon(QIcon("/opt/tetra/A66-app/ICO/HomingMode.png"));
+//    qDebug()<<"ui->toolButton_T1->isCheckable()"<<ui->toolButton_T1->isCheckable();
+
+//    ui->toolButton_ProName->setCheckable(true);
+//    ui->toolButton_ProName->setChecked(true);
+//    ui->toolButton_ProName->setEnabled(false);
+//    ui->toolButton_T1->setEnabled(false);
 
 
 //    this->move((QApplication::desktop()->width() - this->width() )/2,(QApplication::desktop()->height() -this->width())/2);
@@ -56,7 +64,7 @@ void MainWindow::timerEvent(QTimerEvent *t) //定时器事件
     if(t->timerId()== ProgramName_Scan){
 
         ui->toolButton_ProName->setText(CurrentReg.CurrentProgramName);
-       MainWinState();
+        //MainWinState();
         if(developLengthFlag == 1)
         {
             ui->toolButton_State->setText(trUtf8("展开长度 :") + QString::number( CurrentReg.developLength,'.',2));
@@ -107,11 +115,13 @@ void MainWindow::initWindow()
     ui->toolButton_B0->setEnabled(false);
     ui->toolButton_B1->setEnabled(false);
     ui->toolButton_B2->setEnabled(false);
-    ui->toolButton_B3->setEnabled(true);
+    ui->toolButton_B3->setEnabled(false);
     ui->toolButton_B4->setEnabled(false);
     ui->toolButton_B5->setEnabled(false);
     ui->toolButton_Start->setEnabled(false);
     ui->toolButton->setEnabled(false);
+    ui->toolButton_4->setEnabled(false);
+
 
 
 }
@@ -134,16 +144,22 @@ void MainWindow::closeProgramwindows()
 
 void MainWindow::on_toolButton_clicked()
 {
-    ui->toolButton_T1->setText(trUtf8("回零模式"));
+    ui->label_Text->setText(trUtf8("回零模式"));
+    QPixmap pix;
+    pix.load("/opt/tetra/A66-app/ICO/HomingModemini.png");
+    ui->label_Picture->setPixmap(pix);
+//    ui->toolButton_T1->setText(trUtf8("回零模式"));
+//    ui->toolButton_T1->setIcon(QIcon("/opt/tetra/A66-app/ICO/HomingMode.png"));
     ui->toolButton_B0->setEnabled(false);
     ui->toolButton_B1->setEnabled(false);
     ui->toolButton_B2->setEnabled(false);
-    ui->toolButton_B3->setEnabled(true);
+    ui->toolButton_B3->setEnabled(false);
     ui->toolButton_B4->setEnabled(false);
     ui->toolButton_B5->setEnabled(false);
     ui->toolButton_Start->setEnabled(false);
     ui->toolButton->setEnabled(false);
- //   qDebug("deeeeeeeeeeeeeeeeeeeeeeeeeeede");
+    ui->toolButton_4->setEnabled(true);
+
     emit openHomingModeWidget();
     openBeep();
 }
@@ -172,9 +188,12 @@ void MainWindow::ReFlashProgName()
 
 void MainWindow::ReturnProgramdb()
 {
-
-     ui->toolButton_T1->setText(trUtf8(" 程序库"));
-     ui->toolButton_T1->setIcon(QIcon("/opt/tetra/A66-app/ICO/P1-PROG.png"));
+    ui->label_Text->setText(trUtf8("程序库"));
+    QPixmap pix;
+    pix.load("/opt/tetra/A66-app/ICO/P1-PROGmini.png");
+    ui->label_Picture->setPixmap(pix);
+//     ui->toolButton_T1->setText(trUtf8(" 程序库"));
+//     ui->toolButton_T1->setIcon(QIcon("/opt/tetra/A66-app/ICO/P1-PROG.png"));
      ui->toolButton_B0->setEnabled(false);
      ui->toolButton_B1->setEnabled(true);
      ui->toolButton_B2->setEnabled(true);
@@ -182,7 +201,8 @@ void MainWindow::ReturnProgramdb()
      ui->toolButton_B4->setEnabled(true);
      ui->toolButton_B5->setEnabled(true);
      ui->toolButton_Start->setEnabled(true);
-     ui->toolButton->setEnabled(true);
+     ui->toolButton->setEnabled(false);
+     ui->toolButton_4->setEnabled(true);
      emit openProgramWidget();
    //  openBeep();
 
@@ -191,17 +211,21 @@ void MainWindow::ReturnProgramdb()
 
 void MainWindow::on_pushButton_T3_clicked()
 {
-
-
     emit openRunStateWidget();
-    ui->toolButton_T1->setText(trUtf8(" 运行"));
-    ui->toolButton_T1->setIcon(QIcon("/opt/tetra/A66-app/ICO/P1-MOLD.png"));
+    ui->label_Text->setText(trUtf8("运行"));
+    QPixmap pix;
+    pix.load("/opt/tetra/A66-app/ICO/P1-STARTmini.png");
+    ui->label_Picture->setPixmap(pix);
+//    ui->toolButton_T1->setText(trUtf8(" 运行"));
+//    ui->toolButton_T1->setIcon(QIcon("/opt/tetra/A66-app/ICO/P1-MOLD.png"));
     ui->toolButton_B0->setEnabled(true);
     ui->toolButton_B1->setEnabled(true);
     ui->toolButton_B2->setEnabled(true);
     ui->toolButton_B3->setEnabled(true);
     ui->toolButton_B4->setEnabled(true);
     ui->toolButton_B5->setEnabled(true);
+    ui->toolButton->setEnabled(false);
+    ui->toolButton_4->setEnabled(true);
     openBeep();
 }
 
@@ -209,15 +233,20 @@ void MainWindow::on_pushButton_T2_clicked()
 {
     emit openProgramWidget();
 
-    ui->toolButton_T1->setText(trUtf8(" 程序库"));
-    ui->toolButton_T1->setIcon(QIcon("/opt/tetra/A66-app/ICO/P1-PROG.png"));
+    ui->label_Text->setText(trUtf8("程序库"));
+    QPixmap pix;
+    pix.load("/opt/tetra/A66-app/ICO/P1-PROGmini.png");
+    ui->label_Picture->setPixmap(pix);
+//    ui->toolButton_T1->setText(trUtf8(" 程序库"));
+//    ui->toolButton_T1->setIcon(QIcon("/opt/tetra/A66-app/ICO/P1-PROG.png"));
     ui->toolButton_B0->setEnabled(false);
     ui->toolButton_B1->setEnabled(true);
     ui->toolButton_B2->setEnabled(true);
     ui->toolButton_B3->setEnabled(true);
     ui->toolButton_B4->setEnabled(true);
     ui->toolButton_B5->setEnabled(true);
-     ui->toolButton->setEnabled(true);
+    ui->toolButton->setEnabled(false);
+    ui->toolButton_4->setEnabled(true);
     openBeep();
 
 }
@@ -225,13 +254,14 @@ void MainWindow::on_pushButton_T2_clicked()
 void MainWindow::on_toolButton_B0_clicked()
 {
     emit openProgramWidget();
-//    Programdb openTwoWin;
-//    openTwoWin
-//    openTwoWin.openProgramWin();
 
     openProgramwindows();
-    ui->toolButton_T1->setText(trUtf8(" 程序库"));
-    ui->toolButton_T1->setIcon(QIcon("/opt/tetra/A66-app/ICO/P1-PROG.png"));
+    ui->label_Text->setText(trUtf8("程序库"));
+    QPixmap pix;
+    pix.load("/opt/tetra/A66-app/ICO/P1-PROGmini.png");
+    ui->label_Picture->setPixmap(pix);
+//    ui->toolButton_T1->setText(trUtf8(" 程序库"));
+//    ui->toolButton_T1->setIcon(QIcon("/opt/tetra/A66-app/ICO/P1-PROG.png"));
     ui->toolButton_B0->setEnabled(false);
     ui->toolButton_B1->setEnabled(true);
     ui->toolButton_B2->setEnabled(true);
@@ -239,7 +269,8 @@ void MainWindow::on_toolButton_B0_clicked()
     ui->toolButton_B4->setEnabled(true);
     ui->toolButton_B5->setEnabled(true);
     ui->toolButton_Start->setEnabled(true);
-     ui->toolButton->setEnabled(true);
+    ui->toolButton->setEnabled(false);
+    ui->toolButton_4->setEnabled(true);
 
     openBeep();
 
@@ -247,17 +278,13 @@ void MainWindow::on_toolButton_B0_clicked()
 
 void MainWindow::on_toolButton_B1_clicked()
 {
-//    Programdb *pg=new Programdb;
-//    connect(this, SIGNAL(sig_closeProgramdbWin()), pg, SLOT(closeProgramWin()));
-//    emit sig_closeProgramdbWin();
-    //closeProgramwindows();
     emit openStepWidget();
-
-//    Step openStep;
-//    openStep.openStepWin();
-
-    ui->toolButton_T1->setText(trUtf8(" 工步"));
-    ui->toolButton_T1->setIcon(QIcon("/opt/tetra/A66-app/ICO/P1-EDIT.png"));
+    ui->label_Text->setText(trUtf8("工步"));
+    QPixmap pix;
+    pix.load("/opt/tetra/A66-app/ICO/P1-EDITmini.png");
+    ui->label_Picture->setPixmap(pix);
+//    ui->toolButton_T1->setText(trUtf8(" 工步"));
+//    ui->toolButton_T1->setIcon(QIcon("/opt/tetra/A66-app/ICO/P1-EDIT.png"));
     ui->toolButton_B0->setEnabled(true);
     ui->toolButton_B1->setEnabled(false);
     ui->toolButton_B2->setEnabled(true);
@@ -265,20 +292,21 @@ void MainWindow::on_toolButton_B1_clicked()
     ui->toolButton_B4->setEnabled(true);
     ui->toolButton_B5->setEnabled(true);
     ui->toolButton_Start->setEnabled(true);
-     ui->toolButton->setEnabled(true);
-
-
+    ui->toolButton->setEnabled(false);
+    ui->toolButton_4->setEnabled(true);
     openBeep();
 }
 
 void MainWindow::on_toolButton_B2_clicked()
 {
     emit openMouldsWidget();
-
-    ui->toolButton_T1->setIcon(QIcon("/opt/tetra/A66-app/ICO/P1-MOLD.png"));
 //    ui->toolButton_T1->setIcon(QIcon("/opt/tetra/A66-app/ICO/P1-MOLD.png"));
-    ui->toolButton_T1->setText(trUtf8(" 模具库"));
-
+////    ui->toolButton_T1->setIcon(QIcon("/opt/tetra/A66-app/ICO/P1-MOLD.png"));
+//    ui->toolButton_T1->setText(trUtf8(" 模具库"));
+    ui->label_Text->setText(trUtf8("模具库"));
+    QPixmap pix;
+    pix.load("/opt/tetra/A66-app/ICO/P1-MOLDmini.png");
+    ui->label_Picture->setPixmap(pix);
     ui->toolButton_B0->setEnabled(true);
     ui->toolButton_B1->setEnabled(true);
     ui->toolButton_B2->setEnabled(false);
@@ -286,17 +314,21 @@ void MainWindow::on_toolButton_B2_clicked()
     ui->toolButton_B4->setEnabled(true);
     ui->toolButton_B5->setEnabled(true);
     ui->toolButton_Start->setEnabled(false);
-     ui->toolButton->setEnabled(true);
-
+    ui->toolButton->setEnabled(false);
+    ui->toolButton_4->setEnabled(true);
     openBeep();
 }
 
 void MainWindow::on_toolButton_B3_clicked()
 {
     emit openManualWidget();
-    ui->toolButton_T1->setText(trUtf8(" 手动"));
-    QIcon iconManual("/opt/tetra/A66-app/ICO/P1-MANU.png");
-    ui->toolButton_T1->setIcon(iconManual);
+    ui->label_Text->setText(trUtf8("手动"));
+    QPixmap pix;
+    pix.load("/opt/tetra/A66-app/ICO/P1-MANUmini.png");
+    ui->label_Picture->setPixmap(pix);
+//    ui->toolButton_T1->setText(trUtf8(" 手动"));
+//    QIcon iconManual("/opt/tetra/A66-app/ICO/P1-MANU.png");
+    //ui->toolButton_T1->setIcon(iconManual);
     ui->toolButton_B0->setEnabled(true);
     ui->toolButton_B1->setEnabled(true);
     ui->toolButton_B2->setEnabled(true);
@@ -304,7 +336,8 @@ void MainWindow::on_toolButton_B3_clicked()
     ui->toolButton_B4->setEnabled(true);
     ui->toolButton_B5->setEnabled(true);
     ui->toolButton_Start->setEnabled(false);
-     ui->toolButton->setEnabled(true);
+    ui->toolButton->setEnabled(false);
+    ui->toolButton_4->setEnabled(true);
     openBeep();
 }
 
@@ -324,9 +357,12 @@ void MainWindow::on_toolButton_B4_clicked()
 void MainWindow::on_toolButton_B5_clicked()
 {
     emit openSystemSettingWidget();
-    ui->toolButton_T1->setText(trUtf8(" 设置"));
-    ui->toolButton_T1->setIcon(QIcon("/opt/tetra/A66-app//ICO/P1-SET.png"));
-
+    ui->label_Text->setText(trUtf8("设置"));
+    QPixmap pix;
+    pix.load("/opt/tetra/A66-app/ICO/P1-SETmini.png");
+    ui->label_Picture->setPixmap(pix);
+//    ui->toolButton_T1->setText(trUtf8(" 设置"));
+//    ui->toolButton_T1->setIcon(QIcon("/opt/tetra/A66-app//ICO/P1-SET.png"));
     ui->toolButton_B0->setEnabled(true);
     ui->toolButton_B1->setEnabled(true);
     ui->toolButton_B2->setEnabled(true);
@@ -334,7 +370,8 @@ void MainWindow::on_toolButton_B5_clicked()
     ui->toolButton_B4->setEnabled(true);
     ui->toolButton_B5->setEnabled(false);
     ui->toolButton_Start->setEnabled(false);
-     ui->toolButton->setEnabled(true);
+    ui->toolButton->setEnabled(false);
+    ui->toolButton_4->setEnabled(true);
 
     openBeep();
 }
@@ -361,8 +398,12 @@ bool MainWindow::on_toolButton_Start_clicked()
         {
              //emit openProgramwindow();
             emit openProgramWidget();
-            ui->toolButton_T1->setText(trUtf8(" 程序库"));
-            ui->toolButton_T1->setIcon(QIcon("/opt/tetra/A66-app//ICO/P1-PROG.png"));
+            ui->label_Text->setText(trUtf8("程序库"));
+            QPixmap pix;
+            pix.load("/opt/tetra/A66-app/ICO/P1-PROGmini.png");
+            ui->label_Picture->setPixmap(pix);
+//            ui->toolButton_T1->setText(trUtf8(" 程序库"));
+//            ui->toolButton_T1->setIcon(QIcon("/opt/tetra/A66-app//ICO/P1-PROG.png"));
             ui->toolButton_B0->setEnabled(false);
             ui->toolButton_B1->setEnabled(true);
             ui->toolButton_B2->setEnabled(true);
@@ -371,14 +412,19 @@ bool MainWindow::on_toolButton_Start_clicked()
             ui->toolButton_B5->setEnabled(true);
             ui->toolButton_Start->setEnabled(true);
             ui->toolButton->setEnabled(false);
+            ui->toolButton_4->setEnabled(true);
 
              qDebug("openProgramwindow");
         }
         else
         {
             emit openRunStateWidget();
-            ui->toolButton_T1->setText(trUtf8(" 运行"));
-            ui->toolButton_T1->setIcon(QIcon("/opt/tetra/A66-app/ICO/P1-RUN.png"));
+            ui->label_Text->setText(trUtf8("运行"));
+            QPixmap pix;
+            pix.load("/opt/tetra/A66-app/ICO/P1-STARTmini.png");
+            ui->label_Picture->setPixmap(pix);
+//            ui->toolButton_T1->setText(trUtf8(" 运行"));
+//            ui->toolButton_T1->setIcon(QIcon("/opt/tetra/A66-app/ICO/P1-RUN.png"));
             ui->toolButton_B0->setEnabled(false);
             ui->toolButton_B1->setEnabled(false);
             ui->toolButton_B2->setEnabled(false);
@@ -387,13 +433,18 @@ bool MainWindow::on_toolButton_Start_clicked()
             ui->toolButton_B5->setEnabled(false);
             ui->toolButton_Start->setEnabled(false);
             ui->toolButton->setEnabled(false);
+            ui->toolButton_4->setEnabled(true);
         }
     }
     else
     {
         emit openRunStateWidget();
-        ui->toolButton_T1->setText(trUtf8(" 运行"));
-        ui->toolButton_T1->setIcon(QIcon("/opt/tetra/A66-app/ICO/P1-RUN.png"));
+        ui->label_Text->setText(trUtf8("运行"));
+        QPixmap pix;
+        pix.load("/opt/tetra/A66-app/ICO/P1-STARTmini.png");
+        ui->label_Picture->setPixmap(pix);
+//        ui->toolButton_T1->setText(trUtf8(" 运行"));
+//        ui->toolButton_T1->setIcon(QIcon("/opt/tetra/A66-app/ICO/P1-RUN.png"));
         ui->toolButton_B0->setEnabled(false);
         ui->toolButton_B1->setEnabled(false);
         ui->toolButton_B2->setEnabled(false);
@@ -402,6 +453,7 @@ bool MainWindow::on_toolButton_Start_clicked()
         ui->toolButton_B5->setEnabled(false);
         ui->toolButton_Start->setEnabled(false);
         ui->toolButton->setEnabled(false);
+        ui->toolButton_4->setEnabled(true);
 
     }
     openBeep();
@@ -410,6 +462,22 @@ bool MainWindow::on_toolButton_Start_clicked()
 void MainWindow::on_toolButton_4_clicked()
 {
     emit openInfoWidget();
+    ui->label_Text->setText(trUtf8("帮助"));
+    QPixmap pix;
+    pix.load("/opt/tetra/A66-app/ICO/P1-HELP.png");
+    ui->label_Picture->setPixmap(pix);
+//    ui->toolButton_T1->setText(trUtf8("帮助"));
+//    ui->toolButton_T1->setIcon(QIcon("/opt/tetra/A66-app/ICO/P1-HELP.png"));
+    ui->toolButton_4->setEnabled(false);
+
+    ui->toolButton_B0->setEnabled(true);
+    ui->toolButton_B1->setEnabled(true);
+    ui->toolButton_B2->setEnabled(true);
+    ui->toolButton_B3->setEnabled(true);
+    ui->toolButton_B4->setEnabled(true);
+    ui->toolButton_B5->setEnabled(true);
+    ui->toolButton_Start->setEnabled(false);
+    ui->toolButton->setEnabled(false);
 
 }
 

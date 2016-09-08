@@ -18,6 +18,15 @@ public:
 public slots:
     void openInfoWin();
     
+private slots:
+    void on_toolButton_Up_clicked();
+
+    void on_toolButton_Down_clicked();
+
+    void on_toolButton_Top_clicked();
+
+    void on_toolButton_Bottom_clicked();
+
 private:
     Ui::SystemInfo *ui;
 };

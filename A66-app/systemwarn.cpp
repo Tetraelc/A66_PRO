@@ -73,31 +73,26 @@ void SystemWarn::SystemCheckTip(int TipID)
 }
 
 
-
-void SystemWarn::on_buttonBox_accepted()
+void SystemWarn::on_toolButton_Comfirm_clicked()
 {
-
     if(!(A20_IN_Status & UpperPoint))
     {
         //emit ReturnProgramWin();
-
         this->close();
-
     }else
     {
        this->close();
     }
-
 }
-
-
-void SystemWarn::on_buttonBox_rejected()
+void SystemWarn::on_toolButton_Quit_clicked()
 {
+     emit ReturnProgramdbWin();
+}
 
-    emit ReturnProgramdbWin();
 }
 
 
-}
+
+
 
 

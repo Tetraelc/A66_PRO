@@ -125,6 +125,8 @@ private slots:
 
 private:
     Ui::Moulds *ui;
+    QSqlTableModel Materialmodel;
+
 
 };
 

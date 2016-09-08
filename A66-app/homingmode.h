@@ -15,6 +15,7 @@ public:
     explicit HomingMode(QWidget *parent = 0);
     ~HomingMode();
     void timerEvent(QTimerEvent *t) ;//定时器事件
+    void CheckMotorState();
 
 public slots:
     void openHomingModeWin();

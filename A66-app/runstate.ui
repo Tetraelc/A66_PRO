@@ -89,7 +89,7 @@
       <set>QAbstractItemView::NoEditTriggers</set>
      </property>
      <property name="dragEnabled">
-      <bool>true</bool>
+      <bool>false</bool>
      </property>
      <property name="selectionMode">
       <enum>QAbstractItemView::SingleSelection</enum>
@@ -257,38 +257,6 @@
       <enum>Qt::ToolButtonIconOnly</enum>
      </property>
     </widget>
-    <widget class="QToolButton" name="pushButton_Left_2">
-     <property name="geometry">
-      <rect>
-       <x>660</x>
-       <y>80</y>
-       <width>71</width>
-       <height>81</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <family>Sans Serif</family>
-       <pointsize>10</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>跳转至</string>
-     </property>
-     <property name="icon">
-      <iconset resource="A66-appsrc.qrc">
-       <normaloff>:/ico/ICO/P1-LINK.png</normaloff>:/ico/ICO/P1-LINK.png</iconset>
-     </property>
-     <property name="iconSize">
-      <size>
-       <width>36</width>
-       <height>36</height>
-      </size>
-     </property>
-     <property name="toolButtonStyle">
-      <enum>Qt::ToolButtonTextUnderIcon</enum>
-     </property>
-    </widget>
     <widget class="QToolButton" name="pushButton_Left_4">
      <property name="geometry">
       <rect>
@@ -318,6 +286,11 @@
       </size>
      </property>
     </widget>
+    <zorder>tableWidget_Run</zorder>
+    <zorder>pushButton_Left_1</zorder>
+    <zorder>pushButton_Left_4</zorder>
+    <zorder>tableWidget_Programdb</zorder>
+    <zorder>tableWidget_Programdb</zorder>
    </widget>
    <widget class="QWidget" name="tab_2">
     <attribute name="title">
@@ -893,6 +866,26 @@
      <enum>Qt::Vertical</enum>
     </property>
    </widget>
+   <zorder>toolButton</zorder>
+   <zorder>lineEdit_RCurrentPos</zorder>
+   <zorder>toolButton_2</zorder>
+   <zorder>toolButton_3</zorder>
+   <zorder>lineEdit_XCurrentPos</zorder>
+   <zorder>lineEdit_YCurrentPos</zorder>
+   <zorder>line</zorder>
+   <zorder>toolButton_4</zorder>
+   <zorder>toolButton_5</zorder>
+   <zorder>toolButton_6</zorder>
+   <zorder>toolButton_7</zorder>
+   <zorder>toolButton_8</zorder>
+   <zorder>pushButton_Left_5</zorder>
+   <zorder>label_ProgramName</zorder>
+   <zorder>label_CurrentStep</zorder>
+   <zorder>label_WorkedTotal</zorder>
+   <zorder>label_Pressure</zorder>
+   <zorder>label_Run</zorder>
+   <zorder>line_2</zorder>
+   <zorder>tableWidget_Programdb</zorder>
   </widget>
   <widget class="QFrame" name="frame_2">
    <property name="geometry">

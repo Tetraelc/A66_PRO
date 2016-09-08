@@ -30,6 +30,8 @@ Programdb::Programdb(QWidget *parent) :
 
     initProgram();
     CurrentReg.Current_MotorTips = PrepareTip;
+    RunState runstate1 ;
+    runstate1.ReadForRun(CurrentReg.Current_StepProgramRow);
 
 //    RunState *runstate1 = new RunState;
 //     connect(runstate1, SIGNAL(ReturnworkedTotal(int )), this, SLOT(ReflashProgramWrokedNum(int )));
@@ -40,6 +42,9 @@ Programdb::Programdb(QWidget *parent) :
 
     connect(ui->comboBox_P_material,SIGNAL(currentIndexChanged(const QString &)),this,SLOT(UpdtaeMaterialDat()));
 //    Programdb *pb = new Programdb;
+     QFont font;
+     font.setPointSize(18);
+     ui->comboBox_P_material->setFont(font);
 
 }
 
@@ -55,7 +60,7 @@ void Programdb::openProgramWin()
     this->move(0,WIDGET_Y);
     disconnect(ui->comboBox_P_material,SIGNAL(currentIndexChanged(const QString &)),this,SLOT(UpdtaeMaterialDat()));
     ui->tableWidget_Programdb->selectRow(CurrentReg.Current_ProgramLibRow);
-    qDebug()<<"CurrentReg.Current_ProgramLibRow"<<CurrentReg.Current_ProgramLibRow;
+   // qDebug()<<"CurrentReg.Current_ProgramLibRow"<<CurrentReg.Current_ProgramLibRow;
     ReflashMaterialFalg = 1;
   //  ReflashMaterialdb();
     ReflashMaterialdb();
@@ -407,7 +412,7 @@ void Programdb::ReflashProLinedit()
     }
     CurrentReg.Current_ProgramLibRow = ui->tableWidget_Programdb->currentRow();
     QPixmap pix;
-    pix.load("PIC/P01.jpg");
+    pix.load("/opt/tetra/A66-app/PIC/P01.jpg");
     ui->label_pic->setPixmap(pix);
     //db.close();//释放数据库
 

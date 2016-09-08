@@ -12,6 +12,11 @@ ManualAdjustDate::ManualAdjustDate(QWidget *parent) :
     ui(new Ui::ManualAdjustDate)
 {
     ui->setupUi(this);
+    QRegExp rx("^(-?[0]|-?[1-9][0-9]{0,3})(?:\\.\\d{1,2})?$|(^\\t?$)");
+    QRegExpValidator *pReg = new QRegExpValidator(rx, this);
+    ui->lineEdit_ManualX->setValidator(pReg);
+    ui->lineEdit_ManualY->setValidator(pReg);
+    ui->lineEdit_ManualR->setValidator(pReg);
 }
 
 ManualAdjustDate::~ManualAdjustDate()

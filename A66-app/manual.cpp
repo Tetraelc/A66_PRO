@@ -53,6 +53,12 @@ Manual::Manual(QWidget *parent) :
    // ui->label_Y->setText(trUtf8("停止"));
     ui->frame_State->setVisible(false);
 
+    QFont font;
+    font.setPointSize(28);
+    ui->lineEdit_ManualX->setFont(font);
+    ui->lineEdit_ManualY->setFont(font);
+    ui->lineEdit_ManualR->setFont(font);
+
 }
 
 Manual::~Manual()
@@ -89,7 +95,7 @@ void Manual::timerEvent(QTimerEvent *t) //定时器事件
 
            double Dis_XPos =Get_MOTOR_Demand_Postion(0x01) * XaxisParameter.LeadScrew /1000;
            double Dis_YPos =Get_MOTOR_Demand_Postion(0x02) * XaxisParameter.LeadScrew /1000;
-           double Dis_RPos =Get_MOTOR_Demand_Postion(0x03) * XaxisParameter.LeadScrew /1000;
+
 
            ui->lineEdit_ManualX->setText(QString::number(Dis_XPos,'.',2));
 //        }
@@ -99,7 +105,12 @@ void Manual::timerEvent(QTimerEvent *t) //定时器事件
 //        }
 //        if(MotorRDisplayFalg == 1)
 //        {
-          ui->lineEdit_ManualR->setText(QString::number(Dis_RPos,'.',2));
+           if(RaxisParameter.ENABLE_AXIS == 1)
+           {
+               double Dis_RPos =Get_MOTOR_Demand_Postion(0x03) * XaxisParameter.LeadScrew /1000;
+               ui->lineEdit_ManualR->setText(QString::number(Dis_RPos,'.',2));
+           }
+
 //        }
 
     }
@@ -114,9 +125,9 @@ void Manual::timerEvent(QTimerEvent *t) //定时器事件
         CheckINState();
         CheckRunState();
         CheckOutState();
-        ui->lineEdit_error1->setText(QString::number(motor[0].SendCountError+motor[0].ReadCountError,10));
-        ui->lineEdit_error2->setText(QString::number(motor[1].SendCountError+motor[1].ReadCountError,10));
-        ui->lineEdit_error3->setText(QString::number(motor[2].SendCountError+motor[2].ReadCountError,10));
+        //ui->lineEdit_error1->setText(QString::number(motor[0].SendCountError+motor[0].ReadCountError,10));
+        //ui->lineEdit_error2->setText(QString::number(motor[1].SendCountError+motor[1].ReadCountError,10));
+        //ui->lineEdit_error3->setText(QString::number(motor[2].SendCountError+motor[2].ReadCountError,10));
 
     }
 
@@ -455,7 +466,7 @@ void Manual::on_pushButton_M_YForWard_released()
 
 
 void Manual::on_pushButton_M_RForWard_pressed()
-{
+{   
      MotorRDisplayFalg=1;
 
      unsigned long RManualSpeed_temp = RaxisParameter.ManualSpeed;

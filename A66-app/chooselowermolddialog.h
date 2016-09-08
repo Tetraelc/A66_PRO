@@ -27,7 +27,8 @@ public:
     };
 
 private slots:
-    void on_buttonBox_accepted();
+    void on_toolButton_Comfirm_clicked();
+
 signals:
     void sig_sndLowerMold(int num);
 

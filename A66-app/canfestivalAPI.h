@@ -47,9 +47,10 @@ typedef struct {
     UNS8 Read_Multi_Finsh_state;
 
 /*****错误标志****/
-    UNS8 HeartbeatError;
+    UNS8  HeartbeatError;
     UNS32 SendCountError;
     UNS32 ReadCountError;
+    UNS32 HeartCount;
 
 
 
@@ -101,7 +102,7 @@ extern S_Data_trans Write_Multi_buf;
 extern S_Data_trans set_Postion_Speed_buf[4];
 extern S_Data_trans Config_valve_buf;
 extern S_Data_trans Adjust_ManualDate;
-extern S_Data_trans SystemSet_Motor;
+extern S_Data_trans SystemSet_Motor[3];
 extern S_Data_trans HomingModeDate[3];
 extern S_Data_trans SystemSet_MT;
 extern int ManualDat;

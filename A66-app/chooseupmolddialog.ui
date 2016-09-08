@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>722</width>
+    <width>720</width>
     <height>430</height>
    </rect>
   </property>
@@ -82,8 +82,8 @@
     <rect>
      <x>20</x>
      <y>20</y>
-     <width>681</width>
-     <height>391</height>
+     <width>680</width>
+     <height>390</height>
     </rect>
    </property>
    <property name="palette">
@@ -348,26 +348,30 @@
      </property>
     </item>
    </widget>
-   <widget class="QDialogButtonBox" name="buttonBox">
+   <widget class="QToolButton" name="toolButton_Quit">
     <property name="geometry">
      <rect>
-      <x>230</x>
-      <y>340</y>
-      <width>211</width>
-      <height>31</height>
+      <x>340</x>
+      <y>330</y>
+      <width>81</width>
+      <height>41</height>
      </rect>
     </property>
-    <property name="layoutDirection">
-     <enum>Qt::LeftToRight</enum>
+    <property name="text">
+     <string>取消</string>
     </property>
-    <property name="orientation">
-     <enum>Qt::Horizontal</enum>
+   </widget>
+   <widget class="QToolButton" name="toolButton_Comfirm">
+    <property name="geometry">
+     <rect>
+      <x>190</x>
+      <y>330</y>
+      <width>81</width>
+      <height>41</height>
+     </rect>
     </property>
-    <property name="standardButtons">
-     <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-    </property>
-    <property name="centerButtons">
-     <bool>true</bool>
+    <property name="text">
+     <string>确定</string>
     </property>
    </widget>
   </widget>
@@ -375,18 +379,18 @@
  <resources/>
  <connections>
   <connection>
-   <sender>buttonBox</sender>
-   <signal>rejected()</signal>
+   <sender>toolButton_Quit</sender>
+   <signal>clicked()</signal>
    <receiver>chooseUpMoldDialog</receiver>
-   <slot>reject()</slot>
+   <slot>close()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>316</x>
-     <y>260</y>
+     <x>400</x>
+     <y>370</y>
     </hint>
     <hint type="destinationlabel">
-     <x>286</x>
-     <y>274</y>
+     <x>359</x>
+     <y>214</y>
     </hint>
    </hints>
   </connection>

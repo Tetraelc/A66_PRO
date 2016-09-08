@@ -212,7 +212,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>取消</string>
+    <string>退出</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_39">

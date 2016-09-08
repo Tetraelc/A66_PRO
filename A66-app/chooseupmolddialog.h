@@ -27,7 +27,8 @@ signals:
     void sig_sndUpMold(int num);
     
 private slots:
-    void on_buttonBox_accepted();
+
+    void on_toolButton_Comfirm_clicked();
 
 private:
     Ui::chooseUpMoldDialog *ui;

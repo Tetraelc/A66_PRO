@@ -67,12 +67,13 @@ void Step::openStepWin()
     Display_StepProgramItem();
     ui->tableWidget_Step->selectRow(0);
 
-//    RunState runstate1 ;
-//    runstate1.ReadForRun(CurrentReg.Current_StepProgramRow);
+    RunState runstate1 ;
+    runstate1.ReadForRun(CurrentReg.Current_StepProgramRow);
 
     CurrentStepTemp.Pressure = mathcal.pressureCal(CurrentProgramTemp.BroadWideth,CurrentProgramTemp.BroadThick,CurrentMaterialTemp.StrengthFactor,CurrentLowerMoldTemp.D_V);
     ui->lineEdit_S_pressure->setText(QString::number(CurrentStepTemp.Pressure,'.',0));
     ui->tableWidget_Step->setItem(ui->tableWidget_Step->currentRow(),StepProgram_Pressure,new QTableWidgetItem(QString::number(CurrentStepTemp.Pressure,'.',0)));
+    Update_StepProgramItem(ui->tableWidget_Step->item(ui->tableWidget_Step->currentRow(),StepProgram_Id)->text().toInt(),StepProgram_Pressure,ui->lineEdit_S_pressure->text());
 
 }
 
@@ -89,6 +90,7 @@ void Step::timerEvent(QTimerEvent *t) //定时器事件
              scanAngleCompensateFlag = false;
              ui->lineEdit_S_Yaxis->setText(QString::number(CurrentStepTemp.Yaxis,'.',0));
              ui->tableWidget_Step->setItem(ui->tableWidget_Step->currentRow(),StepProgram_Yaxis,new QTableWidgetItem(QString::number(CurrentStepTemp.Yaxis,'.',0)));
+             Update_StepProgramItem(ui->tableWidget_Step->item(ui->tableWidget_Step->currentRow(),StepProgram_Id)->text().toInt(),StepProgram_Yaxis,ui->lineEdit_S_Yaxis->text());
              qDebug()<<"timerEvent"<<CurrentStepTemp.Angle<<CurrentStepTemp.AngleCompensate<<CurrentProgramTemp.BroadThick<<CurrentStepTemp.Yzero<<CurrentStepTemp.Yaxis;
 
 //             double MathCalculation::pressureCal(double boardWidth,double boardTick,double strength,double moldV)

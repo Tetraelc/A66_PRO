@@ -16,18 +16,76 @@
   <widget class="QTextBrowser" name="textBrowser">
    <property name="geometry">
     <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>1024</width>
-     <height>541</height>
+     <x>20</x>
+     <y>20</y>
+     <width>891</width>
+     <height>501</height>
     </rect>
+   </property>
+   <property name="verticalScrollBarPolicy">
+    <enum>Qt::ScrollBarAlwaysOff</enum>
+   </property>
+   <property name="horizontalScrollBarPolicy">
+    <enum>Qt::ScrollBarAlwaysOff</enum>
    </property>
    <property name="html">
     <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;img src=&quot;:/ICO/iGD25.png&quot; /&gt;&lt;img src=&quot;:/ICO/iGD34.png&quot; /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;img src=&quot;:/ICO/0001.jpg&quot; /&gt;&lt;img src=&quot;:/ICO/0002.jpg&quot; /&gt;&lt;img src=&quot;:/ICO/0003.jpg&quot; /&gt;&lt;img src=&quot;:/ICO/0004.jpg&quot; /&gt;&lt;img src=&quot;:/ICO/0005.jpg&quot; /&gt;&lt;img src=&quot;:/ICO/0006.jpg&quot; /&gt;&lt;img src=&quot;:/ICO/0007.jpg&quot; /&gt;&lt;img src=&quot;:/ICO/0008.jpg&quot; /&gt;&lt;img src=&quot;:/ICO/0008.jpg&quot; /&gt;&lt;img src=&quot;:/ICO/0009.jpg&quot; /&gt;&lt;img src=&quot;:/ICO/0010.jpg&quot; /&gt;&lt;img src=&quot;:/ICO/0011.jpg&quot; /&gt;&lt;img src=&quot;:/ICO/0011.jpg&quot; /&gt;&lt;img src=&quot;:/ICO/0012.jpg&quot; /&gt;&lt;img src=&quot;:/ICO/0013.jpg&quot; /&gt;&lt;img src=&quot;:/ICO/0014.jpg&quot; /&gt;&lt;img src=&quot;:/ICO/0015.jpg&quot; /&gt;&lt;img src=&quot;:/ICO/0016.jpg&quot; /&gt;&lt;img src=&quot;:/ICO/0017.jpg&quot; /&gt;&lt;img src=&quot;:/ICO/0018.jpg&quot; /&gt;&lt;img src=&quot;:/ICO/0019.jpg&quot; /&gt;&lt;img src=&quot;:/ICO/0020.jpg&quot; /&gt;&lt;img src=&quot;:/ICO/0021.jpg&quot; /&gt;&lt;img src=&quot;:/ICO/0022.jpg&quot; /&gt;&lt;img src=&quot;:/ICO/0024.jpg&quot; /&gt;&lt;img src=&quot;:/ICO/0025.jpg&quot; /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+  </widget>
+  <widget class="QToolButton" name="toolButton_Up">
+   <property name="geometry">
+    <rect>
+     <x>930</x>
+     <y>161</y>
+     <width>80</width>
+     <height>70</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>上拉</string>
+   </property>
+  </widget>
+  <widget class="QToolButton" name="toolButton_Down">
+   <property name="geometry">
+    <rect>
+     <x>930</x>
+     <y>290</y>
+     <width>80</width>
+     <height>70</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>下拉</string>
+   </property>
+  </widget>
+  <widget class="QToolButton" name="toolButton_Top">
+   <property name="geometry">
+    <rect>
+     <x>930</x>
+     <y>33</y>
+     <width>80</width>
+     <height>70</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>置顶</string>
+   </property>
+  </widget>
+  <widget class="QToolButton" name="toolButton_Bottom">
+   <property name="geometry">
+    <rect>
+     <x>930</x>
+     <y>410</y>
+     <width>80</width>
+     <height>70</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>置尾</string>
    </property>
   </widget>
  </widget>

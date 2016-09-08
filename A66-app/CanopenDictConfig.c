@@ -17,6 +17,8 @@
 //#define POWER_OFF sendSDO_1(d,MOTOR_1,len_16, 0x6040, 0x00,0x0f);
 //#define SELECT_SPPED_MODE sendSDO_1(d,MOTOR_1,len_8,  0x6060, 0x00,0x03);
 
+static int heartbeatCount = 0;
+
 unsigned char nodeID=16;
 void delay1ms(void)
     {      unsigned char a,b,c;     for(c=50;c>0;c--)  for(b=200;b>0;b--)             for(a=2;a>0;a--); }
@@ -27,8 +29,14 @@ void delay1ms(void)
   */
 void Master_heartbeatError(CO_Data* d, UNS8 heartbeatID)
 {
-    motor[heartbeatID-1].initStatus = 0; //离线之后
+        motor[heartbeatID-1].HeartCount++;
+    if( motor[heartbeatID-1].HeartCount >1000)
+    {
+ //   motor[heartbeatID-1].initStatus = 0; //离线之后
+    motor[heartbeatID-1].HeartCount =0;
+    }
     motor[heartbeatID-1].HeartbeatError = 1;
+
   //  MSG_USER(0, "Master_heartbeatError %d\n", heartbeatID);
    printf("Master_heartbeatError %d\n",heartbeatID);
 }
@@ -39,7 +47,8 @@ UNS8 Get_HeartbetError(UNS8 heartbeatID)
 }
 UNS8 Clean_HeartbetError(UNS8 heartbeatID)
 {
-    motor[heartbeatID-1].HeartbeatError = 0x00;
+    motor[heartbeatID-1].HeartbeatError = 0;
+    motor[heartbeatID-1].HeartCount =0;
 }
 /**
   * @brief  Master_initialisation.
@@ -218,17 +227,16 @@ void Master_post_SlaveBootup(CO_Data* d, UNS8 nodeId)
 }
 void Master_pos_SlavePreInit(CO_Data* d, UNS8 nodeId)
 {
-    if(motor[nodeId-1].SDO_status == SDO_free)
+    if(motor[nodeId-1].initStatus == 0)
     {
-    Clean_HeartbetError(nodeId);
-//    if(nodeId == 0x04)//mtzhuji
-//    {
-//        masterSendNMTstateChange (d, nodeId, NMT_Start_Node);
-//        d->NMTable[nodeId] = Operational;
-//    }
-    ConfigureSlaveNode(d,nodeId);
-    MSG_USER(0, "on pre for init %d", nodeId);
+        if(motor[nodeId-1].SDO_status == SDO_free)
+        {
+        ConfigureSlaveNode(d,nodeId);
+        MSG_USER(0, "on pre for init %d", nodeId);
+        }
     }
+    Clean_HeartbetError(nodeId);
+
 }
 void Master_post_SlaveStateChange(CO_Data* d, UNS8 nodeId, e_nodeState newNodeState)
 {
@@ -265,7 +273,7 @@ void CANOpenMasterInit(CO_Data* d)
     d->post_SlaveBootup      = Master_post_SlaveBootup;
     d->post_SlaveStateChange = Master_post_SlaveStateChange;
     d->post_SlavePreInit     = Master_pos_SlavePreInit;
-    Init_MOTOR();
+
 }
 /**
   * @brief  CanopenInit
@@ -278,7 +286,7 @@ void CanopenInit(void)
 //
 //	initTimer();
 //	CANOpenMasterObject->canHandle = CAN1;
-
+     Init_MOTOR();
 //	setState(CANOpenMasterObject,Initialisation);
 //	setNodeId (CANOpenMasterObject, 127);
      CANOpenMasterInit(&ObjDict_Data);

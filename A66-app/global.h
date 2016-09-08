@@ -43,7 +43,7 @@ QString SystemTipsInformation(int TipsID);
 #define ENTER_ENABLE  0xAA
 #define ENTER_DISENABLE  0x55
 
-#define ARMFlag  1
+#define ARMFlag   1
 
 #define X1_ID   1
 #define Y1_ID   2

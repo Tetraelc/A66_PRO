@@ -51,7 +51,7 @@ chooseUpMoldDialog::chooseUpMoldDialog(QWidget *parent) :
             qDebug()<<"record.value().toString()"<<record.value("Id").toString();
     }
 
-   // ui->tableWidget_UpMoulds->selectRow(0);
+    ui->tableWidget_UpMoulds->selectRow(CurrentProgramTemp.UpMold-1);
     //db.close();//释放数据库
 
 
@@ -71,7 +71,7 @@ chooseUpMoldDialog::~chooseUpMoldDialog()
     delete ui;
 }
 
-void chooseUpMoldDialog::on_buttonBox_accepted()
+void chooseUpMoldDialog::on_toolButton_Comfirm_clicked()
 {
     if(ui->tableWidget_UpMoulds->currentRow()>=0)
     {
