@@ -476,7 +476,7 @@
     </property>
     <property name="font">
      <font>
-      <pointsize>12</pointsize>
+      <pointsize>16</pointsize>
      </font>
     </property>
     <property name="text">
@@ -494,7 +494,7 @@
     </property>
     <property name="font">
      <font>
-      <pointsize>12</pointsize>
+      <pointsize>16</pointsize>
      </font>
     </property>
     <property name="text">
@@ -512,7 +512,7 @@
     </property>
     <property name="font">
      <font>
-      <pointsize>12</pointsize>
+      <pointsize>16</pointsize>
      </font>
     </property>
     <property name="text">
@@ -1132,13 +1132,13 @@
      <rect>
       <x>170</x>
       <y>20</y>
-      <width>231</width>
+      <width>271</width>
       <height>21</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>12</pointsize>
+      <pointsize>16</pointsize>
      </font>
     </property>
     <property name="text">
@@ -1148,7 +1148,7 @@
    <widget class="QLineEdit" name="lineEdit_RunState">
     <property name="geometry">
      <rect>
-      <x>440</x>
+      <x>489</x>
       <y>16</y>
       <width>181</width>
       <height>31</height>

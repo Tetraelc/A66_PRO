@@ -30,13 +30,17 @@ HomingMode::HomingMode(QWidget *parent) :
     sys.SystemWriteMT();//写MT参数
 
     ui->label_X->setText(trUtf8("准备就绪"));
-            ui->label_Y->setText(trUtf8("准备就绪"));
-            ui->label_R->setText(trUtf8("准备就绪"));
+    ui->label_Y->setText(trUtf8("准备就绪"));
+    ui->label_R->setText(trUtf8("准备就绪"));
     QFont font;
     font.setPointSize(28);
     ui->lineEdit_XHoming->setFont(font);
     ui->lineEdit_YHoming->setFont(font);
     ui->lineEdit_RHoming->setFont(font);
+
+    ui->toolButton_X->setEnabled(false);
+    ui->toolButton_Y->setEnabled(false);
+    ui->toolButton_R->setEnabled(false);
 
 
     MainWindow *mw =new MainWindow;
@@ -55,52 +59,53 @@ HomingMode::~HomingMode()
     delete ui;
 }
 
-
+//[1]
 void HomingMode::CheckMotorState()
 {
-//    qDebug()<<"Get_HeartbetError(X1_ID) " <<Get_HeartbetError(X1_ID) ;
-//    qDebug()<<"Get_HeartbetError(Y1_ID) " <<Get_HeartbetError(Y1_ID) ;
-//    qDebug()<<"Get_HeartbetError(R1_ID) " <<Get_HeartbetError(R1_ID) ;
-//    qDebug()<<"motor[X1_ID].initStatus"<<motor[X1_ID-1].initStatus;
-//    qDebug()<<"motor[Y1_ID].initStatus"<<motor[Y1_ID-1].initStatus;
-//    qDebug()<<"motor[R1_ID].initStatus"<<motor[R1_ID-1].initStatus;
-
     if(Get_HeartbetError(X1_ID) == 0x01 || motor[X1_ID-1].initStatus == 0)
     {
         ui->label_X->setText(trUtf8("电机异常"));
         ui->toolButton_RunHoming->setEnabled(false);
+        ui->toolButton_X->setEnabled(false);
     }
     else if(HomgingModeFlag == 1 && arrivedSwitch_X == 0)
     {
         ui->label_X->setText(trUtf8("正在归零"));
+        ui->toolButton_X->setEnabled(true);
     }
     else if(arrivedSwitch_X == 1)
     {
         ui->label_X->setText(trUtf8("归零完成"));
+        ui->toolButton_X->setEnabled(false);
         //ui->toolButton_RunHoming->setEnabled(true);
     }
     else if(arrivedSwitch_X == 0)
     {
         ui->label_X->setText(trUtf8("准备就绪"));
         ui->toolButton_RunHoming->setEnabled(true);
+        ui->toolButton_X->setEnabled(false);
     }
     if(Get_HeartbetError(Y1_ID) == 0x01 || motor[Y1_ID-1].initStatus == 0)
     {
         ui->label_Y->setText(trUtf8("电机异常"));
         ui->toolButton_RunHoming->setEnabled(false);
+        ui->toolButton_X->setEnabled(false);
     }
     else if(HomgingModeFlag == 1 && arrivedSwitch_Y == 0)
     {
         ui->label_Y->setText(trUtf8("正在归零"));
+        ui->toolButton_X->setEnabled(true);
     }
     else if(arrivedSwitch_Y == 1)
     {
         ui->label_Y->setText(trUtf8("归零完成"));
+        ui->toolButton_X->setEnabled(false);
        // ui->toolButton_RunHoming->setEnabled(true);
     }
     else if(arrivedSwitch_Y == 0)
     {
         ui->label_Y->setText(trUtf8("准备就绪"));
+        ui->toolButton_X->setEnabled(false);
         ui->toolButton_RunHoming->setEnabled(true);
     }
     if(RaxisParameter.ENABLE_AXIS == 1)
@@ -108,21 +113,25 @@ void HomingMode::CheckMotorState()
         if(Get_HeartbetError(R1_ID) == 0x01 || motor[R1_ID-1].initStatus == 0)
         {
             ui->label_R->setText(trUtf8("电机异常"));
+            ui->toolButton_X->setEnabled(false);
             ui->toolButton_RunHoming->setEnabled(false);
         }
         else if(HomgingModeFlag == 1 && arrivedSwitch_R == 0)
         {
             ui->label_R->setText(trUtf8("正在归零"));
+            ui->toolButton_X->setEnabled(true);
         }
         else if(arrivedSwitch_R == 1)
         {
             ui->label_R->setText(trUtf8("归零完成"));
+            ui->toolButton_X->setEnabled(false);
             //ui->toolButton_RunHoming->setEnabled(true);
         }
         else if(arrivedSwitch_R == 0)
         {
             ui->label_R->setText(trUtf8("准备就绪"));
             ui->toolButton_RunHoming->setEnabled(true);
+            ui->toolButton_X->setEnabled(false);
         }
     }
     else
@@ -157,14 +166,16 @@ void HomingMode::timerEvent(QTimerEvent *t) //定时器事件
                 CheckMotorState();
 
                 double Dis_XPos =Get_MOTOR_Demand_Postion(X1_ID) * XaxisParameter.LeadScrew /1000;
-                double Dis_YPos =Get_MOTOR_Demand_Postion(Y1_ID) * XaxisParameter.LeadScrew /1000;
-                double Dis_RPos =Get_MOTOR_Demand_Postion(R1_ID) * XaxisParameter.LeadScrew /1000;
+                double Dis_YPos =Get_MOTOR_Demand_Postion(Y1_ID) * YaxisParameter.LeadScrew /1000;
+                double Dis_RPos =Get_MOTOR_Demand_Postion(R1_ID) * RaxisParameter.LeadScrew /1000;
 
                 ui->lineEdit_XHoming->setText(QString::number(Dis_XPos,'.',2));
 
                 ui->lineEdit_YHoming->setText(QString::number(Dis_YPos,'.',2));
 
                 ui->lineEdit_RHoming->setText(QString::number(Dis_RPos,'.',2));
+
+
 
                // qDebug()<<"MOTOR_STATUS[0]"<<MOTOR_STATUS[0] ;
                 if(HomgingModeFlag == 1)

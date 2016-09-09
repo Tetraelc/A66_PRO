@@ -62,7 +62,7 @@
       <cursorShape>ArrowCursor</cursorShape>
      </property>
      <property name="mouseTracking">
-      <bool>true</bool>
+      <bool>false</bool>
      </property>
      <property name="focusPolicy">
       <enum>Qt::NoFocus</enum>
@@ -77,7 +77,7 @@
       <number>1</number>
      </property>
      <property name="verticalScrollBarPolicy">
-      <enum>Qt::ScrollBarAsNeeded</enum>
+      <enum>Qt::ScrollBarAlwaysOff</enum>
      </property>
      <property name="horizontalScrollBarPolicy">
       <enum>Qt::ScrollBarAsNeeded</enum>
@@ -137,7 +137,7 @@
       </property>
       <property name="font">
        <font>
-        <pointsize>12</pointsize>
+        <pointsize>16</pointsize>
        </font>
       </property>
       <property name="textAlignment">
@@ -151,7 +151,7 @@
       <property name="font">
        <font>
         <family>Sans Serif</family>
-        <pointsize>12</pointsize>
+        <pointsize>16</pointsize>
        </font>
       </property>
       <property name="textAlignment">
@@ -165,7 +165,7 @@
       <property name="font">
        <font>
         <family>Sans Serif</family>
-        <pointsize>12</pointsize>
+        <pointsize>16</pointsize>
        </font>
       </property>
       <property name="textAlignment">
@@ -179,7 +179,7 @@
       <property name="font">
        <font>
         <family>Sans Serif</family>
-        <pointsize>12</pointsize>
+        <pointsize>16</pointsize>
        </font>
       </property>
       <property name="textAlignment">
@@ -193,7 +193,7 @@
       <property name="font">
        <font>
         <family>Sans Serif</family>
-        <pointsize>12</pointsize>
+        <pointsize>16</pointsize>
        </font>
       </property>
       <property name="textAlignment">
@@ -207,7 +207,7 @@
       <property name="font">
        <font>
         <family>Sans Serif</family>
-        <pointsize>12</pointsize>
+        <pointsize>16</pointsize>
        </font>
       </property>
       <property name="textAlignment">
@@ -286,11 +286,6 @@
       </size>
      </property>
     </widget>
-    <zorder>tableWidget_Run</zorder>
-    <zorder>pushButton_Left_1</zorder>
-    <zorder>pushButton_Left_4</zorder>
-    <zorder>tableWidget_Programdb</zorder>
-    <zorder>tableWidget_Programdb</zorder>
    </widget>
    <widget class="QWidget" name="tab_2">
     <attribute name="title">
@@ -344,7 +339,7 @@
    <property name="frameShadow">
     <enum>QFrame::Raised</enum>
    </property>
-   <widget class="QToolButton" name="toolButton">
+   <widget class="QToolButton" name="toolButton_R">
     <property name="geometry">
      <rect>
       <x>30</x>
@@ -404,7 +399,7 @@
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QToolButton" name="toolButton_2">
+   <widget class="QToolButton" name="toolButton_Y">
     <property name="geometry">
      <rect>
       <x>30</x>
@@ -440,7 +435,7 @@
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QToolButton" name="toolButton_3">
+   <widget class="QToolButton" name="toolButton_X">
     <property name="geometry">
      <rect>
       <x>30</x>
@@ -527,7 +522,7 @@
    <widget class="Line" name="line">
     <property name="geometry">
      <rect>
-      <x>380</x>
+      <x>362</x>
       <y>30</y>
       <width>20</width>
       <height>151</height>
@@ -535,166 +530,6 @@
     </property>
     <property name="orientation">
      <enum>Qt::Vertical</enum>
-    </property>
-   </widget>
-   <widget class="QToolButton" name="toolButton_4">
-    <property name="geometry">
-     <rect>
-      <x>410</x>
-      <y>30</y>
-      <width>91</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>12</pointsize>
-      <weight>50</weight>
-      <bold>false</bold>
-     </font>
-    </property>
-    <property name="text">
-     <string>程 序 名 ：</string>
-    </property>
-    <property name="iconSize">
-     <size>
-      <width>30</width>
-      <height>30</height>
-     </size>
-    </property>
-    <property name="toolButtonStyle">
-     <enum>Qt::ToolButtonTextBesideIcon</enum>
-    </property>
-    <property name="autoRaise">
-     <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QToolButton" name="toolButton_5">
-    <property name="geometry">
-     <rect>
-      <x>410</x>
-      <y>60</y>
-      <width>91</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>12</pointsize>
-      <weight>50</weight>
-      <bold>false</bold>
-     </font>
-    </property>
-    <property name="text">
-     <string>当前工步：</string>
-    </property>
-    <property name="iconSize">
-     <size>
-      <width>30</width>
-      <height>30</height>
-     </size>
-    </property>
-    <property name="toolButtonStyle">
-     <enum>Qt::ToolButtonTextBesideIcon</enum>
-    </property>
-    <property name="autoRaise">
-     <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QToolButton" name="toolButton_6">
-    <property name="geometry">
-     <rect>
-      <x>410</x>
-      <y>90</y>
-      <width>91</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>12</pointsize>
-      <weight>50</weight>
-      <bold>false</bold>
-     </font>
-    </property>
-    <property name="text">
-     <string>累计加工：</string>
-    </property>
-    <property name="iconSize">
-     <size>
-      <width>30</width>
-      <height>30</height>
-     </size>
-    </property>
-    <property name="toolButtonStyle">
-     <enum>Qt::ToolButtonTextBesideIcon</enum>
-    </property>
-    <property name="autoRaise">
-     <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QToolButton" name="toolButton_7">
-    <property name="geometry">
-     <rect>
-      <x>410</x>
-      <y>120</y>
-      <width>91</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>12</pointsize>
-      <weight>50</weight>
-      <bold>false</bold>
-     </font>
-    </property>
-    <property name="text">
-     <string>液压状态：</string>
-    </property>
-    <property name="iconSize">
-     <size>
-      <width>30</width>
-      <height>30</height>
-     </size>
-    </property>
-    <property name="toolButtonStyle">
-     <enum>Qt::ToolButtonTextBesideIcon</enum>
-    </property>
-    <property name="autoRaise">
-     <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QToolButton" name="toolButton_8">
-    <property name="geometry">
-     <rect>
-      <x>410</x>
-      <y>150</y>
-      <width>91</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>12</pointsize>
-      <weight>50</weight>
-      <bold>false</bold>
-     </font>
-    </property>
-    <property name="text">
-     <string>运行状态：</string>
-    </property>
-    <property name="iconSize">
-     <size>
-      <width>30</width>
-      <height>30</height>
-     </size>
-    </property>
-    <property name="toolButtonStyle">
-     <enum>Qt::ToolButtonTextBesideIcon</enum>
-    </property>
-    <property name="autoRaise">
-     <bool>true</bool>
     </property>
    </widget>
    <widget class="QToolButton" name="pushButton_Left_5">
@@ -766,15 +601,15 @@
    <widget class="QLabel" name="label_ProgramName">
     <property name="geometry">
      <rect>
-      <x>500</x>
+      <x>487</x>
       <y>30</y>
-      <width>131</width>
+      <width>140</width>
       <height>31</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>12</pointsize>
+      <pointsize>16</pointsize>
      </font>
     </property>
     <property name="text">
@@ -784,15 +619,15 @@
    <widget class="QLabel" name="label_CurrentStep">
     <property name="geometry">
      <rect>
-      <x>500</x>
+      <x>487</x>
       <y>60</y>
-      <width>131</width>
+      <width>140</width>
       <height>31</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>12</pointsize>
+      <pointsize>16</pointsize>
      </font>
     </property>
     <property name="text">
@@ -802,15 +637,15 @@
    <widget class="QLabel" name="label_WorkedTotal">
     <property name="geometry">
      <rect>
-      <x>500</x>
+      <x>487</x>
       <y>90</y>
-      <width>131</width>
+      <width>141</width>
       <height>31</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>12</pointsize>
+      <pointsize>16</pointsize>
      </font>
     </property>
     <property name="text">
@@ -820,15 +655,15 @@
    <widget class="QLabel" name="label_Pressure">
     <property name="geometry">
      <rect>
-      <x>500</x>
+      <x>487</x>
       <y>120</y>
-      <width>131</width>
+      <width>151</width>
       <height>31</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>12</pointsize>
+      <pointsize>16</pointsize>
      </font>
     </property>
     <property name="text">
@@ -838,15 +673,15 @@
    <widget class="QLabel" name="label_Run">
     <property name="geometry">
      <rect>
-      <x>500</x>
+      <x>487</x>
       <y>150</y>
-      <width>131</width>
+      <width>151</width>
       <height>31</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>12</pointsize>
+      <pointsize>16</pointsize>
      </font>
     </property>
     <property name="text">
@@ -866,26 +701,96 @@
      <enum>Qt::Vertical</enum>
     </property>
    </widget>
-   <zorder>toolButton</zorder>
-   <zorder>lineEdit_RCurrentPos</zorder>
-   <zorder>toolButton_2</zorder>
-   <zorder>toolButton_3</zorder>
-   <zorder>lineEdit_XCurrentPos</zorder>
-   <zorder>lineEdit_YCurrentPos</zorder>
-   <zorder>line</zorder>
-   <zorder>toolButton_4</zorder>
-   <zorder>toolButton_5</zorder>
-   <zorder>toolButton_6</zorder>
-   <zorder>toolButton_7</zorder>
-   <zorder>toolButton_8</zorder>
-   <zorder>pushButton_Left_5</zorder>
-   <zorder>label_ProgramName</zorder>
-   <zorder>label_CurrentStep</zorder>
-   <zorder>label_WorkedTotal</zorder>
-   <zorder>label_Pressure</zorder>
-   <zorder>label_Run</zorder>
-   <zorder>line_2</zorder>
-   <zorder>tableWidget_Programdb</zorder>
+   <widget class="QLabel" name="label_3">
+    <property name="geometry">
+     <rect>
+      <x>397</x>
+      <y>35</y>
+      <width>80</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>16</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>程 序 名：</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_4">
+    <property name="geometry">
+     <rect>
+      <x>395</x>
+      <y>65</y>
+      <width>90</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>16</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>当前步数:</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_5">
+    <property name="geometry">
+     <rect>
+      <x>395</x>
+      <y>96</y>
+      <width>90</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>16</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>累计加工:</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_6">
+    <property name="geometry">
+     <rect>
+      <x>396</x>
+      <y>125</y>
+      <width>89</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>16</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>液压状态:</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_7">
+    <property name="geometry">
+     <rect>
+      <x>397</x>
+      <y>155</y>
+      <width>90</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>16</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>运行状态:</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QFrame" name="frame_2">
    <property name="geometry">

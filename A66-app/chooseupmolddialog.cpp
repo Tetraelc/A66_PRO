@@ -8,12 +8,15 @@
 #include <QSqlTableModel>
 #include <QSqlRecord>
 #include "global.h"
+#include "runstate.h"
 
 chooseUpMoldDialog::chooseUpMoldDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::chooseUpMoldDialog)
 {
     ui->setupUi(this);
+    RunState runstate1 ;
+    runstate1.ReadForRun(CurrentReg.Current_StepProgramRow);
 
     ui->tableWidget_UpMoulds->horizontalHeader()->setStretchLastSection(true);
     ui->tableWidget_UpMoulds->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
@@ -48,7 +51,7 @@ chooseUpMoldDialog::chooseUpMoldDialog(QWidget *parent) :
             ui->tableWidget_UpMoulds->setItem(i,UpMold_Height,new QTableWidgetItem(record.value("Height").toString()));
             ui->tableWidget_UpMoulds->setItem(i,UpMold_Radius,new QTableWidgetItem(record.value("Radius").toString()));
             ui->tableWidget_UpMoulds->setItem(i,UpMold_Impedance,new QTableWidgetItem(record.value("Impedance").toString()));
-            qDebug()<<"record.value().toString()"<<record.value("Id").toString();
+            //qDebug()<<"record.value().toString()"<<record.value("Id").toString();
     }
 
     ui->tableWidget_UpMoulds->selectRow(CurrentProgramTemp.UpMold-1);

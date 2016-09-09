@@ -70,7 +70,6 @@ bool Moulds::eventFilter(QObject *watched, QEvent *event)
            }
      }
  return QWidget::eventFilter(watched,event);     // 最后将事件交给上层对话框
-
 }
 
 

@@ -67,11 +67,11 @@ QString SystemTipsInformation(int TipsID);
 #define Motor3Tip    9
 #define MTTip   10
 #define OfflineTip   11
-#define DeinitTip   12
 
 
 
-
+extern bool developLengthFlag ;
+extern bool MotorTipFlag ;
 extern int HomgingModeFlag ;
 extern int fastmode;
 extern int ProgIndex;
@@ -313,7 +313,7 @@ struct   _AXISPARAMETER
     double LeadScrew;
     unsigned char  MotorDirection;
     double RunSpeed;
-    double ManualSpeed;
+    unsigned long ManualSpeed;
     double MaxDistance;
     double MinDistance;
     unsigned char   PositioningMode;
@@ -331,7 +331,7 @@ struct   _MTPARAMETER
 {
     unsigned int  KeepTime;
     unsigned int  UnloadTime;
-    bool          VbackMode;
+    unsigned int  VbackMode;
     unsigned int  VbackTime;
     bool          SingleMode;
 

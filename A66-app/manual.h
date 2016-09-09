@@ -19,6 +19,7 @@ public:
     explicit Manual(QWidget *parent = 0);
     ~Manual();
     int Checkstatus(int motor_id);
+    void checkMotorState();
     int CheckINState();
     int CheckRunState();
     int CheckOutState();

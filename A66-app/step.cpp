@@ -33,8 +33,6 @@ Step::Step(QWidget *parent) :
     ui->lineEdit_S_Raxis->setValidator(pRegstep);
     ui->lineEdit_S_return->setValidator(pRegstep);
     ui->lineEdit_S_Xaxis->setValidator(pRegstep);
-//    ui->lineEdit_S_pressure->setValidator(pRegstep);
-//    ui->lineEdit_S_Yaxis->setValidator(pRegstep);
 
     ui->lineEdit_S_distance->setValidator(pRegstep);
     ui->lineEdit_S_AngleCompensate->setValidator(pRegstep);
@@ -610,7 +608,7 @@ void Step::ReflashLinedit()
            ui->lineEdit_S_return->setText(record.value("ReturnTime").toString());
            ui->lineEdit_S_Holding->setText(record.value("Holding").toString());
            ui->lineEdit_S_Raxis->setText(record.value("Raxis").toString());
-           qDebug()<<"record.value().toString()"<<record.value("Id").toString();
+           //qDebug()<<"record.value().toString()"<<record.value("Id").toString();
 
    }
    CurrentReg.Current_StepProgramRow = ui->tableWidget_Step->currentRow();

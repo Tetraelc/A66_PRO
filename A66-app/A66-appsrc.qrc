@@ -21,8 +21,15 @@
         <file>ICO/iGD34.png</file>
         <file>ICO/Materialdb.png</file>
         <file>ICO/HomingMode.png</file>
-        <file>ICO/0001.jpg</file>
         <file>ICO/001.jpg</file>
+        <file>ICO/P1-SETmini.png</file>
+        <file>ICO/P1-STARTmini.png</file>
+        <file>ICO/P1-HELPmini.png</file>
+        <file>ICO/P1-EDITmini.png</file>
+        <file>ICO/P1-MANUmini.png</file>
+        <file>ICO/P1-MOLDmini.png</file>
+        <file>ICO/P1-PROGmini.png</file>
+        <file>ICO/0001.jpg</file>
         <file>ICO/0002.jpg</file>
         <file>ICO/0003.jpg</file>
         <file>ICO/0004.jpg</file>
@@ -47,13 +54,14 @@
         <file>ICO/0023.jpg</file>
         <file>ICO/0024.jpg</file>
         <file>ICO/0025.jpg</file>
-        <file>ICO/P1-SETmini.png</file>
-        <file>ICO/P1-STARTmini.png</file>
-        <file>ICO/P1-HELPmini.png</file>
-        <file>ICO/P1-EDITmini.png</file>
-        <file>ICO/P1-MANUmini.png</file>
-        <file>ICO/P1-MOLDmini.png</file>
-        <file>ICO/P1-PROGmini.png</file>
+        <file>ICO/quit.jpg</file>
+        <file>ICO/sure.jpg</file>
+        <file>ICO/Ok.png</file>
+        <file>ICO/DELETE.png</file>
+        <file>ICO/Delete.png</file>
+        <file>ICO/accept.png</file>
+        <file>ICO/cancel.png</file>
+        <file>ICO/warning96*96.png</file>
     </qresource>
     <qresource prefix="/ico">
         <file>ICO/P1-DEL.png</file>
@@ -87,6 +95,8 @@
         <file>ICO/P1-UPER.png</file>
         <file>ICO/P1-SIN.png</file>
         <file>ICO/P1-LAMP.png</file>
+        <file>ICO/P1-MSGmini.png</file>
+        <file>ICO/P1-VERmini.png</file>
     </qresource>
     <qresource prefix="/PIC">
         <file>PIC/P01.jpg</file>

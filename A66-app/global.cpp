@@ -4,6 +4,9 @@
 #define DEV_PATH "/sys/class/gpio/"
 
 int HomgingModeFlag = 0;
+
+bool developLengthFlag = false;
+bool MotorTipFlag = false;
 bool aralmOrTipFalg = false;
 bool EditableFalg = false;
 bool FactoryAxisFalg = false;
@@ -113,7 +116,7 @@ QString SystemTipsInformation(int TipsID)
 
     }
 
-  qDebug()<<"TipsInformation"<<TipsInformation;
+  //qDebug()<<"TipsInformation"<<TipsInformation;
     //db.close();//释放数据库
 //    qDebug()<<"WarnID"<<TipsID;
 //    qDebug()<<"WarnInformation"<<TipsInformation;

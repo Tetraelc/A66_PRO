@@ -1,4 +1,3 @@
-
 #include "runstate.h"
 #include "ui_runstate.h"
 #include <QDebug>
@@ -17,6 +16,7 @@
 #include "wrokedtotal.h"
 #include "systemwarn.h"
 #include "mathcalculation.h"
+#include <QMouseEvent>
 
 
 unsigned char sendOneStep = 0;
@@ -34,6 +34,7 @@ unsigned char Trg_Pos;
 unsigned char Cont_Pos;
 bool Back_state = false;
 bool fastmodeState =false;
+bool VFast_flag = false;
 
 extern "C"{
      #include "canfestival.h"
@@ -52,17 +53,46 @@ RunState::RunState(QWidget *parent) :
     ui->lineEdit_XCurrentPos->setFont(font);
     ui->lineEdit_YCurrentPos->setFont(font);
     ui->lineEdit_RCurrentPos->setFont(font);
-
-//    killTimer();
+    ui->tableWidget_Run->viewport()->installEventFilter(this);
 }
+bool RunState::eventFilter(QObject *watched, QEvent *event)
+{
+     if (watched==ui->tableWidget_Run->viewport())         //首先判断控件(这里指 lineEdit1)
+     {
+          if (event->type()==QEvent::MouseButtonPress)     //然后再判断控件的具体事件 (这里指获得焦点事件)
+          {
+                 return true;
+          }
+          if (event->type()==QEvent::MouseButtonRelease)     //然后再判断控件的具体事件 (这里指获得焦点事件)
+          {
+                 return true;
+          }
+          if (event->type()==QEvent::MouseMove)     //然后再判断控件的具体事件 (这里指获得焦点事件)
+          {
+                 return true;
+          }
+          if (event->type()==QEvent::KeyPress)     //然后再判断控件的具体事件 (这里指获得焦点事件)
+          {
+                 return true;
+          }
+          if (event->type()==QEvent::KeyRelease)     //然后再判断控件的具体事件 (这里指获得焦点事件)
+          {
+                 return true;
+          }
+          if (event->type()==QEvent::MouseButtonDblClick)     //然后再判断控件的具体事件 (这里指获得焦点事件)
+          {
+                 return true;
+          }
 
+     }
+ return QWidget::eventFilter(watched,event);     // 最后将事件交给上层对话框
+}
 RunState::~RunState()
 {
     delete ui;
 }
 void RunState::openRunStateWin()
 {
-
     this->setWindowFlags(Qt::FramelessWindowHint);
     this->show();
     this->move(0,WIDGET_Y);
@@ -71,15 +101,34 @@ void RunState::openRunStateWin()
     CurrentRnuStateRow =0;
     ReadForRun(CurrentRnuStateRow);
     CurrentRnuStateWorkedTotal=0;
-    SystemSetting syssetting;
-    syssetting.ReadForSystemDat();
+
 
     initWorkedTotalDialog();
+
+    SystemSetting sys;
+    sys.ReadForSystemDat();
+
+    sys.SystemWriteMotor(0x01);//写电机参数
+    sys.SystemWriteMotor(0x02);//写电机参数
+    sys.SystemWriteMotor(0x03);//写电机参数
+    sys.SystemWriteMT();//写MT参数
+
+
+//    Adjust_ManualDate[0].data[1].Data = Get_MOTOR_Demand_Postion(0x01) / XaxisParameter.LeadScrew ;
+//    Write_MOTOR_Multi_Data(&Adjust_ManualDate[0],0x01);
+
+//    Adjust_ManualDate[1].data[1].Data = Get_MOTOR_Demand_Postion(0x02) / YaxisParameter.LeadScrew ;
+//    Write_MOTOR_Multi_Data(&Adjust_ManualDate[1],0x02);
+
+//    Adjust_ManualDate[2].data[1].Data = Get_MOTOR_Demand_Postion(0x03) / RaxisParameter.LeadScrew ;
+//    Write_MOTOR_Multi_Data(&Adjust_ManualDate[2],0x03);
 
 
    // Ms_Lable = startTimer(800);
 
     qDebug()<<"openRunStateWin";
+    VFast_flag = false;
+    VbackTime = 0;
 }
 
 void RunState::systemCheckSafrState()
@@ -102,24 +151,6 @@ void RunState::ReturnRun()
 
 void RunState::initWorkedTotalDialog()
 {
-
-//    if(!(A20_IN_Status & UpperPoint))
-//    {
-//        ReturnRun();
-//        //CurrentReg.Current_MotorAlarm = UpperPointAlarm;
-//        SystemWarn *warn = new SystemWarn;
-//        warn->exec();
-
-//        if(!(A20_IN_Status & UpperPoint))
-//        {
-//             emit openProgramwindow();
-//             qDebug("openProgramwindow");
-//        }
-
-//    }
-//    else
-//    {
-
         CurrentRnuStateRow = 0;
         CurrentReg.Current_WorkedTotal =200;
         ui->tableWidget_Run->selectRow(CurrentRnuStateRow);
@@ -143,10 +174,10 @@ void RunState::initWorkedTotalDialog()
 void RunState::checkMotorState()
 {
      CurrentReg.Current_MotorTipResult.clear();
-    //qDebug()<<"Get_HeartbetError(0x01)"<<Get_HeartbetError(0x01);
-     if(Get_HeartbetError(0x01) == 0x01)
+     if(Get_HeartbetError(0x01) == 0x01 || motor[X1_ID-1].initStatus == 0)
      {
 
+         MotorTipFlag = true;
          CurrentReg.Current_MotorTips = Motor1Tip;
          CurrentReg.Current_MotorTipResult.append(SystemTipsInformation(CurrentReg.Current_MotorTips));
 //         QMessageBox::critical(0,QObject::trUtf8("异常"),
@@ -154,8 +185,9 @@ void RunState::checkMotorState()
 
          qDebug("Motor1");
      }
-     if(Get_HeartbetError(0x02) == 0x01)
+     if(Get_HeartbetError(0x02) == 0x01 || motor[Y1_ID-1].initStatus == 0)
      {
+         MotorTipFlag = true;
          CurrentReg.Current_MotorTips = Motor2Tip;
          CurrentReg.Current_MotorTipResult.append("/").append(SystemTipsInformation(CurrentReg.Current_MotorTips));
 //         QMessageBox::critical(0,QObject::trUtf8("异常"),
@@ -163,8 +195,9 @@ void RunState::checkMotorState()
             qDebug("Motor2");
      }
 
-     if(Get_HeartbetError(0x03) == 1)
+     if(Get_HeartbetError(0x03) == 1 || motor[R1_ID-1].initStatus == 0)
      {
+         MotorTipFlag = true;
          CurrentReg.Current_MotorTips = Motor3Tip;
          CurrentReg.Current_MotorTipResult.append("/").append(SystemTipsInformation(CurrentReg.Current_MotorTips));
 //         QMessageBox::critical(0,QObject::trUtf8("异常"),
@@ -175,6 +208,7 @@ void RunState::checkMotorState()
 
      if(Get_HeartbetError(0x04) == 0x01)
      {
+         MotorTipFlag = true;
          CurrentReg.Current_MotorTips = MTTip;
          CurrentReg.Current_MotorTipResult.append("/").append(SystemTipsInformation(CurrentReg.Current_MotorTips));
 //         QMessageBox::critical(0,QObject::trUtf8("异常"),
@@ -182,52 +216,16 @@ void RunState::checkMotorState()
         qDebug("Motor4");
      }
 
-     if(Get_HeartbetError(0x01) == 0x01 | Get_HeartbetError(0x02) == 0x01 | Get_HeartbetError(0x03) == 0x01 | Get_HeartbetError(0x04) == 0x01 )
+     if(Get_HeartbetError(0x01) == 0x01 || Get_HeartbetError(0x02) == 0x01 ||  Get_HeartbetError(0x03) == 0x01 ||  Get_HeartbetError(0x04) == 0x01 )
      {
+         MotorTipFlag = true;
          CurrentReg.Current_MotorTips = OfflineTip;
          CurrentReg.Current_MotorTipResult.append(SystemTipsInformation(CurrentReg.Current_MotorTips));
-          Clean_HeartbetError(0x01);
-          Clean_HeartbetError(0x02);
-          Clean_HeartbetError(0x03);
-          Clean_HeartbetError(0x04);
+
           qDebug("Motorclean");
 
      }
-     if(motor[0].initStatus == 0)
-     {
-         CurrentReg.Current_MotorTips = Motor1Tip;
-         CurrentReg.Current_MotorTipResult.append("/").append(SystemTipsInformation(CurrentReg.Current_MotorTips));
-//         QMessageBox::critical(0,QObject::trUtf8("异常"),
-//                               trUtf8("1号电机未初始化！要重新打开电机"));
-//         motor[0].initStatus = 1;
-     }
-     if(motor[1].initStatus == 0)
-     {
-         CurrentReg.Current_MotorTips = Motor2Tip;
-         CurrentReg.Current_MotorTipResult.append("/").append(SystemTipsInformation(CurrentReg.Current_MotorTips));
-//         QMessageBox::critical(0,QObject::trUtf8("异常"),
-//                               trUtf8("2号电机未初始化！要重新打开电机"));
-//         motor[1].initStatus = 1;
-     }
-     if(motor[2].initStatus == 0)
-     {
-         CurrentReg.Current_MotorTips = Motor3Tip;
-         CurrentReg.Current_MotorTipResult.append("/").append(SystemTipsInformation(CurrentReg.Current_MotorTips));
-//         QMessageBox::critical(0,QObject::trUtf8("异常"),
-//                               trUtf8("3号电机未初始化！要重新打开电机"));
-//         motor[2].initStatus = 1;
-     }
-     if(motor[0].initStatus == 0 | motor[1].initStatus == 0 | motor[2].initStatus == 0)
-     {
-         CurrentReg.Current_MotorTips = DeinitTip;
-         CurrentReg.Current_MotorTipResult.append(SystemTipsInformation(CurrentReg.Current_MotorTips));
-//         QMessageBox::critical(0,QObject::trUtf8("异常"),
-//                               trUtf8("3号电机未初始化！要重新打开电机"));
-         motor[0].initStatus = 1;
-         motor[1].initStatus = 1;
-         motor[2].initStatus = 1;
-//         motor[2].initStatus = 1;
-     }
+
 
 
 }
@@ -294,11 +292,6 @@ void RunState::SendMTEnableSignalXYAxis()
     YaxisValue = CurrentStepTemp.Yaxis;
     RaxisValue = CurrentStepTemp.Raxis;
 
-    qDebug()<<"XaxisValue"<<XaxisValue;
-    qDebug()<<"YaxisValue"<<YaxisValue;
-    qDebug()<<"RaxisValue"<<RaxisValue;
-
-
     temp1 = MOTOR_STATUS[0] & 0x400;
     temp2 = MOTOR_STATUS[1] & 0x400;
     temp3 = MOTOR_STATUS[2] & 0x400;
@@ -334,8 +327,6 @@ void RunState::SendMTEnableSignalXYAxis()
 
        ui->label_Run->setText(trUtf8("定位"));      
        sendOneStep = 1;
-//       qDebug()<<"XaxisValue"<<XaxisValue;
-//       qDebug()<<"YaxisValue"<<YaxisValue;
    }
    else if (sendOneStep == 1)//第二步等待定位完成  发送A20启动
    {
@@ -350,6 +341,9 @@ void RunState::SendMTEnableSignalXYAxis()
 
                   Write_MOTOR_One_Data(0x04,0x7001,0x01,0x01,ENTER_ENABLE);
                   ui->label_Run->setText(trUtf8("就绪"));
+                  MotorTipFlag =true;
+                  CurrentReg.Current_MotorTips = PrepareTip;
+                  CurrentReg.Current_MotorTipResult = SystemTipsInformation(CurrentReg.Current_MotorTips);
                   PostionReachFlag = 0;
                   wait_pos_time   = 0;
                   motor[0].Wrte_Multi_Finsh_state = NO_SEND;
@@ -383,11 +377,12 @@ void RunState::SendMTEnableSignalXYAxis()
        }
 
    }
-   else if (sendOneStep == 2) //等待A20到达上至点发送数据关闭命令||(fastmodeState == true))&&
+   else if (sendOneStep == 2 ) //等待A20到达上至点发送数据关闭命令||(fastmodeState == true))&&
    {
-       if(((A20_IN_Status & UpperPoint)&&(Back_state == true)))
+      if(((A20_IN_Status & UpperPoint)&&(Back_state == true))||(VbackTime > (MTParameter.VbackTime *50) && VFast_flag == true && MTParameter.VbackMode == 1))
        {
             Write_MOTOR_One_Data(MT_ID,0x7001,0x01,0x01,ENTER_DISENABLE);
+
             sendOneStep = 3;
        }
    }
@@ -395,9 +390,6 @@ void RunState::SendMTEnableSignalXYAxis()
    {
       changeStep();
    }
-//   qDebug("sendOneStep=%d",sendOneStep);
-//   qDebug("motor[0].Wrte_Multi_Finsh_state = %d", motor[0].Wrte_Multi_Finsh_state);
-//   qDebug("motor[1].Wrte_Multi_Finsh_state = %d", motor[1].Wrte_Multi_Finsh_state);
 
 }
 
@@ -409,7 +401,6 @@ void RunState::SendMTEnableSignalXYRAxis()
     XaxisValue = CurrentStepTemp.Xaxis;
     YaxisValue = CurrentStepTemp.Yaxis;
     RaxisValue = CurrentStepTemp.Raxis;
-
 
     temp1 = MOTOR_STATUS[0] & 0x400;
     temp2 = MOTOR_STATUS[1] & 0x400;
@@ -462,6 +453,9 @@ void RunState::SendMTEnableSignalXYRAxis()
 
                   Write_MOTOR_One_Data(0x04,0x7001,0x01,0x01,ENTER_ENABLE);
                   ui->label_Run->setText(trUtf8("就绪"));
+                  MotorTipFlag =true;
+                  CurrentReg.Current_MotorTips = PrepareTip;
+                  CurrentReg.Current_MotorTipResult = SystemTipsInformation(CurrentReg.Current_MotorTips);
                   PostionReachFlag = 0;
                   wait_pos_time   = 0;
                   motor[0].Wrte_Multi_Finsh_state = NO_SEND;
@@ -497,7 +491,7 @@ void RunState::SendMTEnableSignalXYRAxis()
    }
    else if (sendOneStep == 2) //等待A20到达上至点发送数据关闭命令||(fastmodeState == true))&&
    {
-       if(((A20_IN_Status & UpperPoint)&&(Back_state == true)))
+       if(((A20_IN_Status & UpperPoint)&&(Back_state == true))||(VbackTime > (MTParameter.VbackTime *50) && VFast_flag == true && MTParameter.VbackMode == 1))
        {
             Write_MOTOR_One_Data(MT_ID,0x7001,0x01,0x01,ENTER_DISENABLE);
             sendOneStep = 3;
@@ -507,9 +501,6 @@ void RunState::SendMTEnableSignalXYRAxis()
    {
       changeStep();
    }
-//   qDebug("sendOneStep=%d",sendOneStep);
-//   qDebug("motor[0].Wrte_Multi_Finsh_state = %d", motor[0].Wrte_Multi_Finsh_state);
-//   qDebug("motor[1].Wrte_Multi_Finsh_state = %d", motor[1].Wrte_Multi_Finsh_state);
 
 }
 
@@ -541,7 +532,8 @@ void RunState::changeStep()
            fastmodeState = false;
            PostionReachFlag =1;
            concedeModeFlag = 1;
-         //  VbackTime = 0;
+           VbackTime = 0;
+           VFast_flag = false;
 
     }
     else if (motor[MT_ID-1].Write_One_Finsh_state == FAIL_SEND)
@@ -574,15 +566,88 @@ int RunState::concedeState()
     }
 }
 
+int RunState::Checkstatus(int motor_id)
+{
 
+    UNS16 status = 0x00;
+    int temp1,temp2,temp3;
+    status = MOTOR_STATUS[motor_id-1] & STATUS_MASK;
+    switch(status)
+    {
+    case Not_ready_to_switch_on:  MSG_USER(0x8000,"1_Not_ready_to_switch_on",motor_id);  break;
+
+    case SWITCH_ON_DISABLED:      MSG_USER(0x8000, "2_SWITCH_ON_DISABLE"    ,motor_id);  break;
+
+    case Ready_to_switch_on:      MSG_USER(0x8000,"Ready_to_switch_on",motor_id);  break;
+
+    case Swiched_on:              MSG_USER(0x8000,"Swiched_on",motor_id);  break;
+
+    case Operation_enabled:       MSG_USER(0x8000,"Operation_enabled",motor_id);  break;
+
+    case Quick_stop_active:
+        MSG_USER(0x8000,"quick_stop_active",motor_id);  break;
+    case Fault_reaction_active:   MSG_USER(0x8000,"Fault_reaction_active",motor_id);  break;
+    case Fault:
+        if(motor_id == 0x01 )
+        {
+//            QMessageBox::critical(0,QObject::trUtf8("异常"),
+//                                  trUtf8("请检查电机"));break;
+        }
+        if(motor_id == 0x02 )
+        {
+//            QMessageBox::critical(0,QObject::trUtf8("异常"),
+//                                  trUtf8("请检查电机"));break;
+        }
+
+    default:    MSG_USER(0x8000,"Invalid_data",motor_id);break;
+    }
+      temp1 = MOTOR_STATUS[0] & 0x400;
+      temp2 = MOTOR_STATUS[1] & 0x400;
+      temp3 = MOTOR_STATUS[2] & 0x400;
+         if(temp1 == 0x400)
+         {
+            ui->toolButton_X->setEnabled(false);
+         }
+         else
+         {
+             ui->toolButton_X->setEnabled(true);
+         }
+         if(temp2 == 0x400)
+         {
+            ui->toolButton_Y->setEnabled(false);
+         }
+         else
+         {
+             ui->toolButton_Y->setEnabled(true);
+         }
+         if(temp3 == 0x400)
+         {
+            ui->toolButton_R->setEnabled(false);
+         }
+         else
+         {
+             ui->toolButton_R->setEnabled(true);
+         }
+    return status;
+}
 
 int RunState::CheckPressureState()
 {
+    if((VbackTime > (MTParameter.VbackTime *50) && VFast_flag == true && MTParameter.VbackMode == 1))
+    {
+        if(RaxisParameter.ENABLE_AXIS == 0)
+        {
 
+           SendMTEnableSignalXYAxis();
+        }
+        else
+        {
+          SendMTEnableSignalXYRAxis();
+        }
+    }
     switch(A20_Run_Status)
     {
     case Vstop  :
-        //qDebug("Vstop");
          ui->label_Pressure->setText(trUtf8("停止"));
          if(RaxisParameter.ENABLE_AXIS == 0)
          {
@@ -593,43 +658,32 @@ int RunState::CheckPressureState()
            SendMTEnableSignalXYRAxis();
          }
 
-
         break;
     case VFast:
-        //qDebug("VFast");
-
-        if((VbackTime > 50) && (Back_state == true)) //&& fastmode == 1 )
-        {
-//           sendOneStep = 2;
-//           fastmodeState = true;
-//           VbackTime = 0;
-           qDebug("VFastmode");
-          //  changeStep();
-
-        }
          ui->label_Pressure->setText(trUtf8("快下"));
+         MotorTipFlag =true;
          CurrentReg.Current_MotorTips = RunTip;
-         CurrentReg.Current_MotorTipResult = SystemTipsInformation(CurrentReg.Current_MotorTips);break;
-
+         CurrentReg.Current_MotorTipResult = SystemTipsInformation(CurrentReg.Current_MotorTips);
+         if((VbackTime > (MTParameter.VbackTime *50) && MTParameter.VbackMode == 1))
+            {
+                 VFast_flag  = true;
+            }
+         qDebug()<<"vbackTime"<<VbackTime;
+         qDebug()<<"sendOneStep"<<sendOneStep;
+        break;
     case VSlow :
-        // qDebug("VSlow");
-
         ui->label_Pressure->setText(trUtf8("工进"));break;
     case  Vkeep  :
-         //qDebug("Vkeep");
         concedeState();
         ui->label_Pressure->setText(trUtf8("保压"));break;
     case Vunload :
-         //qDebug("Vunload");
-
         ui->label_Pressure->setText(trUtf8("卸荷"));break;
     case Vback   :
-         //qDebug("Vback");
             Back_state = true;
             VbackTime++;
             ui->label_Pressure->setText(trUtf8("回程"));break;
-
     }
+
 
 }
 
@@ -640,7 +694,7 @@ void RunState::timerEvent(QTimerEvent *t) //定时器事件
     if(t->timerId()==Ms_Run){
 
     double Dis_XPos =Get_MOTOR_Demand_Postion(0x01) * XaxisParameter.LeadScrew /1000;
-    double Dis_YPos =Get_MOTOR_Demand_Postion(0x02) * XaxisParameter.LeadScrew /1000;
+    double Dis_YPos =Get_MOTOR_Demand_Postion(0x02) * YaxisParameter.LeadScrew /1000;
 
 
       ui->lineEdit_XCurrentPos->setText(QString::number(Dis_XPos,'.',2));
@@ -648,14 +702,15 @@ void RunState::timerEvent(QTimerEvent *t) //定时器事件
 
       if(RaxisParameter.ENABLE_AXIS == 1)
       {
-          double Dis_RPos =Get_MOTOR_Demand_Postion(0x03) * XaxisParameter.LeadScrew /1000;
+          double Dis_RPos =Get_MOTOR_Demand_Postion(0x03) * RaxisParameter.LeadScrew /1000;
           ui->lineEdit_RCurrentPos->setText(QString::number(Dis_RPos,'.',2));
       }
-
-
       MotorRun();
       CheckPressureState();
       ReflashWorkedTotal();
+      Checkstatus(0x01);
+      Checkstatus(0x02);
+      Checkstatus(0x03);
     }
 
 
@@ -724,7 +779,6 @@ void RunState::ReadForRun(int Type)
 //        QMessageBox::critical(0,QObject::tr("Error"),
 //                              db.lastError().text());//打开数据库连接
 //    }
-
     QSqlTableModel model;
     model.setTable("ProgramLib");
     model.setFilter("ID =" +QString::number(CurrentReg.Current_ProgramLibRow + 1,10));
@@ -741,11 +795,8 @@ void RunState::ReadForRun(int Type)
                CurrentProgramTemp.UpMold = record.value("UpMold").toDouble(&ok);
                CurrentProgramTemp.LowerMold =  record.value("LowerMold").toDouble(&ok);
                CurrentProgramTemp.ProcessedNum = record.value("WorkedTotal").toDouble(&ok);
-    //          qDebug()<<" CurrentProgramTemp.Material"<< CurrentProgramTemp.Material;
-        //      qDebug()<<"record.value().toString()"<<record.value("Name").toString();
-//              qDebug()<<"record.value().toString()"<<record.value("BoardThick").toString();
-//              qDebug()<<"record.value().toString()"<<record.value("Material").toString();
-
+               qDebug()<<"CurrentProgramTemp.UpMold "<<CurrentProgramTemp.UpMold ;
+               qDebug()<<"CurrentProgramTemp.LowerMold"<<CurrentProgramTemp.LowerMold ;
     }
 
     model.setTable(CurrentReg.CurrentProgramName);
@@ -759,7 +810,7 @@ void RunState::ReadForRun(int Type)
               CurrentStepTemp.Yaxis =  record.value("Yaxis").toDouble(&ok);
               CurrentStepTemp.Xaxis = record.value("Xaxis").toDouble(&ok);
               CurrentStepTemp.XaxisCorrect =  record.value("XaxisCorrect").toDouble(&ok);
-              CurrentStepTemp.concedeDistance= record.value("Distance").toDouble(&ok);
+              CurrentStepTemp.concedeDistance= record.value("Distance").toDouble(&ok) * 1000 / XaxisParameter.LeadScrew ;
               CurrentStepTemp.Pressure =  record.value("Pressure").toDouble(&ok);
               CurrentStepTemp.Holding = record.value("HoldiAng").toDouble(&ok);
               CurrentStepTemp.ReturnTime =  record.value("ReturnTime").toDouble(&ok);
@@ -795,21 +846,17 @@ void RunState::ReadForRun(int Type)
               CurrentLowerMoldTemp.D_V =  record.value("D_V").toDouble(&ok);
               CurrentLowerMoldTemp.SpeedSafeDis = record.value("SpeedChange").toDouble(&ok);
 
-           qDebug()<<"record.value().toString()"<<record.value("D_V").toString();
+          // qDebug()<<"record.value().toString()"<<record.value("D_V").toString();
     }
     model.setTable("Materialdb");
     model.setFilter("ID = " + QString::number(CurrentProgramTemp.Material + 1 ,10));//
-    qDebug()<<"CurrentProgramTemp.Material"<<CurrentProgramTemp.Material;
 
-    // qDebug()<<"CurrentProgramTemp.Material"<<CurrentProgramTemp.Material.toStdString();
     model.select();
     for(int i=0;i<model.rowCount();i++)
     {
             QSqlRecord record = model.record(i);
              CurrentMaterialTemp.StrengthFactor = record.value("StrengthFactor").toDouble(&ok);
              CurrentMaterialTemp.EMold = record.value("EMold").toDouble(&ok);
-             qDebug()<<"record.value().StrengthFactor()"<<record.value("StrengthFactor").toString();
-             qDebug()<<"record.value().EMold()"<<record.value("EMold").toString();
     }
     model.setTable("RunParameter");
     model.setFilter("ID = 1");
@@ -818,7 +865,6 @@ void RunState::ReadForRun(int Type)
     {
             QSqlRecord record = model.record(i);
              CurrentStepTemp.Yzero = record.value("Yzero").toDouble(&ok);
-       // qDebug()<<"record.value().toString()"<<record.value("Id").toString();
     }
 
    // ui->tableWidget_UpMoulds->selectRow(0);
@@ -836,7 +882,8 @@ void RunState::QuitRunState()
     Stop_MOTOR(0x02);
     Stop_MOTOR(0x03);
     sendOneStep = 0;//状态清零
-
+    VbackTime   = 0;
+    VFast_flag = false;
 
 //    if(!db.open())
 //    {
@@ -856,9 +903,9 @@ void RunState::QuitRunState()
         model.submitAll();
     }
 //    //db.close();//释放数据库
+    MotorTipFlag =true;
     CurrentReg.Current_MotorTips = RunFinishTip;
     CurrentReg.Current_MotorTipResult = SystemTipsInformation(CurrentReg.Current_MotorTips);
-
     CurrentReg.Current_WorkedTotal = CurrentRnuStateWorkedTotal;
 
 
@@ -891,27 +938,36 @@ void RunState::on_tableWidget_Run_itemSelectionChanged()
 
 void RunState::on_pushButton_Left_1_clicked()  //向上
 {
-    if((CurrentRnuStateRow > 0) && ( CurrentRnuStateRow < QString::number( CurrentProgramTemp.StepNumber,'.',0).toInt()))
+
+    if((A20_IN_Status & UpperPoint))
     {
-        CurrentRnuStateRow--;
-        if(CurrentRnuStateRow == CurrentProgramTemp.StepNumber )
+        if((CurrentRnuStateRow > 0) && ( CurrentRnuStateRow < QString::number( CurrentProgramTemp.StepNumber,'.',0).toInt()))
         {
-            CurrentRnuStateRow= 0;
+            CurrentRnuStateRow--;
+            if(CurrentRnuStateRow == CurrentProgramTemp.StepNumber )
+            {
+                CurrentRnuStateRow= 0;
+            }
         }
     }
+
 }
 
 void RunState::on_pushButton_Left_4_clicked() //向下
 {
-    qDebug()<<"QString::number( CurrentProgramTemp.StepNumber,'.',0).toInt()"<<QString::number( CurrentProgramTemp.StepNumber,'.',0).toInt();
-  if((CurrentRnuStateRow >= 0) && ( CurrentRnuStateRow < QString::number( CurrentProgramTemp.StepNumber,'.',0).toInt()))
+    if((A20_IN_Status & UpperPoint))
     {
+        if((CurrentRnuStateRow >= 0) && ( CurrentRnuStateRow < QString::number( CurrentProgramTemp.StepNumber,'.',0).toInt()))
+          {
 
-       CurrentRnuStateRow++;
-       if((CurrentRnuStateRow) == CurrentProgramTemp.StepNumber )
-       {
-           CurrentRnuStateRow= CurrentProgramTemp.StepNumber -1;
-       }
+             CurrentRnuStateRow++;
+             if((CurrentRnuStateRow) == CurrentProgramTemp.StepNumber )
+             {
+                 CurrentRnuStateRow= CurrentProgramTemp.StepNumber -1;
+             }
 
-  }
+        }
+
+    }
+
 }

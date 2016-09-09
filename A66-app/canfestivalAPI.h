@@ -101,7 +101,7 @@ extern S_motor motor[MAX_MOTOR_NUM];
 extern S_Data_trans Write_Multi_buf;
 extern S_Data_trans set_Postion_Speed_buf[4];
 extern S_Data_trans Config_valve_buf;
-extern S_Data_trans Adjust_ManualDate;
+extern S_Data_trans Adjust_ManualDate[3];
 extern S_Data_trans SystemSet_Motor[3];
 extern S_Data_trans HomingModeDate[3];
 extern S_Data_trans SystemSet_MT;

@@ -74,91 +74,6 @@
       <bool>false</bool>
      </property>
     </widget>
-    <widget class="QToolButton" name="toolButton_State">
-     <property name="geometry">
-      <rect>
-       <x>280</x>
-       <y>10</y>
-       <width>441</width>
-       <height>71</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <family>Sans Serif</family>
-       <pointsize>14</pointsize>
-      </font>
-     </property>
-     <property name="focusPolicy">
-      <enum>Qt::NoFocus</enum>
-     </property>
-     <property name="text">
-      <string> 准备就绪!</string>
-     </property>
-     <property name="icon">
-      <iconset resource="A66-appsrc.qrc">
-       <normaloff>:/ico/ICO/P1-MSG.png</normaloff>:/ico/ICO/P1-MSG.png</iconset>
-     </property>
-     <property name="iconSize">
-      <size>
-       <width>40</width>
-       <height>40</height>
-      </size>
-     </property>
-     <property name="autoRepeat">
-      <bool>false</bool>
-     </property>
-     <property name="popupMode">
-      <enum>QToolButton::InstantPopup</enum>
-     </property>
-     <property name="toolButtonStyle">
-      <enum>Qt::ToolButtonTextBesideIcon</enum>
-     </property>
-     <property name="autoRaise">
-      <bool>true</bool>
-     </property>
-    </widget>
-    <widget class="QToolButton" name="toolButton_ProName">
-     <property name="geometry">
-      <rect>
-       <x>870</x>
-       <y>52</y>
-       <width>131</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <family>Sans Serif</family>
-       <pointsize>10</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>程序: P01</string>
-     </property>
-     <property name="icon">
-      <iconset resource="A66-appsrc.qrc">
-       <normaloff>:/ico/ICO/P1-VER.png</normaloff>:/ico/ICO/P1-VER.png</iconset>
-     </property>
-     <property name="iconSize">
-      <size>
-       <width>30</width>
-       <height>30</height>
-      </size>
-     </property>
-     <property name="checkable">
-      <bool>false</bool>
-     </property>
-     <property name="popupMode">
-      <enum>QToolButton::DelayedPopup</enum>
-     </property>
-     <property name="toolButtonStyle">
-      <enum>Qt::ToolButtonTextBesideIcon</enum>
-     </property>
-     <property name="autoRaise">
-      <bool>true</bool>
-     </property>
-    </widget>
     <widget class="QLabel" name="label_Picture">
      <property name="geometry">
       <rect>
@@ -191,6 +106,69 @@
      </property>
      <property name="text">
       <string>程序库</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_3">
+     <property name="geometry">
+      <rect>
+       <x>270</x>
+       <y>23</y>
+       <width>51</width>
+       <height>51</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="pixmap">
+      <pixmap resource="A66-appsrc.qrc">:/ico/ICO/P1-MSGmini.png</pixmap>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_State">
+     <property name="geometry">
+      <rect>
+       <x>340</x>
+       <y>26</y>
+       <width>411</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>16</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>准备就绪</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_4">
+     <property name="geometry">
+      <rect>
+       <x>880</x>
+       <y>50</y>
+       <width>31</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="pixmap">
+      <pixmap resource="A66-appsrc.qrc">:/ico/ICO/P1-VERmini.png</pixmap>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_Program">
+     <property name="geometry">
+      <rect>
+       <x>914</x>
+       <y>56</y>
+       <width>101</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
      </property>
     </widget>
    </widget>

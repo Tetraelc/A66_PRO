@@ -19,9 +19,11 @@ SystemWarn::SystemWarn(QWidget *parent) :
     if(aralmOrTipFalg)
     {
        SystemCheckAlarm(CurrentReg.Current_MotorAlarm);
+       ui->label_warming->setVisible(true);
     }
     else
     {
+        ui->label_warming->setVisible(false);
         SystemCheckTip(CurrentReg.Current_MotorTips);
         qDebug()<<"CurrentReg.Current_MotorTips"<<CurrentReg.Current_MotorTips;
 
@@ -75,14 +77,7 @@ void SystemWarn::SystemCheckTip(int TipID)
 
 void SystemWarn::on_toolButton_Comfirm_clicked()
 {
-    if(!(A20_IN_Status & UpperPoint))
-    {
-        //emit ReturnProgramWin();
-        this->close();
-    }else
-    {
-       this->close();
-    }
+      this->close();
 }
 void SystemWarn::on_toolButton_Quit_clicked()
 {

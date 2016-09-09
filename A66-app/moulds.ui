@@ -19,9 +19,9 @@
   <widget class="QTabWidget" name="tabWidget_U">
    <property name="geometry">
     <rect>
-     <x>10</x>
+     <x>8</x>
      <y>10</y>
-     <width>1005</width>
+     <width>990</width>
      <height>521</height>
     </rect>
    </property>
@@ -75,7 +75,7 @@
      <property name="font">
       <font>
        <family>Sans Serif</family>
-       <pointsize>12</pointsize>
+       <pointsize>16</pointsize>
       </font>
      </property>
      <property name="cursor">
@@ -731,7 +731,7 @@
       <property name="font">
        <font>
         <family>Sans Serif</family>
-        <pointsize>14</pointsize>
+        <pointsize>16</pointsize>
        </font>
       </property>
       <property name="cursor">
@@ -756,7 +756,7 @@
       <property name="font">
        <font>
         <family>Sans Serif</family>
-        <pointsize>14</pointsize>
+        <pointsize>16</pointsize>
        </font>
       </property>
       <property name="cursor">
@@ -772,7 +772,7 @@
      <widget class="QLabel" name="label_11">
       <property name="geometry">
        <rect>
-        <x>320</x>
+        <x>300</x>
         <y>82</y>
         <width>111</width>
         <height>24</height>
@@ -781,7 +781,7 @@
       <property name="font">
        <font>
         <family>Sans Serif</family>
-        <pointsize>14</pointsize>
+        <pointsize>16</pointsize>
        </font>
       </property>
       <property name="cursor">
@@ -806,7 +806,7 @@
       <property name="font">
        <font>
         <family>Sans Serif</family>
-        <pointsize>14</pointsize>
+        <pointsize>16</pointsize>
        </font>
       </property>
       <property name="cursor">
@@ -822,16 +822,16 @@
      <widget class="QLabel" name="label_10">
       <property name="geometry">
        <rect>
-        <x>320</x>
+        <x>297</x>
         <y>40</y>
-        <width>111</width>
+        <width>141</width>
         <height>24</height>
        </rect>
       </property>
       <property name="font">
        <font>
         <family>Sans Serif</family>
-        <pointsize>12</pointsize>
+        <pointsize>16</pointsize>
        </font>
       </property>
       <property name="cursor">
@@ -985,7 +985,7 @@
       <property name="font">
        <font>
         <family>Sans Serif</family>
-        <pointsize>12</pointsize>
+        <pointsize>16</pointsize>
        </font>
       </property>
       <property name="textAlignment">
@@ -998,7 +998,7 @@
       </property>
       <property name="font">
        <font>
-        <pointsize>12</pointsize>
+        <pointsize>16</pointsize>
        </font>
       </property>
       <property name="textAlignment">
@@ -1012,7 +1012,7 @@
       <property name="font">
        <font>
         <family>Sans Serif</family>
-        <pointsize>12</pointsize>
+        <pointsize>16</pointsize>
        </font>
       </property>
       <property name="textAlignment">
@@ -1026,7 +1026,7 @@
       <property name="font">
        <font>
         <family>Sans Serif</family>
-        <pointsize>12</pointsize>
+        <pointsize>16</pointsize>
        </font>
       </property>
       <property name="textAlignment">
@@ -1040,7 +1040,7 @@
       <property name="font">
        <font>
         <family>Sans Serif</family>
-        <pointsize>12</pointsize>
+        <pointsize>16</pointsize>
        </font>
       </property>
       <property name="textAlignment">
@@ -1054,7 +1054,7 @@
       <property name="font">
        <font>
         <family>Sans Serif</family>
-        <pointsize>12</pointsize>
+        <pointsize>16</pointsize>
        </font>
       </property>
       <property name="textAlignment">
@@ -1068,7 +1068,7 @@
       <property name="font">
        <font>
         <family>Sans Serif</family>
-        <pointsize>12</pointsize>
+        <pointsize>16</pointsize>
        </font>
       </property>
       <property name="textAlignment">
@@ -1082,7 +1082,7 @@
       <property name="font">
        <font>
         <family>Sans Serif</family>
-        <pointsize>12</pointsize>
+        <pointsize>16</pointsize>
        </font>
       </property>
       <property name="textAlignment">
@@ -1462,7 +1462,7 @@
       <property name="font">
        <font>
         <family>Sans Serif</family>
-        <pointsize>12</pointsize>
+        <pointsize>16</pointsize>
        </font>
       </property>
       <property name="textAlignment">
@@ -1475,7 +1475,7 @@
       </property>
       <property name="font">
        <font>
-        <pointsize>12</pointsize>
+        <pointsize>16</pointsize>
        </font>
       </property>
       <property name="textAlignment">
@@ -1489,7 +1489,7 @@
       <property name="font">
        <font>
         <family>Sans Serif</family>
-        <pointsize>12</pointsize>
+        <pointsize>16</pointsize>
        </font>
       </property>
       <property name="textAlignment">
@@ -1503,7 +1503,7 @@
       <property name="font">
        <font>
         <family>Sans Serif</family>
-        <pointsize>12</pointsize>
+        <pointsize>16</pointsize>
        </font>
       </property>
       <property name="textAlignment">
@@ -1517,7 +1517,7 @@
       <property name="font">
        <font>
         <family>Sans Serif</family>
-        <pointsize>12</pointsize>
+        <pointsize>16</pointsize>
        </font>
       </property>
       <property name="textAlignment">
@@ -1560,7 +1560,7 @@
      </property>
      <property name="font">
       <font>
-       <pointsize>12</pointsize>
+       <pointsize>16</pointsize>
       </font>
      </property>
      <property name="cursor">
@@ -1958,7 +1958,7 @@
       </property>
       <property name="font">
        <font>
-        <pointsize>14</pointsize>
+        <pointsize>16</pointsize>
        </font>
       </property>
       <property name="cursor">
@@ -1985,7 +1985,7 @@
       </property>
       <property name="font">
        <font>
-        <pointsize>14</pointsize>
+        <pointsize>16</pointsize>
        </font>
       </property>
       <property name="cursor">
@@ -2012,7 +2012,7 @@
       </property>
       <property name="font">
        <font>
-        <pointsize>14</pointsize>
+        <pointsize>16</pointsize>
        </font>
       </property>
       <property name="cursor">
@@ -2403,7 +2403,7 @@
       <property name="font">
        <font>
         <family>Sans Serif</family>
-        <pointsize>12</pointsize>
+        <pointsize>16</pointsize>
        </font>
       </property>
       <property name="textAlignment">
@@ -2416,7 +2416,7 @@
       </property>
       <property name="font">
        <font>
-        <pointsize>12</pointsize>
+        <pointsize>16</pointsize>
        </font>
       </property>
       <property name="textAlignment">
@@ -2430,7 +2430,7 @@
       <property name="font">
        <font>
         <family>Sans Serif</family>
-        <pointsize>12</pointsize>
+        <pointsize>16</pointsize>
        </font>
       </property>
       <property name="textAlignment">
@@ -2444,7 +2444,7 @@
       <property name="font">
        <font>
         <family>Sans Serif</family>
-        <pointsize>12</pointsize>
+        <pointsize>16</pointsize>
        </font>
       </property>
       <property name="textAlignment">
@@ -2604,7 +2604,7 @@
      </property>
      <property name="font">
       <font>
-       <pointsize>12</pointsize>
+       <pointsize>16</pointsize>
       </font>
      </property>
      <property name="cursor">

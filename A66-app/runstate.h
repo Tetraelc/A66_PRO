@@ -35,6 +35,7 @@ public:
     int  concedeState();
     void checkMotorState();
     void changeStep();
+    int Checkstatus(int motor_id);
     int CurrentRnuStateWorkedTotal;
 public slots:
     void openRunStateWin();
@@ -54,6 +55,8 @@ private:
     int Ms_Run;
     int Ms_Lable;
     int CurrentRnuStateRow;
+protected:
+   bool eventFilter(QObject *watched, QEvent *event);
 
 };
 

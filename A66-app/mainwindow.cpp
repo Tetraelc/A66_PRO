@@ -8,7 +8,7 @@
 #include "deleoplength.h"
 #include "homingmode.h"
 
-int developLengthFlag = 0;
+
 
 extern "C"{
      #include "canfestival.h"
@@ -63,13 +63,10 @@ void MainWindow::timerEvent(QTimerEvent *t) //定时器事件
 
     if(t->timerId()== ProgramName_Scan){
 
-        ui->toolButton_ProName->setText(CurrentReg.CurrentProgramName);
-        //MainWinState();
-        if(developLengthFlag == 1)
-        {
-            ui->toolButton_State->setText(trUtf8("展开长度 :") + QString::number( CurrentReg.developLength,'.',2));
-            developLengthFlag =0;
-        }
+        ui->label_Program->setText(CurrentReg.CurrentProgramName);
+       // ui->toolButton_ProName->setText(CurrentReg.CurrentProgramName);
+        MainWinState();
+
 
 
     }
@@ -77,13 +74,25 @@ void MainWindow::timerEvent(QTimerEvent *t) //定时器事件
 
 void MainWindow::MainWinState()
 {
-    ui->toolButton_State->setText(CurrentReg.Current_MotorTipResult);
+    if(MotorTipFlag == true)
+    {
+         ui->label_State->setText(CurrentReg.Current_MotorTipResult);
+         MotorTipFlag = false;
+    }
+    if(developLengthFlag == true)
+    {
+        ui->label_State->setText(trUtf8("展开长度 :") + QString::number( CurrentReg.developLength,'.',2));
+        developLengthFlag = false;
+    }
 }
 
 
 void MainWindow::initWindow()
 {
-
+    Programdb *pg=new Programdb;
+    connect(pg, SIGNAL(sig_returnMainwindow()), this, SLOT(openMainWindowWin()));
+    connect(pg, SIGNAL(ReflashProgram()), this, SLOT(ReFlashProgName()));
+    connect(this, SIGNAL(openProgramWidget()), pg, SLOT(openProgramWin()));
     Step *sp=new Step;
     connect(this, SIGNAL(openStepWidget()), sp, SLOT(openStepWin()));
     connect(sp, SIGNAL(sig_developLength(double)), this, SLOT(ReturndevelopLength(double)));
@@ -96,15 +105,14 @@ void MainWindow::initWindow()
     RunState *rs=new RunState;
     connect(this, SIGNAL(openRunStateWidget()), rs, SLOT(openRunStateWin()));
     connect(rs, SIGNAL(openProgramwindow()), this, SLOT(ReturnProgramdb()));
-    Programdb *pg=new Programdb;
-    connect(pg, SIGNAL(sig_returnMainwindow()), this, SLOT(openMainWindowWin()));
-    connect(pg, SIGNAL(ReflashProgram()), this, SLOT(ReFlashProgName()));
-    connect(this, SIGNAL(openProgramWidget()), pg, SLOT(openProgramWin()));
+
     connect(rs, SIGNAL(ReturnworkedTotal(int )), pg, SLOT(ReflashProgramWrokedNum(int )));
     SystemInfo *Info = new SystemInfo;
     connect(this, SIGNAL(openInfoWidget()), Info, SLOT(openInfoWin()));
     SystemWarn *syswarn =new SystemWarn;
     connect(syswarn, SIGNAL(ReturnProgramdbWin()), this, SLOT(ReturnProgramdb()));
+
+
 //    HomingMode *homing =new HomingMode;
 //    connect(this, SIGNAL(openHomingModeWidget()), homing, SLOT(openHomingModeWin()));
 
@@ -158,7 +166,7 @@ void MainWindow::on_toolButton_clicked()
     ui->toolButton_B5->setEnabled(false);
     ui->toolButton_Start->setEnabled(false);
     ui->toolButton->setEnabled(false);
-    ui->toolButton_4->setEnabled(true);
+    ui->toolButton_4->setEnabled(false);
 
     emit openHomingModeWidget();
     openBeep();
@@ -202,7 +210,7 @@ void MainWindow::ReturnProgramdb()
      ui->toolButton_B5->setEnabled(true);
      ui->toolButton_Start->setEnabled(true);
      ui->toolButton->setEnabled(false);
-     ui->toolButton_4->setEnabled(true);
+     ui->toolButton_4->setEnabled(false);
      emit openProgramWidget();
    //  openBeep();
 
@@ -225,7 +233,7 @@ void MainWindow::on_pushButton_T3_clicked()
     ui->toolButton_B4->setEnabled(true);
     ui->toolButton_B5->setEnabled(true);
     ui->toolButton->setEnabled(false);
-    ui->toolButton_4->setEnabled(true);
+    ui->toolButton_4->setEnabled(false);
     openBeep();
 }
 
@@ -246,7 +254,7 @@ void MainWindow::on_pushButton_T2_clicked()
     ui->toolButton_B4->setEnabled(true);
     ui->toolButton_B5->setEnabled(true);
     ui->toolButton->setEnabled(false);
-    ui->toolButton_4->setEnabled(true);
+    ui->toolButton_4->setEnabled(false);
     openBeep();
 
 }
@@ -270,7 +278,7 @@ void MainWindow::on_toolButton_B0_clicked()
     ui->toolButton_B5->setEnabled(true);
     ui->toolButton_Start->setEnabled(true);
     ui->toolButton->setEnabled(false);
-    ui->toolButton_4->setEnabled(true);
+    ui->toolButton_4->setEnabled(false);
 
     openBeep();
 
@@ -293,7 +301,7 @@ void MainWindow::on_toolButton_B1_clicked()
     ui->toolButton_B5->setEnabled(true);
     ui->toolButton_Start->setEnabled(true);
     ui->toolButton->setEnabled(false);
-    ui->toolButton_4->setEnabled(true);
+    ui->toolButton_4->setEnabled(false);
     openBeep();
 }
 
@@ -315,7 +323,7 @@ void MainWindow::on_toolButton_B2_clicked()
     ui->toolButton_B5->setEnabled(true);
     ui->toolButton_Start->setEnabled(false);
     ui->toolButton->setEnabled(false);
-    ui->toolButton_4->setEnabled(true);
+    ui->toolButton_4->setEnabled(false);
     openBeep();
 }
 
@@ -337,7 +345,7 @@ void MainWindow::on_toolButton_B3_clicked()
     ui->toolButton_B5->setEnabled(true);
     ui->toolButton_Start->setEnabled(false);
     ui->toolButton->setEnabled(false);
-    ui->toolButton_4->setEnabled(true);
+    ui->toolButton_4->setEnabled(false);
     openBeep();
 }
 
@@ -371,7 +379,7 @@ void MainWindow::on_toolButton_B5_clicked()
     ui->toolButton_B5->setEnabled(false);
     ui->toolButton_Start->setEnabled(false);
     ui->toolButton->setEnabled(false);
-    ui->toolButton_4->setEnabled(true);
+    ui->toolButton_4->setEnabled(false);
 
     openBeep();
 }
@@ -379,42 +387,40 @@ void MainWindow::on_toolButton_B5_clicked()
 
 bool MainWindow::on_toolButton_Start_clicked()
 {
-//    SystemWarnInformation(UpperPointAlarm);
-
     if(!(A20_IN_Status & UpperPoint))
     {
-//        ReturnRun();
         CurrentReg.Current_MotorAlarm = UpperPointAlarm;
         aralmOrTipFalg = true;
 
-       // SystemWarnInformation(CurrentReg.Current_MotorAlarm);
         Write_MOTOR_One_Data(0x04,0x7001,0x01,0x01,ENTER_RETURN);
         SystemWarn warn;
         warn.setWindowFlags(Qt::FramelessWindowHint);
         warn.exec();
 
-
         if(!(A20_IN_Status & UpperPoint))
         {
              //emit openProgramwindow();
-            emit openProgramWidget();
-            ui->label_Text->setText(trUtf8("程序库"));
-            QPixmap pix;
-            pix.load("/opt/tetra/A66-app/ICO/P1-PROGmini.png");
-            ui->label_Picture->setPixmap(pix);
-//            ui->toolButton_T1->setText(trUtf8(" 程序库"));
-//            ui->toolButton_T1->setIcon(QIcon("/opt/tetra/A66-app//ICO/P1-PROG.png"));
-            ui->toolButton_B0->setEnabled(false);
-            ui->toolButton_B1->setEnabled(true);
-            ui->toolButton_B2->setEnabled(true);
-            ui->toolButton_B3->setEnabled(true);
-            ui->toolButton_B4->setEnabled(true);
-            ui->toolButton_B5->setEnabled(true);
-            ui->toolButton_Start->setEnabled(true);
-            ui->toolButton->setEnabled(false);
-            ui->toolButton_4->setEnabled(true);
+            if(ui->toolButton_B0->isEnabled() == true)
+            {
+                emit openProgramWidget();
+                ui->label_Text->setText(trUtf8("程序库"));
+                QPixmap pix;
+                pix.load("/opt/tetra/A66-app/ICO/P1-PROGmini.png");
+                ui->label_Picture->setPixmap(pix);
+    //            ui->toolButton_T1->setText(trUtf8(" 程序库"));
+    //            ui->toolButton_T1->setIcon(QIcon("/opt/tetra/A66-app//ICO/P1-PROG.png"));
+                ui->toolButton_B0->setEnabled(false);
+                ui->toolButton_B1->setEnabled(true);
+                ui->toolButton_B2->setEnabled(true);
+                ui->toolButton_B3->setEnabled(true);
+                ui->toolButton_B4->setEnabled(true);
+                ui->toolButton_B5->setEnabled(true);
+                ui->toolButton_Start->setEnabled(true);
+                ui->toolButton->setEnabled(false);
+                ui->toolButton_4->setEnabled(false);
+            }
 
-             qDebug("openProgramwindow");
+
         }
         else
         {
@@ -433,7 +439,7 @@ bool MainWindow::on_toolButton_Start_clicked()
             ui->toolButton_B5->setEnabled(false);
             ui->toolButton_Start->setEnabled(false);
             ui->toolButton->setEnabled(false);
-            ui->toolButton_4->setEnabled(true);
+            ui->toolButton_4->setEnabled(false);
         }
     }
     else
@@ -453,7 +459,7 @@ bool MainWindow::on_toolButton_Start_clicked()
         ui->toolButton_B5->setEnabled(false);
         ui->toolButton_Start->setEnabled(false);
         ui->toolButton->setEnabled(false);
-        ui->toolButton_4->setEnabled(true);
+        ui->toolButton_4->setEnabled(false);
 
     }
     openBeep();

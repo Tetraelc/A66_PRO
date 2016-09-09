@@ -36,12 +36,12 @@ SystemSetting::SystemSetting(QWidget *parent) :
 
 
     ui->tableWidget_System->horizontalHeader()->setStretchLastSection(true);
-    ui->tableWidget_System->horizontalHeader()->setClickable(false);
+    ui->tableWidget_System->horizontalHeader()->setClickable(false);    
 
     QRegExp rx("^(-?[0]|-?[1-9][0-9]{0,3})$");
     QRegExpValidator *pReg = new QRegExpValidator(rx, this);
-    ui->lineEdit_KeepTime ->setValidator(pReg);
-    ui->lineEdit_UnloadTime->setValidator(pReg);
+    //ui->lineEdit_KeepTime ->setValidator(pReg);
+    //ui->lineEdit_UnloadTime->setValidator(pReg);
     ui->lineEdit_3->setValidator(pReg);
 
 }
@@ -239,12 +239,14 @@ void SystemSetting::SystemWriteMotor(unsigned char nodeId)
     {
         SystemSet_Motor[0].data[0].Data = XaxisParameter.MinDistance ;
         SystemSet_Motor[0].data[1].Data = XaxisParameter.MaxDistance ;
+        //SystemSet_Motor[0].data[4].Data = Get_MOTOR_Demand_Postion(0x01) / XaxisParameter.LeadScrew ;
 
     }
     if(nodeId == 0x02)
     {
-        SystemSet_Motor[1].data[1].Data = YaxisParameter.MinDistance ;
+        SystemSet_Motor[1].data[0].Data = YaxisParameter.MinDistance ;
         SystemSet_Motor[1].data[1].Data = YaxisParameter.MaxDistance ;
+       // SystemSet_Motor[1].data[4].Data = Get_MOTOR_Demand_Postion(0x02) / YaxisParameter.LeadScrew ;
 
     }
 
@@ -252,6 +254,7 @@ void SystemSetting::SystemWriteMotor(unsigned char nodeId)
     {
         SystemSet_Motor[2].data[0].Data = RaxisParameter.MinDistance ;
         SystemSet_Motor[2].data[1].Data = RaxisParameter.MaxDistance ;
+        //SystemSet_Motor[2].data[4].Data = Get_MOTOR_Demand_Postion(0x03) / RaxisParameter.LeadScrew ;
 
     }
 
@@ -1209,8 +1212,8 @@ void SystemSetting::ReadConfig(void)
         ui->checkBoxVstop8->setChecked(false);
     }
 
-    ui->lineEdit_KeepTime->setText(QString::number(ValveReg.KeepTime,10));
-    ui->lineEdit_UnloadTime->setText(QString::number(ValveReg.UnloadTime,10));
+    //ui->lineEdit_KeepTime->setText(QString::number(ValveReg.KeepTime,10));
+    //ui->lineEdit_UnloadTime->setText(QString::number(ValveReg.UnloadTime,10));
 
     MTParameter.KeepTime = ValveReg.KeepTime;
     MTParameter.UnloadTime = ValveReg.UnloadTime;

@@ -363,9 +363,9 @@ void Programdb::Update_ProgramLibItem(int Id,int Col,QString Value)
             break;
         case Program_Material:record.setValue("Material",Value);
             break;
-        case Program_UpMold:record.setValue("LowerMold",Value);
+        case Program_LowerMold:record.setValue("LowerMold",Value);
             break;
-        case Program_LowerMold:record.setValue("UpMold",Value);
+        case Program_UpMold:record.setValue("UpMold",Value);
             break;
         case Program_ProcessNum:record.setValue("WorkedTotal",Value);
             break;
@@ -403,8 +403,8 @@ void Programdb::ReflashProLinedit()
             QSqlRecord record = model.record(i);
 
             ui->lineEdit_P_boardThickness->setText(record.value("BoardThick").toString());
-            ui->lineEdit_P_UpMolds->setText(record.value("LowerMold").toString());
-            ui->lineEdit_P_LowerMolds->setText(record.value("UpMold").toString());
+            ui->lineEdit_P_UpMolds->setText(record.value("UpMold").toString());
+            ui->lineEdit_P_LowerMolds->setText(record.value("LowerMold").toString());
             ui->lineEdit_P_BoardWidth->setText(record.value("BoardWide").toString());
             ui->comboBox_P_material->setCurrentIndex(record.value("Material").toInt());
             //ui->lineEdit_P_Total->setText(record.value("WorkedTotal").toString());
@@ -494,7 +494,7 @@ void Programdb::on_pushButton_clicked()
 {
     chooseUpMoldDialog *UM = new chooseUpMoldDialog;
     UM->setWindowFlags(Qt::FramelessWindowHint);
-    UM->move(200,200);
+    //UM->move(200,200);
     connect(UM, SIGNAL(sig_sndUpMold(int)), this, SLOT(UpMoldDialog(int)));
     UM->exec();
 
@@ -504,7 +504,7 @@ void Programdb::on_pushButton_2_clicked()
 {
     chooseLowerMoldDialog *LM =new chooseLowerMoldDialog;
     LM->setWindowFlags(Qt::FramelessWindowHint);
-    LM->move(200,200);
+    //LM->move(200,200);
     connect(LM, SIGNAL(sig_sndLowerMold(int)), this, SLOT(LowerMoldDialog(int)));
     LM->exec();
 }
@@ -515,7 +515,6 @@ void Programdb::LowerMoldDialog(int num)
     ui->lineEdit_P_LowerMolds->setText(QString::number(num,10));
     ui->tableWidget_Programdb->setItem(ui->tableWidget_Programdb->currentRow(),Program_LowerMold,new QTableWidgetItem(QString::number(num,10)));
     Update_ProgramLibItem(ui->tableWidget_Programdb->item(ui->tableWidget_Programdb->currentRow(),Program_Id)->text().toInt(),Program_LowerMold,ui->lineEdit_P_LowerMolds->text());
-
 }
 
 void Programdb::UpMoldDialog(int num)
@@ -556,7 +555,7 @@ void Programdb::on_pushButton_Left_2_clicked()
     ProgramName  *ProgramName1=new ProgramName;
 
     ProgramName1->setWindowFlags(Qt::FramelessWindowHint);
-    ProgramName1->move(200,250);
+   // ProgramName1->move(200,250);
     connect(ProgramName1, SIGNAL(sig_sndNewName(QString)), this, SLOT(NewProgramLib(QString)));
 
     connect(this, SIGNAL(sig_NewisAZ()), ProgramName1, SLOT(ProNewisAZ()));

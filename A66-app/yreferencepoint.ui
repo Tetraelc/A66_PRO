@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>256</width>
-    <height>330</height>
+    <width>375</width>
+    <height>500</height>
    </rect>
   </property>
   <property name="palette">
@@ -16,9 +16,9 @@
      <colorrole role="WindowText">
       <brush brushstyle="SolidPattern">
        <color alpha="255">
-        <red>253</red>
-        <green>253</green>
-        <blue>253</blue>
+        <red>255</red>
+        <green>255</green>
+        <blue>255</blue>
        </color>
       </brush>
      </colorrole>
@@ -45,9 +45,9 @@
      <colorrole role="WindowText">
       <brush brushstyle="SolidPattern">
        <color alpha="255">
-        <red>253</red>
-        <green>253</green>
-        <blue>253</blue>
+        <red>255</red>
+        <green>255</green>
+        <blue>255</blue>
        </color>
       </brush>
      </colorrole>
@@ -112,21 +112,26 @@
   <widget class="QLineEdit" name="lineEdit_BoardThick">
    <property name="geometry">
     <rect>
-     <x>90</x>
-     <y>147</y>
-     <width>113</width>
-     <height>26</height>
+     <x>123</x>
+     <y>213</y>
+     <width>180</width>
+     <height>40</height>
     </rect>
    </property>
   </widget>
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>30</x>
-     <y>150</y>
+     <x>20</x>
+     <y>225</y>
      <width>50</width>
      <height>20</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>16</pointsize>
+    </font>
    </property>
    <property name="text">
     <string>板厚</string>
@@ -135,11 +140,16 @@
   <widget class="QLabel" name="label_2">
    <property name="geometry">
     <rect>
-     <x>30</x>
-     <y>63</y>
-     <width>50</width>
-     <height>16</height>
+     <x>19</x>
+     <y>96</y>
+     <width>61</width>
+     <height>20</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>16</pointsize>
+    </font>
    </property>
    <property name="text">
     <string>基准点</string>
@@ -148,44 +158,122 @@
   <widget class="QLineEdit" name="lineEdit_YReferencePoint">
    <property name="geometry">
     <rect>
-     <x>90</x>
-     <y>60</y>
-     <width>113</width>
-     <height>26</height>
+     <x>124</x>
+     <y>86</y>
+     <width>180</width>
+     <height>40</height>
     </rect>
    </property>
    <property name="readOnly">
     <bool>true</bool>
    </property>
   </widget>
-  <widget class="QToolButton" name="toolButton_comfirm">
+  <widget class="QPushButton" name="toolButton_comfirm">
    <property name="geometry">
     <rect>
-     <x>40</x>
-     <y>240</y>
-     <width>71</width>
-     <height>41</height>
+     <x>50</x>
+     <y>360</y>
+     <width>100</width>
+     <height>50</height>
     </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>45</width>
+     <height>40</height>
+    </size>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>16</pointsize>
+    </font>
+   </property>
+   <property name="cursor">
+    <cursorShape>ArrowCursor</cursorShape>
+   </property>
+   <property name="focusPolicy">
+    <enum>Qt::NoFocus</enum>
    </property>
    <property name="text">
     <string>确定</string>
    </property>
+   <property name="icon">
+    <iconset resource="A66-appsrc.qrc">
+     <normaloff>:/ICO/accept.png</normaloff>:/ICO/accept.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>36</width>
+     <height>36</height>
+    </size>
+   </property>
+   <property name="buttonValue" stdset="0">
+    <char>
+     <unicode>0</unicode>
+    </char>
+   </property>
   </widget>
-  <widget class="QToolButton" name="toolButton_Cancal">
+  <widget class="QPushButton" name="toolButton_Cancal">
    <property name="geometry">
     <rect>
-     <x>150</x>
-     <y>240</y>
-     <width>71</width>
-     <height>41</height>
+     <x>200</x>
+     <y>360</y>
+     <width>100</width>
+     <height>50</height>
     </rect>
    </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>45</width>
+     <height>40</height>
+    </size>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>16</pointsize>
+    </font>
+   </property>
+   <property name="cursor">
+    <cursorShape>ArrowCursor</cursorShape>
+   </property>
+   <property name="focusPolicy">
+    <enum>Qt::NoFocus</enum>
+   </property>
    <property name="text">
-    <string>取消</string>
+    <string>退出</string>
+   </property>
+   <property name="icon">
+    <iconset resource="A66-appsrc.qrc">
+     <normaloff>:/ICO/cancel.png</normaloff>:/ICO/cancel.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>36</width>
+     <height>36</height>
+    </size>
+   </property>
+   <property name="buttonValue" stdset="0">
+    <char>
+     <unicode>0</unicode>
+    </char>
    </property>
   </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="A66-appsrc.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>toolButton_Cancal</sender>
@@ -194,12 +282,12 @@
    <slot>close()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>165</x>
-     <y>290</y>
+     <x>249</x>
+     <y>384</y>
     </hint>
     <hint type="destinationlabel">
-     <x>127</x>
-     <y>164</y>
+     <x>187</x>
+     <y>249</y>
     </hint>
    </hints>
   </connection>

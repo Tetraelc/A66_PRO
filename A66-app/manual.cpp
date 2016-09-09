@@ -72,8 +72,17 @@ void Manual::openManualWin()
     this->setWindowFlags(Qt::FramelessWindowHint);
     this->show();
     this->move(0,WIDGET_Y);
-    SystemSetting syssetting;
-    syssetting.ReadForSystemDat();
+
+    SystemSetting sys;
+    sys.ReadForSystemDat();
+
+    sys.SystemWriteMotor(0x01);//写电机参数
+    sys.SystemWriteMotor(0x02);//写电机参数
+    sys.SystemWriteMotor(0x03);//写电机参数
+    sys.SystemWriteMT();//写MT参数
+
+
+
 
     qDebug()<<"openManualWin";
 }
@@ -93,8 +102,8 @@ void Manual::timerEvent(QTimerEvent *t) //定时器事件
 //        if(MotorXDisplayFalg == 1)
 //        {
 
-           double Dis_XPos =Get_MOTOR_Demand_Postion(0x01) * XaxisParameter.LeadScrew /1000;
-           double Dis_YPos =Get_MOTOR_Demand_Postion(0x02) * XaxisParameter.LeadScrew /1000;
+           double Dis_XPos = Get_MOTOR_Demand_Postion(0x01) * XaxisParameter.LeadScrew /1000;
+           double Dis_YPos = Get_MOTOR_Demand_Postion(0x02) * YaxisParameter.LeadScrew /1000;
 
 
            ui->lineEdit_ManualX->setText(QString::number(Dis_XPos,'.',2));
@@ -107,7 +116,7 @@ void Manual::timerEvent(QTimerEvent *t) //定时器事件
 //        {
            if(RaxisParameter.ENABLE_AXIS == 1)
            {
-               double Dis_RPos =Get_MOTOR_Demand_Postion(0x03) * XaxisParameter.LeadScrew /1000;
+               double Dis_RPos =Get_MOTOR_Demand_Postion(0x03) * RaxisParameter.LeadScrew /1000;
                ui->lineEdit_ManualR->setText(QString::number(Dis_RPos,'.',2));
            }
 
@@ -116,25 +125,80 @@ void Manual::timerEvent(QTimerEvent *t) //定时器事件
     }
     if(t->timerId()==id2){
 
-//        Checkstatus(0x01);
-//        Checkstatus(0x02);
-
+        Checkstatus(0x01);
+        Checkstatus(0x02);
+        Checkstatus(0x03);
+        checkMotorState();
     }
     if(t->timerId()==id3){
 
         CheckINState();
         CheckRunState();
         CheckOutState();
-        //ui->lineEdit_error1->setText(QString::number(motor[0].SendCountError+motor[0].ReadCountError,10));
-        //ui->lineEdit_error2->setText(QString::number(motor[1].SendCountError+motor[1].ReadCountError,10));
-        //ui->lineEdit_error3->setText(QString::number(motor[2].SendCountError+motor[2].ReadCountError,10));
-
     }
+
+}
+
+void Manual::checkMotorState()
+{
+     CurrentReg.Current_MotorTipResult.clear();
+     if(Get_HeartbetError(0x01) == 0x01 || motor[X1_ID-1].initStatus == 0)
+     {
+
+         MotorTipFlag = true;
+         CurrentReg.Current_MotorTips = Motor1Tip;
+         CurrentReg.Current_MotorTipResult.append(SystemTipsInformation(CurrentReg.Current_MotorTips));
+//         QMessageBox::critical(0,QObject::trUtf8("异常"),
+//                               trUtf8("1号电机离线"));
+
+        // qDebug("Motor1");
+     }
+     if(Get_HeartbetError(0x02) == 0x01 || motor[Y1_ID-1].initStatus == 0)
+     {
+         MotorTipFlag = true;
+         CurrentReg.Current_MotorTips = Motor2Tip;
+         CurrentReg.Current_MotorTipResult.append("/").append(SystemTipsInformation(CurrentReg.Current_MotorTips));
+//         QMessageBox::critical(0,QObject::trUtf8("异常"),
+//                               trUtf8("2号电机离线"));
+           // qDebug("Motor2");
+     }
+
+     if(Get_HeartbetError(0x03) == 1 || motor[R1_ID-1].initStatus == 0)
+     {
+         MotorTipFlag = true;
+         CurrentReg.Current_MotorTips = Motor3Tip;
+         CurrentReg.Current_MotorTipResult.append("/").append(SystemTipsInformation(CurrentReg.Current_MotorTips));
+//         QMessageBox::critical(0,QObject::trUtf8("异常"),
+//                               trUtf8("3号电机离线"));
+        //qDebug("Motor3");
+     }
+
+
+     if(Get_HeartbetError(0x04) == 0x01)
+     {
+         MotorTipFlag = true;
+         CurrentReg.Current_MotorTips = MTTip;
+         CurrentReg.Current_MotorTipResult.append("/").append(SystemTipsInformation(CurrentReg.Current_MotorTips));
+//         QMessageBox::critical(0,QObject::trUtf8("异常"),
+//                               trUtf8("MT离线"));
+        //qDebug("Motor4");
+     }
+
+     if(Get_HeartbetError(0x01) == 0x01 || Get_HeartbetError(0x02) == 0x01 ||  Get_HeartbetError(0x03) == 0x01 ||  Get_HeartbetError(0x04) == 0x01 )
+     {
+         MotorTipFlag = true;
+         CurrentReg.Current_MotorTips = OfflineTip;
+         CurrentReg.Current_MotorTipResult.append(SystemTipsInformation(CurrentReg.Current_MotorTips));
+
+          //qDebug("Motorclean");
+
+     }
+
+
 
 }
 int Manual::CheckRunState()
 {
-   // qDebug()<<"A20_Run_Status"<<A20_Run_Status;
     switch(A20_Run_Status)
     {
     case VFast:
@@ -232,8 +296,6 @@ int Manual::Checkstatus(int motor_id)
     int temp1,temp2,temp3;
 
     status = MOTOR_STATUS[motor_id-1] & STATUS_MASK;
- //   MSG_USER(0x8000,"MOTOR_STATUS[motor_id-1]",MOTOR_STATUS[motor_id-1]);
-  //  MSG_USER(0x8000,"status:",status);
     switch(status)
     {
     case Not_ready_to_switch_on:  MSG_USER(0x8000,"1_Not_ready_to_switch_on",motor_id);  break;
@@ -269,8 +331,8 @@ int Manual::Checkstatus(int motor_id)
         }
         if(motor_id == 0x02 )
         {
-            QMessageBox::critical(0,QObject::trUtf8("异常"),
-                                  trUtf8("请检查电机"));break;
+//            QMessageBox::critical(0,QObject::trUtf8("异常"),
+//                                  trUtf8("请检查电机"));break;
         }
 
     default:    MSG_USER(0x8000,"Invalid_data",motor_id);break;
@@ -312,11 +374,7 @@ int Manual::Checkstatus(int motor_id)
 
          }
 
-
-//   last_pos[motor_id] = Get_MOTOR_Demand_Postion(motor_id);
     return status;
-
-    qDebug()<<"openManualWin";
 }
 
 
@@ -350,12 +408,12 @@ void Manual::on_pushButton_M_XBack_pressed()
 
     if(XaxisParameter.MotorDirection == 1)
     {
-        Set_Motor_Speed_Postion_Rel(0x01,ManualSpeed_temp,-1 * LeadScrew_temp);
+        Set_Motor_Speed_Postion_Rel(0x01,ManualSpeed_temp*10,-1 * LeadScrew_temp);
     }
     else
     {
 
-        Set_Motor_Speed_Postion_Rel(0x01,ManualSpeed_temp ,LeadScrew_temp);
+        Set_Motor_Speed_Postion_Rel(0x01,ManualSpeed_temp*10 ,LeadScrew_temp);
         qDebug()<<"XaxisParameter.EncodeDirectionflase";
     }
 
@@ -383,11 +441,11 @@ void Manual::on_pushButton_M_XForWard_pressed()
     qDebug()<<"XLeadScrew_temp"<<XLeadScrew_temp;
     if(XaxisParameter.MotorDirection == 1)
     {
-         Set_Motor_Speed_Postion_Rel(0x01,XManualSpeed_temp,XLeadScrew_temp);
+         Set_Motor_Speed_Postion_Rel(0x01,XManualSpeed_temp*10,XLeadScrew_temp);
     }
     else
     {
-         Set_Motor_Speed_Postion_Rel(0x01,XManualSpeed_temp,-1*XLeadScrew_temp);
+         Set_Motor_Speed_Postion_Rel(0x01,XManualSpeed_temp*10,-1*XLeadScrew_temp);
     }
 
 
@@ -415,12 +473,12 @@ void Manual::on_pushButton_M_YBack_pressed()
      long YLeadScrew_temp = 1000000*1000/YaxisParameter.LeadScrew;
     if(YaxisParameter.MotorDirection == 1)
     {
-             Set_Motor_Speed_Postion_Rel(0x02,YManualSpeed_temp,-1 * YLeadScrew_temp);
+             Set_Motor_Speed_Postion_Rel(0x02,YManualSpeed_temp*10,-1 * YLeadScrew_temp);
 
     }
     else
     {
-       Set_Motor_Speed_Postion_Rel(0x02,YManualSpeed_temp,YLeadScrew_temp);
+       Set_Motor_Speed_Postion_Rel(0x02,YManualSpeed_temp*10,YLeadScrew_temp);
     }
 
 }
@@ -445,11 +503,11 @@ void Manual::on_pushButton_M_YForWard_pressed()
      long YLeadScrew_temp = 1000000*1000/YaxisParameter.LeadScrew;
     if(YaxisParameter.MotorDirection == 1)
     {
-         Set_Motor_Speed_Postion_Rel(0x02,YManualSpeed_temp,YLeadScrew_temp);
+         Set_Motor_Speed_Postion_Rel(0x02,YManualSpeed_temp*10,YLeadScrew_temp);
     }
     else
     {
-         Set_Motor_Speed_Postion_Rel(0x02,YManualSpeed_temp,-1 * YLeadScrew_temp);
+         Set_Motor_Speed_Postion_Rel(0x02,YManualSpeed_temp*10,-1 * YLeadScrew_temp);
     }
 
 }
@@ -473,11 +531,11 @@ void Manual::on_pushButton_M_RForWard_pressed()
      unsigned long RLeadScrew_temp = 1000000*1000/RaxisParameter.LeadScrew;
      if(RaxisParameter.MotorDirection == 1)
      {
-         Set_Motor_Speed_Postion_Rel(0x03,RManualSpeed_temp,RLeadScrew_temp);
+         Set_Motor_Speed_Postion_Rel(0x03,RManualSpeed_temp*10,RLeadScrew_temp);
      }
      else
      {
-         Set_Motor_Speed_Postion_Rel(0x03,RManualSpeed_temp,-1 * RLeadScrew_temp);
+         Set_Motor_Speed_Postion_Rel(0x03,RManualSpeed_temp*10,-1 * RLeadScrew_temp);
      }
 }
 
@@ -494,11 +552,13 @@ void Manual::on_pushButton_M_RBack_pressed()
     unsigned long RLeadScrew_temp = 1000000*1000/RaxisParameter.LeadScrew;
     if(RaxisParameter.MotorDirection == 1)
     {
-        Set_Motor_Speed_Postion_Rel(0x03,RManualSpeed_temp,-1 * RLeadScrew_temp);
+        Set_Motor_Speed_Postion_Rel(0x03,RManualSpeed_temp*10,-1 * RLeadScrew_temp);
+        qDebug()<<"RManualSpeed_temp-"<<RManualSpeed_temp;
     }
     else
     {
-        Set_Motor_Speed_Postion_Rel(0x03,RManualSpeed_temp,RLeadScrew_temp);
+        Set_Motor_Speed_Postion_Rel(0x03,RManualSpeed_temp*10,RLeadScrew_temp);
+         qDebug()<<"RManualSpeed_temp+"<<RManualSpeed_temp;
     }
 }
 
@@ -537,22 +597,22 @@ void Manual::ChangeXCurrentPostion(QString str)
 
     ui->lineEdit_ManualX->setText(str);
 
-    Adjust_ManualDate.data[1].Data = str.toInt();
-    Write_MOTOR_Multi_Data(&Adjust_ManualDate,0x01);
+    Adjust_ManualDate[0].data[1].Data = str.toInt();
+    Write_MOTOR_Multi_Data(&Adjust_ManualDate[0],0x01);
 
 }
 void Manual::ChangeYCurrentPostion(QString str)
 {
 
     ui->lineEdit_ManualY->setText(str);
-    Adjust_ManualDate.data[1].Data = str.toInt();
-    Write_MOTOR_Multi_Data(&Adjust_ManualDate,0x02);
+    Adjust_ManualDate[1].data[1].Data = str.toInt();
+    Write_MOTOR_Multi_Data(&Adjust_ManualDate[1],0x02);
 }
 void Manual::ChangeRCurrentPostion(QString str)
 {
     ui->lineEdit_ManualR->setText(str);
-    Adjust_ManualDate.data[1].Data = str.toInt();
-    Write_MOTOR_Multi_Data(&Adjust_ManualDate,0x03);
+    Adjust_ManualDate[2].data[1].Data = str.toInt();
+    Write_MOTOR_Multi_Data(&Adjust_ManualDate[2],0x03);
 }
 
 
@@ -571,12 +631,11 @@ void Manual::on_pushButton_B6_7_clicked()
 }
 
 
-
-
 void Manual::on_toolButton_YReferencePoint_clicked()
 {
-    YReferencePoint yrp;
+    YReferencePoint yrp;   
     yrp.setWindowFlags(Qt::FramelessWindowHint);
+    yrp.move(627, 90);
     yrp.exec();
 
 }

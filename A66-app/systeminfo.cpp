@@ -19,7 +19,6 @@ SystemInfo::SystemInfo(QWidget *parent) :
 
     ui->setupUi(this);
 
-
 }
 
 SystemInfo::~SystemInfo()

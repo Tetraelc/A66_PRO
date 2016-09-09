@@ -29,12 +29,12 @@ void delay1ms(void)
   */
 void Master_heartbeatError(CO_Data* d, UNS8 heartbeatID)
 {
-        motor[heartbeatID-1].HeartCount++;
-    if( motor[heartbeatID-1].HeartCount >1000)
-    {
- //   motor[heartbeatID-1].initStatus = 0; //离线之后
-    motor[heartbeatID-1].HeartCount =0;
-    }
+    motor[heartbeatID-1].HeartCount++;
+//    if( motor[heartbeatID-1].HeartCount >1)
+//    {
+        motor[heartbeatID-1].initStatus = 0; //离线之后
+     //   motor[heartbeatID-1].HeartCount =0;
+ //   }
     motor[heartbeatID-1].HeartbeatError = 1;
 
   //  MSG_USER(0, "Master_heartbeatError %d\n", heartbeatID);
