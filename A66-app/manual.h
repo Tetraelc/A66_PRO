@@ -23,6 +23,7 @@ public:
     int CheckINState();
     int CheckRunState();
     int CheckOutState();
+    void CheckRaxisEnable();
 public slots:
     void openManualWin();
     void XMotorThread();

@@ -322,7 +322,7 @@
    <widget class="QLineEdit" name="lineEdit_ManualR">
     <property name="geometry">
      <rect>
-      <x>351</x>
+      <x>350</x>
       <y>260</y>
       <width>191</width>
       <height>61</height>
@@ -398,8 +398,8 @@
    <widget class="QLineEdit" name="lineEdit_ManualX">
     <property name="geometry">
      <rect>
-      <x>353</x>
-      <y>44</y>
+      <x>350</x>
+      <y>40</y>
       <width>191</width>
       <height>61</height>
      </rect>
@@ -425,8 +425,8 @@
    <widget class="QLineEdit" name="lineEdit_ManualY">
     <property name="geometry">
      <rect>
-      <x>351</x>
-      <y>152</y>
+      <x>350</x>
+      <y>150</y>
       <width>191</width>
       <height>61</height>
      </rect>

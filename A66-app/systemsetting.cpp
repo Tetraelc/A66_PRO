@@ -42,7 +42,7 @@ SystemSetting::SystemSetting(QWidget *parent) :
     QRegExpValidator *pReg = new QRegExpValidator(rx, this);
     //ui->lineEdit_KeepTime ->setValidator(pReg);
     //ui->lineEdit_UnloadTime->setValidator(pReg);
-    ui->lineEdit_3->setValidator(pReg);
+    ui->lineEdit_Secret->setValidator(pReg);
 
 }
 
@@ -1225,8 +1225,12 @@ void SystemSetting::ReadConfig(void)
 void SystemSetting::on_toolButton_confirm_clicked()
 {
 
-    Write_Button_state = 1;
-    WriteConfig();
+    if(ui->lineEdit_Secret->text() == "5678")
+    {
+        Write_Button_state = 1;
+        WriteConfig();
+    }
+
 }
 void SystemSetting::on_toolButton_readConfig_clicked()
 {
@@ -1296,13 +1300,13 @@ int SystemSetting::deal_write_config_event()
         Write_Button_state = 0;
         if(motor[3].RX_buf[0] == 0xA0)
         {
-            QMessageBox::critical(0,QObject::trUtf8("写入配置信息"),
+            QMessageBox::information(0,QObject::trUtf8("写入配置"),
                                    trUtf8("配置成功"));
              qDebug("entern readif");
         }
         else
         {
-           QMessageBox::critical(0,QObject::trUtf8("写入配置信息"),
+           QMessageBox::critical(0,QObject::trUtf8("写入配置"),
                                    trUtf8("配置失败"));
            qDebug("entern readifelse");
         }
@@ -1318,7 +1322,6 @@ int SystemSetting::deal_write_config_event()
         QMessageBox::critical(0,QObject::trUtf8("写入配置信息"),
                               trUtf8("发送失败"));
 
-         qDebug("25555555555555555555555555555555553332");
     }
 
 }
@@ -1346,7 +1349,7 @@ int SystemSetting::deal_read_config_event()
             ValveReg.UnloadTime   = motor[3].RX_DATA[7];
             ValveReg.KeepTime     = motor[3].RX_DATA[8];
             ReadConfig();
-            QMessageBox::critical(0,QObject::trUtf8("读取配置信息"),
+            QMessageBox::information(0,QObject::trUtf8("读取配置信息"),
                                   trUtf8("读取成功"));
             Read_Button_state = 0;
             motor[3].Read_Multi_Finsh_state = NO_SEND;

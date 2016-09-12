@@ -16,7 +16,7 @@
   <widget class="QToolButton" name="toolButton_RunHoming">
    <property name="geometry">
     <rect>
-     <x>930</x>
+     <x>922</x>
      <y>70</y>
      <width>81</width>
      <height>141</height>
@@ -29,7 +29,7 @@
   <widget class="QToolButton" name="toolButton_QuitRunning">
    <property name="geometry">
     <rect>
-     <x>930</x>
+     <x>923</x>
      <y>240</y>
      <width>81</width>
      <height>141</height>
@@ -57,7 +57,7 @@
    <widget class="QToolButton" name="toolButton_R">
     <property name="geometry">
      <rect>
-      <x>166</x>
+      <x>150</x>
       <y>270</y>
       <width>101</width>
       <height>41</height>
@@ -93,8 +93,8 @@
    <widget class="QToolButton" name="toolButton_X">
     <property name="geometry">
      <rect>
-      <x>166</x>
-      <y>50</y>
+      <x>152</x>
+      <y>54</y>
       <width>101</width>
       <height>41</height>
      </rect>
@@ -129,8 +129,8 @@
    <widget class="QToolButton" name="toolButton_Y">
     <property name="geometry">
      <rect>
-      <x>166</x>
-      <y>160</y>
+      <x>150</x>
+      <y>163</y>
       <width>101</width>
       <height>41</height>
      </rect>
@@ -218,7 +218,7 @@
    <widget class="QLineEdit" name="lineEdit_XHoming">
     <property name="geometry">
      <rect>
-      <x>269</x>
+      <x>267</x>
       <y>44</y>
       <width>241</width>
       <height>61</height>
@@ -274,8 +274,8 @@
      <rect>
       <x>540</x>
       <y>50</y>
-      <width>171</width>
-      <height>51</height>
+      <width>170</width>
+      <height>50</height>
      </rect>
     </property>
     <property name="frameShape">
@@ -310,9 +310,9 @@
     <property name="geometry">
      <rect>
       <x>540</x>
-      <y>150</y>
-      <width>171</width>
-      <height>51</height>
+      <y>158</y>
+      <width>170</width>
+      <height>50</height>
      </rect>
     </property>
     <property name="frameShape">
@@ -347,9 +347,9 @@
     <property name="geometry">
      <rect>
       <x>540</x>
-      <y>260</y>
-      <width>171</width>
-      <height>51</height>
+      <y>266</y>
+      <width>170</width>
+      <height>50</height>
      </rect>
     </property>
     <property name="frameShape">

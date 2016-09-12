@@ -16,6 +16,7 @@ public:
     ~HomingMode();
     void timerEvent(QTimerEvent *t) ;//定时器事件
     void CheckMotorState();
+    void CheckRaxisEnable();
 
 public slots:
     void openHomingModeWin();

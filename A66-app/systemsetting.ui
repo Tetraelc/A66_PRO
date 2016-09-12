@@ -891,7 +891,7 @@
        <string>保压</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit_3">
+     <widget class="QLineEdit" name="lineEdit_Secret">
       <property name="geometry">
        <rect>
         <x>272</x>

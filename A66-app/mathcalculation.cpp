@@ -34,6 +34,7 @@ double MathCalculation::AngleToYDis(double angle,double compensationAngle,unsign
 
     if(m_com == 0)  //角度补偿
     {
+        qDebug()<<"Angle"<<2* AngleToLength(m_a)<<AngleToLength(m_a-m_ac);
         m_y =   2* AngleToLength(m_a) - AngleToLength(m_a-m_ac);
         EspYm =  m_y + YZero;
         qDebug("EspYm  %f",m_y );
@@ -67,7 +68,6 @@ double MathCalculation::AngleToLength(double m_ba)
     double m_v = CurrentLowerMoldTemp.D_V; //MoldLib[(uint8)DisMenu[MultiStepProgram].Dis[MspMoldNum].fword - 1].MoldOpening_W;
     double m_tt =CurrentProgramTemp.BroadThick; //DisMenu[MultiStepProgram].Dis[MspPancel].fword;
     double m_r = CurrentLowerMoldTemp.Radius;//MoldLib[(uint8)DisMenu[MultiStepProgram].Dis[MspMoldNum].fword - 1].MoldRadius;
-//	double m_ba = DisMenu[EachStepProgram].Dis[EspAngle].fword;
     double m_e =CurrentMaterialTemp.EMold;//MaterLib[(uint8)DisMenu[MultiStepProgram].Dis[MspMaterial].fword - 1].E_Module;
     double m_o = CurrentMaterialTemp.StrengthFactor;// MaterLib[(uint8)DisMenu[MultiStepProgram].Dis[MspMaterial].fword - 1].TensileStrength;
 

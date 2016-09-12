@@ -22,7 +22,6 @@ MainWindow::MainWindow(QWidget *parent) :
     initWindow();
 
 
-
     ProgramName_Scan = startTimer(800);
     CurrentReg.Current_ProgramLibRow =0;
     CurrentReg.Current_WorkedTotal = 0;
@@ -47,7 +46,6 @@ MainWindow::MainWindow(QWidget *parent) :
 //    ui->toolButton_T1->setEnabled(false);
 
 
-//    this->move((QApplication::desktop()->width() - this->width() )/2,(QApplication::desktop()->height() -this->width())/2);
 }
 
 

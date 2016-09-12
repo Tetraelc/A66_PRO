@@ -81,12 +81,60 @@ void Manual::openManualWin()
     sys.SystemWriteMotor(0x03);//写电机参数
     sys.SystemWriteMT();//写MT参数
 
+    CheckRaxisEnable();
 
 
 
     qDebug()<<"openManualWin";
 }
 
+
+void Manual::CheckRaxisEnable()
+{
+    if(RaxisParameter.ENABLE_AXIS == 1)
+    {
+        ui->lineEdit_ManualR->setVisible(true); //R轴可视
+        ui->pushButton_M_RForWard->setVisible(true);
+        ui->pushButton_M_RBack->setVisible(true);
+        ui->toolButton_R->setVisible(true);
+
+        ui->pushButton_M_XBack->move(130,40);
+        ui->toolButton_X->move(250,50);
+        ui->lineEdit_ManualX->move(350,40);
+        ui->pushButton_M_XForWard->move(540,40);
+
+        ui->pushButton_M_YBack->move(130,150);
+        ui->toolButton_Y->move(250,160);
+        ui->lineEdit_ManualY->move(350,150);
+        ui->pushButton_M_YForWard->move(540,100);
+
+        ui->pushButton_M_RBack->move(130,260);
+        ui->toolButton_R->move(250,270);
+        ui->lineEdit_ManualR->move(350,260);
+        ui->pushButton_M_RForWard->move(540,200);
+
+    }
+    else
+    {
+        ui->lineEdit_ManualR->setVisible(false); //R轴bu可视
+        ui->pushButton_M_RForWard->setVisible(false);
+        ui->pushButton_M_RBack->setVisible(false);
+        ui->toolButton_R->setVisible(false);
+
+        ui->pushButton_M_XBack->move(130,100);
+        ui->toolButton_X->move(250,110);
+        ui->lineEdit_ManualX->move(350,100);
+        ui->pushButton_M_XForWard->move(590,100);
+
+        ui->pushButton_M_YBack->move(130,220);
+        ui->toolButton_Y->move(250,230);
+        ui->lineEdit_ManualY->move(350,220);
+        ui->pushButton_M_YForWard->move(590,220);
+
+
+    }
+
+}
 
 
 void Manual::timerEvent(QTimerEvent *t) //定时器事件
@@ -189,6 +237,7 @@ void Manual::checkMotorState()
          MotorTipFlag = true;
          CurrentReg.Current_MotorTips = OfflineTip;
          CurrentReg.Current_MotorTipResult.append(SystemTipsInformation(CurrentReg.Current_MotorTips));
+
 
           //qDebug("Motorclean");
 

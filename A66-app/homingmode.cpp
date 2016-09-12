@@ -4,6 +4,24 @@
 #include "systemsetting.h"
 #include "mainwindow.h"
 
+//#define HomingXButtonPos   152
+//#define HomingXLineditPos  HomingXButtonPos+115
+//#define HomingXFramePos    HomingXLineditPos+273
+
+
+//#define HomingYButtonPos   152
+//#define HomingYLineditPos  HomingYButtonPos+115
+//#define HomingYFramePos    HomingYLineditPos+273
+
+
+//#define HomingRButtonPos   152
+//#define HomingRLineditPos  HomingRButtonPos+115
+//#define HomingRFramePos    HomingRLineditPos+273
+
+//#define  HomingXButtonPosCol  44
+
+//#define  HomingYButtonPosCol  44
+//#define  HomingRButtonPosCol  44
 
 static int time_count1 =0;
 static int arrivedSwitch_X = 0;
@@ -42,6 +60,7 @@ HomingMode::HomingMode(QWidget *parent) :
     ui->toolButton_Y->setEnabled(false);
     ui->toolButton_R->setEnabled(false);
 
+    CheckRaxisEnable();
 
     MainWindow *mw =new MainWindow;
     mw->setWindowFlags(Qt::FramelessWindowHint);
@@ -58,6 +77,45 @@ HomingMode::~HomingMode()
 {
     delete ui;
 }
+
+void HomingMode::CheckRaxisEnable()
+{
+    if(RaxisParameter.ENABLE_AXIS == 1)
+    {
+        ui->lineEdit_RHoming->setVisible(true); //R轴可视
+        ui->frame_4->setVisible(true);
+        ui->toolButton_R->setVisible(true);
+
+        ui->toolButton_X->move(152,54);
+        ui->lineEdit_XHoming->move(267,44);
+        ui->frame_2->move(540,50);
+
+        ui->toolButton_Y->move(150,163);
+        ui->lineEdit_YHoming->move(267,152);
+        ui->frame_3->move(540,158);
+
+        ui->toolButton_R->move(150,270);
+        ui->lineEdit_RHoming->move(267,260);
+        ui->frame_4->move(540,266);
+
+    }
+    else
+    {
+        ui->lineEdit_RHoming->setVisible(false);
+        ui->frame_4->setVisible(false);
+        ui->toolButton_R->setVisible(false);
+
+        ui->toolButton_X->move(150,96);
+        ui->lineEdit_XHoming->move(267,86);
+        ui->frame_2->move(540,92);
+
+        ui->toolButton_Y->move(150,218);
+        ui->lineEdit_YHoming->move(267,207);
+        ui->frame_3->move(540,213);
+    }
+
+}
+
 
 //[1]
 void HomingMode::CheckMotorState()
@@ -83,29 +141,29 @@ void HomingMode::CheckMotorState()
     {
         ui->label_X->setText(trUtf8("准备就绪"));
         ui->toolButton_RunHoming->setEnabled(true);
-        ui->toolButton_X->setEnabled(false);
+        ui->toolButton_Y->setEnabled(false);
     }
     if(Get_HeartbetError(Y1_ID) == 0x01 || motor[Y1_ID-1].initStatus == 0)
     {
         ui->label_Y->setText(trUtf8("电机异常"));
         ui->toolButton_RunHoming->setEnabled(false);
-        ui->toolButton_X->setEnabled(false);
+        ui->toolButton_Y->setEnabled(false);
     }
     else if(HomgingModeFlag == 1 && arrivedSwitch_Y == 0)
     {
         ui->label_Y->setText(trUtf8("正在归零"));
-        ui->toolButton_X->setEnabled(true);
+        ui->toolButton_Y->setEnabled(true);
     }
     else if(arrivedSwitch_Y == 1)
     {
         ui->label_Y->setText(trUtf8("归零完成"));
-        ui->toolButton_X->setEnabled(false);
+        ui->toolButton_Y->setEnabled(false);
        // ui->toolButton_RunHoming->setEnabled(true);
     }
     else if(arrivedSwitch_Y == 0)
     {
         ui->label_Y->setText(trUtf8("准备就绪"));
-        ui->toolButton_X->setEnabled(false);
+        ui->toolButton_Y->setEnabled(false);
         ui->toolButton_RunHoming->setEnabled(true);
     }
     if(RaxisParameter.ENABLE_AXIS == 1)
@@ -113,25 +171,25 @@ void HomingMode::CheckMotorState()
         if(Get_HeartbetError(R1_ID) == 0x01 || motor[R1_ID-1].initStatus == 0)
         {
             ui->label_R->setText(trUtf8("电机异常"));
-            ui->toolButton_X->setEnabled(false);
+            ui->toolButton_R->setEnabled(false);
             ui->toolButton_RunHoming->setEnabled(false);
         }
         else if(HomgingModeFlag == 1 && arrivedSwitch_R == 0)
         {
             ui->label_R->setText(trUtf8("正在归零"));
-            ui->toolButton_X->setEnabled(true);
+            ui->toolButton_R->setEnabled(true);
         }
         else if(arrivedSwitch_R == 1)
         {
             ui->label_R->setText(trUtf8("归零完成"));
-            ui->toolButton_X->setEnabled(false);
+            ui->toolButton_R->setEnabled(false);
             //ui->toolButton_RunHoming->setEnabled(true);
         }
         else if(arrivedSwitch_R == 0)
         {
             ui->label_R->setText(trUtf8("准备就绪"));
             ui->toolButton_RunHoming->setEnabled(true);
-            ui->toolButton_X->setEnabled(false);
+            ui->toolButton_R->setEnabled(false);
         }
     }
     else
@@ -152,6 +210,7 @@ void HomingMode::openHomingModeWin()
     this->show();
     this->move(0,WIDGET_Y);
 
+    CheckRaxisEnable();
     ui->toolButton_RunHoming->setEnabled(true);
 
 

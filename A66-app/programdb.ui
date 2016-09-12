@@ -638,11 +638,7 @@
     </font>
    </property>
    <property name="text">
-    <string>导入</string>
-   </property>
-   <property name="icon">
-    <iconset resource="A66-appsrc.qrc">
-     <normaloff>:/ico/ICO/P1-IMPORT.png</normaloff>:/ico/ICO/P1-IMPORT.png</iconset>
+    <string/>
    </property>
    <property name="iconSize">
     <size>
@@ -670,11 +666,7 @@
     </font>
    </property>
    <property name="text">
-    <string>导出</string>
-   </property>
-   <property name="icon">
-    <iconset resource="A66-appsrc.qrc">
-     <normaloff>:/ico/ICO/P1-OUTPORT.png</normaloff>:/ico/ICO/P1-OUTPORT.png</iconset>
+    <string/>
    </property>
    <property name="iconSize">
     <size>
@@ -734,11 +726,7 @@
     </font>
    </property>
    <property name="text">
-    <string>添加照片</string>
-   </property>
-   <property name="icon">
-    <iconset resource="A66-appsrc.qrc">
-     <normaloff>:/ico/ICO/P1-PIC.png</normaloff>:/ico/ICO/P1-PIC.png</iconset>
+    <string/>
    </property>
    <property name="iconSize">
     <size>

@@ -69,8 +69,8 @@ void Step::openStepWin()
     runstate1.ReadForRun(CurrentReg.Current_StepProgramRow);
 
     CurrentStepTemp.Pressure = mathcal.pressureCal(CurrentProgramTemp.BroadWideth,CurrentProgramTemp.BroadThick,CurrentMaterialTemp.StrengthFactor,CurrentLowerMoldTemp.D_V);
-    ui->lineEdit_S_pressure->setText(QString::number(CurrentStepTemp.Pressure,'.',0));
-    ui->tableWidget_Step->setItem(ui->tableWidget_Step->currentRow(),StepProgram_Pressure,new QTableWidgetItem(QString::number(CurrentStepTemp.Pressure,'.',0)));
+    ui->lineEdit_S_pressure->setText(QString::number(CurrentStepTemp.Pressure,'.',2));
+    ui->tableWidget_Step->setItem(ui->tableWidget_Step->currentRow(),StepProgram_Pressure,new QTableWidgetItem(QString::number(CurrentStepTemp.Pressure,'.',2)));
     Update_StepProgramItem(ui->tableWidget_Step->item(ui->tableWidget_Step->currentRow(),StepProgram_Id)->text().toInt(),StepProgram_Pressure,ui->lineEdit_S_pressure->text());
 
 }
@@ -83,11 +83,12 @@ void Step::timerEvent(QTimerEvent *t) //定时器事件
 //         MathCalculation *mathcal = new MathCalculation;
         if(scanAngleFlag == true || scanAngleCompensateFlag  == true)
         {
+            qDebug()<<"AngleToYDis"<<QString::number(CurrentStepTemp.Angle,'.',0).toInt()<<QString::number(CurrentStepTemp.AngleCompensate,'.',0).toInt()<<CurrentProgramTemp.BroadThick<<CurrentStepTemp.Yzero;
              CurrentStepTemp.Yaxis = mathcal.AngleToYDis(QString::number(CurrentStepTemp.Angle,'.',0).toInt(),QString::number(CurrentStepTemp.AngleCompensate,'.',0).toInt(),0,CurrentProgramTemp.BroadThick,0, CurrentStepTemp.Yzero);
              scanAngleFlag = false;
              scanAngleCompensateFlag = false;
-             ui->lineEdit_S_Yaxis->setText(QString::number(CurrentStepTemp.Yaxis,'.',0));
-             ui->tableWidget_Step->setItem(ui->tableWidget_Step->currentRow(),StepProgram_Yaxis,new QTableWidgetItem(QString::number(CurrentStepTemp.Yaxis,'.',0)));
+             ui->lineEdit_S_Yaxis->setText(QString::number(CurrentStepTemp.Yaxis,'.',2));
+             ui->tableWidget_Step->setItem(ui->tableWidget_Step->currentRow(),StepProgram_Yaxis,new QTableWidgetItem(QString::number(CurrentStepTemp.Yaxis,'.',2)));
              Update_StepProgramItem(ui->tableWidget_Step->item(ui->tableWidget_Step->currentRow(),StepProgram_Id)->text().toInt(),StepProgram_Yaxis,ui->lineEdit_S_Yaxis->text());
              qDebug()<<"timerEvent"<<CurrentStepTemp.Angle<<CurrentStepTemp.AngleCompensate<<CurrentProgramTemp.BroadThick<<CurrentStepTemp.Yzero<<CurrentStepTemp.Yaxis;
 
@@ -127,25 +128,26 @@ void Step::Display_StepProgramItem()
     for(int i=0;i<model.rowCount();i++)
     {
             QSqlRecord record = model.record(i);
+            bool ok;
             ui->tableWidget_Step->setItem(i,StepProgram_Id,new QTableWidgetItem(record.value("Id").toString()));
-            ui->tableWidget_Step->setItem(i,StepProgram_Angle,new QTableWidgetItem(record.value("Angle").toString()));
+            ui->tableWidget_Step->setItem(i,StepProgram_Angle,new QTableWidgetItem(QString::number(record.value("Angle").toDouble(&ok),'.',2)));
 //            if(record.value("AngleCompensate").toInt() > 0)
 //            {
 //             ui->tableWidget_Step->setItem(i,StepProgram_AngleCompensate,new QTableWidgetItem("+" + record.value("AngleCompensate").toString()));
 //            }
 //            else
 //            {
-             ui->tableWidget_Step->setItem(i,StepProgram_AngleCompensate,new QTableWidgetItem( record.value("AngleCompensate").toString()));
+             ui->tableWidget_Step->setItem(i,StepProgram_AngleCompensate,new QTableWidgetItem(QString::number(record.value("AngleCompensate").toDouble(&ok),'.',2)));
 //            }
 
-            ui->tableWidget_Step->setItem(i,StepProgram_Yaxis,new QTableWidgetItem(record.value("Yaxis").toString()));
-            ui->tableWidget_Step->setItem(i,StepProgram_Xaxis,new QTableWidgetItem(record.value("Xaxis").toString()));
-            ui->tableWidget_Step->setItem(i,StepProgram_XaxisCorrect,new QTableWidgetItem(record.value("XaxisCorrect").toString()));
-            ui->tableWidget_Step->setItem(i,StepProgram_Distance,new QTableWidgetItem(record.value("Distance").toString()));
-            ui->tableWidget_Step->setItem(i,StepProgram_Pressure,new QTableWidgetItem(record.value("Pressure").toString()));
-            ui->tableWidget_Step->setItem(i,StepProgram_ReturnTime,new QTableWidgetItem(record.value("ReturnTime").toString()));
-            ui->tableWidget_Step->setItem(i,StepProgram_HoldingTime,new QTableWidgetItem(record.value("Holding").toString()));
-            ui->tableWidget_Step->setItem(i,StepProgram_Raxis,new QTableWidgetItem(record.value("Raxis").toString()));
+            ui->tableWidget_Step->setItem(i,StepProgram_Yaxis,new QTableWidgetItem(QString::number(record.value("Yaxis").toDouble(&ok),'.',2) ));
+            ui->tableWidget_Step->setItem(i,StepProgram_Xaxis,new QTableWidgetItem(QString::number(record.value("Xaxis").toDouble(&ok),'.',2)));
+            ui->tableWidget_Step->setItem(i,StepProgram_XaxisCorrect,new QTableWidgetItem(QString::number(record.value("XaxisCorrect").toDouble(&ok),'.',2)));
+            ui->tableWidget_Step->setItem(i,StepProgram_Distance,new QTableWidgetItem(QString::number(record.value("Distance").toDouble(&ok),'.',2)));
+            ui->tableWidget_Step->setItem(i,StepProgram_Pressure,new QTableWidgetItem(QString::number(record.value("Pressure").toDouble(&ok),'.',2)));
+            ui->tableWidget_Step->setItem(i,StepProgram_ReturnTime,new QTableWidgetItem(QString::number(record.value("ReturnTime").toDouble(&ok),'.',2)));
+            ui->tableWidget_Step->setItem(i,StepProgram_HoldingTime,new QTableWidgetItem(QString::number(record.value("Holding").toDouble(&ok),'.',2)));
+            ui->tableWidget_Step->setItem(i,StepProgram_Raxis,new QTableWidgetItem(QString::number(record.value("Raxis").toDouble(&ok),'.',2)));
 
     }
 
@@ -593,21 +595,22 @@ void Step::ReflashLinedit()
    {
            QSqlRecord record = model.record(i);
 
-           ui->lineEdit_S_Angle->setText(record.value("Angle").toString());
-           ui->lineEdit_S_AngleCompensate->setText(record.value("AngleCompensate").toString());
+           bool ok;
+           ui->lineEdit_S_Angle->setText(QString::number(record.value("Angle").toDouble(&ok),'.',2));
+           ui->lineEdit_S_AngleCompensate->setText(QString::number(record.value("AngleCompensate").toDouble(&ok),'.',2));
 //           if(record.value("AngleCompensate").toInt() > 0)
 //           {
-               ui->lineEdit_S_AngleCompensate->setText(ui->lineEdit_S_AngleCompensate->text());
+             //  ui->lineEdit_S_AngleCompensate->setText(ui->lineEdit_S_AngleCompensate->text());
 //           }
-           ui->lineEdit_S_Yaxis->setText(record.value("Yaxis").toString());
-           ui->lineEdit_S_Xaxis->setText(record.value("Xaxis").toString());
-           ui->lineEdit_S_XaxisCorrect->setText(record.value("XaxisCorrect").toString());
+           ui->lineEdit_S_Yaxis->setText(QString::number(record.value("Yaxis").toDouble(&ok),'.',2));
+           ui->lineEdit_S_Xaxis->setText(QString::number(record.value("Xaxis").toDouble(&ok),'.',2));
+           ui->lineEdit_S_XaxisCorrect->setText(QString::number(record.value("XaxisCorrect").toDouble(&ok),'.',2));
 
-           ui->lineEdit_S_distance->setText(record.value("Distance").toString());
-           ui->lineEdit_S_pressure->setText(record.value("Pressure").toString());
-           ui->lineEdit_S_return->setText(record.value("ReturnTime").toString());
-           ui->lineEdit_S_Holding->setText(record.value("Holding").toString());
-           ui->lineEdit_S_Raxis->setText(record.value("Raxis").toString());
+           ui->lineEdit_S_distance->setText(QString::number(record.value("Distance").toDouble(&ok),'.',2));
+           ui->lineEdit_S_pressure->setText(QString::number(record.value("Pressure").toDouble(&ok),'.',2));
+           ui->lineEdit_S_return->setText(QString::number(record.value("ReturnTime").toDouble(&ok),'.',2));
+           ui->lineEdit_S_Holding->setText(QString::number(record.value("Holding").toDouble(&ok),'.',2));
+           ui->lineEdit_S_Raxis->setText(QString::number(record.value("Raxis").toDouble(&ok),'.',2));
            //qDebug()<<"record.value().toString()"<<record.value("Id").toString();
 
    }
