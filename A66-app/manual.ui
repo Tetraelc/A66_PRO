@@ -16,7 +16,7 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <widget class="QToolButton" name="toolButton_Length">
+  <widget class="QToolButton" name="toolButton_OpenMT">
    <property name="geometry">
     <rect>
      <x>910</x>
@@ -26,10 +26,10 @@
     </rect>
    </property>
    <property name="text">
-    <string/>
+    <string>MT</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_B6_7">
+  <widget class="QToolButton" name="pushButton_B6_7">
    <property name="geometry">
     <rect>
      <x>910</x>
@@ -41,8 +41,17 @@
    <property name="text">
     <string>状态</string>
    </property>
+   <property name="iconSize">
+    <size>
+     <width>36</width>
+     <height>36</height>
+    </size>
+   </property>
+   <property name="toolButtonStyle">
+    <enum>Qt::ToolButtonTextUnderIcon</enum>
+   </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_Adjust">
+  <widget class="QToolButton" name="pushButton_Adjust">
    <property name="geometry">
     <rect>
      <x>910</x>
@@ -53,6 +62,19 @@
    </property>
    <property name="text">
     <string>对数</string>
+   </property>
+   <property name="icon">
+    <iconset resource="A66-appsrc.qrc">
+     <normaloff>:/ICO/duishu.png</normaloff>:/ICO/duishu.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>48</width>
+     <height>48</height>
+    </size>
+   </property>
+   <property name="toolButtonStyle">
+    <enum>Qt::ToolButtonTextUnderIcon</enum>
    </property>
   </widget>
   <widget class="QToolButton" name="toolButton_YReferencePoint">
@@ -66,6 +88,15 @@
    </property>
    <property name="text">
     <string>基准点</string>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>48</width>
+     <height>48</height>
+    </size>
+   </property>
+   <property name="toolButtonStyle">
+    <enum>Qt::ToolButtonTextUnderIcon</enum>
    </property>
   </widget>
   <widget class="QPushButton" name="pushButton_B6_6">
@@ -1127,7 +1158,7 @@
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QLabel" name="label_37">
+   <widget class="QLabel" name="label_RunState">
     <property name="geometry">
      <rect>
       <x>170</x>
@@ -1143,22 +1174,6 @@
     </property>
     <property name="text">
      <string>停止/快下/慢下/工进/回程</string>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="lineEdit_RunState">
-    <property name="geometry">
-     <rect>
-      <x>489</x>
-      <y>16</y>
-      <width>181</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-    <property name="readOnly">
-     <bool>true</bool>
     </property>
    </widget>
   </widget>

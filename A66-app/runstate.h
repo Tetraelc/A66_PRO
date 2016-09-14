@@ -22,7 +22,7 @@ public:
     void ReadForRun(int Type);
     void ReadRunTable();
     void MotorRun();
-    int CheckPressureState();
+    int  CheckPressureState();
     void StopRun();
     void ReadTrg( unsigned char pin );
     void initWorkedTotalDialog();
@@ -35,7 +35,9 @@ public:
     int  concedeState();
     void checkMotorState();
     void changeStep();
-    int Checkstatus(int motor_id);
+    int  Checkstatus(int motor_id);
+    void CheckRaxisEnable();
+    void SaveCurrentAxisDat(int Col);
     int CurrentRnuStateWorkedTotal;
 public slots:
     void openRunStateWin();

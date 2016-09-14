@@ -39,6 +39,7 @@ Step::Step(QWidget *parent) :
     ui->lineEdit_S_XaxisCorrect->setValidator(pRegstep);
     ui->lineEdit_S_Holding->setValidator(pRegstep);
     ui->lineEdit_S_Angle->setValidator(pRegstep);
+    CheckRaxisEnable();
 
 }
 
@@ -73,6 +74,8 @@ void Step::openStepWin()
     ui->tableWidget_Step->setItem(ui->tableWidget_Step->currentRow(),StepProgram_Pressure,new QTableWidgetItem(QString::number(CurrentStepTemp.Pressure,'.',2)));
     Update_StepProgramItem(ui->tableWidget_Step->item(ui->tableWidget_Step->currentRow(),StepProgram_Id)->text().toInt(),StepProgram_Pressure,ui->lineEdit_S_pressure->text());
 
+    CheckRaxisEnable();
+
 }
 
 void Step::timerEvent(QTimerEvent *t) //定时器事件
@@ -100,6 +103,26 @@ void Step::timerEvent(QTimerEvent *t) //定时器事件
 
 }
 
+
+
+void Step::CheckRaxisEnable()
+{
+    if(RaxisParameter.ENABLE_AXIS == 1)
+    {
+        ui->lineEdit_S_Raxis->setVisible(true); //R轴可视
+        ui->label_mould_9->setVisible(true);
+        ui->label_57->setVisible(true);
+        ui->tableWidget_Step->setColumnHidden(StepProgram_Raxis,false);
+    }
+    else
+    {
+        ui->lineEdit_S_Raxis->setVisible(false); //R轴bu可视
+        ui->label_mould_9->setVisible(false);
+        ui->label_57->setVisible(false);
+        ui->tableWidget_Step->setColumnHidden(StepProgram_Raxis,true);
+    }
+
+}
 
 void Step::Display_StepProgramItem()
 {

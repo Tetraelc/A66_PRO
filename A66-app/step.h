@@ -31,6 +31,7 @@ public:
     void Update_StepProgramItem(int Id,int Col,QString Value);
 
     void initStep(void);
+    void CheckRaxisEnable();
 
 
 signals:

@@ -18,7 +18,6 @@ deleopLength::~deleopLength()
 
 void deleopLength::on_toolButton_comfirm_clicked()
 {
-
     if(ui->lineEdit_Angle->text().toInt() % 5 == 0 && ui->lineEdit_Angle->text().toInt() >= 60 && ui->lineEdit_Angle->text().toInt() <= 180)
     {
         MainWindow *win =new MainWindow;

@@ -44,6 +44,9 @@ SystemSetting::SystemSetting(QWidget *parent) :
     //ui->lineEdit_UnloadTime->setValidator(pReg);
     ui->lineEdit_Secret->setValidator(pReg);
 
+    ReadForSystemDat();
+
+
 }
 
 void SystemSetting::on_treeWidget_System_itemSelectionChanged()
@@ -147,7 +150,17 @@ void SystemSetting::ReadForSystemDat()
 //                              db.lastError().text());//打开数据库连接
 //    }
 
+
     QSqlTableModel model;
+    model.setTable("Setup");
+    model.setFilter("Class = " NormalSYS_Id);
+    model.select();
+    for(int i=0;i<model.rowCount();i++)
+    {
+            QSqlRecord record = model.record(i);
+            SystemParameterTemp[i] = record.value("Value").toDouble(&ok);
+    }
+
     model.setTable("Setup");
     model.setFilter("Class = " Xaxis_Id);
     model.select();
@@ -179,6 +192,18 @@ void SystemSetting::ReadForSystemDat()
             MTParameterTemp[i] = record.value("Value").toDouble(&ok);
     }
     SystemDatChange();
+
+    model.setTable("RunParameter");
+    model.setFilter("ID = 1");
+    model.select();
+    for(int i=0;i<model.rowCount();i++)
+    {
+            QSqlRecord record = model.record(i);
+             CurrentStepTemp.Yzero = record.value("Yzero").toDouble(&ok);
+             CurrentStepTemp.XPostion = record.value("XPostion").toDouble(&ok);
+             CurrentStepTemp.YPostion= record.value("YPostion").toDouble(&ok);
+             CurrentStepTemp.RPostion= record.value("RPostion").toDouble(&ok);
+    }
     //db.close();//释放数据库
 }
 
@@ -186,6 +211,9 @@ void SystemSetting::SystemDatChange()
 {
 
     ////X轴参数
+     SYSParameter.Language = SystemParameterTemp[0];
+     SYSParameter.Units = SystemParameterTemp[1];
+
      XaxisParameter.LeadScrew = XaxisParameterTemp[0];
      XaxisParameter.MotorDirection = XaxisParameterTemp[1];
      XaxisParameter.RunSpeed = XaxisParameterTemp[2];
@@ -239,14 +267,14 @@ void SystemSetting::SystemWriteMotor(unsigned char nodeId)
     {
         SystemSet_Motor[0].data[0].Data = XaxisParameter.MinDistance ;
         SystemSet_Motor[0].data[1].Data = XaxisParameter.MaxDistance ;
-        //SystemSet_Motor[0].data[4].Data = Get_MOTOR_Demand_Postion(0x01) / XaxisParameter.LeadScrew ;
+        SystemSet_Motor[0].data[4].Data = CurrentStepTemp.XPostion * 1000 / XaxisParameter.LeadScrew ;
 
     }
     if(nodeId == 0x02)
     {
         SystemSet_Motor[1].data[0].Data = YaxisParameter.MinDistance ;
         SystemSet_Motor[1].data[1].Data = YaxisParameter.MaxDistance ;
-       // SystemSet_Motor[1].data[4].Data = Get_MOTOR_Demand_Postion(0x02) / YaxisParameter.LeadScrew ;
+        SystemSet_Motor[1].data[4].Data =  CurrentStepTemp.YPostion * 1000 / YaxisParameter.LeadScrew ;
 
     }
 
@@ -254,19 +282,19 @@ void SystemSetting::SystemWriteMotor(unsigned char nodeId)
     {
         SystemSet_Motor[2].data[0].Data = RaxisParameter.MinDistance ;
         SystemSet_Motor[2].data[1].Data = RaxisParameter.MaxDistance ;
-        //SystemSet_Motor[2].data[4].Data = Get_MOTOR_Demand_Postion(0x03) / RaxisParameter.LeadScrew ;
+        SystemSet_Motor[2].data[4].Data =  CurrentStepTemp.RPostion * 1000 / RaxisParameter.LeadScrew ;
 
     }
 
 
     Write_MOTOR_Multi_Data(&SystemSet_Motor[nodeId-1],nodeId);
+   // SystemSet_Motor[nodeId-1].Cmd_num = 3;
 
 
 }
 
 void SystemSetting::SystemWriteMT()
 {
-
      SystemSet_MT.data[0].Data = MTParameter.UnloadTime * 100;
      SystemSet_MT.data[1].Data = MTParameter.KeepTime * 100;
      Write_MOTOR_Multi_Data(&SystemSet_MT,MT_ID);
@@ -1263,7 +1291,7 @@ int SystemSetting::deal_write_config_event()
     }
     if(motor[3].Read_one_state == RUN_SEND)
     {
-    //    qDebug("Read_one_state_RUNSEND");
+    //qDebug("Read_one_state_RUNSEND");
         return 0;
     }
      if(motor[3].Wrte_Multi_Finsh_state == NO_SEND)
@@ -1300,6 +1328,7 @@ int SystemSetting::deal_write_config_event()
         Write_Button_state = 0;
         if(motor[3].RX_buf[0] == 0xA0)
         {
+            Write_MOTOR_One_Data(MT_ID,0x7000,0x01,0x01,0x00);
             QMessageBox::information(0,QObject::trUtf8("写入配置"),
                                    trUtf8("配置成功"));
              qDebug("entern readif");
@@ -1334,12 +1363,12 @@ int SystemSetting::deal_read_config_event()
     if(Read_Button_state == 1)
    {
        if(motor[3].Read_Multi_Finsh_state == NO_SEND)
-         {
+       {
           Read_MOTOR_Multi_Data(&Config_valve_buf,0x04);
           //qDebug("Read_MOTOR_Multi_Data--1---------------");
-         }
-        else if(motor[3].Read_Multi_Finsh_state == SUCCESS_SEND)
-        {
+       }
+       else if(motor[3].Read_Multi_Finsh_state == SUCCESS_SEND)
+       {
             ValveReg.VFaststate   = motor[3].RX_DATA[1];
             ValveReg.VSlowstate   = motor[3].RX_DATA[2];
             ValveReg.VKeepstate   = motor[3].RX_DATA[3];
@@ -1355,7 +1384,7 @@ int SystemSetting::deal_read_config_event()
             motor[3].Read_Multi_Finsh_state = NO_SEND;
             motor[3].SDO_status = SDO_free;
           // qDebug("motor[3].Read_Multi_Finsh_state == SUCCESS_SEND---------------");
-        }
+       }
         else if (motor[3].Read_Multi_Finsh_state == FAIL_SEND)
         {
            QMessageBox::critical(0,QObject::trUtf8("读取配置信息"),

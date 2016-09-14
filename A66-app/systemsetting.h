@@ -34,6 +34,7 @@ public:
     void SystemWriteMT();
 
 
+    double SystemParameterTemp[2];
     double XaxisParameterTemp[10];
     double YaxisParameterTemp[10];
     double RaxisParameterTemp[11];
@@ -81,6 +82,7 @@ private:
     int ValveConfig_scan;
 
     Ui::SystemSetting *ui;
+
 };
 
 #endif // SYSTEMSETTING_H

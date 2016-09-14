@@ -14,6 +14,7 @@ class ManualAdjustDate : public QDialog
 public:
     explicit ManualAdjustDate(QWidget *parent = 0);
     ~ManualAdjustDate();
+    void CheckRaxisEnable();
 
 signals:
      void sig_sndManualX(QString str);

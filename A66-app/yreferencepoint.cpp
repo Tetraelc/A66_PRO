@@ -19,6 +19,8 @@ YReferencePoint::~YReferencePoint()
     delete ui;
 }
 
+
+
 void YReferencePoint::Display_YReferenceItem()
 {
     //QString Str_ClassId=QString::number(ClassId,10);

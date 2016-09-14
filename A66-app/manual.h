@@ -67,6 +67,8 @@ private slots:
 
     void on_pushButton_B6_6_clicked();
 
+    void on_toolButton_OpenMT_clicked();
+
 private:
     Ui::Manual *ui;
     Thread ThreadX;

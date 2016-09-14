@@ -37,7 +37,8 @@ struct MaterialData  CurrentMaterialTemp;
 struct _AXISPARAMETER  XaxisParameter;
 struct _AXISPARAMETER  YaxisParameter;
 struct _AXISPARAMETER  RaxisParameter;
-struct _MTPARAMETER  MTParameter;
+struct _MTPARAMETER    MTParameter;
+struct _SYSPARAMETER   SYSParameter;
 
 void openBeep()
 {

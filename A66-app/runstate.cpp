@@ -54,6 +54,11 @@ RunState::RunState(QWidget *parent) :
     ui->lineEdit_YCurrentPos->setFont(font);
     ui->lineEdit_RCurrentPos->setFont(font);
     ui->tableWidget_Run->viewport()->installEventFilter(this);
+
+    CheckRaxisEnable();
+    ui->tableWidget_Run->horizontalHeader()->setStretchLastSection(true);
+    ui->tableWidget_Run->horizontalHeader()->setClickable(false);    //******NEW********//
+    ui->tableWidget_Run->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
 }
 bool RunState::eventFilter(QObject *watched, QEvent *event)
 {
@@ -102,16 +107,8 @@ void RunState::openRunStateWin()
     ReadForRun(CurrentRnuStateRow);
     CurrentRnuStateWorkedTotal=0;
 
-
     initWorkedTotalDialog();
-
-    SystemSetting sys;
-    sys.ReadForSystemDat();
-
-    sys.SystemWriteMotor(0x01);//写电机参数
-    sys.SystemWriteMotor(0x02);//写电机参数
-    sys.SystemWriteMotor(0x03);//写电机参数
-    sys.SystemWriteMT();//写MT参数
+    CheckRaxisEnable();
 
 
 //    Adjust_ManualDate[0].data[1].Data = Get_MOTOR_Demand_Postion(0x01) / XaxisParameter.LeadScrew ;
@@ -139,6 +136,45 @@ void RunState::systemCheckSafrState()
         //chushihua
         //
 }
+
+
+void RunState::CheckRaxisEnable()
+{
+    if(RaxisParameter.ENABLE_AXIS == 1)
+    {
+
+        ui->lineEdit_RCurrentPos->setVisible(true);//R轴可视
+        ui->toolButton_R->setVisible(true);
+
+        ui->toolButton_X->move(30,20);
+        ui->lineEdit_XCurrentPos->move(170,20);
+
+        ui->toolButton_Y->move(30,80);
+        ui->lineEdit_YCurrentPos->move(170,80);
+
+        ui->toolButton_R->move(30,140);
+        ui->lineEdit_RCurrentPos->move(170,140);
+
+        ui->tableWidget_Run->setColumnHidden(RunStep_Raxis,false);
+
+    }
+    else
+    {
+        ui->lineEdit_RCurrentPos->setVisible(false);//R轴bu可视
+        ui->toolButton_R->setVisible(false);
+
+        ui->toolButton_X->move(30,40);
+        ui->lineEdit_XCurrentPos->move(170,40);
+
+        ui->toolButton_Y->move(30,120);
+        ui->lineEdit_YCurrentPos->move(170,120);
+
+        ui->tableWidget_Run->setColumnHidden(RunStep_Raxis,true);
+
+    }
+
+}
+
 
 void RunState::ReturnRun()
 {
@@ -195,15 +231,6 @@ void RunState::checkMotorState()
 //            qDebug("Motor2");
      }
 
-     if(Get_HeartbetError(0x03) == 1 || motor[R1_ID-1].initStatus == 0)
-     {
-         MotorTipFlag = true;
-         CurrentReg.Current_MotorTips = Motor3Tip;
-         CurrentReg.Current_MotorTipResult.append("/").append(SystemTipsInformation(CurrentReg.Current_MotorTips));
-//         QMessageBox::critical(0,QObject::trUtf8("异常"),
-//                               trUtf8("3号电机离线"));
-//        qDebug("Motor3");
-     }
 
 
      if(Get_HeartbetError(0x04) == 0x01)
@@ -216,16 +243,45 @@ void RunState::checkMotorState()
   //      qDebug("Motor4");
      }
 
-     if(Get_HeartbetError(0x01) == 0x01 || Get_HeartbetError(0x02) == 0x01 ||  Get_HeartbetError(0x03) == 0x01 ||  Get_HeartbetError(0x04) == 0x01 )
+     if(RaxisParameter.ENABLE_AXIS == 1)
      {
-         MotorTipFlag = true;
-         CurrentReg.Current_MotorTips = OfflineTip;
-         CurrentReg.Current_MotorTipResult.append(SystemTipsInformation(CurrentReg.Current_MotorTips));
-         QuitRunState();
 
-    //      qDebug("Motorclean");
+         if(Get_HeartbetError(0x03) == 1 || motor[R1_ID-1].initStatus == 0)
+         {
+             MotorTipFlag = true;
+             CurrentReg.Current_MotorTips = Motor3Tip;
+             CurrentReg.Current_MotorTipResult.append("/").append(SystemTipsInformation(CurrentReg.Current_MotorTips));
+    //         QMessageBox::critical(0,QObject::trUtf8("异常"),
+    //                               trUtf8("3号电机离线"));
+    //        qDebug("Motor3");
+         }
+         if(Get_HeartbetError(0x01) == 0x01 || Get_HeartbetError(0x02) == 0x01 ||  Get_HeartbetError(0x03) == 0x01 ||  Get_HeartbetError(0x04) == 0x01 )
+         {
+             MotorTipFlag = true;
+             CurrentReg.Current_MotorTips = OfflineTip;
+             CurrentReg.Current_MotorTipResult.append(SystemTipsInformation(CurrentReg.Current_MotorTips));
+             QuitRunState();
+
+        //      qDebug("Motorclean");
+
+         }
+     }
+     else
+     {
+         if(Get_HeartbetError(0x01) == 0x01 || Get_HeartbetError(0x02) == 0x01 ||   Get_HeartbetError(0x04) == 0x01 )
+         {
+             MotorTipFlag = true;
+             CurrentReg.Current_MotorTips = OfflineTip;
+             CurrentReg.Current_MotorTipResult.append(SystemTipsInformation(CurrentReg.Current_MotorTips));
+             QuitRunState();
+
+        //      qDebug("Motorclean");
+
+         }
+
 
      }
+
 
 
 
@@ -248,7 +304,7 @@ void RunState::MotorRun()
     {
          ui->toolButton_Mode->setText(trUtf8("单次"));
     }
-    else if(A20_IN_Status & CUTJMODE)
+    else if((A20_IN_Status & CUTJMODE) == 0)
     {
         ui->toolButton_Mode->setText(trUtf8("点动")); //>????
     }
@@ -632,6 +688,36 @@ int RunState::Checkstatus(int motor_id)
     return status;
 }
 
+
+void RunState::SaveCurrentAxisDat(int Col)
+{
+
+    QSqlTableModel model;
+    model.setTable("RunParameter");
+    model.setFilter("ID =  1" );
+    model.select();
+    if(model.rowCount() == 1)
+    {
+        QSqlRecord record = model.record(0);
+        switch(Col)
+        {
+        case X1_ID:record.setValue("XPostion",QString::number(Get_MOTOR_Demand_Postion(X1_ID) * XaxisParameter.LeadScrew /1000,'.',2));
+            break;
+        case Y1_ID:record.setValue("YPostion",QString::number(Get_MOTOR_Demand_Postion(Y1_ID) * YaxisParameter.LeadScrew /1000,'.',2));
+            break;
+        case R1_ID:record.setValue("RPostion",QString::number(Get_MOTOR_Demand_Postion(R1_ID) * RaxisParameter.LeadScrew /1000,'.',2));
+            break;
+        default :break;
+        }
+
+        model.setRecord(0,record);
+        model.submitAll();
+    }
+
+
+}
+
+
 int RunState::CheckPressureState()
 {
     if((VbackTime > (MTParameter.VbackTime *50) && VFast_flag == true && MTParameter.VbackMode == 1))
@@ -645,6 +731,9 @@ int RunState::CheckPressureState()
         {
           SendMTEnableSignalXYRAxis();
         }
+        SaveCurrentAxisDat(X1_ID);
+        SaveCurrentAxisDat(Y1_ID);
+        SaveCurrentAxisDat(R1_ID);
     }
     switch(A20_Run_Status)
     {
@@ -658,7 +747,9 @@ int RunState::CheckPressureState()
          {
            SendMTEnableSignalXYRAxis();
          }
-
+         SaveCurrentAxisDat(X1_ID);
+         SaveCurrentAxisDat(Y1_ID);
+         SaveCurrentAxisDat(R1_ID);
         break;
     case VFast:
          ui->label_Pressure->setText(trUtf8("快下"));
@@ -793,7 +884,7 @@ void RunState::ReadForRun(int Type)
                CurrentProgramTemp.BroadWideth = record.value("BoardWide").toDouble(&ok);
                CurrentProgramTemp.Material = record.value("Material").toInt();//QString::fromUtf8(
                CurrentProgramTemp.StepNumber =  record.value("StepTotal").toDouble(&ok);
-               CurrentProgramTemp.UpMold = record.value("UpMold").toDouble(&ok);
+               CurrentProgramTemp.UpMold     = record.value("UpMold").toDouble(&ok);
                CurrentProgramTemp.LowerMold =  record.value("LowerMold").toDouble(&ok);
                CurrentProgramTemp.ProcessedNum = record.value("WorkedTotal").toDouble(&ok);
                qDebug()<<"CurrentProgramTemp.UpMold "<<CurrentProgramTemp.UpMold ;
@@ -866,6 +957,9 @@ void RunState::ReadForRun(int Type)
     {
             QSqlRecord record = model.record(i);
              CurrentStepTemp.Yzero = record.value("Yzero").toDouble(&ok);
+             CurrentStepTemp.XPostion = record.value("XPostion").toDouble(&ok);
+             CurrentStepTemp.YPostion= record.value("YPostion").toDouble(&ok);
+             CurrentStepTemp.RPostion= record.value("RPostion").toDouble(&ok);
     }
 
    // ui->tableWidget_UpMoulds->selectRow(0);

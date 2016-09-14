@@ -110,7 +110,7 @@ void MainWindow::initWindow()
     SystemWarn *syswarn =new SystemWarn;
     connect(syswarn, SIGNAL(ReturnProgramdbWin()), this, SLOT(ReturnProgramdb()));
 
-
+    sys->installEventFilter(this);
 //    HomingMode *homing =new HomingMode;
 //    connect(this, SIGNAL(openHomingModeWidget()), homing, SLOT(openHomingModeWin()));
 
@@ -484,7 +484,29 @@ void MainWindow::on_toolButton_4_clicked()
     ui->toolButton->setEnabled(false);
 
 }
+bool MainWindow::eventFilter(QObject *watched, QEvent *event)
+{
 
+      if (event->type()==QEvent::WindowDeactivate)     //然后再判断控件的具体事件 (这里指获得焦点事件)
+      {
+          SystemSetting sys;
+          sys.ReadForSystemDat();
+          sys.SystemWriteMotor(0x01);//写电机参数
+          sys.SystemWriteMotor(0x02);//写电机参数
+          if(RaxisParameter.ENABLE_AXIS == 1)
+          {
+              sys.SystemWriteMotor(0x03);//写电机参数
+          }
+
+          sys.SystemWriteMT();//写MT参数
+
+
+             return false;
+
+      }
+
+ return QWidget::eventFilter(watched,event);     // 最后将事件交给上层对话框
 }
 
+}
 

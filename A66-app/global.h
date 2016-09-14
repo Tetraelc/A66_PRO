@@ -19,17 +19,17 @@ QString SystemWarnInformation(int WarnID);
 QString SystemTipsInformation(int TipsID);
 
 
-#define FootStart		0x01//¶ÁœÅÌ€¿ª¹ØÐÅºÅ  IN1
-#define FootUp	    	0x02//œÅÌ€ÉÏ  IN2
+#define FootStart		0x08//¶ÁœÅÌ€¿ª¹ØÐÅºÅ  IN1
+#define FootUp	    	0x04//œÅÌ€ÉÏ  IN2
 /*********************ÔËÐÐÄ£Êœ:µ¥ŽÎ,Á¬Ðø,µã¶¯**********************/
-#define CUTSMODE			0x08//µ¥ŽÎÄ£Êœ  IN4
-#define CUTCMODE			0x04//Á¬ÐøÄ£Êœ  IN3
-#define CUTJMODE			0x00//µã¶¯Ä£Êœ
-#define CUTEMODE			0x00//µ¥ŽÎÁ¬Ðø¶ŒÓÐÐ§£¬ŽíÎóÄ£Êœ
-#define CutMode		        0x0C//ŒôÇÐ·œÊœ on Á¬Ðø off µ¥ŽÎ
-#define UpperPoint		    0X10//ÉÏËÀµãÐÅºÅÊäÈë on Î»ÓÚÉÏËÀµã IN5
-#define DownPoint			0X20// IN6
-#define PumpSignal		    0X40//ÓÍ±ÃÆô¶¯ÐÅºÅ IN7
+#define CUTSMODE			0x20//single
+#define CUTCMODE			0x40//continue
+#define CUTJMODE			0x00//job
+//#define CUTEMODE			0x60//
+#define CutMode		        0x60//ŒôÇÐ·œÊœ on Á¬Ðø off µ¥ŽÎ
+#define UpperPoint		    0X02//ÉÏËÀµãÐÅºÅÊäÈë on Î»ÓÚÉÏËÀµã IN5
+#define DownPoint			0X01// IN6
+#define PumpSignal		    0X10//ÓÍ±ÃÆô¶¯ÐÅºÅ IN7
 
 #define VFast  0x01
 #define VSlow  0x02
@@ -43,7 +43,7 @@ QString SystemTipsInformation(int TipsID);
 #define ENTER_ENABLE  0xAA
 #define ENTER_DISENABLE  0x55
 
-#define ARMFlag   0
+#define ARMFlag   1
 
 #define X1_ID   1
 #define Y1_ID   2
@@ -103,6 +103,7 @@ extern QSqlDatabase db;
 
 
 /////设置界面轴ID///////
+#define NormalSYS_Id  "10"
 #define Xaxis_Id  "21"
 #define Yaxis_Id  "22"
 #define Raxis_Id  "23"
@@ -253,6 +254,9 @@ struct Stepdata
   double Holding;
   double Raxis;
   double Yzero;
+  double XPostion;
+  double YPostion;
+  double RPostion;
 };
 
 extern struct Stepdata CurrentStepTemp;
@@ -326,6 +330,13 @@ extern struct _AXISPARAMETER  XaxisParameter;
 extern struct _AXISPARAMETER  YaxisParameter;
 extern struct _AXISPARAMETER  RaxisParameter;
 
+struct   _SYSPARAMETER
+{
+    int Language;
+    int Units;
+};
+
+extern struct _SYSPARAMETER  SYSParameter;
 
 struct   _MTPARAMETER
 {

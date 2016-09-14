@@ -44,12 +44,18 @@ HomingMode::HomingMode(QWidget *parent) :
 
     sys.SystemWriteMotor(0x01);//写电机参数
     sys.SystemWriteMotor(0x02);//写电机参数
-    sys.SystemWriteMotor(0x03);//写电机参数
-    sys.SystemWriteMT();//写MT参数
-
     ui->label_X->setText(trUtf8("准备就绪"));
     ui->label_Y->setText(trUtf8("准备就绪"));
-    ui->label_R->setText(trUtf8("准备就绪"));
+
+    if(RaxisParameter.ENABLE_AXIS == 1)
+    {
+        sys.SystemWriteMotor(0x03);//写电机参数
+        ui->label_R->setText(trUtf8("准备就绪"));
+    }
+
+    sys.SystemWriteMT();//写MT参数
+
+
     QFont font;
     font.setPointSize(28);
     ui->lineEdit_XHoming->setFont(font);
@@ -62,6 +68,7 @@ HomingMode::HomingMode(QWidget *parent) :
 
     CheckRaxisEnable();
 
+
     MainWindow *mw =new MainWindow;
     mw->setWindowFlags(Qt::FramelessWindowHint);
     mw->move(0,MAIN_WIDGET_Y);
@@ -69,8 +76,8 @@ HomingMode::HomingMode(QWidget *parent) :
 
     connect(mw, SIGNAL(openHomingModeWidget()), this, SLOT(openHomingModeWin()));
     connect(ui->toolButton_QuitRunning, SIGNAL(clicked()), mw, SLOT(ReturnProgramdb()));//returnProgramdb
-
     Homging_Scan = startTimer(100);
+
 }
 
 HomingMode::~HomingMode()
@@ -135,6 +142,8 @@ void HomingMode::CheckMotorState()
     {
         ui->label_X->setText(trUtf8("归零完成"));
         ui->toolButton_X->setEnabled(false);
+//        RunState rs;
+//        rs.SaveCurrentAxisDat();
         //ui->toolButton_RunHoming->setEnabled(true);
     }
     else if(arrivedSwitch_X == 0)
@@ -153,11 +162,14 @@ void HomingMode::CheckMotorState()
     {
         ui->label_Y->setText(trUtf8("正在归零"));
         ui->toolButton_Y->setEnabled(true);
+
     }
     else if(arrivedSwitch_Y == 1)
     {
         ui->label_Y->setText(trUtf8("归零完成"));
         ui->toolButton_Y->setEnabled(false);
+//        RunState rs;
+//        rs.SaveCurrentAxisDat();
        // ui->toolButton_RunHoming->setEnabled(true);
     }
     else if(arrivedSwitch_Y == 0)
@@ -183,6 +195,8 @@ void HomingMode::CheckMotorState()
         {
             ui->label_R->setText(trUtf8("归零完成"));
             ui->toolButton_R->setEnabled(false);
+//            RunState rs;
+//            rs.SaveCurrentAxisDat();
             //ui->toolButton_RunHoming->setEnabled(true);
         }
         else if(arrivedSwitch_R == 0)
@@ -194,7 +208,7 @@ void HomingMode::CheckMotorState()
     }
     else
     {
-        ui->label_R->setText(trUtf8("电机未使能"));
+        //ui->label_R->setText(trUtf8("电机未使能"));
     }
 
 

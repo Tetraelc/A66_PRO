@@ -81,6 +81,8 @@ private:
     Ui::MainWindow *ui;
     Programdb *programwin;
     int ProgramName_Scan;
+protected:
+    bool eventFilter(QObject *watched, QEvent *event);
 };
 
 #endif // MAINWINDOW_H

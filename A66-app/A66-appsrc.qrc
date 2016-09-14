@@ -62,6 +62,16 @@
         <file>ICO/accept.png</file>
         <file>ICO/cancel.png</file>
         <file>ICO/warning96*96.png</file>
+        <file>ICO/duishu.png</file>
+        <file>ICO/chushihua.png</file>
+        <file>ICO/huifu.png</file>
+        <file>ICO/jizhunpoint.png</file>
+        <file>ICO/yellowmt.png</file>
+        <file>ICO/zhixing.png</file>
+        <file>ICO/zhuangtai 2.png</file>
+        <file>ICO/read.png</file>
+        <file>ICO/read2.png</file>
+        <file>ICO/state.png</file>
     </qresource>
     <qresource prefix="/ico">
         <file>ICO/P1-DEL.png</file>
