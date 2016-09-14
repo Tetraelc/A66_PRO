@@ -192,19 +192,6 @@
      <property name="frameShadow">
       <enum>QFrame::Raised</enum>
      </property>
-     <widget class="QLabel" name="label_5">
-      <property name="geometry">
-       <rect>
-        <x>80</x>
-        <y>190</y>
-        <width>31</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>卸荷</string>
-      </property>
-     </widget>
      <widget class="QGroupBox" name="groupBox">
       <property name="geometry">
        <rect>
@@ -842,32 +829,6 @@
        </property>
       </widget>
      </widget>
-     <widget class="QLabel" name="label_3">
-      <property name="geometry">
-       <rect>
-        <x>80</x>
-        <y>110</y>
-        <width>31</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>工进</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_7">
-      <property name="geometry">
-       <rect>
-        <x>80</x>
-        <y>270</y>
-        <width>31</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>停止</string>
-      </property>
-     </widget>
      <widget class="QLabel" name="label">
       <property name="geometry">
        <rect>
@@ -894,19 +855,6 @@
        <string>写入</string>
       </property>
      </widget>
-     <widget class="QLabel" name="label_4">
-      <property name="geometry">
-       <rect>
-        <x>80</x>
-        <y>150</y>
-        <width>31</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>保压</string>
-      </property>
-     </widget>
      <widget class="QLineEdit" name="lineEdit_Secret">
       <property name="geometry">
        <rect>
@@ -915,19 +863,6 @@
         <width>120</width>
         <height>40</height>
        </rect>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_2">
-      <property name="geometry">
-       <rect>
-        <x>80</x>
-        <y>70</y>
-        <width>31</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>快下</string>
       </property>
      </widget>
      <widget class="QToolButton" name="toolButton_readConfig">
@@ -941,19 +876,6 @@
       </property>
       <property name="text">
        <string>读取</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_6">
-      <property name="geometry">
-       <rect>
-        <x>80</x>
-        <y>230</y>
-        <width>31</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>回程</string>
       </property>
      </widget>
      <widget class="QLabel" name="label_8">
@@ -1045,6 +967,84 @@
       </property>
       <property name="text">
        <string> KA8</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_FastTest">
+      <property name="geometry">
+       <rect>
+        <x>69</x>
+        <y>70</y>
+        <width>41</width>
+        <height>27</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>快下</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_SlowTest">
+      <property name="geometry">
+       <rect>
+        <x>69</x>
+        <y>110</y>
+        <width>41</width>
+        <height>27</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>共进</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_KeepTest">
+      <property name="geometry">
+       <rect>
+        <x>70</x>
+        <y>150</y>
+        <width>41</width>
+        <height>27</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>保压</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_UnloadTest">
+      <property name="geometry">
+       <rect>
+        <x>70</x>
+        <y>190</y>
+        <width>41</width>
+        <height>27</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>卸荷</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_BackTest">
+      <property name="geometry">
+       <rect>
+        <x>70</x>
+        <y>230</y>
+        <width>41</width>
+        <height>27</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>回程</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_StopTest">
+      <property name="geometry">
+       <rect>
+        <x>70</x>
+        <y>270</y>
+        <width>41</width>
+        <height>27</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>停止</string>
       </property>
      </widget>
     </widget>

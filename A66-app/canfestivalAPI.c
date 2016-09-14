@@ -163,7 +163,8 @@ S_Data_trans HomingModeDate[3]    = {{0x06,
 
                                           }, //0x6060,0x00,0x01,0x01,
                                      };
-
+S_Data_trans ConfigTest = {0x02,0x7001,0x01,0x01,0x30, //模式为停止
+                                0x7001,0x02,0x01,0x00};//写入要阀组输出的数据
 
 
 /**

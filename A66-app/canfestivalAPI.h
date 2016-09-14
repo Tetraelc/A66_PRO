@@ -105,6 +105,7 @@ extern S_Data_trans Adjust_ManualDate[3];
 extern S_Data_trans SystemSet_Motor[3];
 extern S_Data_trans HomingModeDate[3];
 extern S_Data_trans SystemSet_MT;
+extern S_Data_trans ConfigTest;
 extern int ManualDat;
 
 long Get_MOTOR_Demand_Postion(UNS8 motor_id);

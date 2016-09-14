@@ -1332,7 +1332,7 @@ int SystemSetting::deal_write_config_event()
         Write_Button_state = 0;
         if(motor[3].RX_buf[0] == 0xA0)
         {
-            Write_MOTOR_One_Data(MT_ID,0x7000,0x01,0x01,0x00);
+
             MotorTipFlag = true;
             CurrentReg.Current_MotorTips = WriteSuccessTip;
             CurrentReg.Current_MotorTipResult.append(SystemTipsInformation(CurrentReg.Current_MotorTips));
@@ -1350,7 +1350,7 @@ int SystemSetting::deal_write_config_event()
 //                                   trUtf8("配置失败"));
            qDebug("entern readifelse");
         }
-
+        Write_MOTOR_One_Data(MT_ID,0x7000,0x01,0x01,0x00);
        // qDebug("234444444444444444444444444444444444432");
     }
     else if(motor[3].Read_one_state == FAIL_SEND)
@@ -1429,6 +1429,92 @@ int SystemSetting::deal_read_config_event()
 }
 
 
+void SystemSetting::on_pushButton_FastTest_pressed()
+{
+    WriteConfig();
+    ConfigTest.data[0].Data = 0x30;//打开测试配置模式
+    ConfigTest.data[1].Data = ValveReg.VFaststate;
+    Write_MOTOR_Multi_Data(&ConfigTest,MT_ID);
+}
 
+void SystemSetting::on_pushButton_FastTest_released()
+{
+    ConfigTest.data[0].Data = 0x31;//关闭测试配置模式
+    ConfigTest.data[1].Data = 0x00;
+    Write_MOTOR_Multi_Data(&ConfigTest,MT_ID);
+}
 
+void SystemSetting::on_pushButton_SlowTest_pressed()
+{
+    WriteConfig();
+    ConfigTest.data[0].Data = 0x30;//打开测试配置模式
+    ConfigTest.data[1].Data = ValveReg.VSlowstate;
+    Write_MOTOR_Multi_Data(&ConfigTest,MT_ID);
+}
 
+void SystemSetting::on_pushButton_SlowTest_released()
+{
+    ConfigTest.data[0].Data = 0x31;//关闭测试配置模式
+    ConfigTest.data[1].Data = 0x00;
+    Write_MOTOR_Multi_Data(&ConfigTest,MT_ID);
+}
+
+void SystemSetting::on_pushButton_KeepTest_pressed()
+{
+    WriteConfig();
+    ConfigTest.data[0].Data = 0x30;//打开测试配置模式
+    ConfigTest.data[1].Data = ValveReg.VKeepstate;
+    Write_MOTOR_Multi_Data(&ConfigTest,MT_ID);
+}
+
+void SystemSetting::on_pushButton_KeepTest_released()
+{
+    ConfigTest.data[0].Data = 0x31;//关闭测试配置模式
+    ConfigTest.data[1].Data = 0x00;
+    Write_MOTOR_Multi_Data(&ConfigTest,MT_ID);
+}
+
+void SystemSetting::on_pushButton_UnloadTest_pressed()
+{
+    WriteConfig();
+    ConfigTest.data[0].Data = 0x30;//打开测试配置模式
+    ConfigTest.data[1].Data = ValveReg.Vunloadstate;
+    Write_MOTOR_Multi_Data(&ConfigTest,MT_ID);
+}
+
+void SystemSetting::on_pushButton_UnloadTest_released()
+{
+    ConfigTest.data[0].Data = 0x31;//关闭测试配置模式
+    ConfigTest.data[1].Data = 0x00;
+    Write_MOTOR_Multi_Data(&ConfigTest,MT_ID);
+}
+
+void SystemSetting::on_pushButton_BackTest_pressed()
+{
+    WriteConfig();
+    ConfigTest.data[0].Data = 0x30;//打开测试配置模式
+    ConfigTest.data[1].Data = ValveReg.Vbackstate;
+    Write_MOTOR_Multi_Data(&ConfigTest,MT_ID);
+}
+
+void SystemSetting::on_pushButton_BackTest_released()
+{
+    ConfigTest.data[0].Data = 0x31;//关闭测试配置模式
+    ConfigTest.data[1].Data = 0x00;
+    Write_MOTOR_Multi_Data(&ConfigTest,MT_ID);
+}
+
+void SystemSetting::on_pushButton_StopTest_pressed()
+{
+    WriteConfig();
+    ConfigTest.data[0].Data = 0x30;//打开测试配置模式
+    ConfigTest.data[1].Data = ValveReg.Vstopstate;
+    Write_MOTOR_Multi_Data(&ConfigTest,MT_ID);
+}
+
+void SystemSetting::on_pushButton_StopTest_released()
+{
+    ConfigTest.data[0].Data = 0x31;//关闭测试配置模式
+    ConfigTest.data[1].Data = 0x00;
+    Write_MOTOR_Multi_Data(&ConfigTest,MT_ID);
+}

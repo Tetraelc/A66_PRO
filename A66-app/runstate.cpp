@@ -1066,3 +1066,5 @@ void RunState::on_pushButton_Left_4_clicked() //向下
     }
 
 }
+
+
