@@ -183,6 +183,7 @@ void SystemSetting::ReadForSystemDat()
     {
             QSqlRecord record = model.record(i);
             RaxisParameterTemp[i] = record.value("Value").toDouble(&ok);
+            qDebug()<<"Value"<<record.value("Value").toDouble(&ok);
            // qDebug()<<"RaxisParameterTemp[i]"<<RaxisParameterTemp[i];
     }
     model.setFilter("Class = " MT_Id);
@@ -191,6 +192,7 @@ void SystemSetting::ReadForSystemDat()
     {
             QSqlRecord record = model.record(i);
             MTParameterTemp[i] = record.value("Value").toDouble(&ok);
+
     }
     SystemDatChange();
 
@@ -248,7 +250,9 @@ void SystemSetting::SystemDatChange()
      RaxisParameter.OverrunDistance = RaxisParameterTemp[8];
      RaxisParameter.ReferencePosMode = RaxisParameterTemp[9];
      RaxisParameter.ReferencePos = RaxisParameterTemp[10] * 1000 / RaxisParameter.LeadScrew;
-     qDebug()<<"RaxisParameterTemp[10]"<<RaxisParameterTemp[10];
+     qDebug()<<"RaxisParameterTemp[10]"<<RaxisParameterTemp[10]<<RaxisParameter.ReferencePosMode<<RaxisParameterTemp[9];
+     qDebug()<<"RaxisParameterTemp[10]"<<XaxisParameterTemp[10]<<XaxisParameter.ReferencePosMode<<XaxisParameterTemp[8];
+     qDebug()<<"RaxisParameterTemp[10]"<<YaxisParameterTemp[10]<<YaxisParameter.ReferencePosMode<<YaxisParameterTemp[8];
 
      ////MT轴参数////
      MTParameter.KeepTime = MTParameterTemp[0];
@@ -268,28 +272,51 @@ void SystemSetting::SystemWriteMotor(unsigned char nodeId)
     {
         SystemSet_Motor[0].data[0].Data = XaxisParameter.MinDistance ;
         SystemSet_Motor[0].data[1].Data = XaxisParameter.MaxDistance ;
-        SystemSet_Motor[0].data[4].Data = CurrentStepTemp.XPostion * 1000 / XaxisParameter.LeadScrew ;
+        SystemSet_Motor[0].data[6].Data = CurrentStepTemp.XPostion * 1000 / XaxisParameter.LeadScrew ;
+        qDebug()<<"XaxisParameter.PositioningMode"<<CurrentStepTemp.XPostion;
+        if(XaxisParameter.ReferencePosMode == 0)
+        {
+           SystemSet_Motor[0].Cmd_num = 10;
+        }
+        else
+        {
+           SystemSet_Motor[0].Cmd_num = 5;
+        }
 
     }
     if(nodeId == 0x02)
     {
         SystemSet_Motor[1].data[0].Data = YaxisParameter.MinDistance ;
         SystemSet_Motor[1].data[1].Data = YaxisParameter.MaxDistance ;
-        SystemSet_Motor[1].data[4].Data =  CurrentStepTemp.YPostion * 1000 / YaxisParameter.LeadScrew ;
-
+        SystemSet_Motor[1].data[6].Data =  CurrentStepTemp.YPostion * 1000 / YaxisParameter.LeadScrew ;
+        if(YaxisParameter.ReferencePosMode == 0)
+        {
+           SystemSet_Motor[1].Cmd_num = 10;
+        }
+        else
+        {
+           SystemSet_Motor[1].Cmd_num = 5;
+        }
     }
 
     if(nodeId == 0x03)
     {
         SystemSet_Motor[2].data[0].Data = RaxisParameter.MinDistance ;
         SystemSet_Motor[2].data[1].Data = RaxisParameter.MaxDistance ;
-        SystemSet_Motor[2].data[4].Data =  CurrentStepTemp.RPostion * 1000 / RaxisParameter.LeadScrew ;
-
+        SystemSet_Motor[2].data[6].Data =  CurrentStepTemp.RPostion * 1000 / RaxisParameter.LeadScrew ;
+        if(RaxisParameter.ReferencePosMode == 0)
+        {
+           SystemSet_Motor[2].Cmd_num = 10;
+        }
+        else
+        {
+           SystemSet_Motor[2].Cmd_num = 5;
+        }
     }
 
-
     Write_MOTOR_Multi_Data(&SystemSet_Motor[nodeId-1],nodeId);
-   // SystemSet_Motor[nodeId-1].Cmd_num = 3;
+
+   //
 
 
 }
@@ -462,6 +489,14 @@ void SystemSetting::openSystemSettingWin()
     this->setWindowFlags(Qt::FramelessWindowHint);
     this->show();
     this->move(0,WIDGET_Y);
+
+    ui->pushButton_BackTest->setEnabled(false);
+    ui->pushButton_FastTest->setEnabled(false);
+    ui->pushButton_KeepTest->setEnabled(false);
+    ui->pushButton_SlowTest->setEnabled(false);
+    ui->pushButton_StopTest->setEnabled(false);
+    ui->pushButton_UnloadTest->setEnabled(false);
+    ui->toolButton_confirm->setEnabled(false);
     qDebug()<<"openSystemSettingWin";
 }
 
@@ -1334,7 +1369,6 @@ int SystemSetting::deal_write_config_event()
 //                              trUtf8("发送失败~。~"));
 
         return 0;
-       // qDebug("233333333333333333333333333333333333332");
     }
     else if(motor[3].Read_one_state == SUCCESS_SEND)
     {
@@ -1344,7 +1378,7 @@ int SystemSetting::deal_write_config_event()
         Write_Button_state = 0;
         if(motor[3].RX_buf[0] == 0xA0)
         {
-            Write_MOTOR_One_Data(MT_ID,0x7000,0x01,0x01,0x00);
+
             MotorTipFlag = true;
             CurrentReg.Current_MotorTips = WriteSuccessTip;
             CurrentReg.Current_MotorTipResult.append(SystemTipsInformation(CurrentReg.Current_MotorTips));
@@ -1362,7 +1396,7 @@ int SystemSetting::deal_write_config_event()
 //                                   trUtf8("配置失败"));
            qDebug("entern readifelse");
         }
-
+        Write_MOTOR_One_Data(MT_ID,0x7000,0x01,0x01,0x00);
        // qDebug("234444444444444444444444444444444444432");
     }
     else if(motor[3].Read_one_state == FAIL_SEND)
@@ -1426,13 +1460,6 @@ int SystemSetting::deal_read_config_event()
            motor[3].Read_Multi_Finsh_state = NO_SEND;
            // qDebug("motor[3].Read_Multi_Finsh_state == FAIL_SEND--------------");
        }
-//  else
-//  {
-//      motor[3].SDO_status = SDO_free;
-//      Read_Button_state = 0;
-//      motor[3].Read_Multi_Finsh_state = NO_SEND;
-//      qDebug("motor[3].Read_Multi_Finsh_state == FAIL_SEND--------------");
-//  }
 
 }
 
@@ -1441,6 +1468,107 @@ int SystemSetting::deal_read_config_event()
 }
 
 
+void SystemSetting::on_pushButton_FastTest_pressed()
+{
+    WriteConfig();
+    ConfigTest.data[0].Data = 0x30;//打开测试配置模式
+    ConfigTest.data[1].Data = ValveReg.VFaststate;
+    Write_MOTOR_Multi_Data(&ConfigTest,MT_ID);
+}
 
+void SystemSetting::on_pushButton_FastTest_released()
+{
+    ConfigTest.data[0].Data = 0x31;//关闭测试配置模式
+    ConfigTest.data[1].Data = 0x00;
+    Write_MOTOR_Multi_Data(&ConfigTest,MT_ID);
+}
 
+void SystemSetting::on_pushButton_SlowTest_pressed()
+{
+    WriteConfig();
+    ConfigTest.data[0].Data = 0x30;//打开测试配置模式
+    ConfigTest.data[1].Data = ValveReg.VSlowstate;
+    Write_MOTOR_Multi_Data(&ConfigTest,MT_ID);
+}
 
+void SystemSetting::on_pushButton_SlowTest_released()
+{
+    ConfigTest.data[0].Data = 0x31;//关闭测试配置模式
+    ConfigTest.data[1].Data = 0x00;
+    Write_MOTOR_Multi_Data(&ConfigTest,MT_ID);
+}
+
+void SystemSetting::on_pushButton_KeepTest_pressed()
+{
+    WriteConfig();
+    ConfigTest.data[0].Data = 0x30;//打开测试配置模式
+    ConfigTest.data[1].Data = ValveReg.VKeepstate;
+    Write_MOTOR_Multi_Data(&ConfigTest,MT_ID);
+}
+
+void SystemSetting::on_pushButton_KeepTest_released()
+{
+    ConfigTest.data[0].Data = 0x31;//关闭测试配置模式
+    ConfigTest.data[1].Data = 0x00;
+    Write_MOTOR_Multi_Data(&ConfigTest,MT_ID);
+}
+
+void SystemSetting::on_pushButton_UnloadTest_pressed()
+{
+    WriteConfig();
+    ConfigTest.data[0].Data = 0x30;//打开测试配置模式
+    ConfigTest.data[1].Data = ValveReg.Vunloadstate;
+    Write_MOTOR_Multi_Data(&ConfigTest,MT_ID);
+}
+
+void SystemSetting::on_pushButton_UnloadTest_released()
+{
+    ConfigTest.data[0].Data = 0x31;//关闭测试配置模式
+    ConfigTest.data[1].Data = 0x00;
+    Write_MOTOR_Multi_Data(&ConfigTest,MT_ID);
+}
+
+void SystemSetting::on_pushButton_BackTest_pressed()
+{
+    WriteConfig();
+    ConfigTest.data[0].Data = 0x30;//打开测试配置模式
+    ConfigTest.data[1].Data = ValveReg.Vbackstate;
+    Write_MOTOR_Multi_Data(&ConfigTest,MT_ID);
+}
+
+void SystemSetting::on_pushButton_BackTest_released()
+{
+    ConfigTest.data[0].Data = 0x31;//关闭测试配置模式
+    ConfigTest.data[1].Data = 0x00;
+    Write_MOTOR_Multi_Data(&ConfigTest,MT_ID);
+}
+
+void SystemSetting::on_pushButton_StopTest_pressed()
+{
+    WriteConfig();
+    ConfigTest.data[0].Data = 0x30;//打开测试配置模式
+    ConfigTest.data[1].Data = ValveReg.Vstopstate;
+    Write_MOTOR_Multi_Data(&ConfigTest,MT_ID);
+}
+
+void SystemSetting::on_pushButton_StopTest_released()
+{
+    ConfigTest.data[0].Data = 0x31;//关闭测试配置模式
+    ConfigTest.data[1].Data = 0x00;
+    Write_MOTOR_Multi_Data(&ConfigTest,MT_ID);
+}
+
+void SystemSetting::on_lineEdit_Secret_editingFinished()
+{
+    if(ui->lineEdit_Secret->text() == "5678")
+    {
+       ui->pushButton_BackTest->setEnabled(true);
+       ui->pushButton_FastTest->setEnabled(true);
+       ui->pushButton_KeepTest->setEnabled(true);
+       ui->pushButton_SlowTest->setEnabled(true);
+       ui->pushButton_StopTest->setEnabled(true);
+       ui->pushButton_UnloadTest->setEnabled(true);
+       ui->toolButton_confirm->setEnabled(true);
+    }
+
+}

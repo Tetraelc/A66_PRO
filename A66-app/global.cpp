@@ -5,6 +5,9 @@
 
 int HomgingModeFlag = 0;
 
+bool XStopFalg = false;
+bool YStopFalg = false;
+bool RStopFalg = false;
 bool developLengthFlag = false;
 bool MotorTipFlag = false;
 bool aralmOrTipFalg = false;
@@ -125,7 +128,6 @@ QString SystemTipsInformation(int TipsID)
     return TipsInformation;
 
 }
-
 
 
 Global::Global(QWidget *parent) :

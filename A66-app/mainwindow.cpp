@@ -60,10 +60,22 @@ void MainWindow::timerEvent(QTimerEvent *t) //定时器事件
 {
 
     if(t->timerId()== ProgramName_Scan){
-     RunState rs;
-     rs.SaveCurrentAxisDat(X1_ID);
-     rs.SaveCurrentAxisDat(Y1_ID);
-     rs.SaveCurrentAxisDat(R1_ID);
+        if(((MOTOR_STATUS[X1_ID-1] & 0x400) == 0x400) && XStopFalg == true && XaxisParameter.PositioningMode == 0 )
+        {
+            runstate.SaveCurrentAxisDat(X1_ID);
+            XStopFalg =false;
+        }
+        if(((MOTOR_STATUS[Y1_ID-1] & 0x400) == 0x400) && YStopFalg == true && YaxisParameter.PositioningMode == 0)
+        {
+            runstate.SaveCurrentAxisDat(Y1_ID);
+            YStopFalg =false;
+        }
+        if(((MOTOR_STATUS[R1_ID-1] & 0x400) == 0x400) && RStopFalg == true && RaxisParameter.PositioningMode == 0)
+        {
+            runstate.SaveCurrentAxisDat(R1_ID);
+            RStopFalg =false;
+        }
+
         ui->label_Program->setText(CurrentReg.CurrentProgramName);
        // ui->toolButton_ProName->setText(CurrentReg.CurrentProgramName);
         MainWinState();

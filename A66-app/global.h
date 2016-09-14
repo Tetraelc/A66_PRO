@@ -78,7 +78,9 @@ QString SystemTipsInformation(int TipsID);
 #define RecFailTip   19
 
 
-
+extern bool XStopFalg;
+extern bool YStopFalg;
+extern bool RStopFalg;
 extern bool developLengthFlag ;
 extern bool MotorTipFlag ;
 extern int HomgingModeFlag ;

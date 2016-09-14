@@ -112,7 +112,7 @@ TIMEVAL getElapsedTime(void)
 }
 void timerForCan()
 {
-        TimeCNT++;
+
         if (TimeCNT>= TIMER_MAX_COUNT)
         {
                 TimeCNT=0;
@@ -122,7 +122,7 @@ void timerForCan()
                 TimeDispatch();
         }
       // printf("timerforcan is ok!\n");
-
+        TimeCNT++;
 }
 
 //void socketCan()

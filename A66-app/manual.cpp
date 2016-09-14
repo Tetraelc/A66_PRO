@@ -470,6 +470,8 @@ void Manual::on_pushButton_M_XBack_released()
 //        ThreadX.stop();
      Stop_MOTOR(0x01);
      MotorXDisplayFalg=0;
+     XStopFalg = true;
+
 //     RunState rs;
 //     rs.SaveCurrentAxisDat(X1_ID);
 }
@@ -502,6 +504,7 @@ void Manual::on_pushButton_M_XForWard_released()
     Stop_MOTOR(0x01);
     // ui->lineEdit_ManualX->setText(QString::number(MotorXDisplayValue,10));
      MotorXDisplayFalg=0;
+       XStopFalg = true;
 //     RunState rs;
 //     rs.SaveCurrentAxisDat(X1_ID);
 
@@ -531,6 +534,7 @@ void Manual::on_pushButton_M_YBack_released()
 //    ThreadX.stop();
     Stop_MOTOR(0x02);
     MotorYDisplayFalg=0;
+    YStopFalg = true;
 //    RunState rs;
 //    rs.SaveCurrentAxisDat(Y1_ID);
 }
@@ -561,6 +565,7 @@ void Manual::on_pushButton_M_YForWard_released()
     Stop_MOTOR(0x02);
     //Set_Motor_Speed_Postion(0x02,0,0);
 //    ThreadX.stop();
+      YStopFalg = true;
     MotorYDisplayFalg=0;
 //    RunState rs;
 //    rs.SaveCurrentAxisDat(Y1_ID);
@@ -589,6 +594,7 @@ void Manual::on_pushButton_M_RForWard_released()
 {
      Stop_MOTOR(0x03);
      MotorRDisplayFalg=0;
+       RStopFalg = true;
 //     RunState rs;
 //     rs.SaveCurrentAxisDat(R1_ID);
 }
@@ -614,6 +620,7 @@ void Manual::on_pushButton_M_RBack_released()
 {
     Stop_MOTOR(0x03);
     MotorRDisplayFalg=0;
+      RStopFalg = true;
 //    RunState rs;
 //    rs.SaveCurrentAxisDat(R1_ID);
 }

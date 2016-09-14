@@ -73,6 +73,32 @@ private slots:
 
     void on_toolButton_ResumeDAT_clicked();
 
+    void on_pushButton_FastTest_pressed();
+
+    void on_pushButton_FastTest_released();
+
+    void on_pushButton_SlowTest_pressed();
+
+    void on_pushButton_SlowTest_released();
+
+    void on_pushButton_KeepTest_pressed();
+
+    void on_pushButton_KeepTest_released();
+
+    void on_pushButton_UnloadTest_pressed();
+
+    void on_pushButton_UnloadTest_released();
+
+    void on_pushButton_BackTest_pressed();
+
+    void on_pushButton_BackTest_released();
+
+    void on_pushButton_StopTest_pressed();
+
+    void on_pushButton_StopTest_released();
+
+    void on_lineEdit_Secret_editingFinished();
+
 private:
     int deal_write_config_event();
     int deal_read_config_event();

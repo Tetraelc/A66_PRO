@@ -620,6 +620,9 @@ int RunState::concedeState()
         Set_Motor_Speed_Postion_Rel(0x01,1000,CurrentStepTemp.concedeDistance);
         ui->label_Run->setText(trUtf8("退让"));
         concedeModeFlag = 0;
+        XStopFalg =true;
+        YStopFalg =true;
+        RStopFalg =true;
     }
 }
 
@@ -730,26 +733,29 @@ int RunState::CheckPressureState()
         else
         {
           SendMTEnableSignalXYRAxis();
-        }
-        SaveCurrentAxisDat(X1_ID);
-        SaveCurrentAxisDat(Y1_ID);
-        SaveCurrentAxisDat(R1_ID);
+        }     
+        XStopFalg =true;
+        YStopFalg =true;
+        RStopFalg =true;
     }
     switch(A20_Run_Status)
     {
     case Vstop  :
          ui->label_Pressure->setText(trUtf8("停止"));
-         if(RaxisParameter.ENABLE_AXIS == 0)
+         if(MTParameter.VbackMode == 0)
          {
-            SendMTEnableSignalXYAxis();
+             if(RaxisParameter.ENABLE_AXIS == 0 )
+             {
+                SendMTEnableSignalXYAxis();
+             }
+             else
+             {
+               SendMTEnableSignalXYRAxis();
+             }
+             XStopFalg =true;
+             YStopFalg =true;
+             RStopFalg =true;
          }
-         else
-         {
-           SendMTEnableSignalXYRAxis();
-         }
-         SaveCurrentAxisDat(X1_ID);
-         SaveCurrentAxisDat(Y1_ID);
-         SaveCurrentAxisDat(R1_ID);
         break;
     case VFast:
          ui->label_Pressure->setText(trUtf8("快下"));
@@ -1066,3 +1072,5 @@ void RunState::on_pushButton_Left_4_clicked() //向下
     }
 
 }
+
+

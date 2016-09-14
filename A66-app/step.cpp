@@ -355,6 +355,7 @@ void Step::on_lineEdit_S_AngleCompensate_returnPressed()
             ui->tableWidget_Step->setItem(ui->tableWidget_Step->currentRow(), StepProgram_AngleCompensate, new QTableWidgetItem(ui->lineEdit_S_AngleCompensate->text()));
             Update_StepProgramItem(ui->tableWidget_Step->item(ui->tableWidget_Step->currentRow(),StepProgram_Id)->text().toInt(),StepProgram_AngleCompensate,ui->lineEdit_S_AngleCompensate->text());
             ui->lineEdit_S_AngleCompensate->setText(ui->lineEdit_S_AngleCompensate->text());
+            scanAngleCompensateFlag = true;
         }
         else
         {

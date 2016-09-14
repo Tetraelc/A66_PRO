@@ -80,6 +80,7 @@ private:
     void timerEvent(QTimerEvent *t); //定时器事件
     Ui::MainWindow *ui;
     Programdb *programwin;
+    RunState runstate;
     int ProgramName_Scan;
 protected:
     bool eventFilter(QObject *watched, QEvent *event);
