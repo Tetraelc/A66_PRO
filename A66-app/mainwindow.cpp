@@ -60,7 +60,10 @@ void MainWindow::timerEvent(QTimerEvent *t) //定时器事件
 {
 
     if(t->timerId()== ProgramName_Scan){
-
+     RunState rs;
+     rs.SaveCurrentAxisDat(X1_ID);
+     rs.SaveCurrentAxisDat(Y1_ID);
+     rs.SaveCurrentAxisDat(R1_ID);
         ui->label_Program->setText(CurrentReg.CurrentProgramName);
        // ui->toolButton_ProName->setText(CurrentReg.CurrentProgramName);
         MainWinState();

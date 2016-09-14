@@ -106,9 +106,9 @@ void RunState::openRunStateWin()
     CurrentRnuStateRow =0;
     ReadForRun(CurrentRnuStateRow);
     CurrentRnuStateWorkedTotal=0;
-
-    initWorkedTotalDialog();
     CheckRaxisEnable();
+    initWorkedTotalDialog();
+
 
 
 //    Adjust_ManualDate[0].data[1].Data = Get_MOTOR_Demand_Postion(0x01) / XaxisParameter.LeadScrew ;

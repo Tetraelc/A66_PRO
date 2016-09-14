@@ -53,6 +53,7 @@ void SystemSetting::on_treeWidget_System_itemSelectionChanged()
 {
     Table_Editable_Flag = 0;
 
+    ReadForSystemDat();
     if(ui->treeWidget_System->currentItem()->parent() != NULL)
     {
         if(ui->treeWidget_System->currentItem()->parent()->text(0).compare(trUtf8("通用")) == 0)
@@ -102,6 +103,7 @@ void SystemSetting::on_treeWidget_System_itemSelectionChanged()
     }
 
 
+
 }
 
 
@@ -136,7 +138,6 @@ void SystemSetting::TreeWidgetInit()
 {
 
 }
-
 
 
 void SystemSetting::ReadForSystemDat()
@@ -314,7 +315,7 @@ void SystemSetting::Display_Item(int ClassId,bool Editable,bool FristEnable)
 
     QSqlTableModel model;
     model.setTable("Setup");
-    model.setFilter("Visable = 1 AND Class = " + Str_ClassId);
+    model.setFilter("Visable = 1  AND Class = " + Str_ClassId);
     model.select();
 
     if(model.rowCount()!=0)
@@ -331,10 +332,21 @@ void SystemSetting::Display_Item(int ClassId,bool Editable,bool FristEnable)
         ui->tableWidget_System->setRowHeight(i,45);
 
         QSqlRecord record = model.record(i);
-        ui->tableWidget_System->setItem(i,Table_Id,new QTableWidgetItem(record.value("Id").toString()));
-        ui->tableWidget_System->setItem(i,Table_Name,new QTableWidgetItem(record.value("Name").toString()));
-        ui->tableWidget_System->setItem(i,Table_Value,new QTableWidgetItem(record.value("Value").toString()));
-        ui->tableWidget_System->setItem(i,Table_Info,new QTableWidgetItem(record.value("Introduce").toString()));
+        if(SYSParameter.Language == 0)
+        {
+            ui->tableWidget_System->setItem(i,Table_Id,new QTableWidgetItem(record.value("Id").toString()));
+            ui->tableWidget_System->setItem(i,Table_Name,new QTableWidgetItem(record.value("Name").toString()));
+            ui->tableWidget_System->setItem(i,Table_Value,new QTableWidgetItem(record.value("Value").toString()));
+            ui->tableWidget_System->setItem(i,Table_Info,new QTableWidgetItem(record.value("Introduce").toString()));
+        }
+        else
+        {
+            ui->tableWidget_System->setItem(i,Table_Id,new QTableWidgetItem(record.value("Id").toString()));
+            ui->tableWidget_System->setItem(i,Table_Name,new QTableWidgetItem(record.value("EnglishName").toString()));
+            ui->tableWidget_System->setItem(i,Table_Value,new QTableWidgetItem(record.value("Value").toString()));
+            ui->tableWidget_System->setItem(i,Table_Info,new QTableWidgetItem(record.value("EnglishInfo").toString()));
+
+        }
 
         if(Editable)
         {                    

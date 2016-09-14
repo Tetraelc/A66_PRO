@@ -449,8 +449,6 @@ void Manual::on_pushButton_M_XBack_pressed()
     MotorXDisplayFalg=1;
 //    ThreadX.start();
 //    stopped=false;
-     qDebug()<<"XaxisParameter.LeadScrew"<<XaxisParameter.LeadScrew;
-     qDebug()<<"XaxisParameter.EncodeDirection"<<XaxisParameter.MotorDirection;
      unsigned long ManualSpeed_temp = XaxisParameter.ManualSpeed;
      long LeadScrew_temp =1000000*1000/ XaxisParameter.LeadScrew;
 
@@ -460,9 +458,7 @@ void Manual::on_pushButton_M_XBack_pressed()
     }
     else
     {
-
         Set_Motor_Speed_Postion_Rel(0x01,ManualSpeed_temp*10 ,LeadScrew_temp);
-        qDebug()<<"XaxisParameter.EncodeDirectionflase";
     }
 
    // qDebug()<<"XaxisParameter.ManualSpeed"<<XaxisParameter.ManualSpeed;
@@ -472,17 +468,10 @@ void Manual::on_pushButton_M_XBack_pressed()
 void Manual::on_pushButton_M_XBack_released()
 {
 //        ThreadX.stop();
-
-        Stop_MOTOR(0x01);
-      //Set_Motor_Speed_Postion_Rel(0x01,0,0);
-        //ui->lineEdit_ManualX->setText(QString::number(MotorXDisplayValue,10));
+     Stop_MOTOR(0x01);
      MotorXDisplayFalg=0;
-     RunState rs;
-     rs.SaveCurrentAxisDat(X1_ID);
-     SystemSetting sys;
-     sys.ReadForSystemDat();
-     //ui->lineEdit->setText(QString::number(CurrentStepTemp.XPostion,'.',2) );
-     qDebug()<<"QString::number(CurrentStepTemp.XPostion,'.',2)"<<QString::number(CurrentStepTemp.XPostion,'.',2);
+//     RunState rs;
+//     rs.SaveCurrentAxisDat(X1_ID);
 }
 void Manual::on_pushButton_M_XForWard_pressed()
 {
@@ -492,7 +481,6 @@ void Manual::on_pushButton_M_XForWard_pressed()
 //    stopped=false;
     unsigned long XManualSpeed_temp = XaxisParameter.ManualSpeed;
     long XLeadScrew_temp = 1000000*1000/XaxisParameter.LeadScrew;
-    qDebug()<<"XLeadScrew_temp"<<XLeadScrew_temp;
     if(XaxisParameter.MotorDirection == 1)
     {
          Set_Motor_Speed_Postion_Rel(0x01,XManualSpeed_temp*10,XLeadScrew_temp);
@@ -514,8 +502,8 @@ void Manual::on_pushButton_M_XForWard_released()
     Stop_MOTOR(0x01);
     // ui->lineEdit_ManualX->setText(QString::number(MotorXDisplayValue,10));
      MotorXDisplayFalg=0;
-     RunState rs;
-     rs.SaveCurrentAxisDat(X1_ID);
+//     RunState rs;
+//     rs.SaveCurrentAxisDat(X1_ID);
 
 }
 
@@ -524,14 +512,11 @@ void Manual::on_pushButton_M_YBack_pressed()
     MotorYDisplayFalg=1;
 //    ThreadX.start();
 //    stopped=false;
-    qDebug()<<"YaxisParameter.ManualSpeed"<<YaxisParameter.ManualSpeed;
-    qDebug()<<"YaxisParameter.LeadScrew"<<YaxisParameter.LeadScrew;
     unsigned long YManualSpeed_temp = YaxisParameter.ManualSpeed;
      long YLeadScrew_temp = 1000000*1000/YaxisParameter.LeadScrew;
     if(YaxisParameter.MotorDirection == 1)
     {
-             Set_Motor_Speed_Postion_Rel(0x02,YManualSpeed_temp*10,-1 * YLeadScrew_temp);
-
+        Set_Motor_Speed_Postion_Rel(0x02,YManualSpeed_temp*10,-1 * YLeadScrew_temp);
     }
     else
     {
@@ -544,11 +529,10 @@ void Manual::on_pushButton_M_YBack_released()
 {
     //Set_Motor_Speed_Postion(0x02,0,0);
 //    ThreadX.stop();
-
     Stop_MOTOR(0x02);
     MotorYDisplayFalg=0;
-    RunState rs;
-    rs.SaveCurrentAxisDat(Y1_ID);
+//    RunState rs;
+//    rs.SaveCurrentAxisDat(Y1_ID);
 }
 
 
@@ -578,8 +562,8 @@ void Manual::on_pushButton_M_YForWard_released()
     //Set_Motor_Speed_Postion(0x02,0,0);
 //    ThreadX.stop();
     MotorYDisplayFalg=0;
-    RunState rs;
-    rs.SaveCurrentAxisDat(Y1_ID);
+//    RunState rs;
+//    rs.SaveCurrentAxisDat(Y1_ID);
 
 
 }
@@ -605,8 +589,8 @@ void Manual::on_pushButton_M_RForWard_released()
 {
      Stop_MOTOR(0x03);
      MotorRDisplayFalg=0;
-     RunState rs;
-     rs.SaveCurrentAxisDat(R1_ID);
+//     RunState rs;
+//     rs.SaveCurrentAxisDat(R1_ID);
 }
 
 void Manual::on_pushButton_M_RBack_pressed()
@@ -630,8 +614,8 @@ void Manual::on_pushButton_M_RBack_released()
 {
     Stop_MOTOR(0x03);
     MotorRDisplayFalg=0;
-    RunState rs;
-    rs.SaveCurrentAxisDat(R1_ID);
+//    RunState rs;
+//    rs.SaveCurrentAxisDat(R1_ID);
 }
 void Manual::on_toolButton_Length_clicked()
 {
@@ -660,24 +644,25 @@ void Manual::on_pushButton_Adjust_clicked()
 
 void Manual::ChangeXCurrentPostion(QString str)
 {
-
+    bool ok;
     ui->lineEdit_ManualX->setText(str);
 
-    Adjust_ManualDate[0].data[1].Data = str.toInt() * 1000/ XaxisParameter.LeadScrew ;
+    Adjust_ManualDate[0].data[1].Data = str.toDouble(&ok)* 1000/ XaxisParameter.LeadScrew ;
     Write_MOTOR_Multi_Data(&Adjust_ManualDate[0],0x01);
 
 }
 void Manual::ChangeYCurrentPostion(QString str)
 {
-
+    bool ok;
     ui->lineEdit_ManualY->setText(str);
-    Adjust_ManualDate[1].data[1].Data = str.toInt() *1000 / YaxisParameter.LeadScrew ;
+    Adjust_ManualDate[1].data[1].Data = str.toDouble(&ok) *1000 / YaxisParameter.LeadScrew ;
     Write_MOTOR_Multi_Data(&Adjust_ManualDate[1],0x02);
 }
 void Manual::ChangeRCurrentPostion(QString str)
 {
+    bool ok;
     ui->lineEdit_ManualR->setText(str);
-    Adjust_ManualDate[2].data[1].Data = str.toInt() *1000 / RaxisParameter.LeadScrew ;
+    Adjust_ManualDate[2].data[1].Data = str.toDouble(&ok) *1000 / RaxisParameter.LeadScrew ;
     Write_MOTOR_Multi_Data(&Adjust_ManualDate[2],0x03);
 }
 

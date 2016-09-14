@@ -127,89 +127,114 @@ void HomingMode::CheckRaxisEnable()
 //[1]
 void HomingMode::CheckMotorState()
 {
-    if(Get_HeartbetError(X1_ID) == 0x01 || motor[X1_ID-1].initStatus == 0)
+    if(XaxisParameter.ReferencePosMode == 1 ||  XaxisParameter.ReferencePosMode == 2 )
     {
-        ui->label_X->setText(trUtf8("电机异常"));
-        ui->toolButton_RunHoming->setEnabled(false);
-        ui->toolButton_X->setEnabled(false);
-    }
-    else if(HomgingModeFlag == 1 && arrivedSwitch_X == 0)
-    {
-        ui->label_X->setText(trUtf8("正在归零"));
-        ui->toolButton_X->setEnabled(true);
-    }
-    else if(arrivedSwitch_X == 1)
-    {
-        ui->label_X->setText(trUtf8("归零完成"));
-        ui->toolButton_X->setEnabled(false);
-//        RunState rs;
-//        rs.SaveCurrentAxisDat();
-        //ui->toolButton_RunHoming->setEnabled(true);
-    }
-    else if(arrivedSwitch_X == 0)
-    {
-        ui->label_X->setText(trUtf8("准备就绪"));
-        ui->toolButton_RunHoming->setEnabled(true);
-        ui->toolButton_Y->setEnabled(false);
-    }
-    if(Get_HeartbetError(Y1_ID) == 0x01 || motor[Y1_ID-1].initStatus == 0)
-    {
-        ui->label_Y->setText(trUtf8("电机异常"));
-        ui->toolButton_RunHoming->setEnabled(false);
-        ui->toolButton_Y->setEnabled(false);
-    }
-    else if(HomgingModeFlag == 1 && arrivedSwitch_Y == 0)
-    {
-        ui->label_Y->setText(trUtf8("正在归零"));
-        ui->toolButton_Y->setEnabled(true);
-
-    }
-    else if(arrivedSwitch_Y == 1)
-    {
-        ui->label_Y->setText(trUtf8("归零完成"));
-        ui->toolButton_Y->setEnabled(false);
-//        RunState rs;
-//        rs.SaveCurrentAxisDat();
-       // ui->toolButton_RunHoming->setEnabled(true);
-    }
-    else if(arrivedSwitch_Y == 0)
-    {
-        ui->label_Y->setText(trUtf8("准备就绪"));
-        ui->toolButton_Y->setEnabled(false);
-        ui->toolButton_RunHoming->setEnabled(true);
-    }
-    if(RaxisParameter.ENABLE_AXIS == 1)
-    {
-        if(Get_HeartbetError(R1_ID) == 0x01 || motor[R1_ID-1].initStatus == 0)
+        if(Get_HeartbetError(X1_ID) == 0x01 || motor[X1_ID-1].initStatus == 0)
         {
-            ui->label_R->setText(trUtf8("电机异常"));
-            ui->toolButton_R->setEnabled(false);
+            ui->label_X->setText(trUtf8("电机异常"));
             ui->toolButton_RunHoming->setEnabled(false);
+            ui->toolButton_X->setEnabled(false);
         }
-        else if(HomgingModeFlag == 1 && arrivedSwitch_R == 0)
+        else if(HomgingModeFlag == 1 && arrivedSwitch_X == 0)
         {
-            ui->label_R->setText(trUtf8("正在归零"));
-            ui->toolButton_R->setEnabled(true);
+            ui->label_X->setText(trUtf8("正在归零"));
+            ui->toolButton_X->setEnabled(true);
         }
-        else if(arrivedSwitch_R == 1)
+        else if(arrivedSwitch_X == 1)
         {
-            ui->label_R->setText(trUtf8("归零完成"));
-            ui->toolButton_R->setEnabled(false);
-//            RunState rs;
-//            rs.SaveCurrentAxisDat();
+            ui->label_X->setText(trUtf8("归零完成"));
+            ui->toolButton_X->setEnabled(false);
+    //        RunState rs;
+    //        rs.SaveCurrentAxisDat();
             //ui->toolButton_RunHoming->setEnabled(true);
         }
-        else if(arrivedSwitch_R == 0)
+        else if(arrivedSwitch_X == 0)
         {
-            ui->label_R->setText(trUtf8("准备就绪"));
+            ui->label_X->setText(trUtf8("准备就绪"));
             ui->toolButton_RunHoming->setEnabled(true);
-            ui->toolButton_R->setEnabled(false);
+            ui->toolButton_Y->setEnabled(false);
+        }
+
+    }
+    else
+    {
+        ui->label_X->setText(trUtf8("手动寻参"));
+    }
+
+    if(YaxisParameter.ReferencePosMode == 1 ||  YaxisParameter.ReferencePosMode == 2 )
+    {
+        if(Get_HeartbetError(Y1_ID) == 0x01 || motor[Y1_ID-1].initStatus == 0)
+        {
+            ui->label_Y->setText(trUtf8("电机异常"));
+            ui->toolButton_RunHoming->setEnabled(false);
+            ui->toolButton_Y->setEnabled(false);
+        }
+        else if(HomgingModeFlag == 1 && arrivedSwitch_Y == 0)
+        {
+            ui->label_Y->setText(trUtf8("正在归零"));
+            ui->toolButton_Y->setEnabled(true);
+
+        }
+        else if(arrivedSwitch_Y == 1)
+        {
+            ui->label_Y->setText(trUtf8("归零完成"));
+            ui->toolButton_Y->setEnabled(false);
+    //        RunState rs;
+    //        rs.SaveCurrentAxisDat();
+           // ui->toolButton_RunHoming->setEnabled(true);
+        }
+        else if(arrivedSwitch_Y == 0)
+        {
+            ui->label_Y->setText(trUtf8("准备就绪"));
+            ui->toolButton_Y->setEnabled(false);
+            ui->toolButton_RunHoming->setEnabled(true);
+        }
+
+    }
+    else
+    {
+        ui->label_Y->setText(trUtf8("手动寻参"));
+    }
+
+
+    if(RaxisParameter.ReferencePosMode == 1 ||  RaxisParameter.ReferencePosMode == 2 )
+    {
+
+        if(RaxisParameter.ENABLE_AXIS == 1)
+        {
+            if(Get_HeartbetError(R1_ID) == 0x01 || motor[R1_ID-1].initStatus == 0)
+            {
+                ui->label_R->setText(trUtf8("电机异常"));
+                ui->toolButton_R->setEnabled(false);
+                ui->toolButton_RunHoming->setEnabled(false);
+            }
+            else if(HomgingModeFlag == 1 && arrivedSwitch_R == 0)
+            {
+                ui->label_R->setText(trUtf8("正在归零"));
+                ui->toolButton_R->setEnabled(true);
+            }
+            else if(arrivedSwitch_R == 1)
+            {
+                ui->label_R->setText(trUtf8("归零完成"));
+                ui->toolButton_R->setEnabled(false);
+    //            RunState rs;
+    //            rs.SaveCurrentAxisDat();
+                //ui->toolButton_RunHoming->setEnabled(true);
+            }
+            else if(arrivedSwitch_R == 0)
+            {
+                ui->label_R->setText(trUtf8("准备就绪"));
+                ui->toolButton_RunHoming->setEnabled(true);
+                ui->toolButton_R->setEnabled(false);
+            }
         }
     }
     else
     {
-        //ui->label_R->setText(trUtf8("电机未使能"));
+        ui->label_R->setText(trUtf8("手动寻参"));
     }
+
+
 
 
 
@@ -223,8 +248,6 @@ void HomingMode::openHomingModeWin()
     this->setWindowFlags(Qt::FramelessWindowHint);
     this->show();
     this->move(0,WIDGET_Y);
-
-    CheckRaxisEnable();
     ui->toolButton_RunHoming->setEnabled(true);
 
 
@@ -333,51 +356,59 @@ void HomingMode::timerEvent(QTimerEvent *t) //定时器事件
 void HomingMode::on_toolButton_RunHoming_clicked()
 {
 
-    if(XaxisParameter.ReferencePosMode == 1)
+    if(XaxisParameter.ReferencePosMode == 0)
+    {
+
+    }else if(XaxisParameter.ReferencePosMode == 1)
     {
         HomingModeDate[0].data[1].Data = 0x01;// 这里写回零模式
+        HomingModeDate[0].data[2].Data  = XaxisParameter.ReferencePos;
+        Write_MOTOR_Multi_Data(&HomingModeDate[X1_ID -1 ],X1_ID);
 
     }else if(XaxisParameter.ReferencePosMode == 2)
     {
         HomingModeDate[0].data[1].Data = 0x02;// 这里写回零模式
+        HomingModeDate[0].data[2].Data  = XaxisParameter.ReferencePos;
+        Write_MOTOR_Multi_Data(&HomingModeDate[X1_ID -1 ],X1_ID);
+
     }
 
-     Write_MOTOR_Multi_Data(&HomingModeDate[0],X1_ID);
-
-     if(YaxisParameter.ReferencePosMode == 1)
+    if(YaxisParameter.ReferencePosMode == 0)
+    {
+    } else if(YaxisParameter.ReferencePosMode == 1)
      {
          HomingModeDate[1].data[1].Data = 0x01;// 这里写回零模式
-
+         HomingModeDate[1].data[2].Data  = YaxisParameter.ReferencePos;
+         Write_MOTOR_Multi_Data(&HomingModeDate[Y1_ID -1],Y1_ID);
      }else if(YaxisParameter.ReferencePosMode == 2)
      {
          HomingModeDate[1].data[1].Data = 0x02;// 这里写回零模式
+         HomingModeDate[1].data[2].Data  = YaxisParameter.ReferencePos;
+         Write_MOTOR_Multi_Data(&HomingModeDate[Y1_ID -1],Y1_ID);
      }
 
-     Write_MOTOR_Multi_Data(&HomingModeDate[1],Y1_ID);
 
-     HomingModeDate[0].data[2].Data  = XaxisParameter.ReferencePos;
-     HomingModeDate[1].data[2].Data  = YaxisParameter.ReferencePos;
-     Write_MOTOR_Multi_Data(&HomingModeDate[X1_ID -1 ],X1_ID);
-     Write_MOTOR_Multi_Data(&HomingModeDate[Y1_ID -1],Y1_ID);
 
 
      if(RaxisParameter.ENABLE_AXIS == 1)
      {
-
-         if(RaxisParameter.ReferencePosMode == 1)
+         if(YaxisParameter.ReferencePosMode == 0)
+         {
+         } else if(YaxisParameter.ReferencePosMode == 0)
+         {
+         }else if(RaxisParameter.ReferencePosMode == 1)
          {
              HomingModeDate[2].data[1].Data = 0x01;// 这里写回零模式
+             HomingModeDate[2].data[2].Data  = RaxisParameter.ReferencePos;
+             Write_MOTOR_Multi_Data(&HomingModeDate[R1_ID-1],R1_ID);
 
          }else if(RaxisParameter.ReferencePosMode == 2)
          {
              HomingModeDate[2].data[1].Data = 0x02;// 这里写回零模式
+             HomingModeDate[2].data[2].Data  = RaxisParameter.ReferencePos;
+             Write_MOTOR_Multi_Data(&HomingModeDate[R1_ID-1],R1_ID);
          }
-
-         HomingModeDate[2].data[2].Data  = RaxisParameter.ReferencePos;
-         Write_MOTOR_Multi_Data(&HomingModeDate[R1_ID-1],R1_ID);
      }
-
-
 
     HomgingModeFlag = 1;
     ui->toolButton_RunHoming->setEnabled(false);
