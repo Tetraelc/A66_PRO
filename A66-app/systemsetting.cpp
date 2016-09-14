@@ -1314,8 +1314,12 @@ int SystemSetting::deal_write_config_event()
         motor[3].Wrte_Multi_Finsh_state = NO_SEND;
         motor[3].SDO_status = SDO_free;
         Write_Button_state = 0;
-        QMessageBox::critical(0,QObject::trUtf8("写入配置信息"),
-                              trUtf8("发送失败~。~"));
+
+        MotorTipFlag = true;
+        CurrentReg.Current_MotorTips = SendFailTip;
+        CurrentReg.Current_MotorTipResult.append(SystemTipsInformation(CurrentReg.Current_MotorTips));
+//        QMessageBox::critical(0,QObject::trUtf8("写入配置信息"),
+//                              trUtf8("发送失败~。~"));
 
         return 0;
        // qDebug("233333333333333333333333333333333333332");
@@ -1329,14 +1333,21 @@ int SystemSetting::deal_write_config_event()
         if(motor[3].RX_buf[0] == 0xA0)
         {
             Write_MOTOR_One_Data(MT_ID,0x7000,0x01,0x01,0x00);
-            QMessageBox::information(0,QObject::trUtf8("写入配置"),
-                                   trUtf8("配置成功"));
+            MotorTipFlag = true;
+            CurrentReg.Current_MotorTips = WriteSuccessTip;
+            CurrentReg.Current_MotorTipResult.append(SystemTipsInformation(CurrentReg.Current_MotorTips));
+//            QMessageBox::information(0,QObject::trUtf8("写入配置"),
+//                                   trUtf8("配置成功"));
              qDebug("entern readif");
         }
         else
         {
-           QMessageBox::critical(0,QObject::trUtf8("写入配置"),
-                                   trUtf8("配置失败"));
+            MotorTipFlag = true;
+            CurrentReg.Current_MotorTips = WriteFailTip;
+            CurrentReg.Current_MotorTipResult.append(SystemTipsInformation(CurrentReg.Current_MotorTips));
+
+//           QMessageBox::critical(0,QObject::trUtf8("写入配置"),
+//                                   trUtf8("配置失败"));
            qDebug("entern readifelse");
         }
 
@@ -1348,8 +1359,11 @@ int SystemSetting::deal_write_config_event()
          motor[3].Wrte_Multi_Finsh_state = NO_SEND;
          motor[3].SDO_status = SDO_free;
          Write_Button_state = 0;
-        QMessageBox::critical(0,QObject::trUtf8("写入配置信息"),
-                              trUtf8("发送失败"));
+         MotorTipFlag = true;
+         CurrentReg.Current_MotorTips = SendFailTip;
+         CurrentReg.Current_MotorTipResult.append(SystemTipsInformation(CurrentReg.Current_MotorTips));
+//        QMessageBox::critical(0,QObject::trUtf8("写入配置信息"),
+//                              trUtf8("发送失败"));
 
     }
 
@@ -1378,8 +1392,11 @@ int SystemSetting::deal_read_config_event()
             ValveReg.UnloadTime   = motor[3].RX_DATA[7];
             ValveReg.KeepTime     = motor[3].RX_DATA[8];
             ReadConfig();
-            QMessageBox::information(0,QObject::trUtf8("读取配置信息"),
-                                  trUtf8("读取成功"));
+            MotorTipFlag = true;
+            CurrentReg.Current_MotorTips = ReadSuccessTip;
+            CurrentReg.Current_MotorTipResult.append(SystemTipsInformation(CurrentReg.Current_MotorTips));
+//            QMessageBox::information(0,QObject::trUtf8("读取配置信息"),
+//                                  trUtf8("读取成功"));
             Read_Button_state = 0;
             motor[3].Read_Multi_Finsh_state = NO_SEND;
             motor[3].SDO_status = SDO_free;
@@ -1387,8 +1404,11 @@ int SystemSetting::deal_read_config_event()
        }
         else if (motor[3].Read_Multi_Finsh_state == FAIL_SEND)
         {
-           QMessageBox::critical(0,QObject::trUtf8("读取配置信息"),
-                                 trUtf8("读取失败"));
+           MotorTipFlag = true;
+           CurrentReg.Current_MotorTips = ReadFailTip;
+           CurrentReg.Current_MotorTipResult.append(SystemTipsInformation(CurrentReg.Current_MotorTips));
+//           QMessageBox::critical(0,QObject::trUtf8("读取配置信息"),
+//                                 trUtf8("读取失败"));
            Read_Button_state = 0;
            motor[3].SDO_status = SDO_free;
            motor[3].Read_Multi_Finsh_state = NO_SEND;

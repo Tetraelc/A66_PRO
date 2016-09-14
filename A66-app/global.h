@@ -67,6 +67,15 @@ QString SystemTipsInformation(int TipsID);
 #define Motor3Tip    9
 #define MTTip   10
 #define OfflineTip   11
+#define WriteSuccessTip   12
+#define WriteFailTip   13
+#define SendSuccessTip   14
+#define SendFailTip   15
+
+#define ReadSuccessTip   16
+#define ReadFailTip   17
+#define RecSuccessTip   18
+#define RecFailTip   19
 
 
 
