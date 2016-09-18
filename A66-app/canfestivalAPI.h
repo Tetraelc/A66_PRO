@@ -52,6 +52,8 @@ typedef struct {
     UNS32 ReadCountError;
     UNS32 HeartCount;
 
+    UNS8 Error_Mode;
+
 
 
 

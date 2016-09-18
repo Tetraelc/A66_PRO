@@ -10,6 +10,9 @@
     <height>540</height>
    </rect>
   </property>
+  <property name="cursor">
+   <cursorShape>BlankCursor</cursorShape>
+  </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
@@ -27,6 +30,9 @@
      <family>Sans Serif</family>
      <pointsize>16</pointsize>
     </font>
+   </property>
+   <property name="cursor">
+    <cursorShape>BlankCursor</cursorShape>
    </property>
    <property name="title">
     <string> 工步参数 </string>
@@ -48,6 +54,9 @@
       <pointsize>14</pointsize>
      </font>
     </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
+    </property>
     <property name="text">
      <string>mm</string>
     </property>
@@ -60,6 +69,9 @@
       <width>170</width>
       <height>30</height>
      </rect>
+    </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
     </property>
     <property name="focusPolicy">
      <enum>Qt::ClickFocus</enum>
@@ -77,6 +89,9 @@
       <height>30</height>
      </rect>
     </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
+    </property>
     <property name="focusPolicy">
      <enum>Qt::ClickFocus</enum>
     </property>
@@ -93,6 +108,9 @@
       <height>30</height>
      </rect>
     </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
+    </property>
     <property name="focusPolicy">
      <enum>Qt::ClickFocus</enum>
     </property>
@@ -106,6 +124,9 @@
       <height>30</height>
      </rect>
     </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
+    </property>
     <property name="focusPolicy">
      <enum>Qt::ClickFocus</enum>
     </property>
@@ -118,6 +139,9 @@
       <width>170</width>
       <height>30</height>
      </rect>
+    </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
     </property>
     <property name="focusPolicy">
      <enum>Qt::ClickFocus</enum>
@@ -136,6 +160,9 @@
      <font>
       <pointsize>16</pointsize>
      </font>
+    </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
     </property>
     <property name="text">
      <string>角度</string>
@@ -158,6 +185,9 @@
       <pointsize>16</pointsize>
      </font>
     </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
+    </property>
     <property name="text">
      <string>Y轴</string>
     </property>
@@ -178,6 +208,9 @@
      <font>
       <pointsize>16</pointsize>
      </font>
+    </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
     </property>
     <property name="text">
      <string>X轴</string>
@@ -200,6 +233,9 @@
       <pointsize>16</pointsize>
      </font>
     </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
+    </property>
     <property name="text">
      <string>角度补偿</string>
     </property>
@@ -221,6 +257,9 @@
       <pointsize>16</pointsize>
      </font>
     </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
+    </property>
     <property name="text">
      <string>X轴校准</string>
     </property>
@@ -237,6 +276,9 @@
       <height>30</height>
      </rect>
     </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
+    </property>
     <property name="focusPolicy">
      <enum>Qt::ClickFocus</enum>
     </property>
@@ -252,6 +294,9 @@
       <width>170</width>
       <height>30</height>
      </rect>
+    </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
     </property>
     <property name="focusPolicy">
      <enum>Qt::ClickFocus</enum>
@@ -278,6 +323,9 @@
       <height>30</height>
      </rect>
     </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
+    </property>
     <property name="focusPolicy">
      <enum>Qt::ClickFocus</enum>
     </property>
@@ -290,6 +338,9 @@
       <width>170</width>
       <height>30</height>
      </rect>
+    </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
     </property>
     <property name="focusPolicy">
      <enum>Qt::ClickFocus</enum>
@@ -306,6 +357,9 @@
       <width>170</width>
       <height>30</height>
      </rect>
+    </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
     </property>
     <property name="focusPolicy">
      <enum>Qt::ClickFocus</enum>
@@ -324,6 +378,9 @@
      <font>
       <pointsize>16</pointsize>
      </font>
+    </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
     </property>
     <property name="text">
      <string>退让距离</string>
@@ -346,6 +403,9 @@
       <pointsize>16</pointsize>
      </font>
     </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
+    </property>
     <property name="text">
      <string>回程时间</string>
     </property>
@@ -366,6 +426,9 @@
      <font>
       <pointsize>16</pointsize>
      </font>
+    </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
     </property>
     <property name="text">
      <string>保压时间</string>
@@ -388,6 +451,9 @@
       <pointsize>16</pointsize>
      </font>
     </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
+    </property>
     <property name="text">
      <string>压力</string>
     </property>
@@ -408,6 +474,9 @@
      <font>
       <pointsize>16</pointsize>
      </font>
+    </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
     </property>
     <property name="text">
      <string>R轴</string>
@@ -430,6 +499,9 @@
       <pointsize>14</pointsize>
      </font>
     </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
+    </property>
     <property name="text">
      <string>mm</string>
     </property>
@@ -447,6 +519,9 @@
      <font>
       <pointsize>14</pointsize>
      </font>
+    </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
     </property>
     <property name="text">
      <string>mm</string>
@@ -466,6 +541,9 @@
       <pointsize>14</pointsize>
      </font>
     </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
+    </property>
     <property name="text">
      <string>mm</string>
     </property>
@@ -483,6 +561,9 @@
      <font>
       <pointsize>14</pointsize>
      </font>
+    </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
     </property>
     <property name="text">
      <string>KN</string>
@@ -502,6 +583,9 @@
       <pointsize>14</pointsize>
      </font>
     </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
+    </property>
     <property name="text">
      <string>S</string>
     </property>
@@ -519,6 +603,9 @@
      <font>
       <pointsize>14</pointsize>
      </font>
+    </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
     </property>
     <property name="text">
      <string>S</string>
@@ -538,6 +625,9 @@
       <pointsize>14</pointsize>
      </font>
     </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
+    </property>
     <property name="text">
      <string>mm</string>
     </property>
@@ -556,6 +646,9 @@
       <pointsize>14</pointsize>
      </font>
     </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
+    </property>
     <property name="text">
      <string>°</string>
     </property>
@@ -573,6 +666,9 @@
      <font>
       <pointsize>14</pointsize>
      </font>
+    </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
     </property>
     <property name="text">
      <string>°</string>
@@ -598,6 +694,9 @@
     <font>
      <pointsize>12</pointsize>
     </font>
+   </property>
+   <property name="cursor" stdset="0">
+    <cursorShape>BlankCursor</cursorShape>
    </property>
    <property name="acceptDrops">
     <bool>false</bool>
@@ -831,6 +930,9 @@
      <pointsize>12</pointsize>
     </font>
    </property>
+   <property name="cursor">
+    <cursorShape>BlankCursor</cursorShape>
+   </property>
    <property name="text">
     <string/>
    </property>
@@ -859,8 +961,11 @@
      <pointsize>9</pointsize>
     </font>
    </property>
+   <property name="cursor">
+    <cursorShape>BlankCursor</cursorShape>
+   </property>
    <property name="text">
-    <string>展开长度</string>
+    <string/>
    </property>
    <property name="iconSize">
     <size>
@@ -887,8 +992,11 @@
      <pointsize>12</pointsize>
     </font>
    </property>
+   <property name="cursor">
+    <cursorShape>BlankCursor</cursorShape>
+   </property>
    <property name="text">
-    <string>大圆弧</string>
+    <string/>
    </property>
    <property name="iconSize">
     <size>
@@ -914,6 +1022,9 @@
      <family>Sans Serif</family>
      <pointsize>12</pointsize>
     </font>
+   </property>
+   <property name="cursor">
+    <cursorShape>BlankCursor</cursorShape>
    </property>
    <property name="text">
     <string>UP</string>
@@ -947,6 +1058,9 @@
      <pointsize>12</pointsize>
     </font>
    </property>
+   <property name="cursor">
+    <cursorShape>BlankCursor</cursorShape>
+   </property>
    <property name="text">
     <string/>
    </property>
@@ -974,6 +1088,9 @@
      <family>Sans Serif</family>
      <pointsize>10</pointsize>
     </font>
+   </property>
+   <property name="cursor">
+    <cursorShape>BlankCursor</cursorShape>
    </property>
    <property name="text">
     <string>删除</string>
@@ -1007,6 +1124,9 @@
      <pointsize>10</pointsize>
     </font>
    </property>
+   <property name="cursor">
+    <cursorShape>BlankCursor</cursorShape>
+   </property>
    <property name="text">
     <string>新增</string>
    </property>
@@ -1038,6 +1158,9 @@
      <family>Sans Serif</family>
      <pointsize>12</pointsize>
     </font>
+   </property>
+   <property name="cursor">
+    <cursorShape>BlankCursor</cursorShape>
    </property>
    <property name="text">
     <string>down</string>

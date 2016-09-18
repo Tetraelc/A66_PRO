@@ -163,11 +163,17 @@ void Manual::timerEvent(QTimerEvent *t) //定时器事件
 
     }
     if(t->timerId()==id2){
-
+        CurrentReg.Current_MotorTipResult.clear();
         Checkstatus(0x01);
         Checkstatus(0x02);
         Checkstatus(0x03);
+
         checkMotorState();
+//        MotorTipFlag = true;
+//        CurrentReg.Current_MotorTips = MotorErrorTip;
+//        CurrentReg.Current_MotorTipResult.append(SystemTipsInformation(CurrentReg.Current_MotorTips));
+
+
     }
     if(t->timerId()==id3){
 
@@ -181,7 +187,7 @@ void Manual::timerEvent(QTimerEvent *t) //定时器事件
 void Manual::checkMotorState()
 {
      CurrentReg.Current_MotorTipResult.clear();
-     if(Get_HeartbetError(0x01) == 0x01 || motor[X1_ID-1].initStatus == 0)
+     if(Get_HeartbetError(0x01) == 0x01 || motor[X1_ID-1].initStatus == 0 || XFaultFlag ==true)
      {
 
          MotorTipFlag = true;
@@ -192,7 +198,7 @@ void Manual::checkMotorState()
 
         // qDebug("Motor1");
      }
-     if(Get_HeartbetError(0x02) == 0x01 || motor[Y1_ID-1].initStatus == 0)
+     if(Get_HeartbetError(0x02) == 0x01 || motor[Y1_ID-1].initStatus == 0 || YFaultFlag ==true)
      {
          MotorTipFlag = true;
          CurrentReg.Current_MotorTips = Motor2Tip;
@@ -201,7 +207,6 @@ void Manual::checkMotorState()
 //                               trUtf8("2号电机离线"));
            // qDebug("Motor2");
      }
-
 
 
 
@@ -216,7 +221,7 @@ void Manual::checkMotorState()
      }
      if(RaxisParameter.ENABLE_AXIS == 1)
      {
-         if(Get_HeartbetError(0x03) == 1 || motor[R1_ID-1].initStatus == 0)
+         if(Get_HeartbetError(0x03) == 1 || motor[R1_ID-1].initStatus == 0 || RFaultFlag ==true)
          {
              MotorTipFlag = true;
              CurrentReg.Current_MotorTips = Motor3Tip;
@@ -225,22 +230,33 @@ void Manual::checkMotorState()
     //                               trUtf8("3号电机离线"));
             //qDebug("Motor3");
          }
-         if(Get_HeartbetError(0x01) == 0x01 || Get_HeartbetError(0x02) == 0x01 ||  Get_HeartbetError(0x03) == 0x01 ||  Get_HeartbetError(0x04) == 0x01 )
-         {
-             MotorTipFlag = true;
-             CurrentReg.Current_MotorTips = OfflineTip;
-             CurrentReg.Current_MotorTipResult.append(SystemTipsInformation(CurrentReg.Current_MotorTips));
-         }
 
      }
-     else
+//     else
+//     {
+//         if(Get_HeartbetError(0x01) == 0x01 || Get_HeartbetError(0x02) == 0x01 ||  Get_HeartbetError(0x04) == 0x01 )
+//         {
+//             MotorTipFlag = true;
+//             CurrentReg.Current_MotorTips = OfflineTip;
+//             CurrentReg.Current_MotorTipResult.append(SystemTipsInformation(CurrentReg.Current_MotorTips));
+//         }
+//     }
+
+
+     if( (XFaultFlag ==true) ||  (YFaultFlag ==true) || (RFaultFlag ==true))
      {
-         if(Get_HeartbetError(0x01) == 0x01 || Get_HeartbetError(0x02) == 0x01 ||  Get_HeartbetError(0x04) == 0x01 )
-         {
-             MotorTipFlag = true;
-             CurrentReg.Current_MotorTips = OfflineTip;
-             CurrentReg.Current_MotorTipResult.append(SystemTipsInformation(CurrentReg.Current_MotorTips));
-         }
+         MotorTipFlag = true;
+         CurrentReg.Current_MotorTips = MotorErrorTip;
+         CurrentReg.Current_MotorTipResult.append(SystemTipsInformation(CurrentReg.Current_MotorTips));
+         XFaultFlag =false;
+         YFaultFlag =false;
+         RFaultFlag =false;
+     }
+     if((Get_HeartbetError(0x01) == 0x01) ||( Get_HeartbetError(0x02) == 0x01) ||  (Get_HeartbetError(0x04) == 0x01) )//||  (Get_HeartbetError(0x03) == 0x01)
+     {
+         MotorTipFlag = true;
+         CurrentReg.Current_MotorTips = OfflineTip;
+         CurrentReg.Current_MotorTipResult.append(SystemTipsInformation(CurrentReg.Current_MotorTips));
      }
 
 
@@ -376,12 +392,32 @@ int Manual::Checkstatus(int motor_id)
         {
 //            QMessageBox::critical(0,QObject::trUtf8("异常"),
 //                                  trUtf8("请检查电机"));break;
+//            motor[motor_id-1].Error_Mode = 1;
+
+            XFaultFlag =true;
         }
         if(motor_id == 0x02 )
         {
 //            QMessageBox::critical(0,QObject::trUtf8("异常"),
 //                                  trUtf8("请检查电机"));break;
+
+            YFaultFlag =true;
         }
+
+        if(RaxisParameter.ENABLE_AXIS == 1)
+        {
+            if(motor_id == 0x03 )
+            {
+    //            QMessageBox::critical(0,QObject::trUtf8("异常"),
+    //                                  trUtf8("请检查电机"));break;
+
+           RFaultFlag =true;
+            }
+        }
+
+
+//        CurrentReg.Current_MotorConfigResult.clear();
+
 
     default:    MSG_USER(0x8000,"Invalid_data",motor_id);break;
     }
@@ -711,10 +747,12 @@ void Manual::on_toolButton_OpenMT_clicked()
     if(Button_press_count == 1)
     {
         Write_MOTOR_One_Data(MT_ID,0x7001,0x01,0x01,ENTER_ENABLE);
+
     }
     else if (Button_press_count == 2)
     {
         Write_MOTOR_One_Data(MT_ID,0x7001,0x01,0x01,ENTER_DISENABLE);
+
         Button_press_count = 0;
     }
 

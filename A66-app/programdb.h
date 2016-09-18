@@ -75,6 +75,8 @@ private slots:
 
     void on_lineEdit_P_BoardWidth_returnPressed();
 
+    void on_toolButton_UpdatePIC_clicked();
+
 private:
     Ui::Programdb *ui;
     QTableWidgetItem * setItemContext;

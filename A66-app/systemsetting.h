@@ -24,6 +24,7 @@ public:
  //   void initSystemSettings(void);
     void Display_Item(int ClassId,bool Editable,bool FristEnable);
     void Update_Item(int Id,double Value);
+    void TreeWidgetIntoTable();
     QString Select_Item(int Id);
     void TreeWidgetInit();
     void ReadForSystem();
@@ -97,7 +98,7 @@ private slots:
 
     void on_pushButton_StopTest_released();
 
-    void on_lineEdit_Secret_editingFinished();
+  //  void on_lineEdit_Secret_editingFinished();
 
 private:
     int deal_write_config_event();

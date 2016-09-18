@@ -74,6 +74,9 @@
     </disabled>
    </palette>
   </property>
+  <property name="cursor">
+   <cursorShape>BlankCursor</cursorShape>
+  </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
@@ -104,7 +107,7 @@
     </font>
    </property>
    <property name="cursor">
-    <cursorShape>ArrowCursor</cursorShape>
+    <cursorShape>BlankCursor</cursorShape>
    </property>
    <property name="focusPolicy">
     <enum>Qt::NoFocus</enum>
@@ -210,7 +213,7 @@
     </font>
    </property>
    <property name="cursor">
-    <cursorShape>ArrowCursor</cursorShape>
+    <cursorShape>BlankCursor</cursorShape>
    </property>
    <property name="focusPolicy">
     <enum>Qt::NoFocus</enum>
@@ -251,7 +254,7 @@
     </font>
    </property>
    <property name="cursor">
-    <cursorShape>ArrowCursor</cursorShape>
+    <cursorShape>BlankCursor</cursorShape>
    </property>
    <property name="focusPolicy">
     <enum>Qt::NoFocus</enum>
@@ -333,7 +336,7 @@
     </font>
    </property>
    <property name="cursor">
-    <cursorShape>ArrowCursor</cursorShape>
+    <cursorShape>BlankCursor</cursorShape>
    </property>
    <property name="focusPolicy">
     <enum>Qt::NoFocus</enum>
@@ -374,7 +377,7 @@
     </font>
    </property>
    <property name="cursor">
-    <cursorShape>ArrowCursor</cursorShape>
+    <cursorShape>BlankCursor</cursorShape>
    </property>
    <property name="focusPolicy">
     <enum>Qt::NoFocus</enum>
@@ -415,7 +418,7 @@
     </font>
    </property>
    <property name="cursor">
-    <cursorShape>ArrowCursor</cursorShape>
+    <cursorShape>BlankCursor</cursorShape>
    </property>
    <property name="focusPolicy">
     <enum>Qt::NoFocus</enum>
@@ -456,7 +459,7 @@
     </font>
    </property>
    <property name="cursor">
-    <cursorShape>ArrowCursor</cursorShape>
+    <cursorShape>BlankCursor</cursorShape>
    </property>
    <property name="focusPolicy">
     <enum>Qt::NoFocus</enum>
@@ -497,7 +500,7 @@
     </font>
    </property>
    <property name="cursor">
-    <cursorShape>ArrowCursor</cursorShape>
+    <cursorShape>BlankCursor</cursorShape>
    </property>
    <property name="focusPolicy">
     <enum>Qt::NoFocus</enum>
@@ -538,7 +541,7 @@
     </font>
    </property>
    <property name="cursor">
-    <cursorShape>ArrowCursor</cursorShape>
+    <cursorShape>BlankCursor</cursorShape>
    </property>
    <property name="focusPolicy">
     <enum>Qt::NoFocus</enum>
@@ -579,7 +582,7 @@
     </font>
    </property>
    <property name="cursor">
-    <cursorShape>ArrowCursor</cursorShape>
+    <cursorShape>BlankCursor</cursorShape>
    </property>
    <property name="focusPolicy">
     <enum>Qt::NoFocus</enum>

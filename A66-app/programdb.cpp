@@ -19,6 +19,7 @@
 #include <QDesktopWidget>
 #include "runstate.h"
 #include "mainwindow.h"
+#include "choosepicture.h"
 
 
 int MaterialIndexFlag =0;
@@ -289,7 +290,7 @@ bool  Programdb::NewProgramLib(QString str)
    model.setData(model.index(row,Program_UpMold),ui->tableWidget_Programdb->item(ui->tableWidget_Programdb->currentRow(),Program_UpMold)->text());
    model.setData(model.index(row,Program_LowerMold),ui->tableWidget_Programdb->item(ui->tableWidget_Programdb->currentRow(),Program_LowerMold)->text());
    model.setData(model.index(row,Program_ProcessNum),"0");
-
+  model.setData(model.index(row,Program_PicPath),"P01.jpg");
    model.submitAll();
    //db.close();//释放数据库
 
@@ -412,7 +413,16 @@ void Programdb::ReflashProLinedit()
     }
     CurrentReg.Current_ProgramLibRow = ui->tableWidget_Programdb->currentRow();
     QPixmap pix;
-    pix.load("/opt/tetra/A66-app/PIC/P01.jpg");
+#if ARMFlag
+    QString str_temp ="/opt/tetra/A66-app/PIC/" + CurrentReg.CurrentProgramPic;
+    pix.load(str_temp);
+#else
+    QString str_temp ="/home/tetra/gitA66/A66-app/PIC/" + CurrentReg.CurrentProgramPic;
+    pix.load(str_temp);
+#endif
+    qDebug()<<"------"<<CurrentReg.CurrentProgramPic;
+
+
     ui->label_pic->setPixmap(pix);
     //db.close();//释放数据库
 
@@ -579,4 +589,10 @@ void Programdb::on_pushButton_Left_3_clicked()
     }
 }
 
+void Programdb::on_toolButton_UpdatePIC_clicked()
+{
+   ChoosePicture *pic = new ChoosePicture;
+   pic->setWindowFlags(Qt::FramelessWindowHint);
+   pic->exec();
 
+}

@@ -38,19 +38,22 @@ SystemSetting::SystemSetting(QWidget *parent) :
     ui->tableWidget_System->horizontalHeader()->setStretchLastSection(true);
     ui->tableWidget_System->horizontalHeader()->setClickable(false);    
 
-    QRegExp rx("^(-?[0]|-?[1-9][0-9]{0,3})$");
-    QRegExpValidator *pReg = new QRegExpValidator(rx, this);
+//    QRegExp rx("^(-?[0]|-?[1-9][0-9]{0,3})$");
+//    QRegExpValidator *pReg = new QRegExpValidator(rx, this);
     //ui->lineEdit_KeepTime ->setValidator(pReg);
     //ui->lineEdit_UnloadTime->setValidator(pReg);
-    ui->lineEdit_Secret->setValidator(pReg);
+    //ui->lineEdit_Secret->setValidator(pReg);
+
 
     ReadForSystemDat();
 
 
+
 }
 
-void SystemSetting::on_treeWidget_System_itemSelectionChanged()
+void SystemSetting::TreeWidgetIntoTable()
 {
+
     Table_Editable_Flag = 0;
 
     ReadForSystemDat();
@@ -91,10 +94,27 @@ void SystemSetting::on_treeWidget_System_itemSelectionChanged()
         if(ui->treeWidget_System->currentItem()->text(0).compare(trUtf8("阀组配置")) == 0 )
         {
             ui->stackedWidget->setCurrentIndex(2);
+            if(FactoryAxisFalg == true)
+            {
+                ui->pushButton_BackTest->setEnabled(true);
+                ui->pushButton_FastTest->setEnabled(true);
+                ui->pushButton_KeepTest->setEnabled(true);
+                ui->pushButton_SlowTest->setEnabled(true);
+                ui->pushButton_StopTest->setEnabled(true);
+                ui->pushButton_UnloadTest->setEnabled(true);
+                ui->toolButton_confirm->setEnabled(true);
+            }
         }
         if(ui->treeWidget_System->currentItem()->text(0).compare(trUtf8("工厂设置")) == 0 )
         {
             ui->stackedWidget->setCurrentIndex(1);
+
+            if(FactoryAxisFalg == true)
+            {
+                ui->toolButton_InitDAT->setEnabled(true);
+                ui->toolButton_ResumeDAT->setEnabled(true);
+                ui->toolButton_SaveDAT->setEnabled(true);
+            }
         }
 
 
@@ -102,6 +122,13 @@ void SystemSetting::on_treeWidget_System_itemSelectionChanged()
       // checktSecret();
     }
 
+
+}
+
+void SystemSetting::on_treeWidget_System_itemSelectionChanged()
+{
+
+    TreeWidgetIntoTable();
 
 
 }
@@ -272,15 +299,15 @@ void SystemSetting::SystemWriteMotor(unsigned char nodeId)
     {
         SystemSet_Motor[0].data[0].Data = XaxisParameter.MinDistance ;
         SystemSet_Motor[0].data[1].Data = XaxisParameter.MaxDistance ;
-        SystemSet_Motor[0].data[6].Data = CurrentStepTemp.XPostion * 1000 / XaxisParameter.LeadScrew ;
+        SystemSet_Motor[0].data[5].Data = CurrentStepTemp.XPostion * 1000 / XaxisParameter.LeadScrew ;
         qDebug()<<"XaxisParameter.PositioningMode"<<CurrentStepTemp.XPostion;
         if(XaxisParameter.ReferencePosMode == 0)
         {
-           SystemSet_Motor[0].Cmd_num = 10;
+           SystemSet_Motor[0].Cmd_num = 9;
         }
         else
         {
-           SystemSet_Motor[0].Cmd_num = 5;
+           SystemSet_Motor[0].Cmd_num = 4;
         }
 
     }
@@ -288,14 +315,14 @@ void SystemSetting::SystemWriteMotor(unsigned char nodeId)
     {
         SystemSet_Motor[1].data[0].Data = YaxisParameter.MinDistance ;
         SystemSet_Motor[1].data[1].Data = YaxisParameter.MaxDistance ;
-        SystemSet_Motor[1].data[6].Data =  CurrentStepTemp.YPostion * 1000 / YaxisParameter.LeadScrew ;
+        SystemSet_Motor[1].data[5].Data =  CurrentStepTemp.YPostion * 1000 / YaxisParameter.LeadScrew ;
         if(YaxisParameter.ReferencePosMode == 0)
         {
-           SystemSet_Motor[1].Cmd_num = 10;
+           SystemSet_Motor[1].Cmd_num = 9;
         }
         else
         {
-           SystemSet_Motor[1].Cmd_num = 5;
+           SystemSet_Motor[1].Cmd_num = 4;
         }
     }
 
@@ -303,14 +330,14 @@ void SystemSetting::SystemWriteMotor(unsigned char nodeId)
     {
         SystemSet_Motor[2].data[0].Data = RaxisParameter.MinDistance ;
         SystemSet_Motor[2].data[1].Data = RaxisParameter.MaxDistance ;
-        SystemSet_Motor[2].data[6].Data =  CurrentStepTemp.RPostion * 1000 / RaxisParameter.LeadScrew ;
+        SystemSet_Motor[2].data[5].Data =  CurrentStepTemp.RPostion * 1000 / RaxisParameter.LeadScrew ;
         if(RaxisParameter.ReferencePosMode == 0)
         {
-           SystemSet_Motor[2].Cmd_num = 10;
+           SystemSet_Motor[2].Cmd_num = 9;
         }
         else
         {
-           SystemSet_Motor[2].Cmd_num = 5;
+           SystemSet_Motor[2].Cmd_num = 4;
         }
     }
 
@@ -490,6 +517,9 @@ void SystemSetting::openSystemSettingWin()
     this->show();
     this->move(0,WIDGET_Y);
 
+    qDebug()<<"EditableFalg1111"<<EditableFalg;
+
+    ui->tableWidget_System->setRowCount(0);
     ui->pushButton_BackTest->setEnabled(false);
     ui->pushButton_FastTest->setEnabled(false);
     ui->pushButton_KeepTest->setEnabled(false);
@@ -497,6 +527,14 @@ void SystemSetting::openSystemSettingWin()
     ui->pushButton_StopTest->setEnabled(false);
     ui->pushButton_UnloadTest->setEnabled(false);
     ui->toolButton_confirm->setEnabled(false);
+
+    ui->toolButton_InitDAT->setEnabled(false);
+    ui->toolButton_ResumeDAT->setEnabled(false);
+    ui->toolButton_SaveDAT->setEnabled(false);
+
+    //Display_Item(10,true,false);
+
+
     qDebug()<<"openSystemSettingWin";
 }
 
@@ -590,7 +628,7 @@ void SystemSetting::on_tableWidget_System_cellChanged(int row, int column)
         if( CurrentReg.CurrentSecret == FACTORYSECRET)
         {
             FactoryAxisFalg =true;
-            Display_Item(Factory_Id,FactoryAxisFalg,true);
+           // Display_Item(Factory_Id,FactoryAxisFalg,true);
 
         }
 
@@ -1300,11 +1338,11 @@ void SystemSetting::ReadConfig(void)
 void SystemSetting::on_toolButton_confirm_clicked()
 {
 
-    if(ui->lineEdit_Secret->text() == "5678")
-    {
+//    if(ui->lineEdit_Secret->text() == "5678")
+//    {
         Write_Button_state = 1;
         WriteConfig();
-    }
+//    }
 
 }
 void SystemSetting::on_toolButton_readConfig_clicked()
@@ -1315,7 +1353,7 @@ void SystemSetting::on_toolButton_readConfig_clicked()
 
 
 
-
+static int write_step=0;
 int SystemSetting::deal_write_config_event()
 {
 
@@ -1341,13 +1379,15 @@ int SystemSetting::deal_write_config_event()
     //qDebug("Read_one_state_RUNSEND");
         return 0;
     }
-     if(motor[3].Wrte_Multi_Finsh_state == NO_SEND)
+     if(write_step == 0) //motor[3].Wrte_Multi_Finsh_state == NO_SEND &&
     {
+        motor[3].SDO_status = SDO_free;
         Write_MOTOR_Multi_Data(&Config_valve_buf,0x04);
        // qDebug("11111111111111111111111111111111");
         qDebug("motor[3].Wrte_Multi_Finsh_state = WAIT_FREE_SEND: %d",motor[3].Wrte_Multi_Finsh_state);
+        write_step = 1;
     }
-    else if(motor[3].Wrte_Multi_Finsh_state == SUCCESS_SEND ) //顺序不能调换
+    else if(motor[3].Wrte_Multi_Finsh_state == SUCCESS_SEND) //顺序不能调换
     {
          motor[3].SDO_status = SDO_free;
          read_One_Data(0x04,0x7000,0x01); //进入读取验证配置是否成功
@@ -1361,10 +1401,11 @@ int SystemSetting::deal_write_config_event()
         motor[3].Wrte_Multi_Finsh_state = NO_SEND;
         motor[3].SDO_status = SDO_free;
         Write_Button_state = 0;
-
-        MotorTipFlag = true;
+        write_step = 0;
+        MotorConfigTipFlag = true;
         CurrentReg.Current_MotorTips = SendFailTip;
-        CurrentReg.Current_MotorTipResult.append(SystemTipsInformation(CurrentReg.Current_MotorTips));
+        CurrentReg.Current_MotorConfigResult = SystemTipsInformation(CurrentReg.Current_MotorTips);
+        qDebug("SendFailTip");
 //        QMessageBox::critical(0,QObject::trUtf8("写入配置信息"),
 //                              trUtf8("发送失败~。~"));
 
@@ -1376,21 +1417,23 @@ int SystemSetting::deal_write_config_event()
         motor[3].Wrte_Multi_Finsh_state = NO_SEND;
         motor[3].SDO_status = SDO_free;
         Write_Button_state = 0;
+         write_step = 0;
         if(motor[3].RX_buf[0] == 0xA0)
         {
 
-            MotorTipFlag = true;
+            MotorConfigTipFlag = true;
             CurrentReg.Current_MotorTips = WriteSuccessTip;
-            CurrentReg.Current_MotorTipResult.append(SystemTipsInformation(CurrentReg.Current_MotorTips));
+            CurrentReg.Current_MotorConfigResult = SystemTipsInformation(CurrentReg.Current_MotorTips);
+            qDebug("WriteSuccessTip");
 //            QMessageBox::information(0,QObject::trUtf8("写入配置"),
 //                                   trUtf8("配置成功"));
              qDebug("entern readif");
         }
         else
         {
-            MotorTipFlag = true;
+            MotorConfigTipFlag = true;
             CurrentReg.Current_MotorTips = WriteFailTip;
-            CurrentReg.Current_MotorTipResult.append(SystemTipsInformation(CurrentReg.Current_MotorTips));
+            CurrentReg.Current_MotorConfigResult = SystemTipsInformation(CurrentReg.Current_MotorTips);
 
 //           QMessageBox::critical(0,QObject::trUtf8("写入配置"),
 //                                   trUtf8("配置失败"));
@@ -1405,9 +1448,11 @@ int SystemSetting::deal_write_config_event()
          motor[3].Wrte_Multi_Finsh_state = NO_SEND;
          motor[3].SDO_status = SDO_free;
          Write_Button_state = 0;
-         MotorTipFlag = true;
+          write_step = 0;
+         MotorConfigTipFlag = true;
          CurrentReg.Current_MotorTips = SendFailTip;
-         CurrentReg.Current_MotorTipResult.append(SystemTipsInformation(CurrentReg.Current_MotorTips));
+         CurrentReg.Current_MotorConfigResult = SystemTipsInformation(CurrentReg.Current_MotorTips);
+         qDebug("SendFailTip");
 //        QMessageBox::critical(0,QObject::trUtf8("写入配置信息"),
 //                              trUtf8("发送失败"));
 
@@ -1438,9 +1483,11 @@ int SystemSetting::deal_read_config_event()
             ValveReg.UnloadTime   = motor[3].RX_DATA[7];
             ValveReg.KeepTime     = motor[3].RX_DATA[8];
             ReadConfig();
-            MotorTipFlag = true;
+            MotorConfigTipFlag = true;
             CurrentReg.Current_MotorTips = ReadSuccessTip;
-            CurrentReg.Current_MotorTipResult.append(SystemTipsInformation(CurrentReg.Current_MotorTips));
+            CurrentReg.Current_MotorConfigResult = SystemTipsInformation(CurrentReg.Current_MotorTips);
+            qDebug("ReadSuccessTip");
+
 //            QMessageBox::information(0,QObject::trUtf8("读取配置信息"),
 //                                  trUtf8("读取成功"));
             Read_Button_state = 0;
@@ -1450,11 +1497,12 @@ int SystemSetting::deal_read_config_event()
        }
         else if (motor[3].Read_Multi_Finsh_state == FAIL_SEND)
         {
-           MotorTipFlag = true;
+           MotorConfigTipFlag = true;
            CurrentReg.Current_MotorTips = ReadFailTip;
-           CurrentReg.Current_MotorTipResult.append(SystemTipsInformation(CurrentReg.Current_MotorTips));
+           CurrentReg.Current_MotorConfigResult = SystemTipsInformation(CurrentReg.Current_MotorTips);
 //           QMessageBox::critical(0,QObject::trUtf8("读取配置信息"),
 //                                 trUtf8("读取失败"));
+           qDebug("ReadFailTip");
            Read_Button_state = 0;
            motor[3].SDO_status = SDO_free;
            motor[3].Read_Multi_Finsh_state = NO_SEND;
@@ -1558,17 +1606,17 @@ void SystemSetting::on_pushButton_StopTest_released()
     Write_MOTOR_Multi_Data(&ConfigTest,MT_ID);
 }
 
-void SystemSetting::on_lineEdit_Secret_editingFinished()
-{
-    if(ui->lineEdit_Secret->text() == "5678")
-    {
-       ui->pushButton_BackTest->setEnabled(true);
-       ui->pushButton_FastTest->setEnabled(true);
-       ui->pushButton_KeepTest->setEnabled(true);
-       ui->pushButton_SlowTest->setEnabled(true);
-       ui->pushButton_StopTest->setEnabled(true);
-       ui->pushButton_UnloadTest->setEnabled(true);
-       ui->toolButton_confirm->setEnabled(true);
-    }
+//void SystemSetting::on_lineEdit_Secret_editingFinished()
+//{
+//    if(ui->lineEdit_Secret->text() == "5678")
+//    {
+//       ui->pushButton_BackTest->setEnabled(true);
+//       ui->pushButton_FastTest->setEnabled(true);
+//       ui->pushButton_KeepTest->setEnabled(true);
+//       ui->pushButton_SlowTest->setEnabled(true);
+//       ui->pushButton_StopTest->setEnabled(true);
+//       ui->pushButton_UnloadTest->setEnabled(true);
+//       ui->toolButton_confirm->setEnabled(true);
+//    }
 
-}
+//}

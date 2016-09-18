@@ -362,33 +362,33 @@ void HomingMode::on_toolButton_RunHoming_clicked()
     }else if(XaxisParameter.ReferencePosMode == 1)
     {
         HomingModeDate[0].data[1].Data = 0x01;// 这里写回零模式
-        HomingModeDate[0].data[2].Data  = XaxisParameter.ReferencePos;
+        HomingModeDate[0].data[2].Data = XaxisParameter.ReferencePos;
+        HomingModeDate[0].data[3].Data = XaxisParameter.ManualSpeed;
         Write_MOTOR_Multi_Data(&HomingModeDate[X1_ID -1 ],X1_ID);
 
     }else if(XaxisParameter.ReferencePosMode == 2)
     {
         HomingModeDate[0].data[1].Data = 0x02;// 这里写回零模式
         HomingModeDate[0].data[2].Data  = XaxisParameter.ReferencePos;
+        HomingModeDate[0].data[3].Data = XaxisParameter.ManualSpeed;
         Write_MOTOR_Multi_Data(&HomingModeDate[X1_ID -1 ],X1_ID);
 
     }
-
     if(YaxisParameter.ReferencePosMode == 0)
     {
     } else if(YaxisParameter.ReferencePosMode == 1)
      {
          HomingModeDate[1].data[1].Data = 0x01;// 这里写回零模式
          HomingModeDate[1].data[2].Data  = YaxisParameter.ReferencePos;
+         HomingModeDate[1].data[3].Data = YaxisParameter.ManualSpeed;
          Write_MOTOR_Multi_Data(&HomingModeDate[Y1_ID -1],Y1_ID);
      }else if(YaxisParameter.ReferencePosMode == 2)
      {
          HomingModeDate[1].data[1].Data = 0x02;// 这里写回零模式
          HomingModeDate[1].data[2].Data  = YaxisParameter.ReferencePos;
+               HomingModeDate[1].data[3].Data = YaxisParameter.ManualSpeed;
          Write_MOTOR_Multi_Data(&HomingModeDate[Y1_ID -1],Y1_ID);
      }
-
-
-
 
      if(RaxisParameter.ENABLE_AXIS == 1)
      {
@@ -400,12 +400,14 @@ void HomingMode::on_toolButton_RunHoming_clicked()
          {
              HomingModeDate[2].data[1].Data = 0x01;// 这里写回零模式
              HomingModeDate[2].data[2].Data  = RaxisParameter.ReferencePos;
+            HomingModeDate[2].data[3].Data = RaxisParameter.ManualSpeed;
              Write_MOTOR_Multi_Data(&HomingModeDate[R1_ID-1],R1_ID);
 
          }else if(RaxisParameter.ReferencePosMode == 2)
          {
              HomingModeDate[2].data[1].Data = 0x02;// 这里写回零模式
              HomingModeDate[2].data[2].Data  = RaxisParameter.ReferencePos;
+               HomingModeDate[2].data[3].Data = YaxisParameter.ManualSpeed;
              Write_MOTOR_Multi_Data(&HomingModeDate[R1_ID-1],R1_ID);
          }
      }

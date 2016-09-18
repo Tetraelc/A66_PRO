@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="cursor">
-   <cursorShape>ArrowCursor</cursorShape>
+   <cursorShape>BlankCursor</cursorShape>
   </property>
   <property name="windowTitle">
    <string>Form</string>
@@ -25,8 +25,24 @@
      <height>80</height>
     </rect>
    </property>
+   <property name="cursor">
+    <cursorShape>BlankCursor</cursorShape>
+   </property>
    <property name="text">
     <string>MT</string>
+   </property>
+   <property name="icon">
+    <iconset resource="A66-appsrc.qrc">
+     <normaloff>:/ICO/MTnew.png</normaloff>:/ICO/MTnew.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>48</width>
+     <height>48</height>
+    </size>
+   </property>
+   <property name="toolButtonStyle">
+    <enum>Qt::ToolButtonTextUnderIcon</enum>
    </property>
   </widget>
   <widget class="QToolButton" name="pushButton_B6_7">
@@ -38,13 +54,20 @@
      <height>80</height>
     </rect>
    </property>
+   <property name="cursor">
+    <cursorShape>BlankCursor</cursorShape>
+   </property>
    <property name="text">
     <string>状态</string>
    </property>
+   <property name="icon">
+    <iconset resource="A66-appsrc.qrc">
+     <normaloff>:/ICO/state11.png</normaloff>:/ICO/state11.png</iconset>
+   </property>
    <property name="iconSize">
     <size>
-     <width>36</width>
-     <height>36</height>
+     <width>48</width>
+     <height>48</height>
     </size>
    </property>
    <property name="toolButtonStyle">
@@ -59,6 +82,9 @@
      <width>80</width>
      <height>80</height>
     </rect>
+   </property>
+   <property name="cursor">
+    <cursorShape>BlankCursor</cursorShape>
    </property>
    <property name="text">
     <string>对数</string>
@@ -86,8 +112,15 @@
      <height>80</height>
     </rect>
    </property>
+   <property name="cursor">
+    <cursorShape>BlankCursor</cursorShape>
+   </property>
    <property name="text">
     <string>基准点</string>
+   </property>
+   <property name="icon">
+    <iconset resource="A66-appsrc.qrc">
+     <normaloff>:/ICO/jizhundian11.png</normaloff>:/ICO/jizhundian11.png</iconset>
    </property>
    <property name="iconSize">
     <size>
@@ -108,6 +141,9 @@
      <height>80</height>
     </rect>
    </property>
+   <property name="cursor">
+    <cursorShape>BlankCursor</cursorShape>
+   </property>
    <property name="text">
     <string/>
    </property>
@@ -120,6 +156,9 @@
      <width>821</width>
      <height>361</height>
     </rect>
+   </property>
+   <property name="cursor">
+    <cursorShape>BlankCursor</cursorShape>
    </property>
    <property name="frameShape">
     <enum>QFrame::StyledPanel</enum>
@@ -135,6 +174,9 @@
       <width>91</width>
       <height>61</height>
      </rect>
+    </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
     </property>
     <property name="text">
      <string/>
@@ -158,6 +200,9 @@
       <width>91</width>
       <height>61</height>
      </rect>
+    </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
     </property>
     <property name="text">
      <string/>
@@ -189,6 +234,9 @@
       <bold>true</bold>
      </font>
     </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
+    </property>
     <property name="text">
      <string> R</string>
     </property>
@@ -217,6 +265,9 @@
       <width>91</width>
       <height>61</height>
      </rect>
+    </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
     </property>
     <property name="text">
      <string/>
@@ -247,6 +298,9 @@
       <weight>75</weight>
       <bold>true</bold>
      </font>
+    </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
     </property>
     <property name="text">
      <string> X</string>
@@ -284,6 +338,9 @@
       <bold>true</bold>
      </font>
     </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
+    </property>
     <property name="text">
      <string> Y</string>
     </property>
@@ -313,6 +370,9 @@
       <height>61</height>
      </rect>
     </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
+    </property>
     <property name="text">
      <string/>
     </property>
@@ -335,6 +395,9 @@
       <width>91</width>
       <height>61</height>
      </rect>
+    </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
     </property>
     <property name="text">
      <string/>
@@ -364,6 +427,9 @@
       <pointsize>18</pointsize>
      </font>
     </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
+    </property>
     <property name="text">
      <string/>
     </property>
@@ -385,6 +451,9 @@
       <width>91</width>
       <height>61</height>
      </rect>
+    </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
     </property>
     <property name="text">
      <string/>
@@ -409,6 +478,9 @@
       <height>31</height>
      </rect>
     </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
+    </property>
     <property name="text">
      <string/>
     </property>
@@ -421,6 +493,9 @@
       <width>51</width>
       <height>30</height>
      </rect>
+    </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
     </property>
     <property name="text">
      <string/>
@@ -439,6 +514,9 @@
      <font>
       <pointsize>18</pointsize>
      </font>
+    </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
     </property>
     <property name="text">
      <string/>
@@ -467,6 +545,9 @@
       <pointsize>18</pointsize>
      </font>
     </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
+    </property>
     <property name="text">
      <string/>
     </property>
@@ -490,6 +571,9 @@
      <height>121</height>
     </rect>
    </property>
+   <property name="cursor">
+    <cursorShape>BlankCursor</cursorShape>
+   </property>
    <property name="frameShape">
     <enum>QFrame::StyledPanel</enum>
    </property>
@@ -510,6 +594,9 @@
       <pointsize>16</pointsize>
      </font>
     </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
+    </property>
     <property name="text">
      <string>液压状态：</string>
     </property>
@@ -527,6 +614,9 @@
      <font>
       <pointsize>16</pointsize>
      </font>
+    </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
     </property>
     <property name="text">
      <string>输入状态：</string>
@@ -546,6 +636,9 @@
       <pointsize>16</pointsize>
      </font>
     </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
+    </property>
     <property name="text">
      <string>输出状态：</string>
     </property>
@@ -558,6 +651,9 @@
       <width>21</width>
       <height>21</height>
      </rect>
+    </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
     </property>
     <property name="text">
      <string/>
@@ -578,6 +674,9 @@
       <height>21</height>
      </rect>
     </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
+    </property>
     <property name="text">
      <string/>
     </property>
@@ -596,6 +695,9 @@
       <width>21</width>
       <height>21</height>
      </rect>
+    </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
     </property>
     <property name="text">
      <string/>
@@ -616,6 +718,9 @@
       <height>21</height>
      </rect>
     </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
+    </property>
     <property name="text">
      <string/>
     </property>
@@ -634,6 +739,9 @@
       <width>21</width>
       <height>21</height>
      </rect>
+    </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
     </property>
     <property name="text">
      <string/>
@@ -654,6 +762,9 @@
       <height>21</height>
      </rect>
     </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
+    </property>
     <property name="text">
      <string/>
     </property>
@@ -672,6 +783,9 @@
       <width>21</width>
       <height>21</height>
      </rect>
+    </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
     </property>
     <property name="text">
      <string/>
@@ -692,6 +806,9 @@
       <height>21</height>
      </rect>
     </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
+    </property>
     <property name="text">
      <string/>
     </property>
@@ -710,6 +827,9 @@
       <width>21</width>
       <height>21</height>
      </rect>
+    </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
     </property>
     <property name="text">
      <string/>
@@ -730,6 +850,9 @@
       <height>21</height>
      </rect>
     </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
+    </property>
     <property name="text">
      <string/>
     </property>
@@ -748,6 +871,9 @@
       <width>21</width>
       <height>21</height>
      </rect>
+    </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
     </property>
     <property name="text">
      <string/>
@@ -768,6 +894,9 @@
       <height>21</height>
      </rect>
     </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
+    </property>
     <property name="text">
      <string/>
     </property>
@@ -786,6 +915,9 @@
       <width>21</width>
       <height>21</height>
      </rect>
+    </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
     </property>
     <property name="text">
      <string/>
@@ -806,6 +938,9 @@
       <height>21</height>
      </rect>
     </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
+    </property>
     <property name="text">
      <string/>
     </property>
@@ -824,6 +959,9 @@
       <width>21</width>
       <height>21</height>
      </rect>
+    </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
     </property>
     <property name="text">
      <string/>
@@ -844,6 +982,9 @@
       <height>21</height>
      </rect>
     </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
+    </property>
     <property name="text">
      <string/>
     </property>
@@ -862,6 +1003,9 @@
       <width>21</width>
       <height>21</height>
      </rect>
+    </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
     </property>
     <property name="text">
      <string/>
@@ -882,6 +1026,9 @@
       <height>21</height>
      </rect>
     </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
+    </property>
     <property name="text">
      <string/>
     </property>
@@ -900,6 +1047,9 @@
       <width>21</width>
       <height>21</height>
      </rect>
+    </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
     </property>
     <property name="text">
      <string/>
@@ -920,6 +1070,9 @@
       <height>21</height>
      </rect>
     </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
+    </property>
     <property name="text">
      <string/>
     </property>
@@ -938,6 +1091,9 @@
       <width>21</width>
       <height>21</height>
      </rect>
+    </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
     </property>
     <property name="text">
      <string/>
@@ -958,6 +1114,9 @@
       <height>21</height>
      </rect>
     </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
+    </property>
     <property name="text">
      <string/>
     </property>
@@ -976,6 +1135,9 @@
       <width>21</width>
       <height>21</height>
      </rect>
+    </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
     </property>
     <property name="text">
      <string/>
@@ -996,6 +1158,9 @@
       <height>21</height>
      </rect>
     </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
+    </property>
     <property name="text">
      <string/>
     </property>
@@ -1014,6 +1179,9 @@
       <width>21</width>
       <height>21</height>
      </rect>
+    </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
     </property>
     <property name="text">
      <string/>
@@ -1034,6 +1202,9 @@
       <height>21</height>
      </rect>
     </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
+    </property>
     <property name="text">
      <string/>
     </property>
@@ -1052,6 +1223,9 @@
       <width>21</width>
       <height>21</height>
      </rect>
+    </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
     </property>
     <property name="text">
      <string/>
@@ -1072,6 +1246,9 @@
       <height>21</height>
      </rect>
     </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
+    </property>
     <property name="text">
      <string/>
     </property>
@@ -1090,6 +1267,9 @@
       <width>21</width>
       <height>21</height>
      </rect>
+    </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
     </property>
     <property name="text">
      <string/>
@@ -1110,6 +1290,9 @@
       <height>21</height>
      </rect>
     </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
+    </property>
     <property name="text">
      <string/>
     </property>
@@ -1129,6 +1312,9 @@
       <height>21</height>
      </rect>
     </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
+    </property>
     <property name="text">
      <string/>
     </property>
@@ -1147,6 +1333,9 @@
       <width>21</width>
       <height>21</height>
      </rect>
+    </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
     </property>
     <property name="text">
      <string/>
@@ -1171,6 +1360,9 @@
      <font>
       <pointsize>16</pointsize>
      </font>
+    </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
     </property>
     <property name="text">
      <string>停止/快下/慢下/工进/回程</string>

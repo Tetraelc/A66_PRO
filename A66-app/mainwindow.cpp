@@ -79,9 +79,6 @@ void MainWindow::timerEvent(QTimerEvent *t) //定时器事件
         ui->label_Program->setText(CurrentReg.CurrentProgramName);
        // ui->toolButton_ProName->setText(CurrentReg.CurrentProgramName);
         MainWinState();
-
-
-
     }
 }
 
@@ -92,6 +89,14 @@ void MainWindow::MainWinState()
          ui->label_State->setText(CurrentReg.Current_MotorTipResult);
          MotorTipFlag = false;
     }
+    if(MotorConfigTipFlag == true)
+    {
+         ui->label_StateTip->setText(CurrentReg.Current_MotorConfigResult);
+
+  //       CurrentReg.Current_MotorConfigResult.clear();
+         MotorConfigTipFlag = false;
+    }
+
     if(developLengthFlag == true)
     {
         ui->label_State->setText(trUtf8("展开长度 :") + QString::number( CurrentReg.developLength,'.',2));
@@ -514,6 +519,12 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
           }
 
           sys.SystemWriteMT();//写MT参数
+          EditableFalg = false;
+          FactoryAxisFalg = false;
+          CurrentReg.Current_MotorConfigResult.clear();
+         // ui->label_State->clear();
+          ui->label_Text->clear();
+          qDebug()<<"EditableFalg"<<EditableFalg;
 
 
              return false;

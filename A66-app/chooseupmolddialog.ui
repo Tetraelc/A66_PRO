@@ -74,6 +74,9 @@
     </disabled>
    </palette>
   </property>
+  <property name="cursor">
+   <cursorShape>BlankCursor</cursorShape>
+  </property>
   <property name="windowTitle">
    <string>选择上模</string>
   </property>
@@ -128,6 +131,9 @@
      <pointsize>16</pointsize>
     </font>
    </property>
+   <property name="cursor">
+    <cursorShape>BlankCursor</cursorShape>
+   </property>
    <property name="title">
     <string> 选择上模 </string>
    </property>
@@ -152,7 +158,7 @@
      </font>
     </property>
     <property name="cursor" stdset="0">
-     <cursorShape>ArrowCursor</cursorShape>
+     <cursorShape>BlankCursor</cursorShape>
     </property>
     <property name="focusPolicy">
      <enum>Qt::ClickFocus</enum>
@@ -376,7 +382,7 @@
      </font>
     </property>
     <property name="cursor">
-     <cursorShape>ArrowCursor</cursorShape>
+     <cursorShape>BlankCursor</cursorShape>
     </property>
     <property name="focusPolicy">
      <enum>Qt::NoFocus</enum>
@@ -427,7 +433,7 @@
      </font>
     </property>
     <property name="cursor">
-     <cursorShape>ArrowCursor</cursorShape>
+     <cursorShape>BlankCursor</cursorShape>
     </property>
     <property name="focusPolicy">
      <enum>Qt::NoFocus</enum>

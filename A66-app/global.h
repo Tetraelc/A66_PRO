@@ -76,14 +76,19 @@ QString SystemTipsInformation(int TipsID);
 #define ReadFailTip   17
 #define RecSuccessTip   18
 #define RecFailTip   19
+#define MotorErrorTip  20
 
 
+extern bool XFaultFlag;
+extern bool YFaultFlag;
+extern bool RFaultFlag;
 extern bool XStopFalg;
 extern bool YStopFalg;
 extern bool RStopFalg;
 extern bool developLengthFlag ;
 extern bool MotorTipFlag ;
-extern int HomgingModeFlag ;
+extern bool MotorConfigTipFlag;
+extern int HomgingModeFlag;
 extern int fastmode;
 extern int ProgIndex;
 extern int ProgNameNum;
@@ -141,6 +146,7 @@ extern struct _VALUESTATE ValveReg;
 
 struct _CURRENTREG
 {
+  QString CurrentProgramPic;
   QString CurrentProgramName;
   int Current_ProgramLibRow;
   int Current_UpMoldRow;
@@ -152,6 +158,7 @@ struct _CURRENTREG
   int Current_MotorAlarm;
   int Current_MotorTips;
   QString Current_MotorTipResult;
+  QString Current_MotorConfigResult;
 //  int CurrentRnuStateWorkedTotal;
   int Current_WorkedTotal;
   double developLength;
@@ -218,7 +225,8 @@ enum {
     Program_Material = 5,
     Program_UpMold = 6,
     Program_LowerMold = 7,
-    Program_ProcessNum= 8
+    Program_ProcessNum= 8,
+    Program_PicPath= 9
 
 };
 

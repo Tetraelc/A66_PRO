@@ -194,6 +194,7 @@ void Master_post_emcy(CO_Data* d, UNS8 nodeID, UNS16 errCode, UNS8 errReg)
 {
     //MSG_USER(0, "Master received EMCY message. Node: %2.2x  ErrorCode: %4.4x  ErrorRegister: %2.2x\n", nodeID, errCode, errReg);
     MSG_USER(0, "Master received EMCY message. Node: %2.2x  ErrorCode: %4.4x  ErrorRegister: %2.2x\n", nodeID);
+    printf("emcy%d",nodeID);
 }
 /**
   * @brief  Master_post_TPDO.

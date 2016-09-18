@@ -5,9 +5,13 @@
 
 int HomgingModeFlag = 0;
 
+bool XFaultFlag = false;
+bool YFaultFlag = false;
+bool RFaultFlag = false;
 bool XStopFalg = false;
 bool YStopFalg = false;
 bool RStopFalg = false;
+bool MotorConfigTipFlag = false;
 bool developLengthFlag = false;
 bool MotorTipFlag = false;
 bool aralmOrTipFalg = false;
