@@ -5,6 +5,7 @@
 #include <QMessageBox>
 #include <QString>
 #include "runstate.h"
+#include "systemwarn.h"
 
 
 QString m_strCtrlName;
@@ -783,13 +784,24 @@ void Moulds::on_pushButton_Left_2_clicked()
 
 void Moulds::on_pushButton_Left_3_clicked()
 {
+
+    CurrentReg.Current_MotorAlarm = MoldTip;
+    aralmOrTipFalg = true;
+    SystemWarn MoldDelWarn;
+    MoldDelWarn.setWindowFlags(Qt::FramelessWindowHint);
+    MoldDelWarn.exec();
+
     ui->pushButton_Left_3->setEnabled(false);
-    if(ui->tableWidget_LowerMoulds->rowCount()>1)
+    if(ui->tableWidget_LowerMoulds->rowCount()>1 && MoldDelFlag == true)
     {
         DeleteLowerMold();
         Display_LowerMoldItem();
     }
     ui->pushButton_Left_3->setEnabled(true);
+    StepDelFlag = false;
+    MaterialDelFlag = false;
+    MoldDelFlag = false;
+    ProgramDelFlag = false;
 }
 
 void Moulds::on_pushButton_Left_12_clicked()
@@ -817,7 +829,7 @@ void Moulds::on_pushButton_Left_9_clicked()
 }
 
 void Moulds::on_pushButton_Left_8_clicked()
-{
+{   
     ui->pushButton_Left_8->setEnabled(false);
     NewUpMold();
     Display_UpMoldItem();
@@ -827,13 +839,22 @@ void Moulds::on_pushButton_Left_8_clicked()
 
 void Moulds::on_pushButton_Left_10_clicked()
 {
+    CurrentReg.Current_MotorAlarm = MoldTip;
+    aralmOrTipFalg = true;
+    SystemWarn MoldDelWarn;
+    MoldDelWarn.setWindowFlags(Qt::FramelessWindowHint);
+    MoldDelWarn.exec();
     ui->pushButton_Left_10->setEnabled(false);
-    if(ui->tableWidget_UpMoulds->rowCount()>1)
+    if(ui->tableWidget_UpMoulds->rowCount()>1 && MoldDelFlag == true)
     {
         DeleteUpMold();
         Display_UpMoldItem();
     }
      ui->pushButton_Left_10->setEnabled(true);
+     StepDelFlag = false;
+     MaterialDelFlag = false;
+     MoldDelFlag = false;
+     ProgramDelFlag = false;
 }
 
 void Moulds::Display_MaterialItem()
@@ -1005,11 +1026,21 @@ void Moulds::on_pushButton_M_New_clicked()
 
 void Moulds::on_pushButton_M_Del_clicked()
 {
-    if(ui->tableWidget_Material->rowCount()>1)
+    CurrentReg.Current_MotorAlarm = MaterialTip;
+    aralmOrTipFalg = true;
+    SystemWarn MaterialDelWarn;
+    MaterialDelWarn.setWindowFlags(Qt::FramelessWindowHint);
+    MaterialDelWarn.exec();
+
+    if(ui->tableWidget_Material->rowCount()>1 && MaterialDelFlag == true )
     {
         DeleteMaterial();
         Display_MaterialItem();
     }
+    StepDelFlag = false;
+    MaterialDelFlag = false;
+    MoldDelFlag = false;
+    ProgramDelFlag = false;
 }
 
 void Moulds::ReflashMaterialLinedit()

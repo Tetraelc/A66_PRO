@@ -22,6 +22,8 @@ public:
 private slots:
     void on_toolButton_Add_clicked();
 
+    void on_toolButton_Quit_clicked();
+
 private:
     Ui::ChoosePicture *ui;
     QFileSystemModel *model;

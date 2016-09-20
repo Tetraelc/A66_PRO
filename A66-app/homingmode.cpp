@@ -91,17 +91,21 @@ void HomingMode::CheckRaxisEnable()
     {
         ui->lineEdit_RHoming->setVisible(true); //R轴可视
         ui->frame_4->setVisible(true);
+        ui->label_RHoming->setVisible(true);
         ui->toolButton_R->setVisible(true);
 
         ui->toolButton_X->move(152,54);
+        ui->label_XHomging->move(210,56);
         ui->lineEdit_XHoming->move(267,44);
         ui->frame_2->move(540,50);
 
         ui->toolButton_Y->move(150,163);
+        ui->label_YHoming->move(210,165);
         ui->lineEdit_YHoming->move(267,152);
         ui->frame_3->move(540,158);
 
         ui->toolButton_R->move(150,270);
+        ui->label_RHoming->move(210,270);
         ui->lineEdit_RHoming->move(267,260);
         ui->frame_4->move(540,266);
 
@@ -110,19 +114,21 @@ void HomingMode::CheckRaxisEnable()
     {
         ui->lineEdit_RHoming->setVisible(false);
         ui->frame_4->setVisible(false);
+        ui->label_RHoming->setVisible(false);
         ui->toolButton_R->setVisible(false);
 
         ui->toolButton_X->move(150,96);
+        ui->label_XHomging->move(210,98);
         ui->lineEdit_XHoming->move(267,86);
         ui->frame_2->move(540,92);
 
         ui->toolButton_Y->move(150,218);
+        ui->label_YHoming->move(210,220);
         ui->lineEdit_YHoming->move(267,207);
         ui->frame_3->move(540,213);
     }
 
 }
-
 
 //[1]
 void HomingMode::CheckMotorState()
@@ -158,7 +164,7 @@ void HomingMode::CheckMotorState()
     }
     else
     {
-        ui->label_X->setText(trUtf8("手动寻参"));
+        ui->label_X->setText(trUtf8("归零完成"));
     }
 
     if(YaxisParameter.ReferencePosMode == 1 ||  YaxisParameter.ReferencePosMode == 2 )
@@ -193,14 +199,12 @@ void HomingMode::CheckMotorState()
     }
     else
     {
-        ui->label_Y->setText(trUtf8("手动寻参"));
+        ui->label_Y->setText(trUtf8("归零完成"));
     }
 
-
-    if(RaxisParameter.ReferencePosMode == 1 ||  RaxisParameter.ReferencePosMode == 2 )
+    if(RaxisParameter.ENABLE_AXIS == 1)
     {
-
-        if(RaxisParameter.ENABLE_AXIS == 1)
+        if(RaxisParameter.ReferencePosMode == 1 ||  RaxisParameter.ReferencePosMode == 2 )
         {
             if(Get_HeartbetError(R1_ID) == 0x01 || motor[R1_ID-1].initStatus == 0)
             {
@@ -231,7 +235,7 @@ void HomingMode::CheckMotorState()
     }
     else
     {
-        ui->label_R->setText(trUtf8("手动寻参"));
+        ui->label_R->setText(trUtf8("归零完成"));
     }
 
 
@@ -428,6 +432,7 @@ void HomingMode::on_toolButton_QuitRunning_clicked()
         Stop_MOTOR(R1_ID);
         Write_MOTOR_One_Data(R1_ID,0x6060,0x00,0x01,0x01);
     }
+
     killTimer(Homging_Scan);
 
 }

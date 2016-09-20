@@ -2,6 +2,7 @@
 #include "ui_choosepicture.h"
 
 #include "global.h"
+#include "programdb.h"
 
 ChoosePicture::ChoosePicture(QWidget *parent) :
     QDialog(parent),
@@ -67,26 +68,39 @@ void ChoosePicture::on_toolButton_Add_clicked()
 
     qDebug()<<"Pic_Path"<< Pic_Path;
     #if ARMFlag
-     QString str_tmp = "cp " +  Pic_Path +  " /opt/tetra/Picture" ;
+     QString str_tmp = "wr cp " +  Pic_Path +  " /opt/tetra/A66-app/PIC" ;
     #else
      QString str_tmp = "cp " +  Pic_Path +  " /home/tetra/gitA66/A66-app/Picture" ;
     #endif
 
     CurrentReg.CurrentProgramPic = model->data(ui->treeView->currentIndex(), Qt::DisplayRole).toString();
+    qDebug()<<"CurrentReg.CurrentProgramPic-------------"<<CurrentReg.CurrentProgramPic<<CurrentReg.Current_ProgramLibRow +1;
     system(str_tmp.toAscii());
+//    Programdb pro;
+//    pro.Update_ProgramLibItem(CurrentReg.Current_ProgramLibRow +1,Program_PicPath,CurrentReg.CurrentProgramPic);
+
+    QSqlTableModel model;
+    model.setTable("ProgramLib");
+    model.setFilter("ID = " + QString::number(CurrentReg.Current_ProgramLibRow +1,10));
+    model.select();
+    if(model.rowCount() == 1)
+    {
+        QSqlRecord record = model.record(0);
+        record.setValue("ProgramPic",CurrentReg.CurrentProgramPic);
+        model.setRecord(0,record);
+        model.submitAll();
+   }
+
+
+
+
 
 
 
 }
 
 
+void ChoosePicture::on_toolButton_Quit_clicked()
+{
 
-
-
-
-
-
-
-
-
-
+}

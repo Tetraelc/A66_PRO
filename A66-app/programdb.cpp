@@ -20,6 +20,7 @@
 #include "runstate.h"
 #include "mainwindow.h"
 #include "choosepicture.h"
+#include "systemwarn.h"
 
 
 int MaterialIndexFlag =0;
@@ -46,6 +47,7 @@ Programdb::Programdb(QWidget *parent) :
      QFont font;
      font.setPointSize(18);
      ui->comboBox_P_material->setFont(font);
+
 
 }
 
@@ -84,6 +86,7 @@ void Programdb::initProgram(void)
 
     Display_ProgramItem();
     ui->tableWidget_Programdb->selectRow(CurrentReg.Current_ProgramLibRow);
+    Display_PicItem(1);
     CurrentReg.CurrentProgramName = ui->tableWidget_Programdb->item(ui->tableWidget_Programdb->currentRow(),Program_Name)->text();
 //初始化lineEdit
 
@@ -152,6 +155,32 @@ void Programdb::ReflashProgramWrokedNum(int Num)
 }
 
 
+
+void Programdb::Display_PicItem(int Id)
+{
+
+    QString Str_Id=QString::number(Id,10);
+
+    QSqlQuery query;
+    query.exec("SELECT  ProgramPic  FROM  ProgramLib  WHERE ID = "+Str_Id);
+    while(query.next())
+    {
+        CurrentReg.CurrentProgramPic=query.value(0).toString();
+        break;
+    }
+    QPixmap pix;
+    #if ARMFlag
+        QString str_temp ="/opt/tetra/A66-app/PIC/" + CurrentReg.CurrentProgramPic;
+        pix.load(str_temp);
+    #else
+        QString str_temp ="/home/tetra/gitA66/A66-app/PIC/" + CurrentReg.CurrentProgramPic;
+        pix.load(str_temp);
+    #endif
+        ui->label_pic->setPixmap(pix);
+
+
+}
+
 void Programdb::Display_ProgramItem()
 {
     bool ok;
@@ -214,7 +243,7 @@ void Programdb::Display_ProgramItem()
                 modelStep_temp.setRecord(0,record);
                 modelStep_temp.submitAll();
             }
-            qDebug()<<"StepNum_str"<<StepNum_str;
+
     }
 
   //
@@ -290,7 +319,7 @@ bool  Programdb::NewProgramLib(QString str)
    model.setData(model.index(row,Program_UpMold),ui->tableWidget_Programdb->item(ui->tableWidget_Programdb->currentRow(),Program_UpMold)->text());
    model.setData(model.index(row,Program_LowerMold),ui->tableWidget_Programdb->item(ui->tableWidget_Programdb->currentRow(),Program_LowerMold)->text());
    model.setData(model.index(row,Program_ProcessNum),"0");
-  model.setData(model.index(row,Program_PicPath),"P01.jpg");
+   model.setData(model.index(row,Program_PicPath),"P01.jpg");
    model.submitAll();
    //db.close();//释放数据库
 
@@ -339,7 +368,7 @@ void Programdb::Update_ProgramLibItem(int Id,int Col,QString Value)
     QString Str_Id=QString::number(Id,10);
 
 //    if(!db.open())
-//    {
+//    {Delete
 //        QMessageBox::critical(0,QObject::tr("Error"),
 //                              db.lastError().text());//打开数据库连接
 //    }
@@ -369,6 +398,8 @@ void Programdb::Update_ProgramLibItem(int Id,int Col,QString Value)
         case Program_UpMold:record.setValue("UpMold",Value);
             break;
         case Program_ProcessNum:record.setValue("WorkedTotal",Value);
+            break;
+        case Program_PicPath:record.setValue("ProgramPic",Value);
             break;
 
         default :break;
@@ -412,18 +443,21 @@ void Programdb::ReflashProLinedit()
             qDebug()<<"record.value(BoardWide).toString()"<<record.value("BoardWide").toString();
     }
     CurrentReg.Current_ProgramLibRow = ui->tableWidget_Programdb->currentRow();
-    QPixmap pix;
-#if ARMFlag
-    QString str_temp ="/opt/tetra/A66-app/PIC/" + CurrentReg.CurrentProgramPic;
-    pix.load(str_temp);
-#else
-    QString str_temp ="/home/tetra/gitA66/A66-app/PIC/" + CurrentReg.CurrentProgramPic;
-    pix.load(str_temp);
-#endif
-    qDebug()<<"------"<<CurrentReg.CurrentProgramPic;
 
 
-    ui->label_pic->setPixmap(pix);
+    Display_PicItem(CurrentReg.Current_ProgramLibRow+1);
+//    QPixmap pix;
+//#if ARMFlag
+//    QString str_temp ="/opt/tetra/A66-app/PIC/" + CurrentReg.CurrentProgramPic;
+//    pix.load(str_temp);
+//#else
+//    QString str_temp ="/home/tetra/gitA66/A66-app/PIC/" + CurrentReg.CurrentProgramPic;
+//    pix.load(str_temp);
+//#endif
+//    qDebug()<<"------"<<CurrentReg.CurrentProgramPic;
+
+
+//    ui->label_pic->setPixmap(pix);
     //db.close();//释放数据库
 
     emit ReflashProgram();
@@ -578,7 +612,13 @@ void Programdb::on_pushButton_Left_2_clicked()
 
 void Programdb::on_pushButton_Left_3_clicked()
 {
-    if(ui->tableWidget_Programdb->rowCount()>1)
+
+    CurrentReg.Current_MotorAlarm = ProgramDelTip;
+    aralmOrTipFalg = true;
+    SystemWarn ProgramDelWarn;
+    ProgramDelWarn.setWindowFlags(Qt::FramelessWindowHint);
+    ProgramDelWarn.exec();
+    if(ui->tableWidget_Programdb->rowCount()>1 && ProgramDelFlag == true)
     {
         disconnect(ui->comboBox_P_material,SIGNAL(currentIndexChanged(const QString &)),this,SLOT(UpdtaeMaterialDat()));
         DeleteProgramLib();       
@@ -587,6 +627,11 @@ void Programdb::on_pushButton_Left_3_clicked()
         CurrentReg.CurrentProgramName = ui->tableWidget_Programdb->item(ui->tableWidget_Programdb->currentRow(),Program_Name)->text();
         qDebug()<<"CurrentReg.CurrentProgramName1"<<CurrentReg.CurrentProgramName;
     }
+    StepDelFlag = false;
+    MaterialDelFlag = false;
+    MoldDelFlag = false;
+    ProgramDelFlag = false;
+
 }
 
 void Programdb::on_toolButton_UpdatePIC_clicked()

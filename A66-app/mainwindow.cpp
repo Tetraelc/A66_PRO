@@ -7,24 +7,28 @@
 #include "systemwarn.h"
 #include "deleoplength.h"
 #include "homingmode.h"
+#include "wrokedtotal.h"
 
 
 
 extern "C"{
-     #include "canfestival.h"
-     #include "canfestivalAPI.h"
-     #include "ObjDict.h"
+    #include "canfestival.h"
+    #include "canfestivalAPI.h"
+    #include "ObjDict.h"
+    #include "CanopenDictConfig.h"
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    initWindow();
-
-
-    ProgramName_Scan = startTimer(800);
     CurrentReg.Current_ProgramLibRow =0;
     CurrentReg.Current_WorkedTotal = 0;
+    initWindow();
+    SystemSetting sys;
+    sys.ReadForSystemDat();
+    ProgramName_Scan = startTimer(800);
+
 
 
     //ui->toolButton_T1->setCheckable(false);
@@ -130,10 +134,10 @@ void MainWindow::initWindow()
     SystemWarn *syswarn =new SystemWarn;
     connect(syswarn, SIGNAL(ReturnProgramdbWin()), this, SLOT(ReturnProgramdb()));
 
+
     sys->installEventFilter(this);
 //    HomingMode *homing =new HomingMode;
 //    connect(this, SIGNAL(openHomingModeWidget()), homing, SLOT(openHomingModeWin()));
-
 
 //    pg->setWindowFlags(Qt::FramelessWindowHint);
 //    pg->move(0,WIDGET_Y);
@@ -403,52 +407,104 @@ void MainWindow::on_toolButton_B5_clicked()
 }
 
 
+
+
 bool MainWindow::on_toolButton_Start_clicked()
 {
-    if(!(A20_IN_Status & UpperPoint))
+    if(RaxisParameter.ENABLE_AXIS == 1)
     {
-        CurrentReg.Current_MotorAlarm = UpperPointAlarm;
-        aralmOrTipFalg = true;
+        if((Get_HeartbetError(0x01) == 0x01) ||( Get_HeartbetError(0x02) == 0x01) || (Get_HeartbetError(0x03) == 0x01)  ||  (Get_HeartbetError(0x04) == 0x01) )
+        {
+            CurrentReg.Current_MotorAlarm = MotorOffline;
+            aralmOrTipFalg = true;
+            SystemWarn warn;
+            warn.setWindowFlags(Qt::FramelessWindowHint);
+            warn.exec();
+            MotorOfflineFlag = false;
+        }
 
-        Write_MOTOR_One_Data(0x04,0x7001,0x01,0x01,ENTER_RETURN);
-        SystemWarn warn;
-        warn.setWindowFlags(Qt::FramelessWindowHint);
-        warn.exec();
+    }
+    else
+    {
+        if((Get_HeartbetError(0x01) == 0x01) ||( Get_HeartbetError(0x02) == 0x01) ||  (Get_HeartbetError(0x04) == 0x01) )
+        {
+            CurrentReg.Current_MotorAlarm = MotorOffline;
+            aralmOrTipFalg = true;
+            SystemWarn warn;
+            warn.setWindowFlags(Qt::FramelessWindowHint);
+            warn.exec();
+            MotorOfflineFlag = false;
+        }
 
+    }
+
+    if(MotorOfflineFlag == true)
+    {
         if(!(A20_IN_Status & UpperPoint))
         {
-             //emit openProgramwindow();
-            if(ui->toolButton_B0->isEnabled() == true)
+            CurrentReg.Current_MotorAlarm = UpperPointAlarm;
+            aralmOrTipFalg = true;
+
+            Write_MOTOR_One_Data(0x04,0x7001,0x01,0x01,ENTER_RETURN);
+            SystemWarn warn;
+            warn.setWindowFlags(Qt::FramelessWindowHint);
+            warn.exec();
+
+            if(!(A20_IN_Status & UpperPoint))
             {
-                emit openProgramWidget();
-                ui->label_Text->setText(trUtf8("程序库"));
+                 //emit openProgramwindow();
+                if(ui->toolButton_B0->isEnabled() == true)
+                {
+                    emit openProgramWidget();
+                    ui->label_Text->setText(trUtf8("程序库"));
+                    QPixmap pix;
+                    pix.load("/opt/tetra/A66-app/ICO/P1-PROGmini.png");
+                    ui->label_Picture->setPixmap(pix);
+        //            ui->toolButton_T1->setText(trUtf8(" 程序库"));
+        //            ui->toolButton_T1->setIcon(QIcon("/opt/tetra/A66-app//ICO/P1-PROG.png"));
+                    ui->toolButton_B0->setEnabled(false);
+                    ui->toolButton_B1->setEnabled(true);
+                    ui->toolButton_B2->setEnabled(true);
+                    ui->toolButton_B3->setEnabled(true);
+                    ui->toolButton_B4->setEnabled(true);
+                    ui->toolButton_B5->setEnabled(true);
+                    ui->toolButton_Start->setEnabled(true);
+                    ui->toolButton->setEnabled(false);
+                    ui->toolButton_4->setEnabled(false);
+                }
+
+
+            }
+            else
+            {
                 QPixmap pix;
-                pix.load("/opt/tetra/A66-app/ICO/P1-PROGmini.png");
+                pix.load("/opt/tetra/A66-app/ICO/P1-STARTmini.png");
                 ui->label_Picture->setPixmap(pix);
-    //            ui->toolButton_T1->setText(trUtf8(" 程序库"));
-    //            ui->toolButton_T1->setIcon(QIcon("/opt/tetra/A66-app//ICO/P1-PROG.png"));
+                ui->label_Text->setText(trUtf8("运行"));
+                emit openRunStateWidget();
+
+    //            ui->toolButton_T1->setText(trUtf8(" 运行"));
+    //            ui->toolButton_T1->setIcon(QIcon("/opt/tetra/A66-app/ICO/P1-RUN.png"));
                 ui->toolButton_B0->setEnabled(false);
-                ui->toolButton_B1->setEnabled(true);
-                ui->toolButton_B2->setEnabled(true);
-                ui->toolButton_B3->setEnabled(true);
-                ui->toolButton_B4->setEnabled(true);
-                ui->toolButton_B5->setEnabled(true);
-                ui->toolButton_Start->setEnabled(true);
+                ui->toolButton_B1->setEnabled(false);
+                ui->toolButton_B2->setEnabled(false);
+                ui->toolButton_B3->setEnabled(false);
+                ui->toolButton_B4->setEnabled(false);
+                ui->toolButton_B5->setEnabled(false);
+                ui->toolButton_Start->setEnabled(false);
                 ui->toolButton->setEnabled(false);
                 ui->toolButton_4->setEnabled(false);
             }
-
-
         }
         else
         {
-            emit openRunStateWidget();
             ui->label_Text->setText(trUtf8("运行"));
             QPixmap pix;
             pix.load("/opt/tetra/A66-app/ICO/P1-STARTmini.png");
             ui->label_Picture->setPixmap(pix);
-//            ui->toolButton_T1->setText(trUtf8(" 运行"));
-//            ui->toolButton_T1->setIcon(QIcon("/opt/tetra/A66-app/ICO/P1-RUN.png"));
+            emit openRunStateWidget();
+    //        ui->toolButton_T1->setText(trUtf8(" 运行"));
+    //        ui->toolButton_T1->setIcon(QIcon("/opt/tetra/A66-app/ICO/P1-RUN.png"));
             ui->toolButton_B0->setEnabled(false);
             ui->toolButton_B1->setEnabled(false);
             ui->toolButton_B2->setEnabled(false);
@@ -458,28 +514,10 @@ bool MainWindow::on_toolButton_Start_clicked()
             ui->toolButton_Start->setEnabled(false);
             ui->toolButton->setEnabled(false);
             ui->toolButton_4->setEnabled(false);
+
         }
     }
-    else
-    {
-        emit openRunStateWidget();
-        ui->label_Text->setText(trUtf8("运行"));
-        QPixmap pix;
-        pix.load("/opt/tetra/A66-app/ICO/P1-STARTmini.png");
-        ui->label_Picture->setPixmap(pix);
-//        ui->toolButton_T1->setText(trUtf8(" 运行"));
-//        ui->toolButton_T1->setIcon(QIcon("/opt/tetra/A66-app/ICO/P1-RUN.png"));
-        ui->toolButton_B0->setEnabled(false);
-        ui->toolButton_B1->setEnabled(false);
-        ui->toolButton_B2->setEnabled(false);
-        ui->toolButton_B3->setEnabled(false);
-        ui->toolButton_B4->setEnabled(false);
-        ui->toolButton_B5->setEnabled(false);
-        ui->toolButton_Start->setEnabled(false);
-        ui->toolButton->setEnabled(false);
-        ui->toolButton_4->setEnabled(false);
-
-    }
+    MotorOfflineFlag =true;
     openBeep();
 }
 
@@ -523,13 +561,13 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
           FactoryAxisFalg = false;
           CurrentReg.Current_MotorConfigResult.clear();
          // ui->label_State->clear();
-          ui->label_Text->clear();
+          ui->label_StateTip->clear();
           qDebug()<<"EditableFalg"<<EditableFalg;
-
-
              return false;
 
       }
+
+
 
  return QWidget::eventFilter(watched,event);     // 最后将事件交给上层对话框
 }

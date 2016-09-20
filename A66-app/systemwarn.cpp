@@ -45,6 +45,16 @@ void SystemWarn::SystemCheckAlarm(int WarnID)
     {
     case 1:ui->label_DisplayAlarm->setText(SystemWarnInformation(UpperPointAlarm));
         break;
+    case 2:ui->label_DisplayAlarm->setText(SystemWarnInformation(MotorOffline));
+        break;
+    case 23:ui->label_DisplayAlarm->setText(SystemTipsInformation(ProgramDelTip));
+        break;
+    case 24:ui->label_DisplayAlarm->setText(SystemTipsInformation(MoldTip));
+        break;
+    case 25:ui->label_DisplayAlarm->setText(SystemTipsInformation(MaterialTip));
+        break;
+    case 26:ui->label_DisplayAlarm->setText(SystemTipsInformation(StepDelTip));
+        break;
 
     default :break;
     }
@@ -70,6 +80,8 @@ void SystemWarn::SystemCheckTip(int TipID)
     case 7:ui->label_DisplayAlarm->setText(SystemTipsInformation(DataResumeTip));
         break;
 
+
+
     default :break;
     }
 }
@@ -78,6 +90,11 @@ void SystemWarn::SystemCheckTip(int TipID)
 void SystemWarn::on_toolButton_Comfirm_clicked()
 {
       this->close();
+     ProgramDelFlag = true;
+     MoldDelFlag = true;
+     MaterialDelFlag = true;
+     StepDelFlag = true;
+
 }
 void SystemWarn::on_toolButton_Quit_clicked()
 {

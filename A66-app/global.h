@@ -53,6 +53,7 @@ QString SystemTipsInformation(int TipsID);
 
 /////报警ID号//////
 #define UpperPointAlarm   1
+#define MotorOffline  2
 
 
 ///////提示ID号///////
@@ -78,7 +79,20 @@ QString SystemTipsInformation(int TipsID);
 #define RecFailTip   19
 #define MotorErrorTip  20
 
+#define MTOpenTip   21
+#define MTCloseTip  22
 
+#define ProgramDelTip   23
+#define StepDelTip  26
+#define MoldTip   24
+#define MaterialTip  25
+
+extern bool MotorOfflineFlag ;
+extern bool StepDelFlag;
+extern bool MaterialDelFlag;
+extern bool MoldDelFlag;
+extern bool ProgramDelFlag;
+extern bool RunStateFlag;
 extern bool XFaultFlag;
 extern bool YFaultFlag;
 extern bool RFaultFlag;

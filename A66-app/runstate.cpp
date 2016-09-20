@@ -144,15 +144,19 @@ void RunState::CheckRaxisEnable()
     {
 
         ui->lineEdit_RCurrentPos->setVisible(true);//R轴可视
+        ui->label_RRun->setVisible(true);
         ui->toolButton_R->setVisible(true);
 
         ui->toolButton_X->move(30,20);
+        ui->label_XRun->move(100,27);
         ui->lineEdit_XCurrentPos->move(170,20);
 
         ui->toolButton_Y->move(30,80);
+        ui->label_YRun->move(100,88);
         ui->lineEdit_YCurrentPos->move(170,80);
 
         ui->toolButton_R->move(30,140);
+        ui->label_RRun->move(100,147);
         ui->lineEdit_RCurrentPos->move(170,140);
 
         ui->tableWidget_Run->setColumnHidden(RunStep_Raxis,false);
@@ -161,16 +165,18 @@ void RunState::CheckRaxisEnable()
     else
     {
         ui->lineEdit_RCurrentPos->setVisible(false);//R轴bu可视
+        ui->label_RRun->setVisible(false);
         ui->toolButton_R->setVisible(false);
 
         ui->toolButton_X->move(30,40);
+        ui->label_XRun->move(100,48);
         ui->lineEdit_XCurrentPos->move(170,40);
 
         ui->toolButton_Y->move(30,120);
+        ui->label_YRun->move(100,128);
         ui->lineEdit_YCurrentPos->move(170,120);
 
         ui->tableWidget_Run->setColumnHidden(RunStep_Raxis,true);
-
     }
 
 }
@@ -198,10 +204,17 @@ void RunState::initWorkedTotalDialog()
         motor[1].Wrte_Multi_Finsh_state = NO_SEND;
         motor[2].Wrte_Multi_Finsh_state = NO_SEND;
         motor[MT_ID-1].Write_One_Finsh_state = NO_SEND;
-        WrokedTotal *wk =new WrokedTotal;
-        wk->setWindowFlags(Qt::FramelessWindowHint);
-        wk->exec();
+        WrokedTotal wk ;
+        wk.setWindowFlags(Qt::FramelessWindowHint);
+        wk.exec();
+        qDebug("-----------------------------------------------------------------------------------");
+        qDebug()<<"RunStateFlag"<<RunStateFlag;
+        qDebug("-----------------------------------------------------------------------------------");
+
         Ms_Run = startTimer(20);
+
+
+
 
 //    }
 
@@ -766,8 +779,8 @@ int RunState::CheckPressureState()
             {
                  VFast_flag  = true;
             }
-         qDebug()<<"vbackTime"<<VbackTime;
-         qDebug()<<"sendOneStep"<<sendOneStep;
+//         qDebug()<<"vbackTime"<<VbackTime;
+//         qDebug()<<"sendOneStep"<<sendOneStep;
         break;
     case VSlow :
         ui->label_Pressure->setText(trUtf8("工进"));break;
@@ -789,8 +802,8 @@ int RunState::CheckPressureState()
 void RunState::timerEvent(QTimerEvent *t) //定时器事件
 {
 
-    if(t->timerId()==Ms_Run){
 
+    if(t->timerId()==Ms_Run){
     double Dis_XPos =Get_MOTOR_Demand_Postion(0x01) * XaxisParameter.LeadScrew /1000;
     double Dis_YPos =Get_MOTOR_Demand_Postion(0x02) * YaxisParameter.LeadScrew /1000;
 
@@ -804,7 +817,13 @@ void RunState::timerEvent(QTimerEvent *t) //定时器事件
           ui->lineEdit_RCurrentPos->setText(QString::number(Dis_RPos,'.',2));
       }
       MotorRun();
-      CheckPressureState();
+
+      qDebug()<<"RunStateFlag"<<RunStateFlag;
+      if(RunStateFlag == true)
+      {
+          CheckPressureState();
+      }
+
       ReflashWorkedTotal();
       Checkstatus(0x01);
       Checkstatus(0x02);
@@ -892,9 +911,9 @@ void RunState::ReadForRun(int Type)
                CurrentProgramTemp.StepNumber =  record.value("StepTotal").toDouble(&ok);
                CurrentProgramTemp.UpMold     = record.value("UpMold").toDouble(&ok);
                CurrentProgramTemp.LowerMold =  record.value("LowerMold").toDouble(&ok);
-               CurrentProgramTemp.ProcessedNum = record.value("WorkedTotal").toDouble(&ok);
-               qDebug()<<"CurrentProgramTemp.UpMold "<<CurrentProgramTemp.UpMold ;
-               qDebug()<<"CurrentProgramTemp.LowerMold"<<CurrentProgramTemp.LowerMold ;
+               CurrentProgramTemp.ProcessedNum = record.value("WorkedTotal").toDouble(&ok);//P01.jpg
+               CurrentReg.CurrentProgramPic = record.value("ProgramPro").toString();
+
     }
 
     model.setTable(CurrentReg.CurrentProgramName);
@@ -1037,40 +1056,40 @@ void RunState::on_tableWidget_Run_itemSelectionChanged()
 }
 
 
-void RunState::on_pushButton_Left_1_clicked()  //向上
-{
+//void RunState::on_pushButton_Left_1_clicked()  //向上
+//{
 
-    if((A20_IN_Status & UpperPoint))
-    {
-        if((CurrentRnuStateRow > 0) && ( CurrentRnuStateRow < QString::number( CurrentProgramTemp.StepNumber,'.',0).toInt()))
-        {
-            CurrentRnuStateRow--;
-            if(CurrentRnuStateRow == CurrentProgramTemp.StepNumber )
-            {
-                CurrentRnuStateRow= 0;
-            }
-        }
-    }
+//    if((A20_IN_Status & UpperPoint))
+//    {
+//        if((CurrentRnuStateRow > 0) && ( CurrentRnuStateRow < QString::number( CurrentProgramTemp.StepNumber,'.',0).toInt()))
+//        {
+//            CurrentRnuStateRow--;
+//            if(CurrentRnuStateRow == CurrentProgramTemp.StepNumber )
+//            {
+//                CurrentRnuStateRow= 0;
+//            }
+//        }
+//    }
 
-}
+//}
 
-void RunState::on_pushButton_Left_4_clicked() //向下
-{
-    if((A20_IN_Status & UpperPoint))
-    {
-        if((CurrentRnuStateRow >= 0) && ( CurrentRnuStateRow < QString::number( CurrentProgramTemp.StepNumber,'.',0).toInt()))
-          {
+//void RunState::on_pushButton_Left_4_clicked() //向下
+//{
+//    if((A20_IN_Status & UpperPoint))
+//    {
+//        if((CurrentRnuStateRow >= 0) && ( CurrentRnuStateRow < QString::number( CurrentProgramTemp.StepNumber,'.',0).toInt()))
+//          {
 
-             CurrentRnuStateRow++;
-             if((CurrentRnuStateRow) == CurrentProgramTemp.StepNumber )
-             {
-                 CurrentRnuStateRow= CurrentProgramTemp.StepNumber -1;
-             }
+//             CurrentRnuStateRow++;
+//             if((CurrentRnuStateRow) == CurrentProgramTemp.StepNumber )
+//             {
+//                 CurrentRnuStateRow= CurrentProgramTemp.StepNumber -1;
+//             }
 
-        }
+//        }
 
-    }
+//    }
 
-}
+//}
 
 

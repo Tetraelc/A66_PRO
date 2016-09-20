@@ -134,8 +134,8 @@
    <widget class="QLineEdit" name="lineEdit_S_XaxisCorrect">
     <property name="geometry">
      <rect>
-      <x>144</x>
-      <y>195</y>
+      <x>574</x>
+      <y>116</y>
       <width>170</width>
       <height>30</height>
      </rect>
@@ -246,8 +246,8 @@
    <widget class="QLabel" name="label_mould_6">
     <property name="geometry">
      <rect>
-      <x>39</x>
-      <y>200</y>
+      <x>469</x>
+      <y>121</y>
       <width>81</width>
       <height>20</height>
      </rect>
@@ -286,50 +286,6 @@
      <number>32767</number>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit_S_return">
-    <property name="geometry">
-     <rect>
-      <x>575</x>
-      <y>117</y>
-      <width>170</width>
-      <height>30</height>
-     </rect>
-    </property>
-    <property name="cursor">
-     <cursorShape>BlankCursor</cursorShape>
-    </property>
-    <property name="focusPolicy">
-     <enum>Qt::ClickFocus</enum>
-    </property>
-    <property name="inputMask">
-     <string/>
-    </property>
-    <property name="frame">
-     <bool>true</bool>
-    </property>
-    <property name="cursorPosition">
-     <number>0</number>
-    </property>
-    <property name="placeholderText">
-     <string/>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="lineEdit_S_Holding">
-    <property name="geometry">
-     <rect>
-      <x>575</x>
-      <y>157</y>
-      <width>170</width>
-      <height>30</height>
-     </rect>
-    </property>
-    <property name="cursor">
-     <cursorShape>BlankCursor</cursorShape>
-    </property>
-    <property name="focusPolicy">
-     <enum>Qt::ClickFocus</enum>
-    </property>
-   </widget>
    <widget class="QLineEdit" name="lineEdit_S_pressure">
     <property name="geometry">
      <rect>
@@ -352,8 +308,8 @@
    <widget class="QLineEdit" name="lineEdit_S_Raxis">
     <property name="geometry">
      <rect>
-      <x>575</x>
-      <y>197</y>
+      <x>574</x>
+      <y>158</y>
       <width>170</width>
       <height>30</height>
      </rect>
@@ -389,54 +345,6 @@
      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
     </property>
    </widget>
-   <widget class="QLabel" name="label_mould_8">
-    <property name="geometry">
-     <rect>
-      <x>458</x>
-      <y>120</y>
-      <width>91</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>16</pointsize>
-     </font>
-    </property>
-    <property name="cursor">
-     <cursorShape>BlankCursor</cursorShape>
-    </property>
-    <property name="text">
-     <string>回程时间</string>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_mould_7">
-    <property name="geometry">
-     <rect>
-      <x>458</x>
-      <y>160</y>
-      <width>91</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>16</pointsize>
-     </font>
-    </property>
-    <property name="cursor">
-     <cursorShape>BlankCursor</cursorShape>
-    </property>
-    <property name="text">
-     <string>保压时间</string>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-    </property>
-   </widget>
    <widget class="QLabel" name="label_material_3">
     <property name="geometry">
      <rect>
@@ -464,8 +372,8 @@
    <widget class="QLabel" name="label_mould_9">
     <property name="geometry">
      <rect>
-      <x>468</x>
-      <y>200</y>
+      <x>467</x>
+      <y>161</y>
       <width>81</width>
       <height>20</height>
      </rect>
@@ -509,8 +417,8 @@
    <widget class="QLabel" name="label_52">
     <property name="geometry">
      <rect>
-      <x>320</x>
-      <y>200</y>
+      <x>750</x>
+      <y>121</y>
       <width>58</width>
       <height>15</height>
      </rect>
@@ -569,53 +477,11 @@
      <string>KN</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_55">
-    <property name="geometry">
-     <rect>
-      <x>750</x>
-      <y>120</y>
-      <width>58</width>
-      <height>15</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>14</pointsize>
-     </font>
-    </property>
-    <property name="cursor">
-     <cursorShape>BlankCursor</cursorShape>
-    </property>
-    <property name="text">
-     <string>S</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_56">
-    <property name="geometry">
-     <rect>
-      <x>750</x>
-      <y>160</y>
-      <width>58</width>
-      <height>15</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>14</pointsize>
-     </font>
-    </property>
-    <property name="cursor">
-     <cursorShape>BlankCursor</cursorShape>
-    </property>
-    <property name="text">
-     <string>S</string>
-    </property>
-   </widget>
    <widget class="QLabel" name="label_57">
     <property name="geometry">
      <rect>
-      <x>750</x>
-      <y>200</y>
+      <x>749</x>
+      <y>161</y>
       <width>58</width>
       <height>15</height>
      </rect>

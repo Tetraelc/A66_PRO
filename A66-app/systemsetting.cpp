@@ -210,8 +210,6 @@ void SystemSetting::ReadForSystemDat()
     {
             QSqlRecord record = model.record(i);
             RaxisParameterTemp[i] = record.value("Value").toDouble(&ok);
-            qDebug()<<"Value"<<record.value("Value").toDouble(&ok);
-           // qDebug()<<"RaxisParameterTemp[i]"<<RaxisParameterTemp[i];
     }
     model.setFilter("Class = " MT_Id);
     model.select();
@@ -246,10 +244,10 @@ void SystemSetting::SystemDatChange()
 
      XaxisParameter.LeadScrew = XaxisParameterTemp[0];
      XaxisParameter.MotorDirection = XaxisParameterTemp[1];
-     XaxisParameter.RunSpeed = XaxisParameterTemp[2];
+     XaxisParameter.RunSpeed = XaxisParameterTemp[2] * 10;
      XaxisParameter.ManualSpeed = XaxisParameterTemp[3] ;
-     XaxisParameter.MaxDistance = XaxisParameterTemp[4] * 1000 / XaxisParameter.LeadScrew;
-     XaxisParameter.MinDistance = XaxisParameterTemp[5]* 1000 / XaxisParameter.LeadScrew;
+     XaxisParameter.MaxDistance = XaxisParameterTemp[4] ;
+     XaxisParameter.MinDistance = XaxisParameterTemp[5];
      XaxisParameter.PositioningMode = XaxisParameterTemp[6];
      XaxisParameter.OverrunDistance = XaxisParameterTemp[7];
      XaxisParameter.ReferencePosMode = XaxisParameterTemp[8];
@@ -257,10 +255,10 @@ void SystemSetting::SystemDatChange()
       ////Y轴参数
      YaxisParameter.LeadScrew = YaxisParameterTemp[0];
      YaxisParameter.MotorDirection = YaxisParameterTemp[1];
-     YaxisParameter.RunSpeed = YaxisParameterTemp[2];
+     YaxisParameter.RunSpeed = YaxisParameterTemp[2] * 10;
      YaxisParameter.ManualSpeed = YaxisParameterTemp[3];
-     YaxisParameter.MaxDistance = YaxisParameterTemp[4] * 1000 / YaxisParameter.LeadScrew;
-     YaxisParameter.MinDistance = YaxisParameterTemp[5] * 1000 / YaxisParameter.LeadScrew;
+     YaxisParameter.MaxDistance = YaxisParameterTemp[4];
+     YaxisParameter.MinDistance = YaxisParameterTemp[5];
      YaxisParameter.PositioningMode = YaxisParameterTemp[6];
      YaxisParameter.OverrunDistance = YaxisParameterTemp[7];
      YaxisParameter.ReferencePosMode = YaxisParameterTemp[8];
@@ -269,17 +267,14 @@ void SystemSetting::SystemDatChange()
      RaxisParameter.ENABLE_AXIS = RaxisParameterTemp[0];
      RaxisParameter.LeadScrew = RaxisParameterTemp[1];
      RaxisParameter.MotorDirection = RaxisParameterTemp[2];
-     RaxisParameter.RunSpeed = RaxisParameterTemp[3];
+     RaxisParameter.RunSpeed = RaxisParameterTemp[3] * 10;
      RaxisParameter.ManualSpeed = RaxisParameterTemp[4];
-     RaxisParameter.MaxDistance = RaxisParameterTemp[5] * 1000 / RaxisParameter.LeadScrew;
-     RaxisParameter.MinDistance = RaxisParameterTemp[6] * 1000 / RaxisParameter.LeadScrew;
+     RaxisParameter.MaxDistance = RaxisParameterTemp[5];
+     RaxisParameter.MinDistance = RaxisParameterTemp[6];
      RaxisParameter.PositioningMode = RaxisParameterTemp[7];
      RaxisParameter.OverrunDistance = RaxisParameterTemp[8];
      RaxisParameter.ReferencePosMode = RaxisParameterTemp[9];
      RaxisParameter.ReferencePos = RaxisParameterTemp[10] * 1000 / RaxisParameter.LeadScrew;
-     qDebug()<<"RaxisParameterTemp[10]"<<RaxisParameterTemp[10]<<RaxisParameter.ReferencePosMode<<RaxisParameterTemp[9];
-     qDebug()<<"RaxisParameterTemp[10]"<<XaxisParameterTemp[10]<<XaxisParameter.ReferencePosMode<<XaxisParameterTemp[8];
-     qDebug()<<"RaxisParameterTemp[10]"<<YaxisParameterTemp[10]<<YaxisParameter.ReferencePosMode<<YaxisParameterTemp[8];
 
      ////MT轴参数////
      MTParameter.KeepTime = MTParameterTemp[0];
@@ -297,8 +292,8 @@ void SystemSetting::SystemWriteMotor(unsigned char nodeId)
 {
     if(nodeId == 0x01)
     {
-        SystemSet_Motor[0].data[0].Data = XaxisParameter.MinDistance ;
-        SystemSet_Motor[0].data[1].Data = XaxisParameter.MaxDistance ;
+        SystemSet_Motor[0].data[0].Data = XaxisParameter.MinDistance * 1000 / XaxisParameter.LeadScrew;
+        SystemSet_Motor[0].data[1].Data = XaxisParameter.MaxDistance * 1000 / XaxisParameter.LeadScrew;
         SystemSet_Motor[0].data[5].Data = CurrentStepTemp.XPostion * 1000 / XaxisParameter.LeadScrew ;
         qDebug()<<"XaxisParameter.PositioningMode"<<CurrentStepTemp.XPostion;
         if(XaxisParameter.ReferencePosMode == 0)
@@ -313,8 +308,8 @@ void SystemSetting::SystemWriteMotor(unsigned char nodeId)
     }
     if(nodeId == 0x02)
     {
-        SystemSet_Motor[1].data[0].Data = YaxisParameter.MinDistance ;
-        SystemSet_Motor[1].data[1].Data = YaxisParameter.MaxDistance ;
+        SystemSet_Motor[1].data[0].Data = YaxisParameter.MinDistance * 1000 / YaxisParameter.LeadScrew;
+        SystemSet_Motor[1].data[1].Data = YaxisParameter.MaxDistance * 1000 / YaxisParameter.LeadScrew ;
         SystemSet_Motor[1].data[5].Data =  CurrentStepTemp.YPostion * 1000 / YaxisParameter.LeadScrew ;
         if(YaxisParameter.ReferencePosMode == 0)
         {
@@ -328,8 +323,8 @@ void SystemSetting::SystemWriteMotor(unsigned char nodeId)
 
     if(nodeId == 0x03)
     {
-        SystemSet_Motor[2].data[0].Data = RaxisParameter.MinDistance ;
-        SystemSet_Motor[2].data[1].Data = RaxisParameter.MaxDistance ;
+        SystemSet_Motor[2].data[0].Data = RaxisParameter.MinDistance * 1000 / RaxisParameter.LeadScrew;
+        SystemSet_Motor[2].data[1].Data = RaxisParameter.MaxDistance * 1000 / RaxisParameter.LeadScrew ;
         SystemSet_Motor[2].data[5].Data =  CurrentStepTemp.RPostion * 1000 / RaxisParameter.LeadScrew ;
         if(RaxisParameter.ReferencePosMode == 0)
         {
@@ -895,7 +890,7 @@ void SystemSetting::WriteConfig()
     ValveReg.Vstopstate = VstopStatus[7] << 7 | VstopStatus[6] << 6 | VstopStatus[5] << 5 | VstopStatus[4] << 4 | VstopStatus[3] << 3  | VstopStatus[2] << 2  | VstopStatus[1] << 1 |VstopStatus[0];
 
 
-//    ValveReg.KeepTime  = ui->lineEdit_KeepTime->text().toInt();
+//    ValveReg.KeepTime  = ui->lineEdit_KeepTime->text().toInt();0
 //    ValveReg.UnloadTime= ui->lineEdit_UnloadTime->text().toInt();
 
     ValveReg.KeepTime = MTParameter.KeepTime;
@@ -1335,16 +1330,79 @@ void SystemSetting::ReadConfig(void)
 
 }
 
+void SystemSetting::CleanConfig()
+{
+    ui->checkBoxVFast1->setChecked(false);
+    ui->checkBoxVFast2->setChecked(false);
+    ui->checkBoxVFast3->setChecked(false);
+    ui->checkBoxVFast4->setChecked(false);
+    ui->checkBoxVFast5->setChecked(false);
+    ui->checkBoxVFast6->setChecked(false);
+    ui->checkBoxVFast7->setChecked(false);
+    ui->checkBoxVFast8->setChecked(false);
+
+
+    ui->checkBoxVSlow1->setChecked(false);
+    ui->checkBoxVSlow2->setChecked(false);
+    ui->checkBoxVSlow3->setChecked(false);
+    ui->checkBoxVSlow4->setChecked(false);
+    ui->checkBoxVSlow5->setChecked(false);
+    ui->checkBoxVSlow6->setChecked(false);
+    ui->checkBoxVSlow7->setChecked(false);
+    ui->checkBoxVSlow8->setChecked(false);
+
+    ui->checkBoxVkeep1->setChecked(false);
+    ui->checkBoxVkeep2->setChecked(false);
+    ui->checkBoxVkeep3->setChecked(false);
+    ui->checkBoxVkeep4->setChecked(false);
+    ui->checkBoxVkeep5->setChecked(false);
+    ui->checkBoxVkeep6->setChecked(false);
+    ui->checkBoxVkeep7->setChecked(false);
+    ui->checkBoxVkeep8->setChecked(false);
+
+    ui->checkBoxVback1->setChecked(false);
+    ui->checkBoxVback2->setChecked(false);
+    ui->checkBoxVback3->setChecked(false);
+    ui->checkBoxVback4->setChecked(false);
+    ui->checkBoxVback5->setChecked(false);
+    ui->checkBoxVback6->setChecked(false);
+    ui->checkBoxVback7->setChecked(false);
+    ui->checkBoxVback8->setChecked(false);
+
+    ui->checkBoxVunload1->setChecked(false);
+    ui->checkBoxVunload2->setChecked(false);
+    ui->checkBoxVunload3->setChecked(false);
+    ui->checkBoxVunload4->setChecked(false);
+    ui->checkBoxVunload5->setChecked(false);
+    ui->checkBoxVunload6->setChecked(false);
+    ui->checkBoxVunload7->setChecked(false);
+    ui->checkBoxVunload8->setChecked(false);
+
+    ui->checkBoxVstop1->setChecked(false);
+    ui->checkBoxVstop2->setChecked(false);
+    ui->checkBoxVstop3->setChecked(false);
+    ui->checkBoxVstop4->setChecked(false);
+    ui->checkBoxVstop5->setChecked(false);
+    ui->checkBoxVstop6->setChecked(false);
+    ui->checkBoxVstop7->setChecked(false);
+    ui->checkBoxVstop8->setChecked(false);
+
+
+
+
+
+}
+
 void SystemSetting::on_toolButton_confirm_clicked()
 {
 
 //    if(ui->lineEdit_Secret->text() == "5678")
 //    {
         Write_Button_state = 1;
-        WriteConfig();
-//    }
 
+//    }
 }
+
 void SystemSetting::on_toolButton_readConfig_clicked()
 {
     Read_Button_state  = 1;
@@ -1359,7 +1417,7 @@ int SystemSetting::deal_write_config_event()
 
     if(Write_Button_state == 1)
 {
-
+    WriteConfig();
     Config_valve_buf.data[0].Data = ValveReg.VFaststate;
     Config_valve_buf.data[1].Data = ValveReg.VSlowstate;
     Config_valve_buf.data[2].Data = ValveReg.VKeepstate;
@@ -1428,6 +1486,7 @@ int SystemSetting::deal_write_config_event()
 //            QMessageBox::information(0,QObject::trUtf8("写入配置"),
 //                                   trUtf8("配置成功"));
              qDebug("entern readif");
+             CleanConfig();
         }
         else
         {

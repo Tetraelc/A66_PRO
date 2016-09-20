@@ -14,6 +14,9 @@ class WrokedTotal : public QDialog
 public:
     explicit WrokedTotal(QWidget *parent = 0);
     ~WrokedTotal();
+
+signals:
+    void SendSigProgramdbWin();
     
 private slots:
     void on_toolButton_clicked();

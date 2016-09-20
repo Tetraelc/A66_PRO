@@ -26,6 +26,7 @@ public:
     void Update_ProgramLibItem(int Id,int Col,QString Value);
     void ReflashMaterialdb();
     void ReflashProLinedit();
+    void Display_PicItem(int Id);
 
 //    int Materialtemp[50];
 

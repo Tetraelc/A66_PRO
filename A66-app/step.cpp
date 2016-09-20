@@ -12,6 +12,7 @@
 #include <QSqlRecord>
 #include "mathcalculation.h"
 #include "deleoplength.h"
+#include "systemwarn.h"
 
 
 
@@ -31,13 +32,13 @@ Step::Step(QWidget *parent) :
     QRegExpValidator *pRegstep = new QRegExpValidator(rxstep, this);
 
     ui->lineEdit_S_Raxis->setValidator(pRegstep);
-    ui->lineEdit_S_return->setValidator(pRegstep);
+//    ui->lineEdit_S_return->setValidator(pRegstep);
     ui->lineEdit_S_Xaxis->setValidator(pRegstep);
 
     ui->lineEdit_S_distance->setValidator(pRegstep);
     ui->lineEdit_S_AngleCompensate->setValidator(pRegstep);
     ui->lineEdit_S_XaxisCorrect->setValidator(pRegstep);
-    ui->lineEdit_S_Holding->setValidator(pRegstep);
+//    ui->lineEdit_S_Holding->setValidator(pRegstep);
     ui->lineEdit_S_Angle->setValidator(pRegstep);
     CheckRaxisEnable();
 
@@ -536,40 +537,40 @@ void Step::on_lineEdit_S_pressure_returnPressed()
     }
 
 }
-void Step::on_lineEdit_S_return_returnPressed()
-{
-    bool ok;
-    RunState runstate1 ;
-    runstate1.ReadForRun(CurrentReg.Current_StepProgramRow);
-    if( (ui->lineEdit_S_return->text().toDouble(&ok) > 0) && (ui->lineEdit_S_return->text().toDouble(&ok) <= 9999) )
-    {
-        CurrentStepTemp.ReturnTime = ui->lineEdit_S_return->text().toDouble(&ok);
-        ui->tableWidget_Step->setItem(ui->tableWidget_Step->currentRow(), StepProgram_ReturnTime, new QTableWidgetItem(ui->lineEdit_S_return->text()));
-        Update_StepProgramItem(ui->tableWidget_Step->item(ui->tableWidget_Step->currentRow(),StepProgram_Id)->text().toInt(),StepProgram_ReturnTime,ui->lineEdit_S_return->text());
-    }else
-    {
-        ui->tableWidget_Step->setItem(ui->tableWidget_Step->currentRow(), StepProgram_ReturnTime, new QTableWidgetItem(QString::number(CurrentStepTemp.ReturnTime,'.',0)));
-        ui->lineEdit_S_return->setText(QString::number(CurrentStepTemp.ReturnTime,'.',0));
-    }
+//void Step::on_lineEdit_S_return_returnPressed()
+//{
+//    bool ok;
+//    RunState runstate1 ;
+//    runstate1.ReadForRun(CurrentReg.Current_StepProgramRow);
+//    if( (ui->lineEdit_S_return->text().toDouble(&ok) > 0) && (ui->lineEdit_S_return->text().toDouble(&ok) <= 9999) )
+//    {
+//        CurrentStepTemp.ReturnTime = ui->lineEdit_S_return->text().toDouble(&ok);
+//        ui->tableWidget_Step->setItem(ui->tableWidget_Step->currentRow(), StepProgram_ReturnTime, new QTableWidgetItem(ui->lineEdit_S_return->text()));
+//        Update_StepProgramItem(ui->tableWidget_Step->item(ui->tableWidget_Step->currentRow(),StepProgram_Id)->text().toInt(),StepProgram_ReturnTime,ui->lineEdit_S_return->text());
+//    }else
+//    {
+//        ui->tableWidget_Step->setItem(ui->tableWidget_Step->currentRow(), StepProgram_ReturnTime, new QTableWidgetItem(QString::number(CurrentStepTemp.ReturnTime,'.',0)));
+//        ui->lineEdit_S_return->setText(QString::number(CurrentStepTemp.ReturnTime,'.',0));
+//    }
 
-}
-void Step::on_lineEdit_S_Holding_returnPressed()
-{
-    bool ok;
-    RunState runstate1 ;
-    runstate1.ReadForRun(CurrentReg.Current_StepProgramRow);
-    if( (ui->lineEdit_S_Holding->text().toDouble(&ok) > 0) && (ui->lineEdit_S_Holding->text().toDouble(&ok) <= 99) )
-    {
-        CurrentStepTemp.Holding = ui->lineEdit_S_Holding->text().toDouble(&ok);
-        ui->tableWidget_Step->setItem(ui->tableWidget_Step->currentRow(), StepProgram_HoldingTime, new QTableWidgetItem(ui->lineEdit_S_Holding->text()));
-        Update_StepProgramItem(ui->tableWidget_Step->item(ui->tableWidget_Step->currentRow(),StepProgram_Id)->text().toInt(),StepProgram_HoldingTime,ui->lineEdit_S_Holding->text());
-    }else
-    {
-        ui->tableWidget_Step->setItem(ui->tableWidget_Step->currentRow(), StepProgram_HoldingTime, new QTableWidgetItem(QString::number(CurrentStepTemp.Holding,'.',0)));
-        ui->lineEdit_S_Holding->setText(QString::number(CurrentStepTemp.Holding,'.',0));
-    }
+//}
+//void Step::on_lineEdit_S_Holding_returnPressed()
+//{
+//    bool ok;
+//    RunState runstate1 ;
+//    runstate1.ReadForRun(CurrentReg.Current_StepProgramRow);
+//    if( (ui->lineEdit_S_Holding->text().toDouble(&ok) > 0) && (ui->lineEdit_S_Holding->text().toDouble(&ok) <= 99) )
+//    {
+//        CurrentStepTemp.Holding = ui->lineEdit_S_Holding->text().toDouble(&ok);
+//        ui->tableWidget_Step->setItem(ui->tableWidget_Step->currentRow(), StepProgram_HoldingTime, new QTableWidgetItem(ui->lineEdit_S_Holding->text()));
+//        Update_StepProgramItem(ui->tableWidget_Step->item(ui->tableWidget_Step->currentRow(),StepProgram_Id)->text().toInt(),StepProgram_HoldingTime,ui->lineEdit_S_Holding->text());
+//    }else
+//    {
+//        ui->tableWidget_Step->setItem(ui->tableWidget_Step->currentRow(), StepProgram_HoldingTime, new QTableWidgetItem(QString::number(CurrentStepTemp.Holding,'.',0)));
+//        ui->lineEdit_S_Holding->setText(QString::number(CurrentStepTemp.Holding,'.',0));
+//    }
 
-}
+//}
 void Step::on_lineEdit_S_Raxis_returnPressed()
 {
     bool ok;
@@ -632,8 +633,8 @@ void Step::ReflashLinedit()
 
            ui->lineEdit_S_distance->setText(QString::number(record.value("Distance").toDouble(&ok),'.',2));
            ui->lineEdit_S_pressure->setText(QString::number(record.value("Pressure").toDouble(&ok),'.',2));
-           ui->lineEdit_S_return->setText(QString::number(record.value("ReturnTime").toDouble(&ok),'.',2));
-           ui->lineEdit_S_Holding->setText(QString::number(record.value("Holding").toDouble(&ok),'.',2));
+           //ui->lineEdit_S_return->setText(QString::number(record.value("ReturnTime").toDouble(&ok),'.',2));
+           //ui->lineEdit_S_Holding->setText(QString::number(record.value("Holding").toDouble(&ok),'.',2));
            ui->lineEdit_S_Raxis->setText(QString::number(record.value("Raxis").toDouble(&ok),'.',2));
            //qDebug()<<"record.value().toString()"<<record.value("Id").toString();
 
@@ -683,11 +684,22 @@ void Step::on_pushButton_Left_2_clicked()//工步编程 NEW 按钮
 
 void Step::on_pushButton_Left_3_clicked()//工步编程 DELETE 按钮
 {
-    if(ui->tableWidget_Step->rowCount()>1)
+    CurrentReg.Current_MotorAlarm = StepDelTip;
+    aralmOrTipFalg = true;
+    SystemWarn StepDelWarn;
+    StepDelWarn.setWindowFlags(Qt::FramelessWindowHint);
+    StepDelWarn.exec();
+
+    if(ui->tableWidget_Step->rowCount()>1 && StepDelFlag == true)
     {
         DeleteStepProgram();
         Display_StepProgramItem();
     }
+
+    StepDelFlag = false;
+    MaterialDelFlag = false;
+    MoldDelFlag = false;
+    ProgramDelFlag = false;
 }
 
 void Step::on_pushButton_Length_clicked()

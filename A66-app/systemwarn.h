@@ -20,7 +20,7 @@ signals:
     void ReturnProgramdbWin();
 public slots:
 
-    
+
 private slots:
 
     void on_toolButton_Comfirm_clicked();

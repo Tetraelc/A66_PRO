@@ -505,7 +505,7 @@
       <cursorShape>BlankCursor</cursorShape>
      </property>
      <property name="text">
-      <string>RUN</string>
+      <string>运行</string>
      </property>
      <property name="icon">
       <iconset resource="A66-appsrc.qrc">

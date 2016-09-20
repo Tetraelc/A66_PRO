@@ -5,6 +5,12 @@
 
 int HomgingModeFlag = 0;
 
+bool MotorOfflineFlag =true;
+bool StepDelFlag = false;
+bool MaterialDelFlag = false;
+bool MoldDelFlag = false;
+bool ProgramDelFlag = false;
+bool RunStateFlag = false;
 bool XFaultFlag = false;
 bool YFaultFlag = false;
 bool RFaultFlag = false;

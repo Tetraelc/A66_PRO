@@ -75,6 +75,8 @@
         <file>ICO/state11.png</file>
         <file>ICO/MTnew.png</file>
         <file>ICO/jizhundian11.png</file>
+        <file>ICO/yeya.png</file>
+        <file>ICO/quit.png</file>
     </qresource>
     <qresource prefix="/ico">
         <file>ICO/P1-DEL.png</file>

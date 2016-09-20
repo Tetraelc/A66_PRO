@@ -33,6 +33,7 @@ public:
     void SystemDatChange();
     void SystemWriteMotor(unsigned char nodeId);
     void SystemWriteMT();
+    void CleanConfig();
 
 
     double SystemParameterTemp[2];

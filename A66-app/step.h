@@ -53,8 +53,8 @@ public slots:
     void on_lineEdit_S_XaxisCorrect_returnPressed();
     void on_lineEdit_S_distance_returnPressed();
     void on_lineEdit_S_pressure_returnPressed();
-    void on_lineEdit_S_return_returnPressed();
-    void on_lineEdit_S_Holding_returnPressed();
+    //void on_lineEdit_S_return_returnPressed();
+   // void on_lineEdit_S_Holding_returnPressed();
     void on_lineEdit_S_Raxis_returnPressed();
     void on_tableWidget_Step_itemSelectionChanged();
 //    void on_pushButton_S_Up_clicked();

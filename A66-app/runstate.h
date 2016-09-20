@@ -29,6 +29,7 @@ public:
     void SendMTEnableSignalXYAxis();
     void SendMTEnableSignalXYRAxis();
     void QuitRunState();
+    void CloseTimer();
     void ReflashWorkedTotal();
     void systemCheckSafrState();
     void ReturnRun();
@@ -39,6 +40,7 @@ public:
     void CheckRaxisEnable();
     void SaveCurrentAxisDat(int Col);
     int CurrentRnuStateWorkedTotal;
+    int Ms_Run;
 public slots:
     void openRunStateWin();
 
@@ -49,12 +51,12 @@ private slots:
     void on_pushButton_Left_5_clicked();
     void timerEvent(QTimerEvent *t);
     void on_tableWidget_Run_itemSelectionChanged();
-    void on_pushButton_Left_1_clicked();
-    void on_pushButton_Left_4_clicked();
+//    void on_pushButton_Left_1_clicked();
+//    void on_pushButton_Left_4_clicked();
 
 private:
     Ui::RunState *ui;
-    int Ms_Run;
+
     int Ms_Lable;
     int CurrentRnuStateRow;
 protected:
