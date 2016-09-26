@@ -180,7 +180,7 @@
     <cursorShape>BlankCursor</cursorShape>
    </property>
    <property name="readOnly">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
   </widget>
   <widget class="QPushButton" name="toolButton_comfirm">

@@ -9,6 +9,8 @@
 #include "runstate.h"
 #include "systemsetting.h"
 #include "easybend.h"
+#include "systemwarn.h"
+#include "systeminfotip.h"
 
 class Programdb;
 
@@ -29,6 +31,7 @@ public:
     void closeProgramwindows();
 
 
+
 public slots:
     void openMainWindowWin();
     void ReturnProgramdb();
@@ -41,8 +44,6 @@ private slots:
     void on_pushButton_T3_clicked();
 
     void on_pushButton_T2_clicked();
-
-
 
     void on_toolButton_B0_clicked();
 
@@ -79,8 +80,14 @@ signals:
 private:
     void timerEvent(QTimerEvent *t); //定时器事件
     Ui::MainWindow *ui;
+
+    Manual *ml;
+    SystemSetting *sys;
     Programdb *programwin;
     RunState runstate;
+    SystemInfoTip *infotip;
+
+    //SystemWarn warn;
     int ProgramName_Scan;
 protected:
     bool eventFilter(QObject *watched, QEvent *event);

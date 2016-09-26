@@ -4,6 +4,13 @@
 #include "systemsetting.h"
 #include "mainwindow.h"
 
+#include <QSplashScreen>
+#include <QPixmap>
+#include <QElapsedTimer>
+#include <QDateTime>
+
+int delayTime = 5;
+
 //#define HomingXButtonPos   152
 //#define HomingXLineditPos  HomingXButtonPos+115
 //#define HomingXFramePos    HomingXLineditPos+273
@@ -41,42 +48,53 @@ HomingMode::HomingMode(QWidget *parent) :
 
     SystemSetting sys;
     sys.ReadForSystemDat();
-
     sys.SystemWriteMotor(0x01);//写电机参数
     sys.SystemWriteMotor(0x02);//写电机参数
     ui->label_X->setText(trUtf8("准备就绪"));
     ui->label_Y->setText(trUtf8("准备就绪"));
-
     if(RaxisParameter.ENABLE_AXIS == 1)
     {
         sys.SystemWriteMotor(0x03);//写电机参数
         ui->label_R->setText(trUtf8("准备就绪"));
     }
-
     sys.SystemWriteMT();//写MT参数
 
 
-    QFont font;
-    font.setPointSize(28);
-    ui->lineEdit_XHoming->setFont(font);
-    ui->lineEdit_YHoming->setFont(font);
-    ui->lineEdit_RHoming->setFont(font);
+
 
     ui->toolButton_X->setEnabled(false);
     ui->toolButton_Y->setEnabled(false);
     ui->toolButton_R->setEnabled(false);
 
-    CheckRaxisEnable();
+    this->checkRaxisEnable();
+    this->setXYRLineditFont(28);
 
 
     MainWindow *mw =new MainWindow;
+    connect(mw, SIGNAL(openHomingModeWidget()), this, SLOT(openHomingModeWin()));
+    connect(ui->toolButton_QuitRunning, SIGNAL(clicked()), mw, SLOT(ReturnProgramdb()));//returnProgramdb
+    connect(this, SIGNAL(Sig_returnProgram()), mw, SLOT(ReturnProgramdb()));//returnProgramdb
     mw->setWindowFlags(Qt::FramelessWindowHint);
     mw->move(0,MAIN_WIDGET_Y);
     mw->show();
 
-    connect(mw, SIGNAL(openHomingModeWidget()), this, SLOT(openHomingModeWin()));
-    connect(ui->toolButton_QuitRunning, SIGNAL(clicked()), mw, SLOT(ReturnProgramdb()));//returnProgramdb
-    Homging_Scan = startTimer(100);
+    checkXaxisisEnabble();
+
+    if(HomingFlag == true)
+    {
+      emit Sig_returnProgram();
+    }
+    else
+    {
+       Homging_Scan = startTimer(100);
+    }
+
+
+    PumpSignalFlag = false;
+
+
+
+
 
 }
 
@@ -84,48 +102,91 @@ HomingMode::~HomingMode()
 {
     delete ui;
 }
+void HomingMode::setXYRLineditFont(int fontsize)
+{
+    QFont font;
+    font.setPointSize(fontsize);
+    ui->lineEdit_XHoming->setFont(font);
+    ui->lineEdit_YHoming->setFont(font);
+    ui->lineEdit_RHoming->setFont(font);
 
-void HomingMode::CheckRaxisEnable()
+}
+
+void HomingMode::checkXaxisisEnabble()
+{
+    if(XaxisParameter.ReferencePosMode == 0 &&  YaxisParameter.ReferencePosMode == 0 )
+    {
+         HomingFlag =true;
+    }
+    else if(XaxisParameter.ReferencePosMode == 0 && (YaxisParameter.ReferencePosMode == 1  || YaxisParameter.ReferencePosMode == 2) )
+    {
+          ui->widget_HomeX->setVisible(false);
+          ui->widget_HomeY->setVisible(true);
+          ui->widget_HomeY->move(120,150);
+    }if(YaxisParameter.ReferencePosMode == 0 &&  (XaxisParameter.ReferencePosMode == 1  || XaxisParameter.ReferencePosMode == 2) )
+    {
+        ui->widget_HomeX->setVisible(true);
+        ui->widget_HomeY->setVisible(false);
+        ui->widget_HomeX->move(120,150);
+    }else
+    {
+        ui->widget_HomeR->setVisible(false);
+        ui->widget_HomeX->move(120,90);
+        ui->widget_HomeY->move(120,200);
+    }
+
+
+}
+
+
+void HomingMode::checkRaxisEnable()
 {
     if(RaxisParameter.ENABLE_AXIS == 1)
     {
-        ui->lineEdit_RHoming->setVisible(true); //R轴可视
-        ui->frame_4->setVisible(true);
-        ui->label_RHoming->setVisible(true);
-        ui->toolButton_R->setVisible(true);
+        ui->widget_HomeR->setVisible(true);
+        ui->widget_HomeX->move(120,50);
+        ui->widget_HomeY->move(120,150);
+        ui->widget_HomeR->move(120,250);
 
-        ui->toolButton_X->move(152,54);
-        ui->label_XHomging->move(210,56);
-        ui->lineEdit_XHoming->move(267,44);
-        ui->frame_2->move(540,50);
+//        ui->lineEdit_RHoming->setVisible(true); //R轴可视
+//        ui->frame_4->setVisible(true);
+//        ui->label_RHoming->setVisible(true);
+//        ui->toolButton_R->setVisible(true);
 
-        ui->toolButton_Y->move(150,163);
-        ui->label_YHoming->move(210,165);
-        ui->lineEdit_YHoming->move(267,152);
-        ui->frame_3->move(540,158);
+//        ui->toolButton_X->move(152,54);
+//        ui->label_XHomging->move(210,56);
+//        ui->lineEdit_XHoming->move(267,44);
+//        ui->frame_2->move(540,50);
 
-        ui->toolButton_R->move(150,270);
-        ui->label_RHoming->move(210,270);
-        ui->lineEdit_RHoming->move(267,260);
-        ui->frame_4->move(540,266);
+//        ui->toolButton_Y->move(150,163);
+//        ui->label_YHoming->move(210,165);
+//        ui->lineEdit_YHoming->move(267,152);
+//        ui->frame_3->move(540,158);
 
+//        ui->toolButton_R->move(150,270);
+//        ui->label_RHoming->move(210,270);
+//        ui->lineEdit_RHoming->move(267,260);
+//        ui->frame_4->move(540,266);
     }
     else
     {
-        ui->lineEdit_RHoming->setVisible(false);
-        ui->frame_4->setVisible(false);
-        ui->label_RHoming->setVisible(false);
-        ui->toolButton_R->setVisible(false);
+        ui->widget_HomeR->setVisible(false);
+        ui->widget_HomeX->move(120,90);
+        ui->widget_HomeY->move(120,200);
+//        ui->lineEdit_RHoming->setVisible(false);
+//        ui->frame_4->setVisible(false);
+//        ui->label_RHoming->setVisible(false);
+//        ui->toolButton_R->setVisible(false);
 
-        ui->toolButton_X->move(150,96);
-        ui->label_XHomging->move(210,98);
-        ui->lineEdit_XHoming->move(267,86);
-        ui->frame_2->move(540,92);
+//        ui->toolButton_X->move(150,96);
+//        ui->label_XHomging->move(210,98);
+//        ui->lineEdit_XHoming->move(267,86);
+//        ui->frame_2->move(540,92);
 
-        ui->toolButton_Y->move(150,218);
-        ui->label_YHoming->move(210,220);
-        ui->lineEdit_YHoming->move(267,207);
-        ui->frame_3->move(540,213);
+//        ui->toolButton_Y->move(150,218);
+//        ui->label_YHoming->move(210,220);
+//        ui->lineEdit_YHoming->move(267,207);
+//        ui->frame_3->move(540,213);
     }
 
 }
@@ -150,9 +211,6 @@ void HomingMode::CheckMotorState()
         {
             ui->label_X->setText(trUtf8("归零完成"));
             ui->toolButton_X->setEnabled(false);
-    //        RunState rs;
-    //        rs.SaveCurrentAxisDat();
-            //ui->toolButton_RunHoming->setEnabled(true);
         }
         else if(arrivedSwitch_X == 0)
         {
@@ -179,15 +237,11 @@ void HomingMode::CheckMotorState()
         {
             ui->label_Y->setText(trUtf8("正在归零"));
             ui->toolButton_Y->setEnabled(true);
-
         }
         else if(arrivedSwitch_Y == 1)
         {
             ui->label_Y->setText(trUtf8("归零完成"));
             ui->toolButton_Y->setEnabled(false);
-    //        RunState rs;
-    //        rs.SaveCurrentAxisDat();
-           // ui->toolButton_RunHoming->setEnabled(true);
         }
         else if(arrivedSwitch_Y == 0)
         {
@@ -221,9 +275,6 @@ void HomingMode::CheckMotorState()
             {
                 ui->label_R->setText(trUtf8("归零完成"));
                 ui->toolButton_R->setEnabled(false);
-    //            RunState rs;
-    //            rs.SaveCurrentAxisDat();
-                //ui->toolButton_RunHoming->setEnabled(true);
             }
             else if(arrivedSwitch_R == 0)
             {
@@ -238,13 +289,7 @@ void HomingMode::CheckMotorState()
         ui->label_R->setText(trUtf8("归零完成"));
     }
 
-
-
-
-
 }
-
-
 
 
 void HomingMode::openHomingModeWin()
@@ -252,10 +297,7 @@ void HomingMode::openHomingModeWin()
     this->setWindowFlags(Qt::FramelessWindowHint);
     this->show();
     this->move(0,WIDGET_Y);
-    ui->toolButton_RunHoming->setEnabled(true);
-
-
-
+    ui->toolButton_RunHoming->setEnabled(true);    
 }
 
 void HomingMode::timerEvent(QTimerEvent *t) //定时器事件
@@ -270,12 +312,8 @@ void HomingMode::timerEvent(QTimerEvent *t) //定时器事件
                 double Dis_RPos =Get_MOTOR_Demand_Postion(R1_ID) * RaxisParameter.LeadScrew /1000;
 
                 ui->lineEdit_XHoming->setText(QString::number(Dis_XPos,'.',2));
-
                 ui->lineEdit_YHoming->setText(QString::number(Dis_YPos,'.',2));
-
                 ui->lineEdit_RHoming->setText(QString::number(Dis_RPos,'.',2));
-
-
 
                // qDebug()<<"MOTOR_STATUS[0]"<<MOTOR_STATUS[0] ;
                 if(HomgingModeFlag == 1)
@@ -348,9 +386,6 @@ void HomingMode::timerEvent(QTimerEvent *t) //定时器事件
 
                     }
                     time_count1++;
-
-
-
                 }
 
             }
@@ -365,16 +400,16 @@ void HomingMode::on_toolButton_RunHoming_clicked()
 
     }else if(XaxisParameter.ReferencePosMode == 1)
     {
-        HomingModeDate[0].data[1].Data = 0x01;// 这里写回零模式
+        HomingModeDate[0].data[1].Data = XaxisParameter.ReferencePosMode;// 这里写回零模式
         HomingModeDate[0].data[2].Data = XaxisParameter.ReferencePos;
-        HomingModeDate[0].data[3].Data = XaxisParameter.ManualSpeed;
+        HomingModeDate[0].data[3].Data = XaxisParameter.ManualSpeed * 10;
         Write_MOTOR_Multi_Data(&HomingModeDate[X1_ID -1 ],X1_ID);
 
     }else if(XaxisParameter.ReferencePosMode == 2)
     {
-        HomingModeDate[0].data[1].Data = 0x02;// 这里写回零模式
+        HomingModeDate[0].data[1].Data = XaxisParameter.ReferencePosMode;// 这里写回零模式
         HomingModeDate[0].data[2].Data  = XaxisParameter.ReferencePos;
-        HomingModeDate[0].data[3].Data = XaxisParameter.ManualSpeed;
+        HomingModeDate[0].data[3].Data = XaxisParameter.ManualSpeed * 10;
         Write_MOTOR_Multi_Data(&HomingModeDate[X1_ID -1 ],X1_ID);
 
     }
@@ -382,15 +417,16 @@ void HomingMode::on_toolButton_RunHoming_clicked()
     {
     } else if(YaxisParameter.ReferencePosMode == 1)
      {
-         HomingModeDate[1].data[1].Data = 0x01;// 这里写回零模式
+
+         HomingModeDate[1].data[1].Data = 3;// 这里写回零模式
          HomingModeDate[1].data[2].Data  = YaxisParameter.ReferencePos;
-         HomingModeDate[1].data[3].Data = YaxisParameter.ManualSpeed;
+         HomingModeDate[1].data[3].Data = YaxisParameter.ManualSpeed * 10;
          Write_MOTOR_Multi_Data(&HomingModeDate[Y1_ID -1],Y1_ID);
      }else if(YaxisParameter.ReferencePosMode == 2)
      {
-         HomingModeDate[1].data[1].Data = 0x02;// 这里写回零模式
+         HomingModeDate[1].data[1].Data = YaxisParameter.ReferencePosMode;// 这里写回零模式
          HomingModeDate[1].data[2].Data  = YaxisParameter.ReferencePos;
-               HomingModeDate[1].data[3].Data = YaxisParameter.ManualSpeed;
+               HomingModeDate[1].data[3].Data = YaxisParameter.ManualSpeed * 10;
          Write_MOTOR_Multi_Data(&HomingModeDate[Y1_ID -1],Y1_ID);
      }
 
@@ -402,16 +438,16 @@ void HomingMode::on_toolButton_RunHoming_clicked()
          {
          }else if(RaxisParameter.ReferencePosMode == 1)
          {
-             HomingModeDate[2].data[1].Data = 0x01;// 这里写回零模式
+             HomingModeDate[2].data[1].Data = RaxisParameter.ReferencePosMode;// 这里写回零模式
              HomingModeDate[2].data[2].Data  = RaxisParameter.ReferencePos;
-            HomingModeDate[2].data[3].Data = RaxisParameter.ManualSpeed;
+            HomingModeDate[2].data[3].Data = RaxisParameter.ManualSpeed * 10;
              Write_MOTOR_Multi_Data(&HomingModeDate[R1_ID-1],R1_ID);
 
          }else if(RaxisParameter.ReferencePosMode == 2)
          {
-             HomingModeDate[2].data[1].Data = 0x02;// 这里写回零模式
+             HomingModeDate[2].data[1].Data = RaxisParameter.ReferencePosMode;// 这里写回零模式
              HomingModeDate[2].data[2].Data  = RaxisParameter.ReferencePos;
-               HomingModeDate[2].data[3].Data = YaxisParameter.ManualSpeed;
+               HomingModeDate[2].data[3].Data = YaxisParameter.ManualSpeed * 10;
              Write_MOTOR_Multi_Data(&HomingModeDate[R1_ID-1],R1_ID);
          }
      }
@@ -425,12 +461,10 @@ void HomingMode::on_toolButton_QuitRunning_clicked()
 
     Stop_MOTOR(X1_ID);
     Stop_MOTOR(Y1_ID);
-    Write_MOTOR_One_Data(X1_ID,0x6060,0x00,0x01,0x01);
-    Write_MOTOR_One_Data(Y1_ID,0x6060,0x00,0x01,0x01);
+
     if(RaxisParameter.ENABLE_AXIS == 1)
     {
         Stop_MOTOR(R1_ID);
-        Write_MOTOR_One_Data(R1_ID,0x6060,0x00,0x01,0x01);
     }
 
     killTimer(Homging_Scan);

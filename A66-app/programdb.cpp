@@ -21,6 +21,7 @@
 #include "mainwindow.h"
 #include "choosepicture.h"
 #include "systemwarn.h"
+#include "mathcalculation.h"
 
 
 int MaterialIndexFlag =0;
@@ -43,6 +44,10 @@ Programdb::Programdb(QWidget *parent) :
 //    connect(wd, SIGNAL(openProgramWidget()), this, SLOT(openProgramWin()));
 
     connect(ui->comboBox_P_material,SIGNAL(currentIndexChanged(const QString &)),this,SLOT(UpdtaeMaterialDat()));
+    ui->tableWidget_Programdb->setColumnHidden(Program_UpMold,true);
+    ui->label_upmould->setVisible(false);
+    ui->lineEdit_P_UpMolds->setVisible(false);
+    ui->toolButton_UpMold->setVisible(false);
 //    Programdb *pb = new Programdb;
      QFont font;
      font.setPointSize(18);
@@ -70,6 +75,7 @@ void Programdb::openProgramWin()
     Display_ProgramItem();
     ui->comboBox_P_material->setCurrentIndex(CurrentReg.Materialtemp[0]);
     connect(ui->comboBox_P_material,SIGNAL(currentIndexChanged(const QString &)),this,SLOT(UpdtaeMaterialDat()));
+   //PumpSignalFlag = true;
 
 }
 
@@ -305,7 +311,11 @@ bool  Programdb::NewProgramLib(QString str)
               "Holding             NUMERIC    ," \
               "Raxis               NUMERIC    );");
 
-    query.exec(" INSERT  INTO "+ str +"(ID,Angle,AngleCompensate,Yaxis,Xaxis,XaxisCorrect,Distance,Pressure,ReturnTime,Holding,Raxis) VALUES ( 1,90,10,10,20,1,20,30,1,1,20)");
+    RunState runstate1 ;
+    runstate1.ReadForRun(CurrentReg.Current_StepProgramRow);
+    MathCalculation cal;
+    CurrentStepTemp.Yaxis = cal.AngleToYDis(QString::number(CurrentStepTemp.Angle,'.',0).toInt(),QString::number(CurrentStepTemp.AngleCompensate,'.',0).toInt(),0,CurrentProgramTemp.BroadThick,0, CurrentStepTemp.Yzero);
+    query.exec(" INSERT  INTO "+ str +"(ID,Angle,AngleCompensate,Yaxis,Xaxis,XaxisCorrect,Distance,Pressure,ReturnTime,Holding,Raxis) VALUES ( 1,90,0,"+ QString::number(CurrentStepTemp.Yaxis,'.',2).toAscii() + ",100,0,0,30,1,1,20)");
 
    //QSqlTableModel model;
    model.setTable("ProgramLib");
@@ -536,21 +546,13 @@ void Programdb::on_lineEdit_P_BoardWidth_returnPressed()
 
 void Programdb::on_pushButton_clicked()
 {
-    chooseUpMoldDialog *UM = new chooseUpMoldDialog;
-    UM->setWindowFlags(Qt::FramelessWindowHint);
-    //UM->move(200,200);
-    connect(UM, SIGNAL(sig_sndUpMold(int)), this, SLOT(UpMoldDialog(int)));
-    UM->exec();
+
 
 }
 
 void Programdb::on_pushButton_2_clicked()
 {
-    chooseLowerMoldDialog *LM =new chooseLowerMoldDialog;
-    LM->setWindowFlags(Qt::FramelessWindowHint);
-    //LM->move(200,200);
-    connect(LM, SIGNAL(sig_sndLowerMold(int)), this, SLOT(LowerMoldDialog(int)));
-    LM->exec();
+
 }
 
 void Programdb::LowerMoldDialog(int num)
@@ -615,6 +617,7 @@ void Programdb::on_pushButton_Left_3_clicked()
 
     CurrentReg.Current_MotorAlarm = ProgramDelTip;
     aralmOrTipFalg = true;
+    PumpButtonFlag = true;
     SystemWarn ProgramDelWarn;
     ProgramDelWarn.setWindowFlags(Qt::FramelessWindowHint);
     ProgramDelWarn.exec();
@@ -640,4 +643,22 @@ void Programdb::on_toolButton_UpdatePIC_clicked()
    pic->setWindowFlags(Qt::FramelessWindowHint);
    pic->exec();
 
+}
+
+void Programdb::on_toolButton_LowerMold_clicked()
+{
+    chooseLowerMoldDialog *LM =new chooseLowerMoldDialog;
+    LM->setWindowFlags(Qt::FramelessWindowHint);
+    //LM->move(200,200);
+    connect(LM, SIGNAL(sig_sndLowerMold(int)), this, SLOT(LowerMoldDialog(int)));
+    LM->exec();
+}
+
+void Programdb::on_toolButton_UpMold_clicked()
+{
+    chooseUpMoldDialog *UM = new chooseUpMoldDialog;
+    UM->setWindowFlags(Qt::FramelessWindowHint);
+    //UM->move(200,200);
+    connect(UM, SIGNAL(sig_sndUpMold(int)), this, SLOT(UpMoldDialog(int)));
+    UM->exec();
 }

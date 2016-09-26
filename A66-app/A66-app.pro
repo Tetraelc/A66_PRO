@@ -54,7 +54,9 @@ SOURCES += main.cpp\
     yreferencepoint.cpp \
     deleoplength.cpp \
     homingmode.cpp \
-    choosepicture.cpp
+    choosepicture.cpp \
+    block.cpp \
+    systeminfotip.cpp
 
 HEADERS  += mainwindow.h \
     step.h \
@@ -107,7 +109,9 @@ HEADERS  += mainwindow.h \
     yreferencepoint.h \
     deleoplength.h \
     homingmode.h \
-    choosepicture.h
+    choosepicture.h \
+    block.h \
+    systeminfotip.h
 
 FORMS    += mainwindow.ui \
     step.ui \
@@ -128,7 +132,8 @@ FORMS    += mainwindow.ui \
     yreferencepoint.ui \
     deleoplength.ui \
     homingmode.ui \
-    choosepicture.ui
+    choosepicture.ui \
+    block.ui
 
 RESOURCES += \
     A66-appsrc.qrc

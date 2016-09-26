@@ -63,7 +63,7 @@ void SystemSetting::TreeWidgetIntoTable()
         {
 
             ui->stackedWidget->setCurrentIndex(0);
-            Display_Item(ui->treeWidget_System->currentIndex().row()+10,true,false);
+            Display_Item(ui->treeWidget_System->currentIndex().row()+10,false,true);
 
 //            if(ui->treeWidget_System->currentItem()->text(0).compare(trUtf8("常量")) == 0 )
 //            {
@@ -251,7 +251,7 @@ void SystemSetting::SystemDatChange()
      XaxisParameter.PositioningMode = XaxisParameterTemp[6];
      XaxisParameter.OverrunDistance = XaxisParameterTemp[7];
      XaxisParameter.ReferencePosMode = XaxisParameterTemp[8];
-     XaxisParameter.ReferencePos = XaxisParameterTemp[9] * 1000 / XaxisParameter.LeadScrew;
+    XaxisParameter.ReferencePos = XaxisParameterTemp[9] * 1000 / XaxisParameter.LeadScrew;
       ////Y轴参数
      YaxisParameter.LeadScrew = YaxisParameterTemp[0];
      YaxisParameter.MotorDirection = YaxisParameterTemp[1];
@@ -282,6 +282,8 @@ void SystemSetting::SystemDatChange()
      MTParameter.VbackMode = MTParameterTemp[2];
      MTParameter.VbackTime = MTParameterTemp[3];
      MTParameter.SingleMode = MTParameterTemp[4];
+     MTParameter.FastMode = MTParameterTemp[5];
+     MTParameter.concedTime = MTParameterTemp[6];
 
 
 }
@@ -411,7 +413,7 @@ void SystemSetting::Display_Item(int ClassId,bool Editable,bool FristEnable)
             {
                 ui->tableWidget_System->item(i,0)->setFlags(ui->tableWidget_System->item(i,Table_Id)->flags() & ~Qt::ItemIsEditable & ~Qt::ItemIsSelectable);
                 ui->tableWidget_System->item(i,1)->setFlags(ui->tableWidget_System->item(i,Table_Name)->flags() & ~Qt::ItemIsEditable & ~Qt::ItemIsSelectable);
-                if(i>0)
+                if(i==0)
                 {
                     ui->tableWidget_System->item(i,2)->setFlags(ui->tableWidget_System->item(i,Table_Value)->flags() & ~Qt::ItemIsEditable & ~Qt::ItemIsSelectable);
                 }
@@ -528,7 +530,7 @@ void SystemSetting::openSystemSettingWin()
     ui->toolButton_SaveDAT->setEnabled(false);
 
     //Display_Item(10,true,false);
-
+    //PumpSignalFlag = true;
 
     qDebug()<<"openSystemSettingWin";
 }
@@ -553,9 +555,9 @@ void SystemSetting::on_toolButton_SaveDAT_clicked()
 //    QSqlQuery query;
 //    query.exec(" ");
      #if ARMFlag
-     system("sqlite3 /opt/tetra/A66-app/A66-app.db .dump > /opt/tetra/A66-app/A66-app.bak");
+     system("sqlite3 /opt/tetra/A66-app/A66-app.db .dump > /opt/tetra/A66-app/backup.sql");
      #else
-     system("sqlite3 A66-app.db .dump > /home/tetra/gitA66/A66-app/A66-app.bak");
+     system("sqlite3 A66-app.db .dump > /home/tetra/gitA66/A66-app/backup.sql");
      #endif
      CurrentReg.Current_MotorTips = DataSaveTip;
      aralmOrTipFalg = false;
@@ -567,18 +569,21 @@ void SystemSetting::on_toolButton_SaveDAT_clicked()
 
 void SystemSetting::on_toolButton_ResumeDAT_clicked()
 {
-// #if ARMFlag
-//    system("rm /opt/tetra/A66-app/A66-app.db");
-//    system("sqlite3 /opt/tetra/A66-app/A66-app.db < A66-app.bak");
-// #else
-//    system("rm /home/tetra/gitA66/A66-app/A66-app.db");
-//    system("sqlite3 /home/tetra/gitA66/A66-app/A66-app.db < /home/tetra/gitA66/A66-app/A66-app.bak");
-// #endif
+ #if ARMFlag
+    system("rm /opt/tetra/A66-app/A66-app.db");
+    system("sqlite3 /opt/tetra/A66-app/A66-app.db < /opt/tetra/A66-app/backup.sql");
+ #else
+    system("rm /home/tetra/gitA66/A66-app/A66-app.db");
+    system("sqlite3 /home/tetra/gitA66/A66-app/A66-app.db < /home/tetra/gitA66/A66-app/backup.sql");
+ #endif
     CurrentReg.Current_MotorTips = DataResumeTip;
     aralmOrTipFalg = false;
     SystemWarn SaveDATWarn;
     SaveDATWarn.setWindowFlags(Qt::FramelessWindowHint);
     SaveDATWarn.exec();
+  #if ARMFlag
+        system("reboot");
+   #endif
 }
 
 
@@ -597,7 +602,7 @@ void SystemSetting::on_tableWidget_System_cellChanged(int row, int column)
 
         if(CurrentId == Secret_Index)
         {
-            CurrentReg.CurrentSecret = ui->tableWidget_System->item(2,2)->text();
+            CurrentReg.CurrentSecret = ui->tableWidget_System->item(3,2)->text();
         }
 
         if(CurrentId == Factory_Index)
@@ -623,8 +628,8 @@ void SystemSetting::on_tableWidget_System_cellChanged(int row, int column)
         if( CurrentReg.CurrentSecret == FACTORYSECRET)
         {
             FactoryAxisFalg =true;
+            EditableFalg =true;
            // Display_Item(Factory_Id,FactoryAxisFalg,true);
-
         }
 
 
@@ -1460,6 +1465,7 @@ int SystemSetting::deal_write_config_event()
         motor[3].SDO_status = SDO_free;
         Write_Button_state = 0;
         write_step = 0;
+        MotorConfigFlag = true;
         MotorConfigTipFlag = true;
         CurrentReg.Current_MotorTips = SendFailTip;
         CurrentReg.Current_MotorConfigResult = SystemTipsInformation(CurrentReg.Current_MotorTips);
@@ -1480,6 +1486,7 @@ int SystemSetting::deal_write_config_event()
         {
 
             MotorConfigTipFlag = true;
+            MotorConfigFlag = true;
             CurrentReg.Current_MotorTips = WriteSuccessTip;
             CurrentReg.Current_MotorConfigResult = SystemTipsInformation(CurrentReg.Current_MotorTips);
             qDebug("WriteSuccessTip");
@@ -1491,6 +1498,7 @@ int SystemSetting::deal_write_config_event()
         else
         {
             MotorConfigTipFlag = true;
+            MotorConfigFlag = true;
             CurrentReg.Current_MotorTips = WriteFailTip;
             CurrentReg.Current_MotorConfigResult = SystemTipsInformation(CurrentReg.Current_MotorTips);
 
@@ -1509,6 +1517,7 @@ int SystemSetting::deal_write_config_event()
          Write_Button_state = 0;
           write_step = 0;
          MotorConfigTipFlag = true;
+         MotorConfigFlag = true;
          CurrentReg.Current_MotorTips = SendFailTip;
          CurrentReg.Current_MotorConfigResult = SystemTipsInformation(CurrentReg.Current_MotorTips);
          qDebug("SendFailTip");
@@ -1543,6 +1552,7 @@ int SystemSetting::deal_read_config_event()
             ValveReg.KeepTime     = motor[3].RX_DATA[8];
             ReadConfig();
             MotorConfigTipFlag = true;
+            MotorConfigFlag = true;
             CurrentReg.Current_MotorTips = ReadSuccessTip;
             CurrentReg.Current_MotorConfigResult = SystemTipsInformation(CurrentReg.Current_MotorTips);
             qDebug("ReadSuccessTip");
@@ -1557,6 +1567,7 @@ int SystemSetting::deal_read_config_event()
         else if (motor[3].Read_Multi_Finsh_state == FAIL_SEND)
         {
            MotorConfigTipFlag = true;
+           MotorConfigFlag = true;
            CurrentReg.Current_MotorTips = ReadFailTip;
            CurrentReg.Current_MotorConfigResult = SystemTipsInformation(CurrentReg.Current_MotorTips);
 //           QMessageBox::critical(0,QObject::trUtf8("读取配置信息"),

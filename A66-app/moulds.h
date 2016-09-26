@@ -43,6 +43,7 @@ public:
     void Update_MaterialItem(int Id,int Col,QString Value);
 
     void ReadforMold();
+    void ReadforMaterial();
 
 
     int Current_UpMoldRow;

@@ -28,6 +28,7 @@ Step::Step(QWidget *parent) :
     yValue_Scan =startTimer(10);
 //    RunState runstate1 ;
 //    runstate1.ReadForRun(CurrentReg.Current_StepProgramRow);
+
     QRegExp rxstep("^(-?[0]|-?[1-9][0-9]{0,3})(?:\\.\\d{1,2})?$|(^\\t?$)");
     QRegExpValidator *pRegstep = new QRegExpValidator(rxstep, this);
 
@@ -41,6 +42,9 @@ Step::Step(QWidget *parent) :
 //    ui->lineEdit_S_Holding->setValidator(pRegstep);
     ui->lineEdit_S_Angle->setValidator(pRegstep);
     CheckRaxisEnable();
+    this->pressureIsEnable(false);
+   // PumpSignalFlag = true;
+
 
 }
 
@@ -63,32 +67,49 @@ void Step::openStepWin()
     ui->tableWidget_Step->setColumnHidden(StepProgram_ReturnTime,true);
     ui->tableWidget_Step->setColumnHidden(StepProgram_HoldingTime,true);
     ui->tableWidget_Step->setColumnHidden(StepProgram_Pressure,true);
-
-    Display_StepProgramItem();
-    ui->tableWidget_Step->selectRow(0);
-
     RunState runstate1 ;
     runstate1.ReadForRun(CurrentReg.Current_StepProgramRow);
 
-    CurrentStepTemp.Pressure = mathcal.pressureCal(CurrentProgramTemp.BroadWideth,CurrentProgramTemp.BroadThick,CurrentMaterialTemp.StrengthFactor,CurrentLowerMoldTemp.D_V);
-    ui->lineEdit_S_pressure->setText(QString::number(CurrentStepTemp.Pressure,'.',2));
-    ui->tableWidget_Step->setItem(ui->tableWidget_Step->currentRow(),StepProgram_Pressure,new QTableWidgetItem(QString::number(CurrentStepTemp.Pressure,'.',2)));
-    Update_StepProgramItem(ui->tableWidget_Step->item(ui->tableWidget_Step->currentRow(),StepProgram_Id)->text().toInt(),StepProgram_Pressure,ui->lineEdit_S_pressure->text());
-
+    reflashYaxisValue();
+    Display_StepProgramItem();
+    ui->tableWidget_Step->selectRow(0);
     CheckRaxisEnable();
+    ReflashLinedit();
+
+}
+
+void Step::pressureIsEnable(bool Enable)
+{
+    ui->label_pressure->setVisible(Enable);
+    ui->label_pressure_unit->setVisible(Enable);
+    ui->lineEdit_S_pressure->setVisible(Enable);
+}
+
+
+void Step::reflashYaxisValue()
+{
+
+    for(int i=0; i<CurrentStepTemp.StepTempNum; i++)
+    {
+        CurrentProgramTemp.StepProgram[i].Yaxis = mathcal.AngleToYDis(CurrentProgramTemp.StepProgram[i].Angle,CurrentProgramTemp.StepProgram[i].AngleCompensate,0,CurrentProgramTemp.BroadThick,0, CurrentStepTemp.Yzero);
+        Update_StepProgramItem(i+1,StepProgram_Yaxis,QString::number(CurrentProgramTemp.StepProgram[i].Yaxis,'.',2));
+        Update_StepProgramItem(i+1,StepProgram_Pressure,QString::number(CurrentProgramTemp.StepProgram[i].Pressure,'.',2));
+    }
+
+
 
 }
 
 void Step::timerEvent(QTimerEvent *t) //定时器事件
 {
-
     if(t->timerId()==yValue_Scan){
 
 //         MathCalculation *mathcal = new MathCalculation;
         if(scanAngleFlag == true || scanAngleCompensateFlag  == true)
         {
+            bool ok;
             qDebug()<<"AngleToYDis"<<QString::number(CurrentStepTemp.Angle,'.',0).toInt()<<QString::number(CurrentStepTemp.AngleCompensate,'.',0).toInt()<<CurrentProgramTemp.BroadThick<<CurrentStepTemp.Yzero;
-             CurrentStepTemp.Yaxis = mathcal.AngleToYDis(QString::number(CurrentStepTemp.Angle,'.',0).toInt(),QString::number(CurrentStepTemp.AngleCompensate,'.',0).toInt(),0,CurrentProgramTemp.BroadThick,0, CurrentStepTemp.Yzero);
+             CurrentStepTemp.Yaxis = mathcal.AngleToYDis(CurrentStepTemp.Angle,CurrentStepTemp.AngleCompensate,0,CurrentProgramTemp.BroadThick,0, CurrentStepTemp.Yzero);
              scanAngleFlag = false;
              scanAngleCompensateFlag = false;
              ui->lineEdit_S_Yaxis->setText(QString::number(CurrentStepTemp.Yaxis,'.',2));
@@ -686,6 +707,7 @@ void Step::on_pushButton_Left_3_clicked()//工步编程 DELETE 按钮
 {
     CurrentReg.Current_MotorAlarm = StepDelTip;
     aralmOrTipFalg = true;
+    PumpButtonFlag = true;
     SystemWarn StepDelWarn;
     StepDelWarn.setWindowFlags(Qt::FramelessWindowHint);
     StepDelWarn.exec();

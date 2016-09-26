@@ -18,6 +18,34 @@ ManualAdjustDate::ManualAdjustDate(QWidget *parent) :
     ui->lineEdit_ManualX->setValidator(pReg);
     ui->lineEdit_ManualY->setValidator(pReg);
     ui->lineEdit_ManualR->setValidator(pReg);
+//    if(XaxisParameter.ReferencePosMode > 0)
+//    {
+//        ui->label_X->setVisible(false);
+//        ui->lineEdit_ManualX->setVisible(false);
+//        ui->toolButton->setVisible(false);
+//    }
+//    else
+//    {
+//        ui->label_X->setVisible(true);
+//        ui->lineEdit_ManualX->setVisible(true);
+//        ui->toolButton->setVisible(true);
+//    }
+
+//    if(YaxisParameter.ReferencePosMode > 0)
+//    {
+//        ui->label_Y->setVisible(false);
+//        ui->lineEdit_ManualY->setVisible(false);
+//        ui->toolButton_2->setVisible(false);
+//    }
+//    else
+//    {
+//        ui->label_Y->setVisible(true);
+//        ui->lineEdit_ManualY->setVisible(true);
+//        ui->toolButton_2->setVisible(true);
+//    }
+
+
+
     CheckRaxisEnable();
 }
 
@@ -84,4 +112,12 @@ void ManualAdjustDate::on_toolButton_3_clicked()
 }
 
 
+}
+
+void ManualAdjustDate::on_toolButton_4_clicked()
+{
+    if(ManualFlag == true)
+    {
+        Write_MOTOR_One_Data(MT_ID,0x7001,0x01,0x01,0x40);
+    }
 }

@@ -5,6 +5,14 @@
 
 int HomgingModeFlag = 0;
 
+bool PumpCurError = false;
+bool PumpPreError = false;
+bool HomingFlag =false;
+bool ManualMTFlag = false;
+bool PumpButtonFlag = true;
+bool PumpSignalFlag = false;
+bool MotorConfigFlag = false;
+bool ManualFlag =false;
 bool MotorOfflineFlag =true;
 bool StepDelFlag = false;
 bool MaterialDelFlag = false;

@@ -20,6 +20,8 @@ private slots:
 
     void on_toolButton_comfirm_clicked();
 
+    void on_toolButton_Cancal_clicked();
+
 private:
     Ui::YReferencePoint *ui;
 };

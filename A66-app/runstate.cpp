@@ -35,6 +35,9 @@ unsigned char Cont_Pos;
 bool Back_state = false;
 bool fastmodeState =false;
 bool VFast_flag = false;
+bool concedeStartFlag = false;
+bool concedeEndFlag   = false;
+int  concedeTime      = 0;
 
 extern "C"{
      #include "canfestival.h"
@@ -126,6 +129,7 @@ void RunState::openRunStateWin()
     qDebug()<<"openRunStateWin";
     VFast_flag = false;
     VbackTime = 0;
+    //PumpSignalFlag = true;
 }
 
 void RunState::systemCheckSafrState()
@@ -358,7 +362,7 @@ int wait_pos_time = 0;
 void RunState::SendMTEnableSignalXYAxis()
 {
     int temp1,temp2,temp3;
-    XaxisValue = CurrentStepTemp.Xaxis;
+    XaxisValue = CurrentStepTemp.Xaxis + CurrentStepTemp.XaxisCorrect;
     YaxisValue = CurrentStepTemp.Yaxis;
     RaxisValue = CurrentStepTemp.Raxis;
 
@@ -468,7 +472,7 @@ void RunState::SendMTEnableSignalXYAxis()
 void RunState::SendMTEnableSignalXYRAxis()
 {
     int temp1,temp2,temp3;
-    XaxisValue = CurrentStepTemp.Xaxis;
+    XaxisValue = CurrentStepTemp.Xaxis + CurrentStepTemp.XaxisCorrect;
     YaxisValue = CurrentStepTemp.Yaxis;
     RaxisValue = CurrentStepTemp.Raxis;
 
@@ -604,6 +608,12 @@ void RunState::changeStep()
            concedeModeFlag = 1;
            VbackTime = 0;
            VFast_flag = false;
+
+           concedeStartFlag = false;
+           concedeEndFlag   = false;
+           concedeTime      = 0;
+
+
 
     }
     else if (motor[MT_ID-1].Write_One_Finsh_state == FAIL_SEND)
@@ -783,9 +793,10 @@ int RunState::CheckPressureState()
 //         qDebug()<<"sendOneStep"<<sendOneStep;
         break;
     case VSlow :
+
         ui->label_Pressure->setText(trUtf8("工进"));break;
     case  Vkeep  :
-        concedeState();
+
         ui->label_Pressure->setText(trUtf8("保压"));break;
     case Vunload :
         ui->label_Pressure->setText(trUtf8("卸荷"));break;
@@ -793,6 +804,18 @@ int RunState::CheckPressureState()
             Back_state = true;
             VbackTime++;
             ui->label_Pressure->setText(trUtf8("回程"));break;
+    }
+
+    if((A20_IN_Status & DownPoint) || concedeStartFlag == true)
+    {
+        concedeStartFlag = true;
+        concedeTime++;
+
+        if(concedeTime > MTParameter.concedTime * 50 && concedeEndFlag == false)
+        {
+            concedeState();
+            concedeEndFlag = true;
+        }
     }
 
 
@@ -929,11 +952,34 @@ void RunState::ReadForRun(int Type)
               CurrentStepTemp.XaxisCorrect =  record.value("XaxisCorrect").toDouble(&ok);
               CurrentStepTemp.concedeDistance= record.value("Distance").toDouble(&ok) * 1000 / XaxisParameter.LeadScrew ;
               CurrentStepTemp.Pressure =  record.value("Pressure").toDouble(&ok);
-              CurrentStepTemp.Holding = record.value("HoldiAng").toDouble(&ok);
+              CurrentStepTemp.Holding = record.value("Holding").toDouble(&ok);
               CurrentStepTemp.ReturnTime =  record.value("ReturnTime").toDouble(&ok);
               CurrentStepTemp.Raxis= record.value("Raxis").toDouble(&ok);
 //              qDebug()<<"CurrentStepTemp.Raxis"<<CurrentStepTemp.Raxis;
     }
+
+
+    model.setTable(CurrentReg.CurrentProgramName);
+    //model.setFilter("ID =" + QString::number( Type + 1, 10));//CurrentReg.Current_StepProgramRow
+    model.select();
+    for(int i=0;i<model.rowCount();i++)
+    {
+            QSqlRecord record = model.record(i);
+              CurrentProgramTemp.StepProgram[i].Angle = record.value("Angle").toDouble(&ok);
+              CurrentProgramTemp.StepProgram[i].AngleCompensate = record.value("AngleCompensate").toDouble(&ok);
+              CurrentProgramTemp.StepProgram[i].Yaxis =  record.value("Yaxis").toDouble(&ok);
+              CurrentProgramTemp.StepProgram[i].Xaxis = record.value("Xaxis").toDouble(&ok);
+              CurrentProgramTemp.StepProgram[i].XaxisCorrect =  record.value("XaxisCorrect").toDouble(&ok);
+              CurrentProgramTemp.StepProgram[i].concedeDistance= record.value("Distance").toDouble(&ok) * 1000 / XaxisParameter.LeadScrew ;
+              CurrentProgramTemp.StepProgram[i].Pressure =  record.value("Pressure").toDouble(&ok);
+              CurrentProgramTemp.StepProgram[i].Holding = record.value("Holding").toDouble(&ok);
+              CurrentProgramTemp.StepProgram[i].ReturnTime =  record.value("ReturnTime").toDouble(&ok);
+              CurrentProgramTemp.StepProgram[i].Raxis= record.value("Raxis").toDouble(&ok);
+
+              CurrentStepTemp.StepTempNum = model.rowCount();
+
+    }
+
 
     model.setTable("UpMold");
     model.setFilter("ID =" + QString::number(CurrentProgramTemp.UpMold,'.',0));
@@ -974,6 +1020,7 @@ void RunState::ReadForRun(int Type)
             QSqlRecord record = model.record(i);
              CurrentMaterialTemp.StrengthFactor = record.value("StrengthFactor").toDouble(&ok);
              CurrentMaterialTemp.EMold = record.value("EMold").toDouble(&ok);
+             CurrentMaterialTemp.MaterialName = record.value("Name").toString().split("-").at(1).toInt();
     }
     model.setTable("RunParameter");
     model.setFilter("ID = 1");
@@ -1004,7 +1051,10 @@ void RunState::QuitRunState()
     sendOneStep = 0;//状态清零
     VbackTime   = 0;
     VFast_flag = false;
-
+    //退让需要的标志位
+    concedeStartFlag = false;
+    concedeEndFlag   = false;
+    concedeTime      = 0;
 //    if(!db.open())
 //    {
 //        QMessageBox::critical(0,QObject::tr("Error"),

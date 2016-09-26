@@ -20,18 +20,15 @@ public:
     explicit Step(QWidget *parent = 0);
     ~Step();
 
-
-
-
-
     void ReflashLinedit();
     void Display_StepProgramItem();
     void NewStepProgram();
     void DeleteStepProgram();
     void Update_StepProgramItem(int Id,int Col,QString Value);
-
+    void reflashYaxisValue();
     void initStep(void);
     void CheckRaxisEnable();
+    void pressureIsEnable(bool Enable);
 
 
 signals:

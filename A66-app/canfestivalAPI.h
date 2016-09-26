@@ -108,6 +108,10 @@ extern S_Data_trans SystemSet_Motor[3];
 extern S_Data_trans HomingModeDate[3];
 extern S_Data_trans SystemSet_MT;
 extern S_Data_trans ConfigTest;
+extern S_Data_trans Write_MTEnable_buf;
+extern S_Data_trans Write_MTDisEnable_buf;
+extern S_Data_trans Write_StopAxis_buf[3];
+
 extern int ManualDat;
 
 long Get_MOTOR_Demand_Postion(UNS8 motor_id);
@@ -122,8 +126,9 @@ UNS8 Read_MOTOR_MSG(UNS8 nodeId);
 UNS8 Set_Motor_Speed_Postion_Rel(UNS8 nodeId,UNS32 speed,UNS32 postion);
 UNS8 Set_Motor_Speed_Postion_Abs(UNS8 nodeId,UNS32 speed,UNS32 postion);
 UNS8 Stop_MOTOR(UNS8 nodeId);
+UNS8 Set_Motor_Speed_Mode(UNS8 nodeId,UNS32 speed);
 
-UNS8 Write_MOTOR_One_Data(UNS8 nodeId, UNS16 Index,UNS8 Subindex,UNS8 count,UNS8 data);
+UNS8 Write_MOTOR_One_Data(UNS8 nodeId, UNS16 Index,UNS8 Subindex,UNS8 count,UNS32 data);
 
 UNS8 Write_MOTOR_Multi_Data(S_Data_trans *buf,UNS8 nodeId);
 UNS8 Read_MOTOR_Multi_Data(S_Data_trans *buf,UNS8 nodeId);

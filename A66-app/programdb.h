@@ -78,6 +78,10 @@ private slots:
 
     void on_toolButton_UpdatePIC_clicked();
 
+    void on_toolButton_LowerMold_clicked();
+
+    void on_toolButton_UpMold_clicked();
+
 private:
     Ui::Programdb *ui;
     QTableWidgetItem * setItemContext;

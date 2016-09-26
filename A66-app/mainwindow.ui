@@ -16,7 +16,7 @@
    </font>
   </property>
   <property name="cursor">
-   <cursorShape>BlankCursor</cursorShape>
+   <cursorShape>ArrowCursor</cursorShape>
   </property>
   <property name="focusPolicy">
    <enum>Qt::NoFocus</enum>
@@ -53,7 +53,7 @@
      </rect>
     </property>
     <property name="cursor">
-     <cursorShape>BlankCursor</cursorShape>
+     <cursorShape>ArrowCursor</cursorShape>
     </property>
     <property name="frameShape">
      <enum>QFrame::StyledPanel</enum>
@@ -71,7 +71,7 @@
       </rect>
      </property>
      <property name="cursor">
-      <cursorShape>BlankCursor</cursorShape>
+      <cursorShape>ArrowCursor</cursorShape>
      </property>
      <property name="text">
       <string/>
@@ -93,7 +93,7 @@
       </rect>
      </property>
      <property name="cursor">
-      <cursorShape>BlankCursor</cursorShape>
+      <cursorShape>ArrowCursor</cursorShape>
      </property>
      <property name="text">
       <string/>
@@ -117,7 +117,7 @@
       </font>
      </property>
      <property name="cursor">
-      <cursorShape>BlankCursor</cursorShape>
+      <cursorShape>ArrowCursor</cursorShape>
      </property>
      <property name="text">
       <string>程序库</string>
@@ -133,7 +133,7 @@
       </rect>
      </property>
      <property name="cursor">
-      <cursorShape>BlankCursor</cursorShape>
+      <cursorShape>ArrowCursor</cursorShape>
      </property>
      <property name="text">
       <string/>
@@ -147,7 +147,7 @@
       <rect>
        <x>340</x>
        <y>26</y>
-       <width>211</width>
+       <width>231</width>
        <height>41</height>
       </rect>
      </property>
@@ -157,7 +157,7 @@
       </font>
      </property>
      <property name="cursor">
-      <cursorShape>BlankCursor</cursorShape>
+      <cursorShape>ArrowCursor</cursorShape>
      </property>
      <property name="text">
       <string>准备就绪</string>
@@ -173,7 +173,7 @@
       </rect>
      </property>
      <property name="cursor">
-      <cursorShape>BlankCursor</cursorShape>
+      <cursorShape>ArrowCursor</cursorShape>
      </property>
      <property name="text">
       <string/>
@@ -192,7 +192,7 @@
       </rect>
      </property>
      <property name="cursor">
-      <cursorShape>BlankCursor</cursorShape>
+      <cursorShape>ArrowCursor</cursorShape>
      </property>
      <property name="text">
       <string/>
@@ -201,9 +201,9 @@
     <widget class="QLabel" name="label_StateTip">
      <property name="geometry">
       <rect>
-       <x>569</x>
-       <y>29</y>
-       <width>211</width>
+       <x>610</x>
+       <y>27</y>
+       <width>221</width>
        <height>41</height>
       </rect>
      </property>
@@ -213,7 +213,28 @@
       </font>
      </property>
      <property name="cursor">
-      <cursorShape>BlankCursor</cursorShape>
+      <cursorShape>ArrowCursor</cursorShape>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_PumpTip">
+     <property name="geometry">
+      <rect>
+       <x>520</x>
+       <y>26</y>
+       <width>141</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>16</pointsize>
+      </font>
+     </property>
+     <property name="cursor">
+      <cursorShape>ArrowCursor</cursorShape>
      </property>
      <property name="text">
       <string/>
@@ -230,7 +251,7 @@
      </rect>
     </property>
     <property name="cursor">
-     <cursorShape>BlankCursor</cursorShape>
+     <cursorShape>ArrowCursor</cursorShape>
     </property>
     <property name="frameShape">
      <enum>QFrame::StyledPanel</enum>
@@ -253,7 +274,7 @@
       </font>
      </property>
      <property name="cursor">
-      <cursorShape>BlankCursor</cursorShape>
+      <cursorShape>ArrowCursor</cursorShape>
      </property>
      <property name="text">
       <string>程序库</string>
@@ -287,7 +308,7 @@
       </font>
      </property>
      <property name="cursor">
-      <cursorShape>BlankCursor</cursorShape>
+      <cursorShape>ArrowCursor</cursorShape>
      </property>
      <property name="text">
       <string>工步</string>
@@ -321,7 +342,7 @@
       </font>
      </property>
      <property name="cursor">
-      <cursorShape>BlankCursor</cursorShape>
+      <cursorShape>ArrowCursor</cursorShape>
      </property>
      <property name="text">
       <string>手动</string>
@@ -355,7 +376,7 @@
       </font>
      </property>
      <property name="cursor">
-      <cursorShape>BlankCursor</cursorShape>
+      <cursorShape>ArrowCursor</cursorShape>
      </property>
      <property name="text">
       <string/>
@@ -385,7 +406,7 @@
       </font>
      </property>
      <property name="cursor">
-      <cursorShape>BlankCursor</cursorShape>
+      <cursorShape>ArrowCursor</cursorShape>
      </property>
      <property name="text">
       <string>设置</string>
@@ -419,7 +440,7 @@
       </font>
      </property>
      <property name="cursor">
-      <cursorShape>BlankCursor</cursorShape>
+      <cursorShape>ArrowCursor</cursorShape>
      </property>
      <property name="text">
       <string>模具库</string>
@@ -448,7 +469,7 @@
       </rect>
      </property>
      <property name="cursor">
-      <cursorShape>BlankCursor</cursorShape>
+      <cursorShape>ArrowCursor</cursorShape>
      </property>
      <property name="text">
       <string/>
@@ -473,7 +494,7 @@
       </rect>
      </property>
      <property name="cursor">
-      <cursorShape>BlankCursor</cursorShape>
+      <cursorShape>ArrowCursor</cursorShape>
      </property>
      <property name="text">
       <string>回零</string>
@@ -502,7 +523,7 @@
       </rect>
      </property>
      <property name="cursor">
-      <cursorShape>BlankCursor</cursorShape>
+      <cursorShape>ArrowCursor</cursorShape>
      </property>
      <property name="text">
       <string>运行</string>
@@ -531,7 +552,7 @@
       </rect>
      </property>
      <property name="cursor">
-      <cursorShape>BlankCursor</cursorShape>
+      <cursorShape>ArrowCursor</cursorShape>
      </property>
      <property name="text">
       <string>帮助</string>
@@ -561,7 +582,7 @@
      </rect>
     </property>
     <property name="cursor">
-     <cursorShape>BlankCursor</cursorShape>
+     <cursorShape>ArrowCursor</cursorShape>
     </property>
     <property name="text">
      <string/>

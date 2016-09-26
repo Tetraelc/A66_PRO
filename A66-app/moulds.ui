@@ -16,7 +16,7 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <widget class="QTabWidget" name="tabWidget_U">
+  <widget class="QTabWidget" name="tabWidget_Mold">
    <property name="geometry">
     <rect>
      <x>8</x>
@@ -32,13 +32,13 @@
     </font>
    </property>
    <property name="cursor">
-    <cursorShape>BlankCursor</cursorShape>
+    <cursorShape>SizeVerCursor</cursorShape>
    </property>
    <property name="focusPolicy">
     <enum>Qt::WheelFocus</enum>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>2</number>
    </property>
    <property name="iconSize">
     <size>
@@ -48,6 +48,9 @@
    </property>
    <property name="usesScrollButtons">
     <bool>true</bool>
+   </property>
+   <property name="documentMode">
+    <bool>false</bool>
    </property>
    <property name="tabsClosable">
     <bool>false</bool>
@@ -82,7 +85,7 @@
       </font>
      </property>
      <property name="cursor">
-      <cursorShape>BlankCursor</cursorShape>
+      <cursorShape>ArrowCursor</cursorShape>
      </property>
      <property name="title">
       <string>参数</string>
@@ -103,7 +106,7 @@
        </font>
       </property>
       <property name="cursor">
-       <cursorShape>BlankCursor</cursorShape>
+       <cursorShape>ArrowCursor</cursorShape>
       </property>
       <property name="text">
        <string>mm</string>
@@ -128,7 +131,7 @@
        </font>
       </property>
       <property name="cursor">
-       <cursorShape>BlankCursor</cursorShape>
+       <cursorShape>ArrowCursor</cursorShape>
       </property>
       <property name="text">
        <string>mm</string>
@@ -153,7 +156,7 @@
        </font>
       </property>
       <property name="cursor">
-       <cursorShape>BlankCursor</cursorShape>
+       <cursorShape>ArrowCursor</cursorShape>
       </property>
       <property name="text">
        <string>mm</string>
@@ -178,7 +181,7 @@
        </font>
       </property>
       <property name="cursor">
-       <cursorShape>BlankCursor</cursorShape>
+       <cursorShape>ArrowCursor</cursorShape>
       </property>
       <property name="text">
        <string>mm</string>
@@ -288,7 +291,7 @@
        </palette>
       </property>
       <property name="cursor">
-       <cursorShape>BlankCursor</cursorShape>
+       <cursorShape>ArrowCursor</cursorShape>
       </property>
       <property name="styleSheet">
        <string notr="true">background-color: rgb(255, 255, 255);</string>
@@ -395,7 +398,7 @@
        </palette>
       </property>
       <property name="cursor">
-       <cursorShape>BlankCursor</cursorShape>
+       <cursorShape>ArrowCursor</cursorShape>
       </property>
       <property name="styleSheet">
        <string notr="true">background-color: rgb(255, 255, 255);</string>
@@ -502,7 +505,7 @@
        </palette>
       </property>
       <property name="cursor">
-       <cursorShape>BlankCursor</cursorShape>
+       <cursorShape>ArrowCursor</cursorShape>
       </property>
       <property name="styleSheet">
        <string notr="true">background-color: rgb(255, 255, 255);</string>
@@ -609,7 +612,7 @@
        </palette>
       </property>
       <property name="cursor">
-       <cursorShape>BlankCursor</cursorShape>
+       <cursorShape>ArrowCursor</cursorShape>
       </property>
       <property name="styleSheet">
        <string notr="true">background-color: rgb(255, 255, 255);</string>
@@ -716,7 +719,7 @@
        </palette>
       </property>
       <property name="cursor">
-       <cursorShape>BlankCursor</cursorShape>
+       <cursorShape>ArrowCursor</cursorShape>
       </property>
       <property name="styleSheet">
        <string notr="true">background-color: rgb(255, 255, 255);</string>
@@ -738,7 +741,7 @@
        </font>
       </property>
       <property name="cursor">
-       <cursorShape>BlankCursor</cursorShape>
+       <cursorShape>ArrowCursor</cursorShape>
       </property>
       <property name="text">
        <string>高度(H)</string>
@@ -763,7 +766,7 @@
        </font>
       </property>
       <property name="cursor">
-       <cursorShape>BlankCursor</cursorShape>
+       <cursorShape>ArrowCursor</cursorShape>
       </property>
       <property name="text">
        <string>角度(A)</string>
@@ -788,7 +791,7 @@
        </font>
       </property>
       <property name="cursor">
-       <cursorShape>BlankCursor</cursorShape>
+       <cursorShape>ArrowCursor</cursorShape>
       </property>
       <property name="text">
        <string>半径(RA)</string>
@@ -813,7 +816,7 @@
        </font>
       </property>
       <property name="cursor">
-       <cursorShape>BlankCursor</cursorShape>
+       <cursorShape>ArrowCursor</cursorShape>
       </property>
       <property name="text">
        <string>V开口(V)</string>
@@ -838,7 +841,7 @@
        </font>
       </property>
       <property name="cursor">
-       <cursorShape>BlankCursor</cursorShape>
+       <cursorShape>ArrowCursor</cursorShape>
       </property>
       <property name="text">
        <string>X安全位置(SN)</string>
@@ -862,7 +865,7 @@
        </font>
       </property>
       <property name="cursor">
-       <cursorShape>BlankCursor</cursorShape>
+       <cursorShape>ArrowCursor</cursorShape>
       </property>
       <property name="text">
        <string>°</string>
@@ -884,7 +887,7 @@
       </font>
      </property>
      <property name="cursor" stdset="0">
-      <cursorShape>BlankCursor</cursorShape>
+      <cursorShape>ArrowCursor</cursorShape>
      </property>
      <property name="frameShadow">
       <enum>QFrame::Sunken</enum>
@@ -1119,7 +1122,7 @@
       </rect>
      </property>
      <property name="cursor" stdset="0">
-      <cursorShape>BlankCursor</cursorShape>
+      <cursorShape>ArrowCursor</cursorShape>
      </property>
     </widget>
     <widget class="QLabel" name="label_2">
@@ -1132,7 +1135,7 @@
       </rect>
      </property>
      <property name="cursor">
-      <cursorShape>BlankCursor</cursorShape>
+      <cursorShape>ArrowCursor</cursorShape>
      </property>
      <property name="text">
       <string/>
@@ -1157,7 +1160,7 @@
       </font>
      </property>
      <property name="cursor">
-      <cursorShape>BlankCursor</cursorShape>
+      <cursorShape>ArrowCursor</cursorShape>
      </property>
      <property name="text">
       <string>删除</string>
@@ -1192,7 +1195,7 @@
       </font>
      </property>
      <property name="cursor">
-      <cursorShape>BlankCursor</cursorShape>
+      <cursorShape>ArrowCursor</cursorShape>
      </property>
      <property name="text">
       <string>折弯修正</string>
@@ -1227,7 +1230,7 @@
       </font>
      </property>
      <property name="cursor">
-      <cursorShape>BlankCursor</cursorShape>
+      <cursorShape>ArrowCursor</cursorShape>
      </property>
      <property name="iconSize">
       <size>
@@ -1255,7 +1258,7 @@
       </font>
      </property>
      <property name="cursor">
-      <cursorShape>BlankCursor</cursorShape>
+      <cursorShape>ArrowCursor</cursorShape>
      </property>
      <property name="text">
       <string>down</string>
@@ -1287,7 +1290,7 @@
       </font>
      </property>
      <property name="cursor">
-      <cursorShape>BlankCursor</cursorShape>
+      <cursorShape>ArrowCursor</cursorShape>
      </property>
      <property name="text">
       <string>UP</string>
@@ -1322,7 +1325,7 @@
       </font>
      </property>
      <property name="cursor">
-      <cursorShape>BlankCursor</cursorShape>
+      <cursorShape>ArrowCursor</cursorShape>
      </property>
      <property name="text">
       <string>新建</string>
@@ -1342,7 +1345,7 @@
      </property>
     </widget>
    </widget>
-   <widget class="QWidget" name="tab">
+   <widget class="QWidget" name="tab_Up">
     <attribute name="icon">
      <iconset resource="A66-appsrc.qrc">
       <normaloff>:/ico/ICO/P1-UPER.png</normaloff>:/ico/ICO/P1-UPER.png</iconset>
@@ -1371,7 +1374,7 @@
       </font>
      </property>
      <property name="cursor" stdset="0">
-      <cursorShape>BlankCursor</cursorShape>
+      <cursorShape>ArrowCursor</cursorShape>
      </property>
      <property name="acceptDrops">
       <bool>false</bool>
@@ -1591,7 +1594,7 @@
       </font>
      </property>
      <property name="cursor">
-      <cursorShape>BlankCursor</cursorShape>
+      <cursorShape>ArrowCursor</cursorShape>
      </property>
      <property name="title">
       <string>参数 </string>
@@ -1697,7 +1700,7 @@
        </palette>
       </property>
       <property name="cursor">
-       <cursorShape>BlankCursor</cursorShape>
+       <cursorShape>ArrowCursor</cursorShape>
       </property>
       <property name="focusPolicy">
        <enum>Qt::ClickFocus</enum>
@@ -1813,7 +1816,7 @@
        </palette>
       </property>
       <property name="cursor">
-       <cursorShape>BlankCursor</cursorShape>
+       <cursorShape>ArrowCursor</cursorShape>
       </property>
       <property name="styleSheet">
        <string notr="true">background-color: rgb(255, 255, 255);</string>
@@ -1920,7 +1923,7 @@
        </palette>
       </property>
       <property name="cursor">
-       <cursorShape>BlankCursor</cursorShape>
+       <cursorShape>ArrowCursor</cursorShape>
       </property>
       <property name="styleSheet">
        <string notr="true">background-color: rgb(255, 255, 255);</string>
@@ -1941,7 +1944,7 @@
        </font>
       </property>
       <property name="cursor">
-       <cursorShape>BlankCursor</cursorShape>
+       <cursorShape>ArrowCursor</cursorShape>
       </property>
       <property name="text">
        <string>mm</string>
@@ -1965,7 +1968,7 @@
        </font>
       </property>
       <property name="cursor">
-       <cursorShape>BlankCursor</cursorShape>
+       <cursorShape>ArrowCursor</cursorShape>
       </property>
       <property name="text">
        <string>mm</string>
@@ -1989,7 +1992,7 @@
        </font>
       </property>
       <property name="cursor">
-       <cursorShape>BlankCursor</cursorShape>
+       <cursorShape>ArrowCursor</cursorShape>
       </property>
       <property name="text">
        <string>高度(H)</string>
@@ -2016,7 +2019,7 @@
        </font>
       </property>
       <property name="cursor">
-       <cursorShape>BlankCursor</cursorShape>
+       <cursorShape>ArrowCursor</cursorShape>
       </property>
       <property name="text">
        <string>角度(A)</string>
@@ -2043,7 +2046,7 @@
        </font>
       </property>
       <property name="cursor">
-       <cursorShape>BlankCursor</cursorShape>
+       <cursorShape>ArrowCursor</cursorShape>
       </property>
       <property name="text">
        <string>半径(RA)</string>
@@ -2070,7 +2073,7 @@
        </font>
       </property>
       <property name="cursor">
-       <cursorShape>BlankCursor</cursorShape>
+       <cursorShape>ArrowCursor</cursorShape>
       </property>
       <property name="text">
        <string>°</string>
@@ -2087,7 +2090,7 @@
       </rect>
      </property>
      <property name="cursor" stdset="0">
-      <cursorShape>BlankCursor</cursorShape>
+      <cursorShape>ArrowCursor</cursorShape>
      </property>
     </widget>
     <widget class="QLabel" name="label">
@@ -2100,7 +2103,7 @@
       </rect>
      </property>
      <property name="cursor">
-      <cursorShape>BlankCursor</cursorShape>
+      <cursorShape>ArrowCursor</cursorShape>
      </property>
      <property name="text">
       <string/>
@@ -2125,7 +2128,7 @@
       </font>
      </property>
      <property name="cursor">
-      <cursorShape>BlankCursor</cursorShape>
+      <cursorShape>ArrowCursor</cursorShape>
      </property>
      <property name="iconSize">
       <size>
@@ -2153,7 +2156,7 @@
       </font>
      </property>
      <property name="cursor">
-      <cursorShape>BlankCursor</cursorShape>
+      <cursorShape>ArrowCursor</cursorShape>
      </property>
      <property name="text">
       <string>新建</string>
@@ -2188,7 +2191,7 @@
       </font>
      </property>
      <property name="cursor">
-      <cursorShape>BlankCursor</cursorShape>
+      <cursorShape>ArrowCursor</cursorShape>
      </property>
      <property name="text">
       <string>down</string>
@@ -2220,7 +2223,7 @@
       </font>
      </property>
      <property name="cursor">
-      <cursorShape>BlankCursor</cursorShape>
+      <cursorShape>ArrowCursor</cursorShape>
      </property>
      <property name="text">
       <string>删除</string>
@@ -2255,7 +2258,7 @@
       </font>
      </property>
      <property name="cursor">
-      <cursorShape>BlankCursor</cursorShape>
+      <cursorShape>ArrowCursor</cursorShape>
      </property>
      <property name="iconSize">
       <size>
@@ -2283,7 +2286,7 @@
       </font>
      </property>
      <property name="cursor">
-      <cursorShape>BlankCursor</cursorShape>
+      <cursorShape>ArrowCursor</cursorShape>
      </property>
      <property name="text">
       <string>UP</string>
@@ -2332,7 +2335,7 @@
       </font>
      </property>
      <property name="cursor" stdset="0">
-      <cursorShape>BlankCursor</cursorShape>
+      <cursorShape>ArrowCursor</cursorShape>
      </property>
      <property name="acceptDrops">
       <bool>false</bool>
@@ -2535,7 +2538,7 @@
       </font>
      </property>
      <property name="cursor">
-      <cursorShape>BlankCursor</cursorShape>
+      <cursorShape>ArrowCursor</cursorShape>
      </property>
      <property name="text">
       <string>新建</string>
@@ -2570,7 +2573,7 @@
       </font>
      </property>
      <property name="cursor">
-      <cursorShape>BlankCursor</cursorShape>
+      <cursorShape>ArrowCursor</cursorShape>
      </property>
      <property name="text">
       <string>UP</string>
@@ -2605,7 +2608,7 @@
       </font>
      </property>
      <property name="cursor">
-      <cursorShape>BlankCursor</cursorShape>
+      <cursorShape>ArrowCursor</cursorShape>
      </property>
      <property name="text">
       <string>删除</string>
@@ -2640,7 +2643,7 @@
       </font>
      </property>
      <property name="cursor">
-      <cursorShape>BlankCursor</cursorShape>
+      <cursorShape>ArrowCursor</cursorShape>
      </property>
      <property name="text">
       <string>down</string>
@@ -2671,7 +2674,7 @@
       </font>
      </property>
      <property name="cursor">
-      <cursorShape>BlankCursor</cursorShape>
+      <cursorShape>ArrowCursor</cursorShape>
      </property>
      <property name="title">
       <string>参数 </string>
@@ -2777,7 +2780,7 @@
        </palette>
       </property>
       <property name="cursor">
-       <cursorShape>BlankCursor</cursorShape>
+       <cursorShape>ArrowCursor</cursorShape>
       </property>
       <property name="styleSheet">
        <string notr="true">background-color: rgb(255, 255, 255);</string>
@@ -2798,7 +2801,7 @@
        </font>
       </property>
       <property name="cursor">
-       <cursorShape>BlankCursor</cursorShape>
+       <cursorShape>ArrowCursor</cursorShape>
       </property>
       <property name="text">
        <string>E-模数</string>
@@ -2908,7 +2911,7 @@
        </palette>
       </property>
       <property name="cursor">
-       <cursorShape>BlankCursor</cursorShape>
+       <cursorShape>ArrowCursor</cursorShape>
       </property>
       <property name="styleSheet">
        <string notr="true">background-color: rgb(255, 255, 255);</string>
@@ -2929,7 +2932,7 @@
        </font>
       </property>
       <property name="cursor">
-       <cursorShape>BlankCursor</cursorShape>
+       <cursorShape>ArrowCursor</cursorShape>
       </property>
       <item>
        <property name="text">
@@ -2943,7 +2946,12 @@
       </item>
       <item>
        <property name="text">
-        <string>铁</string>
+        <string>钢</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>冷板</string>
        </property>
       </item>
      </widget>
@@ -2962,7 +2970,7 @@
        </font>
       </property>
       <property name="cursor">
-       <cursorShape>BlankCursor</cursorShape>
+       <cursorShape>ArrowCursor</cursorShape>
       </property>
       <property name="text">
        <string>类型</string>
@@ -3072,7 +3080,7 @@
        </palette>
       </property>
       <property name="cursor">
-       <cursorShape>BlankCursor</cursorShape>
+       <cursorShape>ArrowCursor</cursorShape>
       </property>
       <property name="styleSheet">
        <string notr="true">background-color: rgb(255, 255, 255);</string>
@@ -3093,7 +3101,7 @@
        </font>
       </property>
       <property name="cursor">
-       <cursorShape>BlankCursor</cursorShape>
+       <cursorShape>ArrowCursor</cursorShape>
       </property>
       <property name="text">
        <string>抗拉系数</string>
@@ -3117,7 +3125,7 @@
        </font>
       </property>
       <property name="cursor">
-       <cursorShape>BlankCursor</cursorShape>
+       <cursorShape>ArrowCursor</cursorShape>
       </property>
       <property name="text">
        <string>名称</string>
@@ -3137,7 +3145,7 @@
       </rect>
      </property>
      <property name="cursor" stdset="0">
-      <cursorShape>BlankCursor</cursorShape>
+      <cursorShape>ArrowCursor</cursorShape>
      </property>
      <property name="focusPolicy">
       <enum>Qt::WheelFocus</enum>
@@ -3153,7 +3161,7 @@
       </rect>
      </property>
      <property name="cursor">
-      <cursorShape>BlankCursor</cursorShape>
+      <cursorShape>ArrowCursor</cursorShape>
      </property>
      <property name="text">
       <string/>

@@ -16,20 +16,28 @@ SystemWarn::SystemWarn(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    if(aralmOrTipFalg)
+    qDebug()<<"aralmOrTipFalg"<<aralmOrTipFalg;
+    if(aralmOrTipFalg == true)
     {
        SystemCheckAlarm(CurrentReg.Current_MotorAlarm);
        ui->label_warming->setVisible(true);
+//       if(PumpButtonFlag == true)
+//       {
+//           ui->toolButton_Comfirm->setVisible(true);
+//           ui->toolButton_Quit->setVisible(true);
+//       }
+//       else
+//       {
+//           ui->toolButton_Comfirm->setVisible(false);
+//           ui->toolButton_Quit->setVisible(false);
+//       }
     }
     else
     {
         ui->label_warming->setVisible(false);
         SystemCheckTip(CurrentReg.Current_MotorTips);
         qDebug()<<"CurrentReg.Current_MotorTips"<<CurrentReg.Current_MotorTips;
-
     }
-
-
 
 }
 
@@ -46,6 +54,8 @@ void SystemWarn::SystemCheckAlarm(int WarnID)
     case 1:ui->label_DisplayAlarm->setText(SystemWarnInformation(UpperPointAlarm));
         break;
     case 2:ui->label_DisplayAlarm->setText(SystemWarnInformation(MotorOffline));
+        break;
+    case 3:ui->label_DisplayAlarm->setText(SystemWarnInformation(Pumpsignal));
         break;
     case 23:ui->label_DisplayAlarm->setText(SystemTipsInformation(ProgramDelTip));
         break;

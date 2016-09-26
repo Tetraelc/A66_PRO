@@ -57,19 +57,33 @@ S_Data_trans init_buf[8] = {{0x08,0x6040,0x00,0x02,0x06,                       /
 //                                  0x607B,0x01,0x04,0xAA,// 最小限位
 //                                  0x607B,0x02,0x04,0xAA,// 最大限位
 S_Data_trans set_Postion_Speed_buf[4] = {{0x04,0x6040,0x00,0x02,0x0f,
-                                           0x607A,0x00,0x04,0x0000, // weizhi
-                                           0x6081,0x00,0x04,0x0000, //Speed
-                                           0x6040,0x00,0x02,0x7f},
+                                               0x607A,0x00,0x04,0x0000, // weizhi
+                                               0x6081,0x00,0x04,0x0000, //Speed
+                                               0x6040,0x00,0x02,0x7f,
+                                           },
+                                        {0x04,
+                                              0x6040,0x00,0x02,0x0f,
+                                              0x607A,0x00,0x04,0x0000, // weizhi
+                                              0x6081,0x00,0x04,0x0000, //Speed
+                                              0x6040,0x00,0x02,0x7f,
+                                           },
                                         {0x04,0x6040,0x00,0x02,0x0f,
-                                           0x607A,0x00,0x04,0x0000, // weizhi
-                                           0x6081,0x00,0x04,0x0000, //Speed
-                                           0x6040,0x00,0x02,0x7f},
-                                        {0x04,0x6040,0x00,0x02,0x0f,
-                                           0x607A,0x00,0x04,0x0000, // weizhi
-                                           0x6081,0x00,0x04,0x0000, //Speed
-                                           0x6040,0x00,0x02,0x7f}};
-
-
+                                              0x607A,0x00,0x04,0x0000, // weizhi
+                                              0x6081,0x00,0x04,0x0000, //Speed
+                                              0x6040,0x00,0x02,0x7f,
+                                           }};
+S_Data_trans set_Speed_buf[4] = {{0x03,0x6060,0x00,0x01,0x03,
+                                       0x60ff,0x00,0x04,0x00,
+                                       0x6040,0x00,0x02,0x7f,
+                                       },
+                                 {0x03,0x6060,0x00,0x01,0x03,
+                                       0x60ff,0x00,0x04,0x00,
+                                       0x6040,0x00,0x02,0x7f,
+                                        },
+                                 {0x03,0x6060,0x00,0x01,0x03,
+                                       0x60ff,0x00,0x04,0x00,
+                                       0x6040,0x00,0x02,0x7f,
+                                           }};
 
 
 S_Data_trans Write_Multi_buf       = {0x04,0x6040,0x00,0x02,0x0f,
@@ -89,26 +103,30 @@ S_Data_trans Config_valve_buf      = {0x09,0x7000,0x02,0x01,0x00,
                                            0x7000,0x01,0x01,0xAA
                                      };
 
-S_Data_trans Adjust_ManualDate[3]    = {{0x05,0x6060,0x00,0x01,0x06,
+S_Data_trans Adjust_ManualDate[3]    = {{0x06,0x6098,0x00,0x01,35,
+                                          0x6060,0x00,0x01,0x06,
                                           0x607c,0x00,0x04,0x0,
                                           0x6040,0x00,0x02,0x0f,
-                                          0x6040,0x00,0x02,0x7f,
+                                          0x6040,0x00,0x02,0x1f,
                                           0x6060,0x00,0x01,0x01,},
-                                     {0x05,0x6060,0x00,0x01,0x06,
+                                     {0x06,0x6098,0x00,0x01,35,
+                                           0x6060,0x00,0x01,0x06,
                                            0x607c,0x00,0x04,0x0,
                                            0x6040,0x00,0x02,0x0f,
                                            0x6040,0x00,0x02,0x7f,
                                            0x6060,0x00,0x01,0x01,},
-                                     {0x05,0x6060,0x00,0x01,0x06,
+                                     {0x06,0x6098,0x00,0x01,35,
+                                           0x6060,0x00,0x01,0x06,
                                            0x607c,0x00,0x04,0x0,
                                            0x6040,0x00,0x02,0x0f,
                                            0x6040,0x00,0x02,0x7f,
                                            0x6060,0x00,0x01,0x01,},
 
                                     };
-S_Data_trans SystemSet_MT           = { 0x03,0x7000,0x08,0x02,0x00,
+S_Data_trans SystemSet_MT           = { 0x04,0x7000,0x08,0x02,0x00,
                                              0x7000,0x09,0x02,0x00,
                                              0x7000,0x01,0x01,0xAA,//上面是液压轴
+                                             0x7001,0x01,0x01,0x55,
                                        };
 S_Data_trans SystemSet_Motor[3]        = { {0x09, 0x607B,0x01,0x04,0xAA,// 最小限位
                                                   0x607B,0x02,0x04,0xAA,// 最大限位
@@ -145,8 +163,7 @@ S_Data_trans HomingModeDate[3]    = {{0x07,0x6060,0x00,0x01,0x06,
                                             0x6099,0x02,0x04,50,
                                             0x6040,0x00,0x02,0x0f,
                                             0x6040,0x00,0x02,0x1f,
-
-                                           },//0x6060,0x00,0x01,0x01,
+                                           },
                                      {0x07,
                                            0x6060,0x00,0x01,0x06,
                                            0x6098,0x00,0x01,0x02,//正限位开关
@@ -155,22 +172,31 @@ S_Data_trans HomingModeDate[3]    = {{0x07,0x6060,0x00,0x01,0x06,
                                            0x6099,0x02,0x04,50,
                                            0x6040,0x00,0x02,0x0f,
                                            0x6040,0x00,0x02,0x1f,
-
                                            },//0x6060,0x00,0x01,0x01,
                                       {0x07,
                                             0x6060,0x00,0x01,0x06,
-                                           0x6098,0x00,0x01,0x02,//正限位开关
+                                            0x6098,0x00,0x01,0x02,//正限位开关
                                             0x607c,0x00,0x04,550,// 参考点
-                                           0x6099,0x01,0x04,1000,
-                                       0x6099,0x02,0x04,50,
-                                           0x6040,0x00,0x02,0x0f,
-                                           0x6040,0x00,0x02,0x1f,
-
+                                            0x6099,0x01,0x04,1000,
+                                            0x6099,0x02,0x04,50,
+                                            0x6040,0x00,0x02,0x0f,
+                                            0x6040,0x00,0x02,0x1f,
                                           }, //0x6060,0x00,0x01,0x01,
                                      };
 S_Data_trans ConfigTest = {0x02,0x7001,0x01,0x01,0x30, //模式为停止
                                 0x7001,0x02,0x01,0x00};//写入要阀组输出的数据
 
+S_Data_trans Write_MTEnable_buf   = {0x02,0x7001,0x01,0x01,0xaa,
+                                    0x7001,0x01,0x01,0x40};
+S_Data_trans Write_MTDisEnable_buf   = {0x02,0x7001,0x01,0x01,0x55,
+                                           0x7001,0x01,0x01,0xa0};
+S_Data_trans Write_StopAxis_buf[3]   = {0x01,0x6040,0x00,0x02,0x10f,
+                                             0x6060,0x00,0x01,0x01,
+                                        0x01,0x6040,0x00,0x02,0x10f,
+                                             0x6060,0x00,0x01,0x01,
+                                        0x01,0x6040,0x00,0x02,0x10f,
+                                             0x6060,0x00,0x01,0x01,
+                                       };
 
 /**
   * @brief  鍒濆鍖杕otor
@@ -312,11 +338,10 @@ static void CheckSDOWrite(CO_Data* d, UNS8 nodeId)
 
 }
 
-
-
-UNS8 Write_MOTOR_One_Data(UNS8 nodeId, UNS16 Index,UNS8 Subindex,UNS8 count,UNS8 data)
+UNS8 Write_MOTOR_One_Data(UNS8 nodeId, UNS16 Index,UNS8 Subindex,UNS8 count,UNS32 data)
 {
     UNS8 Ret;
+
     if(motor[nodeId-1].SDO_status == SDO_free)
     {
         Ret = writeNetworkDictCallBack(&ObjDict_Data, /* CO_Data* d*/
@@ -472,7 +497,9 @@ UNS8 Stop_MOTOR(UNS8 nodeId)
 {
    UNS16 quick_stop = 0;
    quick_stop= ( QUICK_STOP);//Get_MOTOR_StatusWord(nodeId) |
-   Write_MOTOR_One_Data(nodeId,0x6040,0x00,2,quick_stop);
+  // Write_MOTOR_Multi_Data(&Write_StopAxis_buf[nodeId-1],nodeId);
+
+   Write_MOTOR_One_Data(nodeId,0x6040,0x00,2,0x02);
 
 }
 /**
@@ -532,6 +559,13 @@ UNS8 Set_Motor_Speed_Postion_Rel(UNS8 nodeId,UNS32 speed,UNS32 postion)
 //       }
 
 }
+UNS8 Set_Motor_Speed_Mode(UNS8 nodeId,UNS32 speed)
+{
+        set_Speed_buf[nodeId-1].data[1].Data     = speed;
+        // Send_Motor_Speed_Postion(&ObjDict_Data,nodeId);
+        Write_MOTOR_Multi_Data(&set_Speed_buf[nodeId-1],nodeId);
+}
+
 UNS8 Set_Motor_Speed_Postion_Abs(UNS8 nodeId,UNS32 speed,UNS32 postion)
 {
     if(motor[nodeId-1].SDO_status != SDO_free)
@@ -540,6 +574,7 @@ UNS8 Set_Motor_Speed_Postion_Abs(UNS8 nodeId,UNS32 speed,UNS32 postion)
         }
     else
         {
+
         set_Postion_Speed_buf[nodeId-1].data[1].Data     =  postion;
         set_Postion_Speed_buf[nodeId-1].data[2].Data     =  speed;
         set_Postion_Speed_buf[nodeId-1].data[3].Data     =  0x3f;

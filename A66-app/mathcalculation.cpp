@@ -34,10 +34,10 @@ double MathCalculation::AngleToYDis(double angle,double compensationAngle,unsign
 
     if(m_com == 0)  //角度补偿
     {
-        qDebug()<<"Angle"<<2* AngleToLength(m_a)<<AngleToLength(m_a-m_ac);
+        //qDebug()<<"Angle"<<2* AngleToLength(m_a)<<AngleToLength(m_a-m_ac);
         m_y =   2* AngleToLength(m_a) - AngleToLength(m_a-m_ac);
         EspYm =  m_y + YZero;
-        qDebug("EspYm  %f",m_y );
+       // qDebug("EspYm  %f",m_y );
 
     }
     else            //深度补偿
@@ -71,7 +71,7 @@ double MathCalculation::AngleToLength(double m_ba)
     double m_e =CurrentMaterialTemp.EMold;//MaterLib[(uint8)DisMenu[MultiStepProgram].Dis[MspMaterial].fword - 1].E_Module;
     double m_o = CurrentMaterialTemp.StrengthFactor;// MaterLib[(uint8)DisMenu[MultiStepProgram].Dis[MspMaterial].fword - 1].TensileStrength;
 
-    qDebug()<<"shuzhi"<<ma<<m_l<<m_v<<m_tt<<m_r<<m_e<<m_o;
+    //qDebug()<<"shuzhi"<<ma<<m_l<<m_v<<m_tt<<m_r<<m_e<<m_o;
 
     if (m_ba >= 180)    return 0-m_tt;
     else

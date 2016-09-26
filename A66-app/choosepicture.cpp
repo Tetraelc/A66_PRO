@@ -37,6 +37,7 @@ ChoosePicture::ChoosePicture(QWidget *parent) :
     ui->treeView->setColumnWidth(2,50);
     ui->treeView->setColumnWidth(3,50);
     ui->treeView->show();
+    ui->treeView->expandAll();
 }
 
 ChoosePicture::~ChoosePicture()

@@ -22,14 +22,12 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    CurrentReg.Current_ProgramLibRow =0;
+    CurrentReg.Current_ProgramLibRow = 0;
     CurrentReg.Current_WorkedTotal = 0;
     initWindow();
     SystemSetting sys;
     sys.ReadForSystemDat();
     ProgramName_Scan = startTimer(800);
-
-
 
     //ui->toolButton_T1->setCheckable(false);
 //    QPixmap pix;
@@ -41,14 +39,13 @@ MainWindow::MainWindow(QWidget *parent) :
     pix.load("/opt/tetra/A66-app/ICO/HomingModemini.png");
     ui->label_Picture->setPixmap(pix);
 
-//    ui->toolButton_T1->setIcon(QIcon("/opt/tetra/A66-app/ICO/HomingMode.png"));
-//    qDebug()<<"ui->toolButton_T1->isCheckable()"<<ui->toolButton_T1->isCheckable();
+    //    ui->toolButton_T1->setIcon(QIcon("/opt/tetra/A66-app/ICO/HomingMode.png"));
+    //    qDebug()<<"ui->toolButton_T1->isCheckable()"<<ui->toolButton_T1->isCheckable();
 
-//    ui->toolButton_ProName->setCheckable(true);
-//    ui->toolButton_ProName->setChecked(true);
-//    ui->toolButton_ProName->setEnabled(false);
-//    ui->toolButton_T1->setEnabled(false);
-
+    //    ui->toolButton_ProName->setCheckable(true);
+    //    ui->toolButton_ProName->setChecked(true);
+    //    ui->toolButton_ProName->setEnabled(false);
+    //    ui->toolButton_T1->setEnabled(false);
 
 }
 
@@ -98,6 +95,7 @@ void MainWindow::MainWinState()
          ui->label_StateTip->setText(CurrentReg.Current_MotorConfigResult);
 
   //       CurrentReg.Current_MotorConfigResult.clear();
+         qDebug()<<"CurrentReg.Current_MotorConfigResult"<<CurrentReg.Current_MotorConfigResult;
          MotorConfigTipFlag = false;
     }
 
@@ -106,6 +104,42 @@ void MainWindow::MainWinState()
         ui->label_State->setText(trUtf8("展开长度 :") + QString::number( CurrentReg.developLength,'.',2));
         developLengthFlag = false;
     }
+    if((A20_IN_Status & UpperPoint) && (MotorConfigFlag == false))
+    {
+        CurrentReg.Current_MotorConfigResult.clear();
+        ui->label_StateTip->setText(CurrentReg.Current_MotorConfigResult);
+    }
+    if(!(A20_IN_Status & PumpSignal) )
+    {
+
+        ui->label_PumpTip->setText(trUtf8("油泵未启动"));
+    }
+    else
+    {
+         ui->label_PumpTip->clear();
+    }
+//    if(!(A20_IN_Status & PumpSignal) )
+//    {
+//      PumpCurError = true;
+//    }
+//    else
+//    {
+//        PumpCurError = false;
+//    }
+//    if(PumpPreError == PumpCurError)
+//    {
+//    }
+//    else
+//    {
+//     PumpPreError =  PumpCurError;
+//     if(PumpCurError == true)
+//     ui->label_State->setText(trUtf8("油泵未启动"));
+//     else
+//     {
+//        ui->label_State->setText(trUtf8(" "));
+//     }
+
+
 }
 
 
@@ -120,9 +154,9 @@ void MainWindow::initWindow()
     connect(sp, SIGNAL(sig_developLength(double)), this, SLOT(ReturndevelopLength(double)));
     Moulds *md=new Moulds;
     connect(this, SIGNAL(openMouldsWidget()), md, SLOT(openMouldsWin()));
-    Manual *ml=new Manual;
+    ml=new Manual;
     connect(this, SIGNAL(openManualWidget()), ml, SLOT(openManualWin()));
-    SystemSetting *sys=new SystemSetting;
+    sys=new SystemSetting;
     connect(this, SIGNAL(openSystemSettingWidget()), sys, SLOT(openSystemSettingWin()));
     RunState *rs=new RunState;
     connect(this, SIGNAL(openRunStateWidget()), rs, SLOT(openRunStateWin()));
@@ -136,6 +170,7 @@ void MainWindow::initWindow()
 
 
     sys->installEventFilter(this);
+     ml->installEventFilter(this);
 //    HomingMode *homing =new HomingMode;
 //    connect(this, SIGNAL(openHomingModeWidget()), homing, SLOT(openHomingModeWin()));
 
@@ -222,8 +257,6 @@ void MainWindow::ReturnProgramdb()
     QPixmap pix;
     pix.load("/opt/tetra/A66-app/ICO/P1-PROGmini.png");
     ui->label_Picture->setPixmap(pix);
-//     ui->toolButton_T1->setText(trUtf8(" 程序库"));
-//     ui->toolButton_T1->setIcon(QIcon("/opt/tetra/A66-app/ICO/P1-PROG.png"));
      ui->toolButton_B0->setEnabled(false);
      ui->toolButton_B1->setEnabled(true);
      ui->toolButton_B2->setEnabled(true);
@@ -234,8 +267,6 @@ void MainWindow::ReturnProgramdb()
      ui->toolButton->setEnabled(false);
      ui->toolButton_4->setEnabled(false);
      emit openProgramWidget();
-   //  openBeep();
-
 }
 
 
@@ -417,6 +448,7 @@ bool MainWindow::on_toolButton_Start_clicked()
         {
             CurrentReg.Current_MotorAlarm = MotorOffline;
             aralmOrTipFalg = true;
+            PumpButtonFlag = true;
             SystemWarn warn;
             warn.setWindowFlags(Qt::FramelessWindowHint);
             warn.exec();
@@ -430,6 +462,7 @@ bool MainWindow::on_toolButton_Start_clicked()
         {
             CurrentReg.Current_MotorAlarm = MotorOffline;
             aralmOrTipFalg = true;
+            PumpButtonFlag = true;
             SystemWarn warn;
             warn.setWindowFlags(Qt::FramelessWindowHint);
             warn.exec();
@@ -444,6 +477,7 @@ bool MainWindow::on_toolButton_Start_clicked()
         {
             CurrentReg.Current_MotorAlarm = UpperPointAlarm;
             aralmOrTipFalg = true;
+            PumpButtonFlag = true;
 
             Write_MOTOR_One_Data(0x04,0x7001,0x01,0x01,ENTER_RETURN);
             SystemWarn warn;
@@ -483,8 +517,6 @@ bool MainWindow::on_toolButton_Start_clicked()
                 ui->label_Text->setText(trUtf8("运行"));
                 emit openRunStateWidget();
 
-    //            ui->toolButton_T1->setText(trUtf8(" 运行"));
-    //            ui->toolButton_T1->setIcon(QIcon("/opt/tetra/A66-app/ICO/P1-RUN.png"));
                 ui->toolButton_B0->setEnabled(false);
                 ui->toolButton_B1->setEnabled(false);
                 ui->toolButton_B2->setEnabled(false);
@@ -503,8 +535,7 @@ bool MainWindow::on_toolButton_Start_clicked()
             pix.load("/opt/tetra/A66-app/ICO/P1-STARTmini.png");
             ui->label_Picture->setPixmap(pix);
             emit openRunStateWidget();
-    //        ui->toolButton_T1->setText(trUtf8(" 运行"));
-    //        ui->toolButton_T1->setIcon(QIcon("/opt/tetra/A66-app/ICO/P1-RUN.png"));
+
             ui->toolButton_B0->setEnabled(false);
             ui->toolButton_B1->setEnabled(false);
             ui->toolButton_B2->setEnabled(false);
@@ -528,10 +559,7 @@ void MainWindow::on_toolButton_4_clicked()
     QPixmap pix;
     pix.load("/opt/tetra/A66-app/ICO/P1-HELP.png");
     ui->label_Picture->setPixmap(pix);
-//    ui->toolButton_T1->setText(trUtf8("帮助"));
-//    ui->toolButton_T1->setIcon(QIcon("/opt/tetra/A66-app/ICO/P1-HELP.png"));
     ui->toolButton_4->setEnabled(false);
-
     ui->toolButton_B0->setEnabled(true);
     ui->toolButton_B1->setEnabled(true);
     ui->toolButton_B2->setEnabled(true);
@@ -544,7 +572,8 @@ void MainWindow::on_toolButton_4_clicked()
 }
 bool MainWindow::eventFilter(QObject *watched, QEvent *event)
 {
-
+    if(watched == sys)
+    {
       if (event->type()==QEvent::WindowDeactivate)     //然后再判断控件的具体事件 (这里指获得焦点事件)
       {
           SystemSetting sys;
@@ -555,19 +584,30 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
           {
               sys.SystemWriteMotor(0x03);//写电机参数
           }
-
           sys.SystemWriteMT();//写MT参数
-          EditableFalg = false;
-          FactoryAxisFalg = false;
+          if(FactoryAxisFalg == false)
+          {
+             EditableFalg = false;
+          }
+          //FactoryAxisFalg = false;
+          MotorConfigFlag = false;
           CurrentReg.Current_MotorConfigResult.clear();
-         // ui->label_State->clear();
           ui->label_StateTip->clear();
-          qDebug()<<"EditableFalg"<<EditableFalg;
-             return false;
-
+          return false;
+       }
       }
 
-
+    if(watched==ml)
+    {
+      if (event->type()==QEvent::WindowDeactivate)
+      {
+          ManualMTFlag =false;
+          ui->label_StateTip->clear();
+          CurrentReg.Current_MotorConfigResult.clear();
+          Write_MOTOR_One_Data(MT_ID,0x7001,0x01,0x01,0xa0);
+          return false;
+      }
+    }
 
  return QWidget::eventFilter(watched,event);     // 最后将事件交给上层对话框
 }

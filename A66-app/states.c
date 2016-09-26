@@ -525,7 +525,7 @@ UNS8 setState(CO_Data* d, e_nodeState newState)
                 (*d->operational)(d);
             }
             break;
-bug();
+//bug();
             case Stopped:
             if(d->nodeState == Initialisation) return 0xFF;
             {

@@ -25,6 +25,13 @@
 #include "manual.h"
 #include "thread.h"
 #include "homingmode.h"
+#include "block.h"
+
+
+#include<QSplashScreen>
+#include<QDateTime>
+#include<QElapsedTimer>
+#include<QPixmap>
 
 extern int XMotorStatusWord,YMotorStatusWord;
 extern int MotorXDisplayFalg,MotorYDisplayFalg;
@@ -100,6 +107,7 @@ void  MotorThread::run()
 int main(int argc, char *argv[])
 {
 #if    ARMFlag
+
     CanopenInit();
 ///////////////////////////////
     printf("to_socket\n");
@@ -152,8 +160,7 @@ int main(int argc, char *argv[])
 
 #endif
     QApplication a(argc, argv);
-
-   // QWSServer::setCursorVisible(false);
+    QWSServer::setCursorVisible(false);
    // QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
     //QTextCodec::setCodecForCStrings(QTextCodec::codecForName("GB2312"));
 
@@ -163,10 +170,6 @@ int main(int argc, char *argv[])
     QTextCodec::setCodecForCStrings(QTextCodec::codecForLocale());
 
     Sql_Init();
-//    MainWindow w;
-//    w.setWindowFlags(Qt::FramelessWindowHint);
-//    w.move(0,MAIN_WIDGET_Y);
-//    w.show();
 
     qSoftKeyvaule *ic = new qSoftKeyvaule;
     a.setInputContext(ic);
@@ -174,15 +177,20 @@ int main(int argc, char *argv[])
     MyThread ThreadA;
     ThreadA.start();
 
-    HomingMode hm;
-    hm.setWindowFlags(Qt::FramelessWindowHint);
-    hm.move(0,WIDGET_Y);
-    hm.show();
 
-//    Programdb Pg ;
-//    Pg.setWindowFlags(Qt::FramelessWindowHint);
-//    Pg.move(0,WIDGET_Y);
-//    Pg.show();
+    block bk;
+    bk.setWindowFlags(Qt::FramelessWindowHint);
+    bk.show();
+
+
+        HomingMode hm;
+        if(HomingFlag == false)
+        {
+            hm.setWindowFlags(Qt::FramelessWindowHint);
+            hm.move(0,WIDGET_Y);
+            hm.show();
+        }
+
 
 
     

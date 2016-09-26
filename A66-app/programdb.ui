@@ -91,11 +91,11 @@
      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
     </property>
    </widget>
-   <widget class="QLabel" name="label_mould">
+   <widget class="QLabel" name="label_upmould">
     <property name="geometry">
      <rect>
-      <x>28</x>
-      <y>160</y>
+      <x>26</x>
+      <y>196</y>
       <width>131</width>
       <height>20</height>
      </rect>
@@ -156,35 +156,11 @@
      <string>mm</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_mould_2">
-    <property name="geometry">
-     <rect>
-      <x>28</x>
-      <y>202</y>
-      <width>131</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>16</pointsize>
-     </font>
-    </property>
-    <property name="cursor">
-     <cursorShape>BlankCursor</cursorShape>
-    </property>
-    <property name="text">
-     <string>下模</string>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-    </property>
-   </widget>
    <widget class="QLineEdit" name="lineEdit_P_UpMolds">
     <property name="geometry">
      <rect>
       <x>180</x>
-      <y>152</y>
+      <y>191</y>
       <width>170</width>
       <height>30</height>
      </rect>
@@ -199,49 +175,11 @@
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit_P_LowerMolds">
-    <property name="geometry">
-     <rect>
-      <x>180</x>
-      <y>192</y>
-      <width>170</width>
-      <height>30</height>
-     </rect>
-    </property>
-    <property name="cursor">
-     <cursorShape>BlankCursor</cursorShape>
-    </property>
-    <property name="focusPolicy">
-     <enum>Qt::NoFocus</enum>
-    </property>
-    <property name="readOnly">
-     <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QToolButton" name="toolButton_UpMold">
     <property name="geometry">
      <rect>
       <x>370</x>
-      <y>152</y>
-      <width>60</width>
-      <height>30</height>
-     </rect>
-    </property>
-    <property name="cursor">
-     <cursorShape>BlankCursor</cursorShape>
-    </property>
-    <property name="focusPolicy">
-     <enum>Qt::NoFocus</enum>
-    </property>
-    <property name="text">
-     <string>...</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton_2">
-    <property name="geometry">
-     <rect>
-      <x>370</x>
-      <y>192</y>
+      <y>191</y>
       <width>60</width>
       <height>30</height>
      </rect>
@@ -321,10 +259,10 @@
    <widget class="QLabel" name="label_pic">
     <property name="geometry">
      <rect>
-      <x>580</x>
-      <y>40</y>
-      <width>261</width>
-      <height>171</height>
+      <x>560</x>
+      <y>20</y>
+      <width>301</width>
+      <height>211</height>
      </rect>
     </property>
     <property name="cursor">
@@ -381,6 +319,68 @@
     </property>
     <property name="text">
      <string>mm</string>
+    </property>
+   </widget>
+   <widget class="QToolButton" name="toolButton_LowerMold">
+    <property name="geometry">
+     <rect>
+      <x>370</x>
+      <y>151</y>
+      <width>60</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
+    </property>
+    <property name="focusPolicy">
+     <enum>Qt::NoFocus</enum>
+    </property>
+    <property name="text">
+     <string>...</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_mould_2">
+    <property name="geometry">
+     <rect>
+      <x>28</x>
+      <y>157</y>
+      <width>131</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>16</pointsize>
+     </font>
+    </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
+    </property>
+    <property name="text">
+     <string>下模</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_P_LowerMolds">
+    <property name="geometry">
+     <rect>
+      <x>180</x>
+      <y>151</y>
+      <width>170</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="cursor">
+     <cursorShape>BlankCursor</cursorShape>
+    </property>
+    <property name="focusPolicy">
+     <enum>Qt::NoFocus</enum>
+    </property>
+    <property name="readOnly">
+     <bool>true</bool>
     </property>
    </widget>
   </widget>
@@ -478,7 +478,7 @@
     <number>9</number>
    </property>
    <attribute name="horizontalHeaderVisible">
-    <bool>false</bool>
+    <bool>true</bool>
    </attribute>
    <attribute name="horizontalHeaderCascadingSectionResizes">
     <bool>false</bool>

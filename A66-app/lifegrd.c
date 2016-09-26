@@ -440,6 +440,7 @@ void proceedNODE_GUARD(CO_Data* d, Message* m )
 
       if( d->NMTable[nodeId] != Unknown_state ) {
         UNS8 index, ConsummerHeartBeat_nodeId ;
+    //    printf("Heart:%d\n",nodeId);
         for( index = (UNS8)0x00; index < *d->ConsumerHeartbeatCount; index++ )
           {
             ConsummerHeartBeat_nodeId = (UNS8)( ((d->ConsumerHeartbeatEntries[index]) & (UNS32)0x00FF0000) >> (UNS8)16 );

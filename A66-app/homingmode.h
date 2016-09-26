@@ -16,11 +16,15 @@ public:
     ~HomingMode();
     void timerEvent(QTimerEvent *t) ;//定时器事件
     void CheckMotorState();
-    void CheckRaxisEnable();
+    void checkRaxisEnable();
+    void setXYRLineditFont(int fontsize);
+    void checkXaxisisEnabble();
 
 public slots:
     void openHomingModeWin();
-    
+
+signals:
+    void Sig_returnProgram();
 private slots:
 
     void on_toolButton_RunHoming_clicked();

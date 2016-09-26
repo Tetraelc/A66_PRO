@@ -39,6 +39,7 @@ Moulds::Moulds(QWidget *parent) :
     QFont font;
     font.setPointSize(18);
     ui->comboBox_material->setFont(font);
+    ui->tabWidget_Mold->removeTab(1);
 
 }
 
@@ -52,6 +53,7 @@ void Moulds::openMouldsWin()
     this->setWindowFlags(Qt::FramelessWindowHint);
     this->show();
     this->move(0,WIDGET_Y);
+   // PumpSignalFlag = true;
 }
 
 
@@ -253,6 +255,26 @@ void Moulds::ReadforMold()
 
 }
 
+void Moulds::ReadforMaterial()
+{
+    bool ok;
+    QSqlTableModel model;
+    model.setTable("Materialdb");
+    model.setFilter("ID =" +QString::number(ui->tableWidget_Material->currentRow()+1,10));
+    model.select();
+    for(int i=0;i<model.rowCount();i++)
+    {
+            QSqlRecord record = model.record(i);
+              CurrentMaterialTemp.MaterialName = record.value("Name").toString().split("-").at(1).toInt();
+              CurrentMaterialTemp.EMold = record.value("EMold").toDouble(&ok);
+              CurrentMaterialTemp.StrengthFactor =  record.value("StrengthFactor").toDouble(&ok);
+
+            qDebug()<<"record.value().toString()"<<record.value("Name").toString();
+    }
+
+
+}
+
 
 //上模表格输入
 void Moulds::on_lineEdit_U_Height_returnPressed()
@@ -325,24 +347,17 @@ void Moulds::on_lineEdit_D_Height_returnPressed()
      qDebug("0000");
     if((ui->lineEdit_D_Height->text().toDouble(&ok) > 0) && (ui->lineEdit_D_Height->text().toDouble(&ok) <= 9999) )
     {
-        qDebug("1111");
-        qDebug()<<"ui->tableWidget_LowerMoulds->currentRow()"<<ui->tableWidget_LowerMoulds->currentRow();
-        qDebug()<<"ui->lineEdit_D_Height->text()"<<ui->lineEdit_D_Height->text();
 
-        qDebug()<<"ui->lineEdit_D_Height->text()"<<ui->lineEdit_D_Height->text();
         ui->tableWidget_LowerMoulds->setItem(ui->tableWidget_LowerMoulds->currentRow(), LowerMold_Height, new QTableWidgetItem(ui->lineEdit_D_Height->text()));
-        qDebug("--------");
+
 //         Update_UpMoldItem(ui->tableWidget_UpMoulds->item(ui->tableWidget_UpMoulds->currentRow(),UpMold_Id)->text().toInt(),UpMold_Radius,ui->lineEdit_U_Radius->text());
         Update_LowerMoldItem(ui->tableWidget_LowerMoulds->item(ui->tableWidget_LowerMoulds->currentRow(),LowerMold_Id)->text().toInt(),LowerMold_Height,ui->lineEdit_D_Height->text());
-        qDebug("+++++++");
     }
     else
     {
-         qDebug("2222");
         ui->tableWidget_LowerMoulds->setItem(ui->tableWidget_LowerMoulds->currentRow(), LowerMold_Height, new QTableWidgetItem(QString::number(CurrentLowerMoldTemp.Height,'.',0)));
         ui->lineEdit_D_Height->setText(QString::number(CurrentLowerMoldTemp.Height,'.',0));
     }
-    qDebug("3333");
 }
 void Moulds::on_lineEdit_D_V_returnPressed()
 {
@@ -786,6 +801,7 @@ void Moulds::on_pushButton_Left_3_clicked()
 {
 
     CurrentReg.Current_MotorAlarm = MoldTip;
+    PumpButtonFlag = true;
     aralmOrTipFalg = true;
     SystemWarn MoldDelWarn;
     MoldDelWarn.setWindowFlags(Qt::FramelessWindowHint);
@@ -841,6 +857,7 @@ void Moulds::on_pushButton_Left_10_clicked()
 {
     CurrentReg.Current_MotorAlarm = MoldTip;
     aralmOrTipFalg = true;
+    PumpButtonFlag = true;
     SystemWarn MoldDelWarn;
     MoldDelWarn.setWindowFlags(Qt::FramelessWindowHint);
     MoldDelWarn.exec();
@@ -1028,6 +1045,7 @@ void Moulds::on_pushButton_M_Del_clicked()
 {
     CurrentReg.Current_MotorAlarm = MaterialTip;
     aralmOrTipFalg = true;
+    PumpButtonFlag = true;
     SystemWarn MaterialDelWarn;
     MaterialDelWarn.setWindowFlags(Qt::FramelessWindowHint);
     MaterialDelWarn.exec();
@@ -1109,23 +1127,59 @@ void Moulds::Update_MaterialItem(int Id,int Col,QString Value)
 
 void Moulds::on_lineEdit_Strengrht_returnPressed()
 {
-    ui->tableWidget_Material->setItem(ui->tableWidget_Material->currentRow(), Material_StrengthFactor, new QTableWidgetItem(ui->lineEdit_Strengrht->text()));
-    Update_MaterialItem(ui->tableWidget_Material->item(ui->tableWidget_Material->currentRow(),Material_Id)->text().toInt(),Material_StrengthFactor,ui->lineEdit_Strengrht->text());
+    ReadforMaterial();
+    bool ok;
+    if((ui->lineEdit_Strengrht->text().toDouble(&ok) > 0) && (ui->lineEdit_Strengrht->text().toDouble(&ok) <= 999999) )
+    {
+        ui->tableWidget_Material->setItem(ui->tableWidget_Material->currentRow(), Material_StrengthFactor, new QTableWidgetItem(ui->lineEdit_Strengrht->text()));
+        Update_MaterialItem(ui->tableWidget_Material->item(ui->tableWidget_Material->currentRow(),Material_Id)->text().toInt(),Material_StrengthFactor,ui->lineEdit_Strengrht->text());
+    }
+    else
+    {
+        ui->tableWidget_Material->setItem(ui->tableWidget_Material->currentRow(), Material_StrengthFactor, new QTableWidgetItem(QString::number(CurrentMaterialTemp.StrengthFactor,'.',0)));
+        ui->lineEdit_Strengrht->setText(QString::number(CurrentMaterialTemp.StrengthFactor,'.',0));
+    }
+
+
 
 }
 
 void Moulds::on_lineEdit_MaterialName_returnPressed()
 {
-    ui->tableWidget_Material->setItem(ui->tableWidget_Material->currentRow(),Material_Name,new QTableWidgetItem(ui->comboBox_material->currentText() + "-" + ui->lineEdit_MaterialName->text()));
-    Update_MaterialItem(ui->tableWidget_Material->item(ui->tableWidget_Material->currentRow(),Material_Id)->text().toInt(),Material_Name,ui->comboBox_material->currentText() + "-"  + ui->lineEdit_MaterialName->text());
+
+    ReadforMaterial();
+    bool ok;
+    if((ui->lineEdit_MaterialName->text().toDouble(&ok) > 0) && (ui->lineEdit_MaterialName->text().toDouble(&ok) <= 9999) )
+    {
+        ui->tableWidget_Material->setItem(ui->tableWidget_Material->currentRow(),Material_Name,new QTableWidgetItem(ui->comboBox_material->currentText() + "-" + ui->lineEdit_MaterialName->text()));
+        Update_MaterialItem(ui->tableWidget_Material->item(ui->tableWidget_Material->currentRow(),Material_Id)->text().toInt(),Material_Name,ui->comboBox_material->currentText() + "-"  + ui->lineEdit_MaterialName->text());
+   }
+    else
+    {
+       ui->tableWidget_Material->setItem(ui->tableWidget_Material->currentRow(),Material_Name,new QTableWidgetItem(ui->comboBox_material->currentText() + "-" + QString::number(CurrentMaterialTemp.MaterialName,10)));
+       ui->lineEdit_MaterialName->setText(QString::number(CurrentMaterialTemp.MaterialName,10));
+    }
+
+
+//    ui->tableWidget_Material->setItem(ui->tableWidget_Material->currentRow(),Material_Name,new QTableWidgetItem(ui->comboBox_material->currentText() + "-" + ui->lineEdit_MaterialName->text()));
+//    Update_MaterialItem(ui->tableWidget_Material->item(ui->tableWidget_Material->currentRow(),Material_Id)->text().toInt(),Material_Name,ui->comboBox_material->currentText() + "-"  + ui->lineEdit_MaterialName->text());
 
 }
 
 
 void Moulds::on_lineEdit_EMold_returnPressed()
 {
-    ui->tableWidget_Material->setItem(ui->tableWidget_Material->currentRow(), Material_EMold, new QTableWidgetItem(ui->lineEdit_EMold->text()));
-    Update_MaterialItem(ui->tableWidget_Material->item(ui->tableWidget_Material->currentRow(),Material_Id)->text().toInt(),Material_EMold,ui->lineEdit_EMold->text());
+    bool ok;
+    ReadforMaterial();
+    if((ui->lineEdit_EMold->text().toDouble(&ok) > 0) && (ui->lineEdit_EMold->text().toDouble(&ok) <= 999999) )
+    {
+        ui->tableWidget_Material->setItem(ui->tableWidget_Material->currentRow(), Material_EMold, new QTableWidgetItem(ui->lineEdit_EMold->text()));
+        Update_MaterialItem(ui->tableWidget_Material->item(ui->tableWidget_Material->currentRow(),Material_Id)->text().toInt(),Material_EMold,ui->lineEdit_EMold->text());  }
+    else
+    {
+        ui->tableWidget_Material->setItem(ui->tableWidget_Material->currentRow(), Material_EMold, new QTableWidgetItem(QString::number(CurrentMaterialTemp.EMold,'.',0)));
+        ui->lineEdit_EMold->setText(QString::number(CurrentMaterialTemp.EMold,'.',0));
+    }
 
 }
 

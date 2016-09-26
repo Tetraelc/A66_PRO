@@ -54,6 +54,7 @@ QString SystemTipsInformation(int TipsID);
 /////报警ID号//////
 #define UpperPointAlarm   1
 #define MotorOffline  2
+#define Pumpsignal  3
 
 
 ///////提示ID号///////
@@ -87,6 +88,16 @@ QString SystemTipsInformation(int TipsID);
 #define MoldTip   24
 #define MaterialTip  25
 
+#define FootUpTip  27
+
+extern bool PumpCurError ;
+extern bool PumpPreError ;
+extern bool HomingFlag ;
+extern bool PumpButtonFlag;
+extern bool PumpSignalFlag;
+extern bool MotorConfigFlag;
+extern  bool ManualFlag ;
+extern  bool ManualMTFlag ;
 extern bool MotorOfflineFlag ;
 extern bool StepDelFlag;
 extern bool MaterialDelFlag;
@@ -290,6 +301,7 @@ struct Stepdata
   double XPostion;
   double YPostion;
   double RPostion;
+  int StepTempNum;
 };
 
 extern struct Stepdata CurrentStepTemp;
@@ -339,6 +351,7 @@ struct MaterialData
 {
   double StrengthFactor;
   double EMold;
+  int MaterialName;
 
 };
 extern struct MaterialData  CurrentMaterialTemp;
@@ -378,6 +391,8 @@ struct   _MTPARAMETER
     unsigned int  VbackMode;
     unsigned int  VbackTime;
     bool          SingleMode;
+    bool          FastMode;
+    unsigned int  concedTime;
 
 };
 
