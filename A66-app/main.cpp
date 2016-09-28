@@ -179,6 +179,9 @@ int main(int argc, char *argv[])
     ThreadA.start();
 
 
+
+
+
     block bk;
     bk.setWindowFlags(Qt::FramelessWindowHint);
     bk.show();

@@ -46,11 +46,37 @@ SystemSetting::SystemSetting(QWidget *parent) :
     //ui->lineEdit_UnloadTime->setValidator(pReg);
     //ui->lineEdit_Secret->setValidator(pReg);
 
-
     ReadForSystemDat();
 
 
+    Systemlanguage();
 
+
+
+}
+
+
+void SystemSetting::Systemlanguage()
+{
+
+    if(SYSParameter.Language == 0)
+    {
+       #if ARMFlag
+        translator.load("/opt/tetra/A66-app/A66-app.ts");
+       #else
+        translator.load("/home/tetra/gitA66/A66-app/A66-app.ts");
+       #endif
+        qApp->installTranslator(&translator);
+    }
+    else
+    {
+    #if ARMFlag
+     translator.load("/opt/tetra/A66-app/A66-app.qm");
+    #else
+        translator.load("/home/tetra/gitA66/A66-app/A66-app.qm");
+    #endif
+        qApp->installTranslator(&translator);
+    }
 
 }
 
@@ -60,6 +86,7 @@ void SystemSetting::TreeWidgetIntoTable()
     Table_Editable_Flag = 0;
 
     ReadForSystemDat();
+    //Systemlanguage();
 
     if(ui->treeWidget_System->currentItem()->parent() != NULL)
     {
@@ -404,6 +431,8 @@ void SystemSetting::Display_Item(int ClassId,bool Editable,bool FristEnable)
             ui->tableWidget_System->setItem(i,Table_Info,new QTableWidgetItem(record.value("EnglishInfo").toString()));
 
         }
+
+
 
         if(Editable)
         {                    
@@ -1689,3 +1718,4 @@ void SystemSetting::on_pushButton_StopTest_released()
 //    }
 
 //}
+

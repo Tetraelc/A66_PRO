@@ -139,3 +139,5 @@ RESOURCES += \
     A66-appsrc.qrc
 
 OTHER_FILES +=
+
+TRANSLATIONS = A66-app.ts

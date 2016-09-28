@@ -1077,7 +1077,7 @@ void Moulds::ReflashMaterialLinedit()
     {
         ui->comboBox_material->setCurrentIndex(1);
     }
-    if(ui->tableWidget_Material->item(CurrentReg.Current_MaterialRow,Material_Name)->text().split("-").at(0).compare(trUtf8("铁")) == 0 )
+    if(ui->tableWidget_Material->item(CurrentReg.Current_MaterialRow,Material_Name)->text().split("-").at(0).compare(trUtf8("钢")) == 0 )
     {
         ui->comboBox_material->setCurrentIndex(2);
     }

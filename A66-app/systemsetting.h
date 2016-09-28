@@ -8,6 +8,7 @@
 #include <QMessageBox>
 #include <QModelIndex>
 #include <QTableWidgetItem>
+#include <QTranslator>
 
 namespace Ui {
 class SystemSetting;
@@ -34,6 +35,7 @@ public:
     void SystemWriteMotor(unsigned char nodeId);
     void SystemWriteMT();
     void CleanConfig();
+    void Systemlanguage();
 
 
     double SystemParameterTemp[2];
@@ -101,6 +103,7 @@ private slots:
 
   //  void on_lineEdit_Secret_editingFinished();
 
+
 private:
     int deal_write_config_event();
     int deal_read_config_event();
@@ -108,6 +111,7 @@ private:
     void WriteConfig();
     void ReadConfig();
     int ValveConfig_scan;
+    QTranslator translator;
 
     Ui::SystemSetting *ui;
 
