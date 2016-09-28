@@ -75,6 +75,7 @@ void Programdb::openProgramWin()
     Display_ProgramItem();
     ui->comboBox_P_material->setCurrentIndex(CurrentReg.Materialtemp[0]);
     connect(ui->comboBox_P_material,SIGNAL(currentIndexChanged(const QString &)),this,SLOT(UpdtaeMaterialDat()));
+    ReflashProLinedit();
    //PumpSignalFlag = true;
 
 }
@@ -450,7 +451,7 @@ void Programdb::ReflashProLinedit()
             ui->lineEdit_P_BoardWidth->setText(record.value("BoardWide").toString());
             ui->comboBox_P_material->setCurrentIndex(record.value("Material").toInt());
             //ui->lineEdit_P_Total->setText(record.value("WorkedTotal").toString());
-            qDebug()<<"record.value(BoardWide).toString()"<<record.value("BoardWide").toString();
+            //qDebug()<<"record.value(BoardWide).toString()"<<record.value("BoardWide").toString();
     }
     CurrentReg.Current_ProgramLibRow = ui->tableWidget_Programdb->currentRow();
 

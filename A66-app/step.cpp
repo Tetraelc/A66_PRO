@@ -13,6 +13,7 @@
 #include "mathcalculation.h"
 #include "deleoplength.h"
 #include "systemwarn.h"
+#include "systemsetting.h"
 
 
 
@@ -70,6 +71,9 @@ void Step::openStepWin()
     RunState runstate1 ;
     runstate1.ReadForRun(CurrentReg.Current_StepProgramRow);
 
+    SystemSetting sys;
+    sys.ReadForSystemDat();
+
     reflashYaxisValue();
     Display_StepProgramItem();
     ui->tableWidget_Step->selectRow(0);
@@ -92,11 +96,15 @@ void Step::reflashYaxisValue()
     for(int i=0; i<CurrentStepTemp.StepTempNum; i++)
     {
         CurrentProgramTemp.StepProgram[i].Yaxis = mathcal.AngleToYDis(CurrentProgramTemp.StepProgram[i].Angle,CurrentProgramTemp.StepProgram[i].AngleCompensate,0,CurrentProgramTemp.BroadThick,0, CurrentStepTemp.Yzero);
+        if(QString::number(CurrentProgramTemp.StepProgram[i].Angle,'.',0).toInt() == 90)
+        {
+           CurrentProgramTemp.StepProgram[i].Yaxis  = CurrentProgramTemp.StepProgram[i].Yaxis + YaxisParameter.FrameStrength;
+        }
+
+
         Update_StepProgramItem(i+1,StepProgram_Yaxis,QString::number(CurrentProgramTemp.StepProgram[i].Yaxis,'.',2));
         Update_StepProgramItem(i+1,StepProgram_Pressure,QString::number(CurrentProgramTemp.StepProgram[i].Pressure,'.',2));
     }
-
-
 
 }
 
@@ -110,6 +118,8 @@ void Step::timerEvent(QTimerEvent *t) //定时器事件
             bool ok;
             qDebug()<<"AngleToYDis"<<QString::number(CurrentStepTemp.Angle,'.',0).toInt()<<QString::number(CurrentStepTemp.AngleCompensate,'.',0).toInt()<<CurrentProgramTemp.BroadThick<<CurrentStepTemp.Yzero;
              CurrentStepTemp.Yaxis = mathcal.AngleToYDis(CurrentStepTemp.Angle,CurrentStepTemp.AngleCompensate,0,CurrentProgramTemp.BroadThick,0, CurrentStepTemp.Yzero);
+             qDebug()<<"QString::number(CurrentStepTemp.Angle,'.',2).toInt()"<<QString::number(CurrentStepTemp.Angle,'.',0).toInt();
+
              scanAngleFlag = false;
              scanAngleCompensateFlag = false;
              ui->lineEdit_S_Yaxis->setText(QString::number(CurrentStepTemp.Yaxis,'.',2));
@@ -374,6 +384,7 @@ void Step::on_lineEdit_S_AngleCompensate_returnPressed()
     if((ui->lineEdit_S_AngleCompensate->text().toDouble(&ok) >= -90) && (ui->lineEdit_S_AngleCompensate->text().toDouble(&ok) <= 90) && !(ui->lineEdit_S_AngleCompensate->text() == "") )
         {
             //CurrentStepTemp.XaxisCorrect = ui->lineEdit_S_XaxisCorrect->text().toDouble(&ok);
+            CurrentStepTemp.AngleCompensate = ui->lineEdit_S_AngleCompensate->text().toDouble(&ok);
             ui->tableWidget_Step->setItem(ui->tableWidget_Step->currentRow(), StepProgram_AngleCompensate, new QTableWidgetItem(ui->lineEdit_S_AngleCompensate->text()));
             Update_StepProgramItem(ui->tableWidget_Step->item(ui->tableWidget_Step->currentRow(),StepProgram_Id)->text().toInt(),StepProgram_AngleCompensate,ui->lineEdit_S_AngleCompensate->text());
             ui->lineEdit_S_AngleCompensate->setText(ui->lineEdit_S_AngleCompensate->text());

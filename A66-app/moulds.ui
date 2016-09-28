@@ -2954,6 +2954,11 @@
         <string>冷板</string>
        </property>
       </item>
+      <item>
+       <property name="text">
+        <string>非标准板</string>
+       </property>
+      </item>
      </widget>
      <widget class="QLabel" name="label_30">
       <property name="geometry">

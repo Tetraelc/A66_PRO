@@ -269,7 +269,7 @@ void Moulds::ReadforMaterial()
               CurrentMaterialTemp.EMold = record.value("EMold").toDouble(&ok);
               CurrentMaterialTemp.StrengthFactor =  record.value("StrengthFactor").toDouble(&ok);
 
-            qDebug()<<"record.value().toString()"<<record.value("Name").toString();
+            //qDebug()<<"record.value().toString()"<<record.value("Name").toString();
     }
 
 
@@ -1081,6 +1081,15 @@ void Moulds::ReflashMaterialLinedit()
     {
         ui->comboBox_material->setCurrentIndex(2);
     }
+    if(ui->tableWidget_Material->item(CurrentReg.Current_MaterialRow,Material_Name)->text().split("-").at(0).compare(trUtf8("冷板")) == 0 )
+    {
+        ui->comboBox_material->setCurrentIndex(3);
+    }
+    if(ui->tableWidget_Material->item(CurrentReg.Current_MaterialRow,Material_Name)->text().split("-").at(0).compare(trUtf8("非标准板")) == 0 )
+    {
+        ui->comboBox_material->setCurrentIndex(4);
+    }
+
 
 
 }

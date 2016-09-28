@@ -194,7 +194,7 @@ void HomingMode::checkRaxisEnable()
 //[1]
 void HomingMode::CheckMotorState()
 {
-    if(XaxisParameter.ReferencePosMode == 1 ||  XaxisParameter.ReferencePosMode == 2 )
+    if(XaxisParameter.ReferencePosMode == 1 ||  XaxisParameter.ReferencePosMode == 2 || XaxisParameter.ReferencePosMode == 3 ||  XaxisParameter.ReferencePosMode == 4)
     {
         if(Get_HeartbetError(X1_ID) == 0x01 || motor[X1_ID-1].initStatus == 0)
         {
@@ -225,7 +225,7 @@ void HomingMode::CheckMotorState()
         ui->label_X->setText(trUtf8("归零完成"));
     }
 
-    if(YaxisParameter.ReferencePosMode == 1 ||  YaxisParameter.ReferencePosMode == 2 )
+    if(YaxisParameter.ReferencePosMode == 1 ||  YaxisParameter.ReferencePosMode == 2 || YaxisParameter.ReferencePosMode == 3 ||  YaxisParameter.ReferencePosMode == 4)
     {
         if(Get_HeartbetError(Y1_ID) == 0x01 || motor[Y1_ID-1].initStatus == 0)
         {
@@ -258,7 +258,7 @@ void HomingMode::CheckMotorState()
 
     if(RaxisParameter.ENABLE_AXIS == 1)
     {
-        if(RaxisParameter.ReferencePosMode == 1 ||  RaxisParameter.ReferencePosMode == 2 )
+        if(RaxisParameter.ReferencePosMode == 1 ||  RaxisParameter.ReferencePosMode == 2 || RaxisParameter.ReferencePosMode == 3 ||  RaxisParameter.ReferencePosMode == 4)
         {
             if(Get_HeartbetError(R1_ID) == 0x01 || motor[R1_ID-1].initStatus == 0)
             {
@@ -411,14 +411,25 @@ void HomingMode::on_toolButton_RunHoming_clicked()
         HomingModeDate[0].data[2].Data  = XaxisParameter.ReferencePos;
         HomingModeDate[0].data[3].Data = XaxisParameter.ManualSpeed * 10;
         Write_MOTOR_Multi_Data(&HomingModeDate[X1_ID -1 ],X1_ID);
-
+    }else if(XaxisParameter.ReferencePosMode == 3)
+    {
+        HomingModeDate[0].data[1].Data = XaxisParameter.ReferencePosMode;// 这里写回零模式
+        HomingModeDate[0].data[2].Data  = XaxisParameter.ReferencePos;
+        HomingModeDate[0].data[3].Data = XaxisParameter.ManualSpeed * 10;
+        Write_MOTOR_Multi_Data(&HomingModeDate[X1_ID -1 ],X1_ID);
+    }else if(XaxisParameter.ReferencePosMode == 4)
+    {
+        HomingModeDate[0].data[1].Data = XaxisParameter.ReferencePosMode;// 这里写回零模式
+        HomingModeDate[0].data[2].Data  = XaxisParameter.ReferencePos;
+        HomingModeDate[0].data[3].Data = XaxisParameter.ManualSpeed * 10;
+        Write_MOTOR_Multi_Data(&HomingModeDate[X1_ID -1 ],X1_ID);
     }
     if(YaxisParameter.ReferencePosMode == 0)
     {
     } else if(YaxisParameter.ReferencePosMode == 1)
      {
 
-         HomingModeDate[1].data[1].Data = 3;// 这里写回零模式
+         HomingModeDate[1].data[1].Data = YaxisParameter.ReferencePosMode;// 这里写回零模式
          HomingModeDate[1].data[2].Data  = YaxisParameter.ReferencePos;
          HomingModeDate[1].data[3].Data = YaxisParameter.ManualSpeed * 10;
          Write_MOTOR_Multi_Data(&HomingModeDate[Y1_ID -1],Y1_ID);
@@ -428,7 +439,19 @@ void HomingMode::on_toolButton_RunHoming_clicked()
          HomingModeDate[1].data[2].Data  = YaxisParameter.ReferencePos;
                HomingModeDate[1].data[3].Data = YaxisParameter.ManualSpeed * 10;
          Write_MOTOR_Multi_Data(&HomingModeDate[Y1_ID -1],Y1_ID);
-     }
+     } else if(YaxisParameter.ReferencePosMode == 3)
+         {
+             HomingModeDate[1].data[1].Data = YaxisParameter.ReferencePosMode;// 这里写回零模式
+             HomingModeDate[1].data[2].Data  = YaxisParameter.ReferencePos;
+                   HomingModeDate[1].data[3].Data = YaxisParameter.ManualSpeed * 10;
+             Write_MOTOR_Multi_Data(&HomingModeDate[Y1_ID -1],Y1_ID);
+         }else if(YaxisParameter.ReferencePosMode == 4)
+         {
+             HomingModeDate[1].data[1].Data = YaxisParameter.ReferencePosMode;// 这里写回零模式
+             HomingModeDate[1].data[2].Data  = YaxisParameter.ReferencePos;
+                   HomingModeDate[1].data[3].Data = YaxisParameter.ManualSpeed * 10;
+             Write_MOTOR_Multi_Data(&HomingModeDate[Y1_ID -1],Y1_ID);
+         }
 
      if(RaxisParameter.ENABLE_AXIS == 1)
      {
@@ -444,6 +467,18 @@ void HomingMode::on_toolButton_RunHoming_clicked()
              Write_MOTOR_Multi_Data(&HomingModeDate[R1_ID-1],R1_ID);
 
          }else if(RaxisParameter.ReferencePosMode == 2)
+         {
+             HomingModeDate[2].data[1].Data = RaxisParameter.ReferencePosMode;// 这里写回零模式
+             HomingModeDate[2].data[2].Data  = RaxisParameter.ReferencePos;
+               HomingModeDate[2].data[3].Data = YaxisParameter.ManualSpeed * 10;
+             Write_MOTOR_Multi_Data(&HomingModeDate[R1_ID-1],R1_ID);
+         }else if(RaxisParameter.ReferencePosMode == 3)
+         {
+             HomingModeDate[2].data[1].Data = RaxisParameter.ReferencePosMode;// 这里写回零模式
+             HomingModeDate[2].data[2].Data  = RaxisParameter.ReferencePos;
+               HomingModeDate[2].data[3].Data = YaxisParameter.ManualSpeed * 10;
+             Write_MOTOR_Multi_Data(&HomingModeDate[R1_ID-1],R1_ID);
+         }else if(RaxisParameter.ReferencePosMode == 4)
          {
              HomingModeDate[2].data[1].Data = RaxisParameter.ReferencePosMode;// 这里写回零模式
              HomingModeDate[2].data[2].Data  = RaxisParameter.ReferencePos;

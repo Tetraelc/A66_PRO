@@ -23,6 +23,8 @@ SystemSetting::SystemSetting(QWidget *parent) :
 {
     ui->setupUi(this);
 
+
+
     Table_Editable_Flag = 0;
     ValveConfig_scan = startTimer(50);
 
@@ -49,6 +51,7 @@ SystemSetting::SystemSetting(QWidget *parent) :
 
 
 
+
 }
 
 void SystemSetting::TreeWidgetIntoTable()
@@ -57,11 +60,11 @@ void SystemSetting::TreeWidgetIntoTable()
     Table_Editable_Flag = 0;
 
     ReadForSystemDat();
+
     if(ui->treeWidget_System->currentItem()->parent() != NULL)
     {
         if(ui->treeWidget_System->currentItem()->parent()->text(0).compare(trUtf8("通用")) == 0)
         {
-
             ui->stackedWidget->setCurrentIndex(0);
             Display_Item(ui->treeWidget_System->currentIndex().row()+10,false,true);
 
@@ -186,7 +189,7 @@ void SystemSetting::ReadForSystemDat()
     for(int i=0;i<model.rowCount();i++)
     {
             QSqlRecord record = model.record(i);
-            SystemParameterTemp[i] = record.value("Value").toDouble(&ok);
+            SystemParameterTemp[i] = record.value("Value").toInt();
     }
 
     model.setTable("Setup");
@@ -239,8 +242,9 @@ void SystemSetting::SystemDatChange()
 {
 
     ////X轴参数
-     SYSParameter.Language = SystemParameterTemp[0];
-     SYSParameter.Units = SystemParameterTemp[1];
+     SYSParameter.serialNumber = SystemParameterTemp[0];
+     SYSParameter.Language = SystemParameterTemp[1];
+     SYSParameter.Units = SystemParameterTemp[2];
 
      XaxisParameter.LeadScrew = XaxisParameterTemp[0];
      XaxisParameter.MotorDirection = XaxisParameterTemp[1];
@@ -263,6 +267,7 @@ void SystemSetting::SystemDatChange()
      YaxisParameter.OverrunDistance = YaxisParameterTemp[7];
      YaxisParameter.ReferencePosMode = YaxisParameterTemp[8];
      YaxisParameter.ReferencePos = YaxisParameterTemp[9] * 1000 / YaxisParameter.LeadScrew;
+     YaxisParameter.FrameStrength = YaxisParameterTemp[10];
       ////R轴参数
      RaxisParameter.ENABLE_AXIS = RaxisParameterTemp[0];
      RaxisParameter.LeadScrew = RaxisParameterTemp[1];
@@ -389,6 +394,7 @@ void SystemSetting::Display_Item(int ClassId,bool Editable,bool FristEnable)
             ui->tableWidget_System->setItem(i,Table_Name,new QTableWidgetItem(record.value("Name").toString()));
             ui->tableWidget_System->setItem(i,Table_Value,new QTableWidgetItem(record.value("Value").toString()));
             ui->tableWidget_System->setItem(i,Table_Info,new QTableWidgetItem(record.value("Introduce").toString()));
+            //qDebug()<<"record.value"<<record.value("Value").toString();
         }
         else
         {
@@ -467,7 +473,7 @@ void SystemSetting::Update_Item(int Id,double Value)
 
     QString Str_Value=QString::number(Value,'.',4);
 
-    if(Id != Secret_Index && Id != Factory_Index)
+    if((Id != Secret_Index) && (Id != Factory_Index ) && ( Id != 59))
     {
      query.exec("UPDATE Setup SET Value =" + Str_Value + " WHERE ID = " + Str_Id);
     }
@@ -1465,11 +1471,8 @@ int SystemSetting::deal_write_config_event()
         motor[3].SDO_status = SDO_free;
         Write_Button_state = 0;
         write_step = 0;
-        MotorConfigFlag = true;
-        MotorConfigTipFlag = true;
-        CurrentReg.Current_MotorTips = SendFailTip;
-        CurrentReg.Current_MotorConfigResult = SystemTipsInformation(CurrentReg.Current_MotorTips);
-        qDebug("SendFailTip");
+
+        ReadFailFlag = true;
 //        QMessageBox::critical(0,QObject::trUtf8("写入配置信息"),
 //                              trUtf8("发送失败~。~"));
 
@@ -1485,11 +1488,7 @@ int SystemSetting::deal_write_config_event()
         if(motor[3].RX_buf[0] == 0xA0)
         {
 
-            MotorConfigTipFlag = true;
-            MotorConfigFlag = true;
-            CurrentReg.Current_MotorTips = WriteSuccessTip;
-            CurrentReg.Current_MotorConfigResult = SystemTipsInformation(CurrentReg.Current_MotorTips);
-            qDebug("WriteSuccessTip");
+            SendSuccessFlag = true;
 //            QMessageBox::information(0,QObject::trUtf8("写入配置"),
 //                                   trUtf8("配置成功"));
              qDebug("entern readif");
@@ -1497,10 +1496,7 @@ int SystemSetting::deal_write_config_event()
         }
         else
         {
-            MotorConfigTipFlag = true;
-            MotorConfigFlag = true;
-            CurrentReg.Current_MotorTips = WriteFailTip;
-            CurrentReg.Current_MotorConfigResult = SystemTipsInformation(CurrentReg.Current_MotorTips);
+            SendFailFlag = true;
 
 //           QMessageBox::critical(0,QObject::trUtf8("写入配置"),
 //                                   trUtf8("配置失败"));
@@ -1516,11 +1512,12 @@ int SystemSetting::deal_write_config_event()
          motor[3].SDO_status = SDO_free;
          Write_Button_state = 0;
           write_step = 0;
-         MotorConfigTipFlag = true;
-         MotorConfigFlag = true;
-         CurrentReg.Current_MotorTips = SendFailTip;
-         CurrentReg.Current_MotorConfigResult = SystemTipsInformation(CurrentReg.Current_MotorTips);
-         qDebug("SendFailTip");
+//         MotorConfigTipFlag = true;
+//         MotorConfigFlag = true;
+//         CurrentReg.Current_MotorTips = SendFailTip;
+//         CurrentReg.Current_MotorConfigResult = SystemTipsInformation(CurrentReg.Current_MotorTips);
+//         qDebug("SendFailTip");
+          SendFailFlag = true;
 //        QMessageBox::critical(0,QObject::trUtf8("写入配置信息"),
 //                              trUtf8("发送失败"));
 
@@ -1551,11 +1548,12 @@ int SystemSetting::deal_read_config_event()
             ValveReg.UnloadTime   = motor[3].RX_DATA[7];
             ValveReg.KeepTime     = motor[3].RX_DATA[8];
             ReadConfig();
-            MotorConfigTipFlag = true;
-            MotorConfigFlag = true;
-            CurrentReg.Current_MotorTips = ReadSuccessTip;
-            CurrentReg.Current_MotorConfigResult = SystemTipsInformation(CurrentReg.Current_MotorTips);
-            qDebug("ReadSuccessTip");
+//            MotorConfigTipFlag = true;
+//            MotorConfigFlag = true;
+//            CurrentReg.Current_MotorTips = ReadSuccessTip;
+//            CurrentReg.Current_MotorConfigResult = SystemTipsInformation(CurrentReg.Current_MotorTips);
+//            qDebug("ReadSuccessTip");
+            ReadSuccessFlag =true;
 
 //            QMessageBox::information(0,QObject::trUtf8("读取配置信息"),
 //                                  trUtf8("读取成功"));
@@ -1566,10 +1564,11 @@ int SystemSetting::deal_read_config_event()
        }
         else if (motor[3].Read_Multi_Finsh_state == FAIL_SEND)
         {
-           MotorConfigTipFlag = true;
-           MotorConfigFlag = true;
-           CurrentReg.Current_MotorTips = ReadFailTip;
-           CurrentReg.Current_MotorConfigResult = SystemTipsInformation(CurrentReg.Current_MotorTips);
+//           MotorConfigTipFlag = true;
+//           MotorConfigFlag = true;
+//           CurrentReg.Current_MotorTips = ReadFailTip;
+//           CurrentReg.Current_MotorConfigResult = SystemTipsInformation(CurrentReg.Current_MotorTips);
+           ReadFailFlag =true;
 //           QMessageBox::critical(0,QObject::trUtf8("读取配置信息"),
 //                                 trUtf8("读取失败"));
            qDebug("ReadFailTip");

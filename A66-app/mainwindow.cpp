@@ -55,7 +55,169 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::displayInfoTip()
+{
+    windowTipFlag = true;
 
+    if(SendFailFlag == true)
+    {
+        CurrentReg.CurrentTip = SendFail;
+        windowTipFlag =false;
+        SendFailFlag =false;
+    }
+    if(SendSuccessFlag == true)
+    {
+        CurrentReg.CurrentTip = SendSuccess;
+        windowTipFlag =false;
+        SendSuccessFlag = false;
+    }
+    if(ReadFailFlag == true)
+    {
+        CurrentReg.CurrentTip = ReadFail;
+        windowTipFlag =false;
+        ReadFailFlag = false;
+    }
+    if(ReadSuccessFlag == true)
+    {
+        CurrentReg.CurrentTip = ReadSuccess;
+        windowTipFlag =false;
+        ReadSuccessFlag =false;
+    }
+
+
+
+    if(LimitFalg == true)
+    {
+        CurrentReg.CurrentTip = LimitState;
+        windowTipFlag =false;
+        LimitFalg =false;
+    }
+
+    if(MotorRunTipFlag == true )
+    {
+        CurrentReg.CurrentTip = RuningState;
+        windowTipFlag =false;
+        MotorRunTipFlag = false;
+    }
+
+    if(!(A20_IN_Status & UpperPoint) && ManualTipFlag == true )
+    {
+        CurrentReg.CurrentTip = UpperPointError;
+        windowTipFlag =false;
+
+    }
+    if((A20_IN_Status & UpperPoint))
+    {
+        ManualTipFlag = false;
+    }
+    if(!(A20_IN_Status & PumpSignal) )
+    {
+           CurrentReg.CurrentTip = PumpError;
+           windowTipFlag =false;
+    }
+    if(RaxisParameter.ENABLE_AXIS == 1)
+    {
+        if(Get_HeartbetError(0x03) == 0x01 || motor[R1_ID-1].initStatus == 0 )
+        {
+            CurrentReg.CurrentTip = RAxisoffLine;
+            windowTipFlag =false;
+        }
+        if(MOTOR_STATUS[2] & STATUS_MASK == Fault )
+        {
+            CurrentReg.CurrentTip = RaxisError;
+            windowTipFlag =false;
+        }
+
+    }
+    if(Get_HeartbetError(0x01) == 0x01 || motor[X1_ID-1].initStatus == 0 )
+    {
+        CurrentReg.CurrentTip = XAxisoffLine;
+        windowTipFlag =false;
+    }
+    if(Get_HeartbetError(0x02) == 0x01 || motor[Y1_ID-1].initStatus == 0 )
+    {
+       CurrentReg.CurrentTip =  YAxisoffLine;
+       windowTipFlag =false;
+    }
+    if((MOTOR_STATUS[0] & STATUS_MASK) == Fault )
+    {
+        CurrentReg.CurrentTip = XaxisError;
+        windowTipFlag =false;
+    }
+    if((MOTOR_STATUS[1] & STATUS_MASK) == Fault )
+    {
+        CurrentReg.CurrentTip = YaxisError;
+        windowTipFlag =false;
+    }
+
+    if(((MOTOR_STATUS[1] & STATUS_MASK) == Fault) && ((MOTOR_STATUS[0] & STATUS_MASK) == Fault ) )
+    {
+        CurrentReg.CurrentTip = XYaxisError;
+        windowTipFlag =false;
+    }
+
+    if((Get_HeartbetError(0x02) == 0x01 || motor[Y1_ID-1].initStatus == 0) &&(Get_HeartbetError(0x01) == 0x01 || motor[X1_ID-1].initStatus == 0 )  )
+    {
+       CurrentReg.CurrentTip =  XYAxisoffLine;
+       windowTipFlag =false;
+    }
+    if(Get_HeartbetError(0x04) == 0x01)
+    {
+       CurrentReg.CurrentTip = MTAxisoffLine;
+       windowTipFlag =false;
+
+    }
+    if(windowTipFlag == true)
+    {
+        CurrentReg.CurrentTip = ReadyAll;
+        windowTipFlag = false;
+    }
+
+
+    switch(CurrentReg.CurrentTip)
+    {
+    case ReadyAll:          ui->label_State->setText(trUtf8("准备就绪"));  break;
+
+    case XAxisoffLine:      ui->label_State->setText(trUtf8("X轴离线"));  break;
+
+    case YAxisoffLine:      ui->label_State->setText(trUtf8("Y轴离线"));  break;
+
+    case RAxisoffLine:      ui->label_State->setText(trUtf8("R轴离线"));  break;
+
+    case MTAxisoffLine:     ui->label_State->setText(trUtf8("MT离线"));  break;
+
+    case PumpError:         ui->label_State->setText(trUtf8("油泵未启动"));  break;
+
+    case XaxisError:        ui->label_State->setText(trUtf8("X轴异常"));  break;
+
+    case YaxisError:        ui->label_State->setText(trUtf8("Y轴异常"));break;
+
+    case RaxisError:        ui->label_State->setText(trUtf8("R轴异常")); break;
+
+    case UpperPointError:   ui->label_State->setText(trUtf8("未到上止点，请踩脚踏上")); break;
+
+    case RuningState:        ui->label_State->setText(trUtf8("正在加工"));  break;
+
+    case WorkedState:        ui->label_State->setText(trUtf8("加工完成"));break;
+
+    case XYAxisoffLine:      ui->label_State->setText(trUtf8("X Y轴离线"));  break;
+
+    case XYaxisError:        ui->label_State->setText(trUtf8("X Y轴异常"));break;
+
+    case LimitState:        ui->label_State->setText(trUtf8("软限位"));break;
+
+    case SendSuccess:        ui->label_State->setText(trUtf8("写入成功"));break;
+
+    case SendFail:      ui->label_State->setText(trUtf8("写入失败"));  break;
+
+    case ReadSuccess:        ui->label_State->setText(trUtf8("读取成功"));break;
+
+    case ReadFail:        ui->label_State->setText(trUtf8("读取失败"));break;
+
+    default:    break;
+    }
+
+}
 
 void MainWindow::timerEvent(QTimerEvent *t) //定时器事件
 {
@@ -78,8 +240,9 @@ void MainWindow::timerEvent(QTimerEvent *t) //定时器事件
         }
 
         ui->label_Program->setText(CurrentReg.CurrentProgramName);
+        displayInfoTip();
        // ui->toolButton_ProName->setText(CurrentReg.CurrentProgramName);
-        MainWinState();
+//        MainWinState();
     }
 }
 
@@ -90,14 +253,14 @@ void MainWindow::MainWinState()
          ui->label_State->setText(CurrentReg.Current_MotorTipResult);
          MotorTipFlag = false;
     }
-    if(MotorConfigTipFlag == true)
-    {
-         ui->label_StateTip->setText(CurrentReg.Current_MotorConfigResult);
+//    if(MotorConfigTipFlag == true)
+//    {
+//         ui->label_StateTip->setText(CurrentReg.Current_MotorConfigResult);
 
-  //       CurrentReg.Current_MotorConfigResult.clear();
-         qDebug()<<"CurrentReg.Current_MotorConfigResult"<<CurrentReg.Current_MotorConfigResult;
-         MotorConfigTipFlag = false;
-    }
+//  //       CurrentReg.Current_MotorConfigResult.clear();
+//         qDebug()<<"CurrentReg.Current_MotorConfigResult"<<CurrentReg.Current_MotorConfigResult;
+//         MotorConfigTipFlag = false;
+//    }
 
     if(developLengthFlag == true)
     {

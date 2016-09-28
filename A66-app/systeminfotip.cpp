@@ -1,4 +1,6 @@
 #include "systeminfotip.h"
+#include "global.h"
+#include <QDebug>
 
 
 extern "C"{
@@ -11,48 +13,57 @@ SystemInfoTip::SystemInfoTip(QObject *parent) :
     QObject(parent)
 {
 
+    list << trUtf8(" X轴") << trUtf8(" Y轴") << trUtf8(" R轴")<<trUtf8(" MT1")<< trUtf8(" 电机离线") << trUtf8(" 电机异常") << trUtf8(" 油泵未启动");
+    for(int i =0; i < list.size(); i++)
+    {
+        errorResult[i].errorId= i;
+        errorResult[i].errorName= list.at(i);
+        qDebug()<<errorResult[i].errorId<<errorResult[i].errorName;
+    }
+    //qDebug()<<list.at(4);
 }
-QString SystemInfoTip::getCurrentErrorStatus()
+QString SystemInfoTip::getCurrentErrorStatus(int errorId)
 {
-    int i;
-    _MOTORERROR error ;
-    setMotorOffline(0x01);
-    setMotorOffline(0x02);
-    error = list.last();
-    printf("error:%d",error.errorId);
-    return error.errorName;
+
+
+//    setMotorOffline(0x01);
+//    setMotorOffline(0x02);
+//    error = list.last();
+////    list.
+//    printf("error:%d",error.errorId);
+//    return error.errorName;
 
 }
 void SystemInfoTip::setMotorOffline(unsigned char nodeId)
 {
-    _MOTORERROR error ;
-    if(Get_HeartbetError(nodeId) == 0x01 || motor[nodeId-1].initStatus == 0)
-    {
-       for(int i =0;i<list.length();i++)
-        {
-            error= list.at(i);
-            if(error.errorId == nodeId)
-            return ;
-        }
-       if(nodeId == 0x01)
-        error.errorName = "X轴电机离线";
-       if(nodeId == 0x02)
-        error.errorName = "Y轴电机离线";
-        error.errorId   = nodeId;
-        error.CurError  = true;
-        list.append(error);
-    }
-    else
-    {
-        for(int i =0;i<list.length();i++)
-         {
-             error= list.at(i);
-             if(error.CurError == true)
-             {
-                 list.removeAt(i);
-             }
-         }
-    }
+//    _MOTORERROR error ;
+//    if(Get_HeartbetError(nodeId) == 0x01 || motor[nodeId-1].initStatus == 0)
+//    {
+//       for(int i =0;i<list.length();i++)
+//        {
+//            errorResult[20]= list.at(i);
+//            if(error.errorId == nodeId)
+//            return ;
+//        }
+//       if(nodeId == 0x01)
+//        error.errorName = "X轴电机离线";
+//       if(nodeId == 0x02)
+//        error.errorName = "Y轴电机离线";
+//        error.errorId   = nodeId;
+//        error.CurError  = true;
+//        list.append(error);
+//    }
+//    else
+//    {
+//        for(int i =0;i<list.length();i++)
+//         {
+//             error= list.at(i);
+//             if(error.CurError == true)
+//             {
+//                 list.removeAt(i);
+//             }
+//         }
+//    }
 
 }
 //void SystemInfoTip::setMotorError()

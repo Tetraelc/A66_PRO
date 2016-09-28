@@ -43,7 +43,9 @@ QString SystemTipsInformation(int TipsID);
 #define ENTER_ENABLE  0xAA
 #define ENTER_DISENABLE  0x55
 
-#define ARMFlag   1
+#define UpdateTime "161001"
+#define SoftVersion  "V1.0"
+#define ARMFlag  1
 
 #define X1_ID   1
 #define Y1_ID   2
@@ -90,6 +92,15 @@ QString SystemTipsInformation(int TipsID);
 
 #define FootUpTip  27
 
+
+extern bool ReadFailFlag ;
+extern bool ReadSuccessFlag;
+extern bool SendFailFlag ;
+extern bool SendSuccessFlag;
+extern bool LimitFalg;
+extern bool MotorRunTipFlag ;
+extern bool ManualTipFlag;
+extern bool windowTipFlag;
 extern bool PumpCurError ;
 extern bool PumpPreError ;
 extern bool HomingFlag ;
@@ -188,12 +199,36 @@ struct _CURRENTREG
   int Current_WorkedTotal;
   double developLength;
   QString CurrentSecret;
+  int CurrentTip;
 
   int Materialtemp[50];
 
 };
 
 extern struct _CURRENTREG CurrentReg;
+
+
+enum {
+    ReadyAll = 0,
+    XAxisoffLine = 1,
+    YAxisoffLine = 2,
+    RAxisoffLine = 3,
+    MTAxisoffLine = 4,
+    PumpError = 5,
+    XaxisError = 6,
+    YaxisError = 7,
+    RaxisError = 8,
+    UpperPointError = 9 ,
+    RuningState = 10,
+    WorkedState = 11,
+    XYAxisoffLine =12,
+    XYaxisError = 13,
+    LimitState = 14,
+    SendSuccess =15,
+    SendFail = 16,
+    ReadSuccess =17,
+    ReadFail =18
+};
 
 
 enum {
@@ -370,6 +405,7 @@ struct   _AXISPARAMETER
     double OverrunDistance;
     unsigned char  ReferencePosMode;
     double ReferencePos;
+    double FrameStrength;
 };
 
 extern struct _AXISPARAMETER  XaxisParameter;
@@ -378,6 +414,7 @@ extern struct _AXISPARAMETER  RaxisParameter;
 
 struct   _SYSPARAMETER
 {
+    int serialNumber;
     int Language;
     int Units;
 };

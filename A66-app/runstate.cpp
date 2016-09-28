@@ -211,9 +211,6 @@ void RunState::initWorkedTotalDialog()
         WrokedTotal wk ;
         wk.setWindowFlags(Qt::FramelessWindowHint);
         wk.exec();
-        qDebug("-----------------------------------------------------------------------------------");
-        qDebug()<<"RunStateFlag"<<RunStateFlag;
-        qDebug("-----------------------------------------------------------------------------------");
 
         Ms_Run = startTimer(20);
 
@@ -782,9 +779,7 @@ int RunState::CheckPressureState()
         break;
     case VFast:
          ui->label_Pressure->setText(trUtf8("快下"));
-         MotorTipFlag =true;
-         CurrentReg.Current_MotorTips = RunTip;
-         CurrentReg.Current_MotorTipResult = SystemTipsInformation(CurrentReg.Current_MotorTips);
+         MotorRunTipFlag =true;
          if((VbackTime > (MTParameter.VbackTime *50) && MTParameter.VbackMode == 1))
             {
                  VFast_flag  = true;
@@ -841,7 +836,6 @@ void RunState::timerEvent(QTimerEvent *t) //定时器事件
       }
       MotorRun();
 
-      qDebug()<<"RunStateFlag"<<RunStateFlag;
       if(RunStateFlag == true)
       {
           CheckPressureState();
@@ -1041,9 +1035,7 @@ void RunState::ReadForRun(int Type)
 
 void RunState::QuitRunState()
 {
-
     killTimer(Ms_Run);
-
     Write_MOTOR_One_Data(0x04,0x7001,0x01,0x01,ENTER_QUIT_STOP);
     Stop_MOTOR(0x01);
     Stop_MOTOR(0x02);
@@ -1055,6 +1047,7 @@ void RunState::QuitRunState()
     concedeStartFlag = false;
     concedeEndFlag   = false;
     concedeTime      = 0;
+    CurrentReg.CurrentTip = WorkedState;
 //    if(!db.open())
 //    {
 //        QMessageBox::critical(0,QObject::tr("Error"),
@@ -1078,12 +1071,8 @@ void RunState::QuitRunState()
     CurrentReg.Current_MotorTipResult = SystemTipsInformation(CurrentReg.Current_MotorTips);
     CurrentReg.Current_WorkedTotal = CurrentRnuStateWorkedTotal;
 
-
     emit ReturnworkedTotal(CurrentRnuStateWorkedTotal);
     emit openProgramwindow();
-    openBeep();
-
-
    // CurrentRnuStateWorkedTotal = 0;
 
 }

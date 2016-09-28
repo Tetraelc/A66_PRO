@@ -3,8 +3,15 @@
 
 #define DEV_PATH "/sys/class/gpio/"
 
+bool ReadFailFlag =false;
+bool ReadSuccessFlag=false;
+bool SendFailFlag =false;
+bool SendSuccessFlag=false;
+bool LimitFalg =false;
+bool MotorRunTipFlag = false;
+bool ManualTipFlag = false;
 int HomgingModeFlag = 0;
-
+bool windowTipFlag = false;
 bool PumpCurError = false;
 bool PumpPreError = false;
 bool HomingFlag =false;

@@ -101,6 +101,7 @@ void Manual::openManualWin()
     Write_MOTOR_Multi_Data(&Write_MTDisEnable_buf,0x04);
     ManualMTFlag =true;
     ManualOpenMTFlag = 0;
+    ManualFlag = false;
     //PumpSignalFlag = true;
 
     qDebug()<<"openManualWin";
@@ -243,7 +244,7 @@ void Manual::timerEvent(QTimerEvent *t) //定时器事件
 
 }
 
-void Manual::checkMotorState()
+void Manual:: checkMotorState()
 {
      CurrentReg.Current_MotorTipResult.clear();
 
@@ -253,28 +254,18 @@ void Manual::checkMotorState()
          MotorTipFlag = true;
          CurrentReg.Current_MotorTips = Motor1Tip;
          CurrentReg.Current_MotorTipResult.append(SystemTipsInformation(CurrentReg.Current_MotorTips));
-//         QMessageBox::critical(0,QObject::trUtf8("异常"),
-//                               trUtf8("1号电机离线"));
-
-        // qDebug("Motor1");
      }
      if(Get_HeartbetError(0x02) == 0x01 || motor[Y1_ID-1].initStatus == 0 || YFaultFlag ==true)
      {
          MotorTipFlag = true;
          CurrentReg.Current_MotorTips = Motor2Tip;
          CurrentReg.Current_MotorTipResult.append("/").append(SystemTipsInformation(CurrentReg.Current_MotorTips));
-//         QMessageBox::critical(0,QObject::trUtf8("异常"),
-//                               trUtf8("2号电机离线"));
-           // qDebug("Motor2");
      }
      if(Get_HeartbetError(0x04) == 0x01)
      {
          MotorTipFlag = true;
          CurrentReg.Current_MotorTips = MTTip;
          CurrentReg.Current_MotorTipResult.append("/").append(SystemTipsInformation(CurrentReg.Current_MotorTips));
-//         QMessageBox::critical(0,QObject::trUtf8("异常"),
-//                               trUtf8("MT离线"));
-        //qDebug("Motor4");
      }
      if(RaxisParameter.ENABLE_AXIS == 1)
      {
@@ -283,9 +274,6 @@ void Manual::checkMotorState()
              MotorTipFlag = true;
              CurrentReg.Current_MotorTips = Motor3Tip;
              CurrentReg.Current_MotorTipResult.append("/").append(SystemTipsInformation(CurrentReg.Current_MotorTips));
-    //         QMessageBox::critical(0,QObject::trUtf8("异常"),
-    //                               trUtf8("3号电机离线"));
-            //qDebug("Motor3");
          }
 
          if( (XFaultFlag ==true) ||  (YFaultFlag ==true) || (RFaultFlag ==true))
@@ -547,12 +535,15 @@ void Manual::XMotorThread()
 
 void Manual::on_pushButton_M_XBack_pressed()
 {
+    bool ok;
+    if(XaxisParameter.MinDistance >= ui->lineEdit_ManualX->text().toDouble(&ok))
+    {
+        LimitFalg = true ;
+    }
 
     if((A20_IN_Status & UpperPoint))
     {
     MotorXDisplayFalg=1;
-//    ThreadX.start();
-//    stopped=false;
 
      unsigned long XManualSpeed_temp = XaxisParameter.ManualSpeed;
      long XLeadScrew_temp =10000*1000/ XaxisParameter.LeadScrew;
@@ -583,18 +574,7 @@ void Manual::on_pushButton_M_XBack_pressed()
     }
     else
     {
-
-
-        MotorConfigTipFlag = true;
-        CurrentReg.Current_MotorTips = FootUpTip;
-        CurrentReg.Current_MotorConfigResult = SystemTipsInformation(CurrentReg.Current_MotorTips);
-        qDebug()<<"CurrentReg.Current_MotorConfigResult"<<CurrentReg.Current_MotorConfigResult;
-//        CurrentReg.Current_MotorAlarm = UpperPointAlarm;
-//        aralmOrTipFalg = true;
-//        SystemWarn warn;
-//        warn.setWindowFlags(Qt::FramelessWindowHint);
-//        warn.exec();
-
+            ManualTipFlag = true;
     }
 
    // qDebug()<<"XaxisParameter.ManualSpeed"<<XaxisParameter.ManualSpeed;
@@ -617,6 +597,11 @@ void Manual::on_pushButton_M_XBack_released()
 }
 void Manual::on_pushButton_M_XForWard_pressed()
 {
+    bool ok;
+    if(XaxisParameter.MaxDistance <= ui->lineEdit_ManualX->text().toDouble(&ok) )
+    {
+        LimitFalg = true ;
+    }
 
     if((A20_IN_Status & UpperPoint))
     {
@@ -656,14 +641,7 @@ void Manual::on_pushButton_M_XForWard_pressed()
     }
     else
     {
-        MotorConfigTipFlag = true;
-        CurrentReg.Current_MotorTips = FootUpTip;
-        CurrentReg.Current_MotorConfigResult = SystemTipsInformation(CurrentReg.Current_MotorTips);
-//        CurrentReg.Current_MotorAlarm = UpperPointAlarm;
-//        aralmOrTipFalg = true;
-//        SystemWarn warn;
-//        warn.setWindowFlags(Qt::FramelessWindowHint);
-//        warn.exec();
+        ManualTipFlag = true;
     }
 
 }
@@ -688,6 +666,12 @@ void Manual::on_pushButton_M_XForWard_released()
 
 void Manual::on_pushButton_M_YBack_pressed()
 {
+    bool ok;
+    if(YaxisParameter.MinDistance >= ui->lineEdit_ManualY->text().toDouble(&ok))
+    {
+        LimitFalg = true ;
+    }
+
 
     if((A20_IN_Status & UpperPoint))
     {
@@ -724,15 +708,7 @@ void Manual::on_pushButton_M_YBack_pressed()
     }
     else
     {
-        MotorConfigTipFlag = true;
-        CurrentReg.Current_MotorTips = FootUpTip;
-        CurrentReg.Current_MotorConfigResult = SystemTipsInformation(CurrentReg.Current_MotorTips);
-        qDebug()<<"CurrentReg.Current_MotorConfigResult"<<CurrentReg.Current_MotorConfigResult;
-//        CurrentReg.Current_MotorAlarm = UpperPointAlarm;
-//        aralmOrTipFalg = true;
-//        SystemWarn warn;
-//        warn.setWindowFlags(Qt::FramelessWindowHint);
-//        warn.exec();
+        ManualTipFlag = true;
 
     }
 
@@ -757,7 +733,11 @@ void Manual::on_pushButton_M_YBack_released()
 
 void Manual::on_pushButton_M_YForWard_pressed()
 {
-
+    bool ok;
+    if(YaxisParameter.MaxDistance <= ui->lineEdit_ManualY->text().toDouble(&ok) )
+    {
+        LimitFalg = true ;
+    }
 
     if(A20_IN_Status & UpperPoint)
     {
@@ -793,15 +773,7 @@ void Manual::on_pushButton_M_YForWard_pressed()
      }
     }else
     {
-//        CurrentReg.Current_MotorAlarm = UpperPointAlarm;
-//        aralmOrTipFalg = true;
-//        SystemWarn warn;
-//        warn.setWindowFlags(Qt::FramelessWindowHint);
-//        warn.exec();
-
-        MotorConfigTipFlag = true;
-        CurrentReg.Current_MotorTips = FootUpTip;
-        CurrentReg.Current_MotorConfigResult = SystemTipsInformation(CurrentReg.Current_MotorTips);
+            ManualTipFlag = true;
     }
 }
 
@@ -826,6 +798,11 @@ void Manual::on_pushButton_M_YForWard_released()
 
 void Manual::on_pushButton_M_RForWard_pressed()
 {   
+    bool ok;
+    if(RaxisParameter.MaxDistance <= ui->lineEdit_ManualR->text().toDouble(&ok) )
+    {
+        LimitFalg = true ;
+    }
 
     if(A20_IN_Status & UpperPoint)
     {
@@ -862,10 +839,7 @@ void Manual::on_pushButton_M_RForWard_pressed()
     }
     else
     {
-
-        MotorConfigTipFlag = true;
-        CurrentReg.Current_MotorTips = FootUpTip;
-        CurrentReg.Current_MotorConfigResult = SystemTipsInformation(CurrentReg.Current_MotorTips);
+            ManualTipFlag = true;
     }
 }
 
@@ -885,6 +859,12 @@ void Manual::on_pushButton_M_RForWard_released()
 
 void Manual::on_pushButton_M_RBack_pressed()
 {   
+    bool ok;
+    if(RaxisParameter.MinDistance >= ui->lineEdit_ManualR->text().toDouble(&ok))
+    {
+        LimitFalg = true ;
+    }
+
     if((A20_IN_Status & UpperPoint))
     {
         MotorRDisplayFalg=1;
@@ -915,14 +895,7 @@ void Manual::on_pushButton_M_RBack_pressed()
     }
     else
     {
-//        CurrentReg.Current_MotorAlarm = UpperPointAlarm;
-//        aralmOrTipFalg = true;
-//        SystemWarn warn;
-//        warn.setWindowFlags(Qt::FramelessWindowHint);
-//        warn.exec();
-        MotorConfigTipFlag = true;
-        CurrentReg.Current_MotorTips = FootUpTip;
-        CurrentReg.Current_MotorConfigResult = SystemTipsInformation(CurrentReg.Current_MotorTips);
+        ManualTipFlag = true;
 
 
     }

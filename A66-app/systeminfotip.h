@@ -9,7 +9,7 @@ class SystemInfoTip : public QObject
     Q_OBJECT
 public:
     explicit SystemInfoTip(QObject *parent = 0);
-    QString getCurrentErrorStatus();
+    QString getCurrentErrorStatus(int errorId);
     void setMotorOffline(unsigned char nodeId);
 
     struct   _MOTORERROR
@@ -22,7 +22,7 @@ public:
     };
     struct _MOTORERROR  errorResult[20];
 
-    QList <_MOTORERROR> list;
+    QList <QString> list;
     //QListIterator<_MOTORERROR> listIterator(list);
 //    bool errorResult[20];
 signals:

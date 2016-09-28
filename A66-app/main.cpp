@@ -26,6 +26,7 @@
 #include "thread.h"
 #include "homingmode.h"
 #include "block.h"
+#include "systeminfotip.h"
 
 
 #include<QSplashScreen>
@@ -160,9 +161,9 @@ int main(int argc, char *argv[])
 
 #endif
     QApplication a(argc, argv);
-    QWSServer::setCursorVisible(false);
-   // QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
-    //QTextCodec::setCodecForCStrings(QTextCodec::codecForName("GB2312"));
+    //QWSServer::setCursorVisible(false);
+    QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
+    QTextCodec::setCodecForCStrings(QTextCodec::codecForName("GB2312"));
 
     QTextCodec *codec = QTextCodec::codecForName("UTF-8");
     QTextCodec::setCodecForTr(codec);
@@ -182,6 +183,18 @@ int main(int argc, char *argv[])
     bk.setWindowFlags(Qt::FramelessWindowHint);
     bk.show();
 
+    int fd;
+    struct ifreq ifr;
+    fd = socket(AF_INET, SOCK_DGRAM, 0);
+    ifr.ifr_addr.sa_family = AF_INET;
+    strncpy(ifr.ifr_name, "eth0", IFNAMSIZ-1);
+    ioctl(fd, SIOCGIFHWADDR, &ifr);
+    close(fd);
+//" + QString::number(SerielNumber,10).append(UpdateTime).append(SoftVersion).toAscii() + "
+    int SerielNumber;
+    SerielNumber=(ifr.ifr_hwaddr.sa_data[5] & 0xff) | ((ifr.ifr_hwaddr.sa_data[4] & 0xff) << 8) | ((ifr.ifr_hwaddr.sa_data[3] & 0xff) << 16);
+    QSqlQuery query;
+    query.exec("UPDATE Setup SET Value = " + QString::number(SerielNumber,10) + "  WHERE ID = 59" );
 
         HomingMode hm;
         if(HomingFlag == false)
@@ -190,6 +203,9 @@ int main(int argc, char *argv[])
             hm.move(0,WIDGET_Y);
             hm.show();
         }
+
+//    SystemInfoTip tip;
+
 
 
 

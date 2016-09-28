@@ -38,7 +38,7 @@ public:
 
     double SystemParameterTemp[2];
     double XaxisParameterTemp[10];
-    double YaxisParameterTemp[10];
+    double YaxisParameterTemp[20];
     double RaxisParameterTemp[11];
     double MTParameterTemp[10];
 

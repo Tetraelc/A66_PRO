@@ -29,6 +29,7 @@ public:
     void MainWinState();
     void openProgramwindows();
     void closeProgramwindows();
+    void displayInfoTip();
 
 
 
