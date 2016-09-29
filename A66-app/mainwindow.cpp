@@ -28,6 +28,7 @@ MainWindow::MainWindow(QWidget *parent) :
     SystemSetting sys;
     sys.ReadForSystemDat();
     ProgramName_Scan = startTimer(800);
+    ProbtionTime_Scan =startTimer(1000);
 
     //ui->toolButton_T1->setCheckable(false);
 //    QPixmap pix;
@@ -46,6 +47,7 @@ MainWindow::MainWindow(QWidget *parent) :
     //    ui->toolButton_ProName->setChecked(true);
     //    ui->toolButton_ProName->setEnabled(false);
     //    ui->toolButton_T1->setEnabled(false);
+//    ui->lcdNumber->set
 
 }
 
@@ -219,8 +221,21 @@ void MainWindow::displayInfoTip()
 
 }
 
+//void MainWindow::ProbtionTime()
+//{
+
+//    CurrentReg.ProbtionTime
+
+//}
+
+
 void MainWindow::timerEvent(QTimerEvent *t) //定时器事件
 {
+
+    if(t->timerId()== ProbtionTime_Scan){
+
+
+    }
 
     if(t->timerId()== ProgramName_Scan){
         if(((MOTOR_STATUS[X1_ID-1] & 0x400) == 0x400) && XStopFalg == true && XaxisParameter.PositioningMode == 0 )
@@ -262,25 +277,25 @@ void MainWindow::MainWinState()
 //         MotorConfigTipFlag = false;
 //    }
 
-    if(developLengthFlag == true)
-    {
-        ui->label_State->setText(trUtf8("展开长度 :") + QString::number( CurrentReg.developLength,'.',2));
-        developLengthFlag = false;
-    }
-    if((A20_IN_Status & UpperPoint) && (MotorConfigFlag == false))
-    {
-        CurrentReg.Current_MotorConfigResult.clear();
-        ui->label_StateTip->setText(CurrentReg.Current_MotorConfigResult);
-    }
-    if(!(A20_IN_Status & PumpSignal) )
-    {
+//    if(developLengthFlag == true)
+//    {
+//        ui->label_State->setText(trUtf8("展开长度 :") + QString::number( CurrentReg.developLength,'.',2));
+//        developLengthFlag = false;
+//    }
+//    if((A20_IN_Status & UpperPoint) && (MotorConfigFlag == false))
+//    {
+//        CurrentReg.Current_MotorConfigResult.clear();
+//        ui->label_StateTip->setText(CurrentReg.Current_MotorConfigResult);
+//    }
+//    if(!(A20_IN_Status & PumpSignal) )
+//    {
 
-        ui->label_PumpTip->setText(trUtf8("油泵未启动"));
-    }
-    else
-    {
-         ui->label_PumpTip->clear();
-    }
+//        ui->label_PumpTip->setText(trUtf8("油泵未启动"));
+//    }
+//    else
+//    {
+//         ui->label_PumpTip->clear();
+//    }
 //    if(!(A20_IN_Status & PumpSignal) )
 //    {
 //      PumpCurError = true;
@@ -755,7 +770,7 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
           //FactoryAxisFalg = false;
           MotorConfigFlag = false;
           CurrentReg.Current_MotorConfigResult.clear();
-          ui->label_StateTip->clear();
+//          ui->label_StateTip->clear();
           return false;
        }
       }
@@ -765,7 +780,7 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
       if (event->type()==QEvent::WindowDeactivate)
       {
           ManualMTFlag =false;
-          ui->label_StateTip->clear();
+//          ui->label_StateTip->clear();
           CurrentReg.Current_MotorConfigResult.clear();
           Write_MOTOR_One_Data(MT_ID,0x7001,0x01,0x01,0xa0);
           return false;

@@ -56,7 +56,8 @@ SOURCES += main.cpp\
     homingmode.cpp \
     choosepicture.cpp \
     block.cpp \
-    systeminfotip.cpp
+    systeminfotip.cpp \
+    probation.cpp
 
 HEADERS  += mainwindow.h \
     step.h \
@@ -111,7 +112,8 @@ HEADERS  += mainwindow.h \
     homingmode.h \
     choosepicture.h \
     block.h \
-    systeminfotip.h
+    systeminfotip.h \
+    probation.h
 
 FORMS    += mainwindow.ui \
     step.ui \

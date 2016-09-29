@@ -90,6 +90,7 @@ private:
 
     //SystemWarn warn;
     int ProgramName_Scan;
+    int ProbtionTime_Scan;
 protected:
     bool eventFilter(QObject *watched, QEvent *event);
 };

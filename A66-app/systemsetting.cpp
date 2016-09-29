@@ -314,7 +314,7 @@ void SystemSetting::SystemDatChange()
      MTParameter.VbackMode = MTParameterTemp[2];
      MTParameter.VbackTime = MTParameterTemp[3];
      MTParameter.SingleMode = MTParameterTemp[4];
-     MTParameter.FastMode = MTParameterTemp[5];
+     MTParameter.changeStepTime = MTParameterTemp[5];
      MTParameter.concedTime = MTParameterTemp[6];
 
 

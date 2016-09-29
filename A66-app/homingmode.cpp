@@ -80,7 +80,7 @@ HomingMode::HomingMode(QWidget *parent) :
     mw->move(0,MAIN_WIDGET_Y);
     mw->show();
 
-    checkXaxisisEnabble();
+
 
     if(HomingFlag == true)
     {
@@ -114,18 +114,18 @@ void HomingMode::setXYRLineditFont(int fontsize)
 
 }
 
-void HomingMode::checkXaxisisEnabble()
+void HomingMode::checkXYaxisisEnabble()
 {
     if(XaxisParameter.ReferencePosMode == 0 &&  YaxisParameter.ReferencePosMode == 0 )
     {
          HomingFlag =true;
     }
-    else if(XaxisParameter.ReferencePosMode == 0 && (YaxisParameter.ReferencePosMode == 1  || YaxisParameter.ReferencePosMode == 2) )
+    else if(XaxisParameter.ReferencePosMode == 0 && ( YaxisParameter.ReferencePosMode != 0))
     {
           ui->widget_HomeX->setVisible(false);
           ui->widget_HomeY->setVisible(true);
           ui->widget_HomeY->move(120,150);
-    }if(YaxisParameter.ReferencePosMode == 0 &&  (XaxisParameter.ReferencePosMode == 1  || XaxisParameter.ReferencePosMode == 2) )
+    }else if(YaxisParameter.ReferencePosMode == 0  && ( XaxisParameter.ReferencePosMode != 0))
     {
         ui->widget_HomeX->setVisible(true);
         ui->widget_HomeY->setVisible(false);
@@ -140,55 +140,90 @@ void HomingMode::checkXaxisisEnabble()
 
 }
 
-
-void HomingMode::checkRaxisEnable()
+void HomingMode::checkXYRaxisisEnabble()
 {
-    if(RaxisParameter.ENABLE_AXIS == 1)
+    if(XaxisParameter.ReferencePosMode == 0 &&  YaxisParameter.ReferencePosMode == 0  &&  RaxisParameter.ReferencePosMode == 0 )
+    {
+         HomingFlag =true;
+    }
+    else if((XaxisParameter.ReferencePosMode == 0) && (YaxisParameter.ReferencePosMode != 0) && (RaxisParameter.ReferencePosMode != 0))
+    {
+        ui->widget_HomeX->setVisible(false);
+        ui->widget_HomeY->setVisible(true);
+        ui->widget_HomeR->setVisible(true);
+        ui->widget_HomeY->move(120,90);
+        ui->widget_HomeR->move(120,200);
+
+
+    }else if(YaxisParameter.ReferencePosMode != 0  && (XaxisParameter.ReferencePosMode == 0)&&  (RaxisParameter.ReferencePosMode != 0))
+    {
+        ui->widget_HomeX->setVisible(true);
+        ui->widget_HomeY->setVisible(false);
+        ui->widget_HomeR->setVisible(true);
+        ui->widget_HomeX->move(120,90);
+        ui->widget_HomeR->move(120,200);
+
+    }else if(YaxisParameter.ReferencePosMode != 0  && (XaxisParameter.ReferencePosMode != 0)&&  (RaxisParameter.ReferencePosMode == 0))
+    {
+        ui->widget_HomeX->setVisible(true);
+        ui->widget_HomeY->setVisible(true);
+        ui->widget_HomeR->setVisible(false);
+        ui->widget_HomeX->move(120,90);
+        ui->widget_HomeY->move(120,200);
+
+    }else if(YaxisParameter.ReferencePosMode == 0  && (XaxisParameter.ReferencePosMode == 0)&&  (RaxisParameter.ReferencePosMode != 0))
+    {
+        ui->widget_HomeX->setVisible(false);
+        ui->widget_HomeY->setVisible(false);
+        ui->widget_HomeR->setVisible(true);
+        ui->widget_HomeX->move(120,150);
+
+    }else if(YaxisParameter.ReferencePosMode == 0  && (XaxisParameter.ReferencePosMode != 0)&&  (RaxisParameter.ReferencePosMode == 0))
+    {
+        ui->widget_HomeX->setVisible(false);
+        ui->widget_HomeY->setVisible(true);
+        ui->widget_HomeR->setVisible(false);
+        ui->widget_HomeY->move(120,150);
+
+    }else if(YaxisParameter.ReferencePosMode != 0  && (XaxisParameter.ReferencePosMode == 0)&&  (RaxisParameter.ReferencePosMode == 0))
+    {
+        ui->widget_HomeX->setVisible(true);
+        ui->widget_HomeY->setVisible(false);
+        ui->widget_HomeR->setVisible(false);
+        ui->widget_HomeR->move(120,150);
+
+    }else
     {
         ui->widget_HomeR->setVisible(true);
         ui->widget_HomeX->move(120,50);
         ui->widget_HomeY->move(120,150);
         ui->widget_HomeR->move(120,250);
+    }
 
-//        ui->lineEdit_RHoming->setVisible(true); //R轴可视
-//        ui->frame_4->setVisible(true);
-//        ui->label_RHoming->setVisible(true);
-//        ui->toolButton_R->setVisible(true);
 
-//        ui->toolButton_X->move(152,54);
-//        ui->label_XHomging->move(210,56);
-//        ui->lineEdit_XHoming->move(267,44);
-//        ui->frame_2->move(540,50);
+}
 
-//        ui->toolButton_Y->move(150,163);
-//        ui->label_YHoming->move(210,165);
-//        ui->lineEdit_YHoming->move(267,152);
-//        ui->frame_3->move(540,158);
 
-//        ui->toolButton_R->move(150,270);
-//        ui->label_RHoming->move(210,270);
-//        ui->lineEdit_RHoming->move(267,260);
-//        ui->frame_4->move(540,266);
+void HomingMode::checkRaxisEnable()
+{
+    if(RaxisParameter.ENABLE_AXIS == 1)
+    {
+//        ui->widget_HomeR->setVisible(true);
+//        ui->widget_HomeX->move(120,50);
+//        ui->widget_HomeY->move(120,150);
+//        ui->widget_HomeR->move(120,250);
+
+        checkXYRaxisisEnabble();
+
     }
     else
     {
-        ui->widget_HomeR->setVisible(false);
-        ui->widget_HomeX->move(120,90);
-        ui->widget_HomeY->move(120,200);
-//        ui->lineEdit_RHoming->setVisible(false);
-//        ui->frame_4->setVisible(false);
-//        ui->label_RHoming->setVisible(false);
-//        ui->toolButton_R->setVisible(false);
+//        ui->widget_HomeR->setVisible(false);
+//        ui->widget_HomeX->move(120,90);
+//        ui->widget_HomeY->move(120,200);
 
-//        ui->toolButton_X->move(150,96);
-//        ui->label_XHomging->move(210,98);
-//        ui->lineEdit_XHoming->move(267,86);
-//        ui->frame_2->move(540,92);
+         checkXYaxisisEnabble();
 
-//        ui->toolButton_Y->move(150,218);
-//        ui->label_YHoming->move(210,220);
-//        ui->lineEdit_YHoming->move(267,207);
-//        ui->frame_3->move(540,213);
     }
 
 }

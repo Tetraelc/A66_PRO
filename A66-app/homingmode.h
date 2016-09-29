@@ -18,7 +18,8 @@ public:
     void CheckMotorState();
     void checkRaxisEnable();
     void setXYRLineditFont(int fontsize);
-    void checkXaxisisEnabble();
+    void checkXYaxisisEnabble();
+    void checkXYRaxisisEnabble();
 
 public slots:
     void openHomingModeWin();

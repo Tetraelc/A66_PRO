@@ -200,6 +200,8 @@ struct _CURRENTREG
   double developLength;
   QString CurrentSecret;
   int CurrentTip;
+  QString ProbtionTime;
+  int ProbtionEnable;
 
   int Materialtemp[50];
 
@@ -428,7 +430,7 @@ struct   _MTPARAMETER
     unsigned int  VbackMode;
     unsigned int  VbackTime;
     bool          SingleMode;
-    bool          FastMode;
+    bool          changeStepTime;
     unsigned int  concedTime;
 
 };
